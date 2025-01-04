@@ -28,6 +28,12 @@ CREATE TABLE `KO_methods` (
   PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `Die_roll_methods` (
+  `id` varchar(64) NOT NULL,
+  `method` varchar(128) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
 CREATE TABLE `Games` (
   `id` varchar(64) NOT NULL,
   `date` datetime NOT NULL,
@@ -47,11 +53,5 @@ CREATE TABLE `Games` (
   `seat_5_KO_turn` integer,
   `seat_5_KO_method_id` varchar(64),
   `Die_roll_method_id` varchar(64),
-  PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `Die_roll_methods` (
-  `id` varchar(64) NOT NULL,
-  `method` varchar(128) NOT NULL,
   PRIMARY KEY (`id`)
 );
