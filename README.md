@@ -1,5 +1,5 @@
 # MtG_game_log
-Inspired by EDHRECast's game tracking
+Inspired by EDHRECast's game tracking.
 
-## install
-Contains files related to setup and installation. Will eventually contain installation instructions.
+## data
+Contains stuff to do with the database.
