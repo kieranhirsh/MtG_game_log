@@ -2,6 +2,10 @@
 
 Contains stuff to do with the database.
 
+## db_storage.py
+
+Defines a class to manage database storage.
+
 ## MtG_log_db.sql
 
 MySQL script that creates the database.<br>
