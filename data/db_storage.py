@@ -13,12 +13,12 @@ class DBStorage():
     __engine = None
     __session = None
     __module_names = {
-        "Decks": "model",
-        "Die_roll_methods": "model",
-        "Games": "model",
-        "KO_categories": "model",
-        "KO_methods": "model",
-        "Players": "model"
+        "Decks": "deck",
+        "Die_roll_methods": "die_roll",
+        "Games": "game_KO",
+        "KO_categories": "game_KO",
+        "KO_methods": "game_KO",
+        "Players": "player"
     }
 
     def __init__(self, Base):
@@ -109,8 +109,10 @@ class DBStorage():
                 if allowed is not None and len(allowed) > 0:
                     if k in allowed:
                         setattr(record, k, v)
+                    else:
+                        print("Warning: %s property in %s class cannot be updated" % (k, class_name))
                 else:
-                    setattr(record, k, v)
+                    raise ValueError("No properties of the %s class can be updated" % (class_name))
 
             self.__session.commit()
         except:
