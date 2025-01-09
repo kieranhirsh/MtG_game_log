@@ -125,6 +125,30 @@ class DBStorage():
 
         return deepcopy(record)
 
+    def delete(self, class_name, record_id):
+        """ Deletes specific record of specified class """
+
+        if class_name == "":
+            raise IndexError("Unable to load Model data. No class name specified")
+
+        if not self.__module_names[class_name]:
+            raise IndexError("Unable to load Model data. %s class not found" % class_name)
+
+        namespace = self.__module_names[class_name]
+        module = importlib.import_module("models." + namespace)
+        class_ = getattr(module, class_name)
+
+        try:
+            data_to_del = self.__session.query(class_).where(class_.id == record_id).limit(1).one()
+        except:
+            raise IndexError("Unable to load Model data. Specified id not found")
+
+        try:
+            self.__session.delete(data_to_del)
+            self.__session.commit()
+        except:
+            raise IndexError("Unable to delete record.")
+
     def contains(self, class_name, ids_list):
         """ Returns a simple TRUE or FALSE depending on whether all the ids in ids_list exist within the specified table """
 

@@ -162,3 +162,15 @@ class Deck(Base):
         }
 
         return jsonify(output)
+
+    @staticmethod
+    def delete(deck_id):
+        """ Class method that deletes an existing Deck """
+        try:
+            # delete the Deck record
+            storage.delete('Deck', deck_id)
+        except IndexError as exc:
+            print("Error: ", exc)
+            return "Unable to delete specified deck!"
+
+        return Deck.all()
