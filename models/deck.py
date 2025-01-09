@@ -1,11 +1,10 @@
 #!/usr/bin/python
 """ Deck model """
 
-from datetime import datetime
 import uuid
 import re
 from flask import jsonify, request, abort
-from sqlalchemy import Column, String, DateTime, ForeignKey
+from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 from data import storage, Base
 
