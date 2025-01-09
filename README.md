@@ -15,3 +15,6 @@ MtG_log_MYSQL_DB    # must be "MtG_log"
 
 ### data/
 Contains stuff to do with the database.
+
+### models/
+Makes python classes out of MySQL tables.
