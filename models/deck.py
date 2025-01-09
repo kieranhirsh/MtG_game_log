@@ -34,17 +34,17 @@ class Deck(Base):
                     setattr(self, key, value)
 
     @property
-    def name(self):
-        """ Getter for private attribute name """
+    def commander(self):
+        """ Getter for private attribute commander """
         return self.__commander
 
-    @name.setter
+    @commander.setter
     def commander(self, value):
-        """ Setter for private attribute name """
+        """ Setter for private attribute commander """
 
         # ensure that the value is not spaces-only and only contains allowed characters (alphabet, latin letters, and some punctuation)
-        is_valid_name = len(value.strip()) > 0 and re.search("^[a-zA-Z\xC0-\xFF,' ]+$", value)
-        if is_valid_name:
+        is_valid_commander = len(value.strip()) > 0 and re.search("^[a-zA-Z\xC0-\xFF,' ]+$", value)
+        if is_valid_commander:
             self.__commander = value
         else:
             raise ValueError("Invalid commander specified: {}".format(value))
