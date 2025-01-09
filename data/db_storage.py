@@ -15,9 +15,14 @@ class DBStorage():
     __module_names = {
         "Decks": "deck",
         "Die_roll_methods": "die_roll",
-        "Games": "game_KO",
-        "KO_categories": "game_KO",
-        "KO_methods": "game_KO",
+        "Games": "game",
+        "KO_categories": "seats_KO",
+        "KO_methods": "seats_KO",
+        "Seat_1": "seats_KO",
+        "Seat_2": "seats_KO",
+        "Seat_3": "seats_KO",
+        "Seat_4": "seats_KO",
+        "Seat_5": "seats_KO",
         "Players": "player"
     }
 
@@ -56,7 +61,7 @@ class DBStorage():
             raise IndexError("Unable to load Model data. No class name specified")
 
         if not self.__module_names[class_name]:
-            raise IndexError("Unable to load Model data. Specified class name not found")
+            raise IndexError("Unable to load Model data. %s name not found" % class_name)
 
         namespace = self.__module_names[class_name]
         module = importlib.import_module("models." + namespace)
