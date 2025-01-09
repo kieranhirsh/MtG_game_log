@@ -19,7 +19,7 @@ class Deck(Base):
     id          = Column(String(64), nullable=False, primary_key=True)
     __commander = Column("commander", String(128), nullable=False)
     __player_id = Column("player_id", String(128), ForeignKey('players.id'), nullable=False)
-    player      = relationship("Country", back_populates="decks")
+    player      = relationship("Player", back_populates="deck")
 
     # constructor
     def __init__(self, *args, **kwargs):
