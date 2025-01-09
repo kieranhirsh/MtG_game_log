@@ -57,7 +57,12 @@ class Deck(Base):
     @player_id.setter
     def player_id(self, value):
         """ Setter for private prop player_id """
-        self.__player_id = value
+        # ensure that the specified player id actually exists before setting
+        if storage.get('Player', value) is not None:
+            self.__player_id = value
+        else:
+            raise ValueError("Invalid player_id specified: {}".format(value))
+
 
     # --- Static methods ---
     @staticmethod
