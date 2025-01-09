@@ -38,10 +38,11 @@ CREATE TABLE `Games` (
   `id` varchar(64) NOT NULL,
   `date` datetime NOT NULL,
   `winner` varchar(128),
-  `game_length` integer,
+  `game_length_turns` integer,
   `die_roll_method_id` varchar(64),
   `start_time` time,
   `end_time` time,
+  `game_length_time` time,
   PRIMARY KEY (`id`)
 );
 
