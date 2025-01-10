@@ -1,5 +1,5 @@
 #!/usr/bin/python
-""" Deck model """
+""" Player model """
 
 import uuid
 import re
@@ -15,7 +15,7 @@ class Player(Base):
     can_update = ["name"]
 
     # Class attributes defaults
-    __tablename__ = 'decks'
+    __tablename__ = 'players'
     id     = Column(String(64), nullable=False, primary_key=True)
     __name = Column("name", String(128), nullable=False)
     decks  = relationship("Deck", back_populates="player", cascade="delete, delete-orphan")
