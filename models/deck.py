@@ -150,7 +150,7 @@ class Deck(Base):
 
         try:
             # update the Deck record. Only commander can be changed
-            result = storage.update('Deck', deck_id, data, Deck.can_update_list)
+            result = storage.update('Deck', deck_id, data, Deck.can_update)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to update specified deck!"

@@ -125,7 +125,7 @@ class Player(Base):
 
         try:
             # update the Player record. Only name can be changed
-            result = storage.update('Player', player_id, data, Player.can_update_list)
+            result = storage.update('Player', player_id, data, Player.can_update)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to update specified player!"
