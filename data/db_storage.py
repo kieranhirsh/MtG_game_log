@@ -12,7 +12,7 @@ class DBStorage():
     __engine = None
     __session = None
     __module_names = {
-        "Decks": "deck",
+        "Deck": "deck",
         "Die_roll_methods": "die_roll",
         "Games": "game",
         "KO_categories": "seats_KO",
@@ -22,7 +22,7 @@ class DBStorage():
         "Seat_3": "seats_KO",
         "Seat_4": "seats_KO",
         "Seat_5": "seats_KO",
-        "Players": "player"
+        "Player": "player"
     }
 
     def __init__(self, Base):

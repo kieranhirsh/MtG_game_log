@@ -28,6 +28,10 @@ def players_specific_decks_get(player_id):
     data = []
 
     player_data = Player.specific(player_id)
+    # this curectly doesn't work
+    print("=======================================")
+    print(player_data)
+    print("=======================================")
     decks_data = player_data[0].decks
 
     for deck in decks_data:

@@ -15,7 +15,7 @@ class Player(Base):
     can_update = ["name"]
 
     # Class attributes defaults
-    __tablename__ = 'players'
+    __tablename__ = 'Players'
     id     = Column(String(64), nullable=False, primary_key=True)
     __name = Column("name", String(128), nullable=False)
     decks  = relationship("Deck", back_populates="player", cascade="delete, delete-orphan")
@@ -80,8 +80,7 @@ class Player(Base):
 
         output = {
             "id": result[0].id,
-            "commander": result[0].commander,
-            "player_id": result[0].player_id
+            "name": result[0].name
         }
 
         return jsonify(output)
@@ -111,8 +110,7 @@ class Player(Base):
 
         output = {
             "id": new_player.id,
-            "commander": new_player.commander,
-            "player_id": new_player.player_id
+            "name": new_player.name
         }
 
         return jsonify(output)

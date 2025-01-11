@@ -15,11 +15,11 @@ class Deck(Base):
     can_update = ["commander", "player_id"]
 
     # Class attributes defaults
-    __tablename__ = 'decks'
+    __tablename__ = 'Decks'
     id          = Column(String(64), nullable=False, primary_key=True)
     __commander = Column("commander", String(128), nullable=False)
-    __player_id = Column("player_id", String(128), ForeignKey('players.id'), nullable=False)
-    player      = relationship("Player", back_populates="deck")
+    __player_id = Column("player_id", String(128), ForeignKey('Players.id'), nullable=False)
+    player      = relationship("Player", back_populates="decks")
 
     # constructor
     def __init__(self, *args, **kwargs):
@@ -120,7 +120,7 @@ class Deck(Base):
 
         try:
             new_deck = Deck(
-                name=data["name"],
+                commander=data["commander"],
                 player_id=data["player_id"]
             )
         except ValueError as exc:
