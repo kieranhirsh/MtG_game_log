@@ -32,7 +32,7 @@ def decks_specific_country_get(deck_id):
 
     data.append({
         "id": player.id,
-        "name": player.name
+        "commander": player.commander
     })
 
     return data
