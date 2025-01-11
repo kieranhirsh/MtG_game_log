@@ -25,5 +25,5 @@ curl -X PUT [URL] /
 
 Delete: deletes a database entry
 ```
-curl -X GET [URL]
+curl -X DELTE [URL]
 ```
