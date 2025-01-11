@@ -29,9 +29,6 @@ def players_specific_decks_get(player_id):
     data = []
 
     player_data = storage.get(class_name="Player", key="id", value=player_id)
-    print("======================================================================")
-    print(player_data)
-    print("======================================================================")
     decks_data = player_data[0].decks
 
     for deck in decks_data:

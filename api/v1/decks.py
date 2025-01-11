@@ -1,5 +1,6 @@
 """ objects that handles all default RestFul API actions for Deck """
 from api.v1 import api_routes
+from data import storage
 from models.deck import Deck
 
 @api_routes.route('/decks', methods=["POST"])
@@ -27,12 +28,12 @@ def decks_specific_country_get(deck_id):
     """ returns the data for a specific deck's owner """
     data = []
 
-    deck_data = Deck.specific(deck_id)
+    deck_data = storage.get(class_name="Deck", key="id", value=deck_id)
     player = deck_data[0].player
 
     data.append({
         "id": player.id,
-        "commander": player.commander
+        "name": player.name
     })
 
     return data
