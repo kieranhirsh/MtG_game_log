@@ -51,7 +51,7 @@ class Player(Base):
 
     # --- Static methods ---
     @staticmethod
-    def all():
+    def all(return_raw_result = False):
         """ Class method that returns all players data """
         output = []
 
@@ -60,6 +60,9 @@ class Player(Base):
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to load players!"
+
+        if return_raw_result:
+            return result
 
         for row in result:
             output.append({
