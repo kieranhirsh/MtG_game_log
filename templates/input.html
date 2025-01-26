@@ -12,7 +12,12 @@
 
 <body pg-name="input" js="off">
     {% include "header.html" %}
-    How may I help you today? 
+    <h2>Create new player</h2>
+    <form action="/input/players" method="POST">
+      <label for="name">Player Name: </label>
+      <input type="text" id="name" name="name">
+      <input type="submit" value="Create player">
+    </form>
     {% include "footer.html" %}
     <noscript><style>body { visibility: visible; }</style></noscript>
 </body>
