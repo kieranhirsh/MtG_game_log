@@ -14,6 +14,15 @@ def index():
 
     return render_template('index.html')
 
+@app.route('/input')
+def input():
+    """ Data is inputted here """
+    # Load the data we need before passing it to the template
+    decks = Deck.all(True)
+    players = Player.all(True)
+
+    return render_template('input.html', decks=decks, players=players)
+
 @app.route('/data')
 def data():
     """ Spreadsheets are displayed here """

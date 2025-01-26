@@ -1,0 +1,58 @@
+html,
+body {
+  margin: 0;
+  padding: 0 0 30px 0;
+}
+
+header {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  box-sizing: border-box;
+  font-family: "Manrope", sans-serif;
+  background-color: red;
+}
+header .content {
+  margin: auto;
+  width: 100%;
+  display: flex;
+  font-size: 1.6rem;
+  padding: 10px;
+  flex-direction: column;
+}
+header .content .title {
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  font-size: 1.6rem;
+  padding: 10px;
+  color: purple;
+}
+header .content .navigation {
+  font-size: 0;
+  background-color: #04AA6D;
+}
+header .content .navigation span {
+  margin: 0 auto;
+  width: 100%;
+  font-size: 0;
+}
+header .content .navigation span a {
+  font-size: 0;
+}
+header .content .navigation span a button {
+  background-color: #04AA6D;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  border-color: transparent orange;
+  border-style: solid;
+  width: 80px;
+  height: 40px;
+}
+
+/*# sourceMappingURL=data.css.map */
