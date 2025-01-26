@@ -1,6 +1,5 @@
 #!/usr/bin/python
 """ Deck model """
-
 import uuid
 import re
 from flask import jsonify, request, abort
@@ -106,12 +105,15 @@ class Deck(Base):
         return jsonify(output)
 
     @staticmethod
-    def create():
+    def create(data = ""):
         """ Class method that creates a new deck """
-        if request.get_json() is None:
-            abort(400, "Not a JSON")
+        if data:
+            if request.get_json() is None:
+                abort(400, "Not a JSON")
+            data = request.get_json()
+        else:
+            data = data.get_json()
 
-        data = request.get_json()
         if 'commander' not in data:
             abort(400, "Missing commander")
         if 'player_id' not in data:

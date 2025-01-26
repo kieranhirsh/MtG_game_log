@@ -1,6 +1,5 @@
 #!/usr/bin/python
 """ Player model """
-
 import uuid
 import re
 from flask import jsonify, request, abort
@@ -89,12 +88,15 @@ class Player(Base):
         return jsonify(output)
 
     @staticmethod
-    def create():
+    def create(data = ""):
         """ Class method that creates a new player """
-        if request.get_json() is None:
-            abort(400, "Not a JSON")
+        if not data:
+            if request.get_json() is None:
+                abort(400, "Not a JSON")
+            data = request.get_json()
+        else:
+            data = data.get_json()
 
-        data = request.get_json()
         if 'name' not in data:
             abort(400, "Missing name")
 
