@@ -107,11 +107,9 @@ class Deck(Base):
     @staticmethod
     def create(data = ""):
         """ Class method that creates a new deck """
-        if data:
-            if request.get_json() is None:
-                abort(400, "Not a JSON")
+        try:
             data = request.get_json()
-        else:
+        except:
             data = data.get_json()
 
         if 'commander' not in data:
