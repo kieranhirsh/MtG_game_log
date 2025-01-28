@@ -21,3 +21,9 @@ Contains stuff to do with the database.
 
 ### models/
 Converts SQL tables to python classes.
+
+### templates/
+Contains html stuff.
+
+### static/
+Contains css stuff.
