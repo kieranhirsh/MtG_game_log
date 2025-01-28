@@ -33,21 +33,21 @@ def input_player():
     return render_template('input.html')
 
 
-#@app.route('/input/decks', methods=['POST'])
-#def input_deck():
-#    """ Data is inputted here """
-#    if request.method == "POST":
-#        player_name = request.form["name"]
-#        player_data = storage.get(class_name="Player", key="name", value=player_name)
-#
-#        new_player = {
-#            "player_id": player_data.id,
-#            "commander": request.form["commadner"]
-#            }
-#
-#        Deck.create(data=jsonify(new_player))
-#
-#    return render_template('input.html')
+@app.route('/input/decks', methods=['POST'])
+def input_deck():
+    """ Data is inputted here """
+    if request.method == "POST":
+        player_name = request.form["name"]
+        player_data = storage.get(class_name="Player", key="name", value=player_name)
+
+        new_player = {
+            "player_id": player_data.id,
+            "commander": request.form["commadner"]
+            }
+
+        Deck.create(data=jsonify(new_player))
+
+    return render_template('input.html')
 
 @app.route('/data')
 def data():
