@@ -45,7 +45,7 @@ class Player(Base):
         if is_valid_name:
             self.__name = value
         else:
-            raise ValueError("Invalid nqme specified: {}".format(value))
+            raise ValueError("Invalid name specified: {}".format(value))
 
 
     # --- Static methods ---
