@@ -1,11 +1,11 @@
 #!/usr/bin/python
 """ Player model """
 import uuid
-import re
 from flask import jsonify, request, abort
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from data import storage, Base
+from validation.player import Player_validator
 
 class Player(Base):
     """ Representation of player """
@@ -15,9 +15,9 @@ class Player(Base):
 
     # Class attributes defaults
     __tablename__ = 'Players'
-    id     = Column(String(64), nullable=False, primary_key=True)
-    __name = Column("name", String(128), nullable=False)
-    decks  = relationship("Deck", back_populates="player", cascade="delete, delete-orphan")
+    id    = Column(String(64), nullable=False, primary_key=True)
+    name  = Column("name", String(128), nullable=False)
+    decks = relationship("Deck", back_populates="player", cascade="delete, delete-orphan")
 
     # constructor
     def __init__(self, *args, **kwargs):
@@ -30,22 +30,6 @@ class Player(Base):
             for key, value in kwargs.items():
                 if key in self.can_init:
                     setattr(self, key, value)
-
-    @property
-    def name(self):
-        """ Getter for private attribute name """
-        return self.__name
-
-    @name.setter
-    def name(self, value):
-        """ Setter for private attribute name """
-
-        # ensure that the value is not spaces-only and only contains allowed characters (alphabet, latin letters, and some punctuation)
-        is_valid_name = len(value.strip()) > 0 and re.search("^[a-zA-Z\xC0-\xFF,' ]+$", value)
-        if is_valid_name:
-            self.__name = value
-        else:
-            raise ValueError("Invalid name specified: {}".format(value))
 
 
     # --- Static methods ---
@@ -98,18 +82,19 @@ class Player(Base):
         if 'name' not in data:
             abort(400, "Missing name")
 
-        try:
-            new_player = Player(
-                name=data["name"]
-            )
-        except ValueError as exc:
-            return repr(exc) + "\n"
+        new_player = Player(
+            name=data["name"]
+        )
+        is_valid = Player_validator.is_valid(new_player)
 
-        try:
-            storage.add(new_player)
-        except IndexError as exc:
-            print("Error: ", exc)
-            return "Unable to add new Player!"
+        if is_valid:
+            try:
+                storage.add(new_player)
+            except IndexError as exc:
+                print("Error: ", exc)
+                return "Unable to add new Player!"
+        else:
+            raise ValueError("Invalid player")
 
         output = {
             "id": new_player.id,
@@ -120,6 +105,7 @@ class Player(Base):
 
     @staticmethod
     def update(player_id):
+        ############# THIS IS SUPER OUTDATED #############
         """ Class method that updates an existing player """
         if request.get_json() is None:
             abort(400, "Not a JSON")

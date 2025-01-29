@@ -41,8 +41,8 @@ def input_deck():
         player_data = storage.get(class_name="Player", key="name", value=player_name)
 
         new_player = {
-            "player_id": player_data.id,
-            "commander": request.form["commadner"]
+            "player_id": player_data[0].id,
+            "commander": request.form["commander"]
             }
 
         Deck.create(data=jsonify(new_player))

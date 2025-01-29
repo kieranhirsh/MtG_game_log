@@ -1,11 +1,11 @@
 #!/usr/bin/python
 """ Deck model """
 import uuid
-import re
 from flask import jsonify, request, abort
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 from data import storage, Base
+from validation.deck import Deck_validator
 
 class Deck(Base):
     """ Representation of deck """
@@ -15,10 +15,10 @@ class Deck(Base):
 
     # Class attributes defaults
     __tablename__ = 'Decks'
-    id          = Column(String(64), nullable=False, primary_key=True)
-    __commander = Column("commander", String(128), nullable=False)
-    __player_id = Column("player_id", String(128), ForeignKey('Players.id'), nullable=False)
-    player      = relationship("Player", back_populates="decks")
+    id        = Column(String(64), nullable=False, primary_key=True)
+    commander = Column("commander", String(128), nullable=False)
+    player_id = Column("player_id", String(128), ForeignKey('Players.id'), nullable=False)
+    player    = relationship("Player", back_populates="decks")
 
     # constructor
     def __init__(self, *args, **kwargs):
@@ -31,36 +31,6 @@ class Deck(Base):
             for key, value in kwargs.items():
                 if key in self.can_init:
                     setattr(self, key, value)
-
-    @property
-    def commander(self):
-        """ Getter for private attribute commander """
-        return self.__commander
-
-    @commander.setter
-    def commander(self, value):
-        """ Setter for private attribute commander """
-
-        # ensure that the value is not spaces-only and only contains allowed characters (alphabet, latin letters, and some punctuation)
-        is_valid_commander = len(value.strip()) > 0 and re.search("^[a-zA-Z\xC0-\xFF,' ]+$", value)
-        if is_valid_commander:
-            self.__commander = value
-        else:
-            raise ValueError("Invalid commander specified: {}".format(value))
-
-    @property
-    def player_id(self):
-        """ Getter for private prop player_id """
-        return self.__player_id
-
-    @player_id.setter
-    def player_id(self, value):
-        """ Setter for private prop player_id """
-        # ensure that the specified player id actually exists before setting
-        if storage.get('Player', value) is not None:
-            self.__player_id = value
-        else:
-            raise ValueError("Invalid player_id specified: {}".format(value))
 
 
     # --- Static methods ---
@@ -121,19 +91,20 @@ class Deck(Base):
         if exists is None:
             abort(400, "Specified player does not exist")
 
-        try:
-            new_deck = Deck(
-                commander=data["commander"],
-                player_id=data["player_id"]
-            )
-        except ValueError as exc:
-            return repr(exc) + "\n"
+        new_deck = Deck(
+            commander=data["commander"],
+            player_id=data["player_id"]
+        )
+        is_valid = Deck_validator.is_valid(new_deck)
 
-        try:
-            storage.add(new_deck)
-        except IndexError as exc:
-            print("Error: ", exc)
-            return "Unable to add new Deck!"
+        if is_valid:
+            try:
+                storage.add(new_deck)
+            except IndexError as exc:
+                print("Error: ", exc)
+                return "Unable to add new Deck!"
+        else:
+            raise ValueError("Invalid deck")
 
         output = {
             "id": new_deck.id,
@@ -145,6 +116,7 @@ class Deck(Base):
 
     @staticmethod
     def update(deck_id):
+        ############# THIS IS SUPER OUTDATED #############
         """ Class method that updates an existing deck """
         if request.get_json() is None:
             abort(400, "Not a JSON")
