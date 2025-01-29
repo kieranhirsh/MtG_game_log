@@ -15,15 +15,15 @@
     {% include "header.html" %}
     <div id="dropdown">
         Data type:
-        <select name="data_types" id="data_types">
+        <select name="data_types" id="data_types" onchange="toggleDataType()">
             <option value="" selected disabled hidden>Choose input data type</option>
             <option value="player">Deck</option>
             <option value="deck">Player</option>
         </select>
     </div>
 
-    <div style='display:none;' id="data_input">
-        <div id="player">
+    <div id="data_inputs">
+        <div class="data_input" id="player">
             <h2>Create new player</h2>
             <form action="/input/players" method="POST">
                 <label for="name">Player Name: </label>
@@ -32,7 +32,7 @@
             </form>
         </div>
 
-        <div id="deck">
+        <div class="data_input" id="deck">
             <h2>Create new deck</h2>
             <form action="/input/decks" method="POST">
                 <label for="commander">Commander: </label>

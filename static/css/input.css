@@ -55,4 +55,8 @@ header .content .navigation span a button {
   height: 40px;
 }
 
+body .data_input {
+  display: none;
+}
+
 /*# sourceMappingURL=input.css.map */
