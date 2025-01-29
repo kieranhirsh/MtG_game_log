@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -8,26 +9,38 @@
     <script type="text/javascript" src="../static/js/input.js"></script>
     <link rel="icon" type="img/png" href="../static/img/card_back.png">
     <title>M:tG Game Logger</title>
-  </head>
+</head>
 
 <body pg-name="input" js="off">
     {% include "header.html" %}
-    <h2>Create new player</h2>
-    <form action="/input/players" method="POST">
-      <label for="name">Player Name: </label>
-      <input type="text" id="name" name="name">
-      <input type="submit" value="Create player">
-    </form>
+    <div class="data_input" id="dropdown">
+        Data type:
+        <select name="data_types" id="data_types">
+            <option value="player">Deck</option>
+            <option value="deck">Player</option>
+        </select>
+    </div>
 
-    <h2>Create new deck</h2>
-    <form action="/input/decks" method="POST">
-      <label for="commander">Commander: </label>
-      <input type="text" id="commander" name="commander">
-      <label for="name">Owner Name: </label>
-      <input type="text" id="name" name="name">
-      <input type="submit" value="Create deck">
-    </form>
+    <div class="data_input" id="player">
+        <h2>Create new player</h2>
+        <form action="/input/players" method="POST">
+            <label for="name">Player Name: </label>
+            <input type="text" id="name" name="name">
+            <input type="submit" value="Create player">
+        </form>
+    </div>
+
+    <div class="data_input" id="player">
+        <h2>Create new deck</h2>
+        <form action="/input/decks" method="POST">
+            <label for="commander">Commander: </label>
+            <input type="text" id="commander" name="commander">
+            <label for="name">Owner Name: </label>
+            <input type="text" id="name" name="name">
+            <input type="submit" value="Create deck">
+        </form>
+    </div>
     {% include "footer.html" %}
-    <noscript><style>body { visibility: visible; }</style></noscript>
 </body>
+
 </html>
