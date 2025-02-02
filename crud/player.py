@@ -126,9 +126,9 @@ class Player_crud():
         decks_data = player_data[0].decks
 
         for deck in decks_data:
-          output.append({
-            "id": deck.id,
-            "commander": deck.commander
-          })
+            output.append({
+                "id": deck.id,
+                "commander": deck.commander
+            })
 
         return jsonify(output)

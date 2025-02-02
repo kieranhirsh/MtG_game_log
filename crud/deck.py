@@ -136,18 +136,9 @@ class Deck_crud():
             print("Error: ", exc)
             return "Unable to find specific deck!"
 
-        for deck_data in decks_data:
-          try:
-              player_data = storage.get(class_name="Player", key="id", value=deck_data.player.id)
-          except IndexError as exc:
-              print("Error: ", exc)
-              return "Unable to find deck's owner!"
-
-          output.append(
-              {
-                  "id": player_data[0].id,
-                  "name": player_data[0].name
-              }
-          )
+        output = {
+            "id": decks_data[0].player.id,
+            "name": decks_data[0].player.name
+        }
 
         return jsonify(output)
