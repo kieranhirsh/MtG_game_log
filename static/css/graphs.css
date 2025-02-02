@@ -26,9 +26,15 @@ header .navigation nav ul li a {
   border-radius: 10px;
   border: 10px solid red;
 }
+header .navigation nav ul li a:hover {
+  background-color: green;
+  border: 10px solid green;
+}
 header .navigation nav ul li .graphs {
-  border-bottom: none;
-  background: linear-gradient(red 80%, purple 20%) top;
+  border-bottom: 5px solid purple;
+}
+header .navigation nav ul li .graphs:hover {
+  border-bottom: 5px solid purple;
 }
 
 /*# sourceMappingURL=graphs.css.map */

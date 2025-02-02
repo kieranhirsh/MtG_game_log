@@ -28,11 +28,18 @@ header {
             background-color: red;
             border-radius: 10px;
             border: 10px solid red;
+
+            &:hover {
+              background-color: green;
+              border: 10px solid green;
+            }
           }
 
           .input {
-            border-bottom:none;
-            background:linear-gradient(red 80%,purple 20%) top;
+            border-bottom: 5px solid purple;
+            &:hover {
+              border-bottom: 5px solid purple;
+            }
           }
         }
       }
