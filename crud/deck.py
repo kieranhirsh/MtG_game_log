@@ -87,7 +87,7 @@ class Deck_crud():
         return jsonify(output)
 
     @staticmethod
-    def update(deck_id):
+    def update(deck_id, data = ""):
         """ Class method that updates an existing deck """
         try:
             data = request.get_json()

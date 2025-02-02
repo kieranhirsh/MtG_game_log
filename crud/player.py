@@ -77,7 +77,7 @@ class Player_crud():
         return jsonify(output)
 
     @staticmethod
-    def update(player_id):
+    def update(player_id, data = ""):
         """ Class method that updates an existing player """
         try:
             data = request.get_json()
