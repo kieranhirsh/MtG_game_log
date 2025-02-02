@@ -1,62 +1,49 @@
 html,
 body {
   margin: 0;
-  padding: 0 0 30px 0;
+  padding: 10px 0 30px 10px;
 }
 
 header {
   width: 100%;
-  padding: 10px;
-  display: flex;
-  box-sizing: border-box;
+  display: block;
   font-family: "Manrope", sans-serif;
-  background-color: red;
 
-  .content {
-    margin: auto;
-    width: 100%;
-    display: flex;
-    font-size: 1.6rem;
-    padding: 10px;
-    flex-direction: column;
+  .title {
+    font-size: x-large;
+  }
 
-    .title {
-      margin: 0 auto;
-      width: 100%;
-      display: flex;
-      font-size: 1.6rem;
-      padding: 10px;
-      color: purple;
-    }
+  .navigation {
+    nav {
+      ul {
+        list-style-type: none;
+        display: flex;
+        padding: 0;
 
-    .navigation {
-      font-size: 0;
-      background-color: #04AA6D;
+        li {
+          padding: 0 10px 0 0;
+          display: flex;
 
-      span {
-        margin: 0 auto;
-        width: 100%;
-        font-size: 0;
+          a {
+            border-radius: 10px;
+            border: 2px solid black;
+            padding: 8px;
 
-        a {
-          font-size: 0;
+            &:hover {
+              background-color: grey;
+            }
+          }
 
-          button {
-            background-color: #04AA6D;
-            border: none;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            cursor: pointer;
-            border-color: transparent orange;
-            border-style: solid;
-            width: 80px;
-            height: 40px;
+          .data {
+            padding: 8px 8px 4px 8px;
+            border-bottom: 6px solid darkslateblue;
           }
         }
       }
     }
   }
+}
+
+a {
+  color: black;
 }
