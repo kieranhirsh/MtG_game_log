@@ -1,58 +1,41 @@
 html,
 body {
   margin: 0;
-  padding: 0 0 30px 0;
+  padding: 10px 0 30px 10px;
 }
 
 header {
   width: 100%;
-  padding: 10px;
-  display: flex;
-  box-sizing: border-box;
+  display: block;
   font-family: "Manrope", sans-serif;
-  background-color: red;
 }
-header .content {
-  margin: auto;
-  width: 100%;
+header .title {
+  font-size: x-large;
+}
+header .navigation nav ul {
+  list-style-type: none;
   display: flex;
-  font-size: 1.6rem;
-  padding: 10px;
-  flex-direction: column;
+  padding: 0;
 }
-header .content .title {
-  margin: 0 auto;
-  width: 100%;
+header .navigation nav ul li {
+  padding: 0 10px 0 0;
   display: flex;
-  font-size: 1.6rem;
-  padding: 10px;
-  color: purple;
 }
-header .content .navigation {
-  font-size: 0;
-  background-color: #04AA6D;
+header .navigation nav ul li a {
+  border-radius: 10px;
+  border: 2px solid black;
+  padding: 8px;
 }
-header .content .navigation span {
-  margin: 0 auto;
-  width: 100%;
-  font-size: 0;
+header .navigation nav ul li a:hover {
+  background-color: grey;
 }
-header .content .navigation span a {
-  font-size: 0;
+header .navigation nav ul li .home {
+  padding: 8px 8px 4px 8px;
+  border-bottom: 6px solid darkslateblue;
 }
-header .content .navigation span a button {
-  background-color: #04AA6D;
-  border: none;
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  cursor: pointer;
-  border-color: transparent orange;
-  border-style: solid;
-  width: 80px;
-  height: 40px;
+
+a {
+  color: black;
 }
 
 /*# sourceMappingURL=index.css.map */
