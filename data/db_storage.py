@@ -13,15 +13,6 @@ class DBStorage():
     __session = None
     __module_names = {
         "Deck": "deck",
-        "Die_roll_methods": "die_roll",
-        "Games": "game",
-        "KO_categories": "seats_KO",
-        "KO_methods": "seats_KO",
-        "Seat_1": "seats_KO",
-        "Seat_2": "seats_KO",
-        "Seat_3": "seats_KO",
-        "Seat_4": "seats_KO",
-        "Seat_5": "seats_KO",
         "Player": "player"
     }
 
