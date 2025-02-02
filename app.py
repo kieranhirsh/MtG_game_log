@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 from flask import Flask, render_template, request, jsonify
 from api.v1 import api_routes
 from data import storage
@@ -31,7 +30,6 @@ def input_player():
         Player.create(data=jsonify(new_player))
 
     return render_template('input.html')
-
 
 @app.route('/input/decks', methods=['POST'])
 def input_deck():
