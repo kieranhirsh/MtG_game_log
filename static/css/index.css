@@ -1,58 +1,34 @@
 html,
 body {
   margin: 0;
-  padding: 0 0 30px 0;
+  padding: 10px 0 30px 10px;
 }
 
 header {
   width: 100%;
-  padding: 10px;
-  display: flex;
-  box-sizing: border-box;
+  display: block;
   font-family: "Manrope", sans-serif;
+}
+header .title {
+  font-size: x-large;
+}
+header .navigation nav ul {
+  list-style-type: none;
+  display: flex;
+  padding: 0;
+}
+header .navigation nav ul li {
+  padding: 0 10px 0 0;
+  display: flex;
+}
+header .navigation nav ul li a {
   background-color: red;
+  border-radius: 10px;
+  border: 10px solid red;
 }
-header .content {
-  margin: auto;
-  width: 100%;
-  display: flex;
-  font-size: 1.6rem;
-  padding: 10px;
-  flex-direction: column;
-}
-header .content .title {
-  margin: 0 auto;
-  width: 100%;
-  display: flex;
-  font-size: 1.6rem;
-  padding: 10px;
-  color: purple;
-}
-header .content .navigation {
-  font-size: 0;
-  background-color: #04AA6D;
-}
-header .content .navigation span {
-  margin: 0 auto;
-  width: 100%;
-  font-size: 0;
-}
-header .content .navigation span a {
-  font-size: 0;
-}
-header .content .navigation span a button {
-  background-color: #04AA6D;
-  border: none;
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  cursor: pointer;
-  border-color: transparent orange;
-  border-style: solid;
-  width: 80px;
-  height: 40px;
+header .navigation nav ul li .home {
+  border-bottom: none;
+  background: linear-gradient(red 80%, purple 20%) top;
 }
 
 /*# sourceMappingURL=index.css.map */
