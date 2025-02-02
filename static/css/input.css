@@ -31,4 +31,8 @@ header .navigation nav ul li .input {
   background: linear-gradient(red 80%, purple 20%) top;
 }
 
+body .data_input {
+  display: none;
+}
+
 /*# sourceMappingURL=input.css.map */
