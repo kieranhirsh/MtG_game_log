@@ -1,6 +1,5 @@
 """ objects that handles all default RestFul API actions for Player """
 from api.v1 import api_routes
-from data import storage
 from models.player import Player
 
 @api_routes.route('/players', methods=["POST"])
@@ -24,20 +23,9 @@ def players_edit(player_id):
     return Player.update(player_id)
 
 @api_routes.route('/players/<player_id>/decks', methods=["GET"])
-def players_specific_decks_get(player_id):
+def get_decks_data(player_id):
     """ returns all of a specific player's decks' data """
-    data = []
-
-    player_data = storage.get(class_name="Player", key="id", value=player_id)
-    decks_data = player_data[0].decks
-
-    for deck in decks_data:
-        data.append({
-            "id": deck.id,
-            "commander": deck.commander
-        })
-
-    return data
+    return Player.get_decks_data(player_id)
 
 @api_routes.route('/players/<player_id>', methods=["DELETE"])
 def players_delete(player_id):
