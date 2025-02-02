@@ -84,6 +84,10 @@ class Player_crud():
         except:
             data = data.get_json()
 
+        # validate all possible inputs
+        if 'name' in data:
+            Player_validator.valid_name(data["name"])
+
         try:
             result = storage.update('Player', player_id, data, Player.can_update)
         except IndexError as exc:

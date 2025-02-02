@@ -94,6 +94,12 @@ class Deck_crud():
         except:
             data = data.get_json()
 
+        # validate all possible inputs
+        if 'commander' in data:
+            Deck_validator.valid_commander(data["commander"])
+        if 'player_id' in data:
+            Deck_validator.valid_player_id(data["player_id"])
+
         try:
             result = storage.update('Deck', deck_id, data, Deck.can_update)
         except IndexError as exc:
