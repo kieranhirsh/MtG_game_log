@@ -54,8 +54,10 @@ class Colour_Identity_crud():
         except:
             data = data.get_json()
 
-        if 'name' not in data:
-            abort(400, "Missing name")
+        if 'colour_identity' not in data:
+            abort(400, "Missing colour_identity")
+        if 'colours' not in data:
+            abort(400, "Missing colours")
 
         new_colour_identity = Colour_Identity(
             colour_identity=data["colour_identity"],
