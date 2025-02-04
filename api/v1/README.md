@@ -4,6 +4,8 @@ Contains API stuff.
 
 ### Usage examples
 
+`base URL: http://127.0.0.1:5000/`
+
 Get: get database entry
 ```
 curl -X GET [URL]
