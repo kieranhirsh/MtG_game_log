@@ -1,5 +1,5 @@
 #!/usr/bin/python
-""" Deck validation """
+""" Colour Identity validation """
 
 class Colour_Identity_validator():
     def is_valid(new_colour_identity):

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-""" Player model """
+""" Colour Identity model """
 import uuid
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
