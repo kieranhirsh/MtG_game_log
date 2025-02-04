@@ -133,6 +133,28 @@ class Player_crud():
         return jsonify(output)
 
     @staticmethod
+    def get_sibling_data(player_id, parent_type):
+        """ Class method get the sibling data for a given Player """
+        output = []
+
+        try:
+            player_data = storage.get(class_name="Player", key="id", value=player_id)
+        except IndexError as exc:
+            print("Error: ", exc)
+            return "Unable to find specific player!"
+
+        parent_data = getattr(player_data[0], parent_type)
+        sibling_data = getattr(parent_data, "players")
+
+        for sibling in sibling_data:
+            output.append({
+                "id": sibling.id,
+                "name": sibling.name
+            })
+
+        return jsonify(output)
+
+    @staticmethod
     def get_child_data(player_id, class_type):
         """ Class method get the child data for a given Player """
         output = []
@@ -141,7 +163,7 @@ class Player_crud():
             player_data = storage.get(class_name="Player", key="id", value=player_id)
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to find specific deck!"
+            return "Unable to find specific player!"
 
         child_data = getattr(player_data[0], class_type)
         child_columns = getattr(child_data[0], "all_attribs")

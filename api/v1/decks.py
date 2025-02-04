@@ -27,6 +27,11 @@ def decks_specific_player_get(deck_id):
     """ returns the data for a specific deck's owner """
     return Deck_crud.get_parent_data(deck_id, class_type="player")
 
+@api_routes.route('/decks/<deck_id>/owner_decks', methods=["GET"])
+def decks_specific_players_decks_get(deck_id):
+    """ returns all the data for a specific deck's owner's decks """
+    return Deck_crud.get_sibling_data(deck_id, parent_type="player")
+
 @api_routes.route('/decks/<deck_id>', methods=["DELETE"])
 def decks_delete(deck_id):
     """ deletes existing deck data using specified id """

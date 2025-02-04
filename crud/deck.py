@@ -145,6 +145,29 @@ class Deck_crud():
         return jsonify(output)
 
     @staticmethod
+    def get_sibling_data(deck_id, parent_type):
+        """ Class method get the sibling data for a given Deck """
+        output = []
+
+        try:
+            deck_data = storage.get(class_name="Deck", key="id", value=deck_id)
+        except IndexError as exc:
+            print("Error: ", exc)
+            return "Unable to find specific deck!"
+
+        parent_data = getattr(deck_data[0], parent_type)
+        sibling_data = getattr(parent_data, "decks")
+
+        for sibling in sibling_data:
+            output.append({
+                "id": sibling.id,
+                "commander": sibling.commander,
+                "player_id": sibling.player_id
+            })
+
+        return jsonify(output)
+
+    @staticmethod
     def get_child_data(deck_id, class_type):
         """ Class method get the child data for a given Deck """
         output = []
