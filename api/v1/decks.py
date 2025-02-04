@@ -13,7 +13,7 @@ def decks_get():
     return Deck_crud.all()
 
 @api_routes.route('/decks/<deck_id>', methods=["GET"])
-def decks_specific_get(deck_id):
+def decks_get_specific(deck_id):
     """ returns specific deck data """
     return Deck_crud.specific(deck_id)
 
@@ -23,12 +23,12 @@ def decks_edit(deck_id):
     return Deck_crud.update(deck_id)
 
 @api_routes.route('/decks/<deck_id>/player', methods=["GET"])
-def decks_specific_player_get(deck_id):
+def decks_get_player(deck_id):
     """ returns the data for a specific deck's owner """
     return Deck_crud.get_parent_data(deck_id, class_type="player")
 
-@api_routes.route('/decks/<deck_id>/owner_decks', methods=["GET"])
-def decks_specific_players_decks_get(deck_id):
+@api_routes.route('/decks/<deck_id>/player_decks', methods=["GET"])
+def decks_get_player_decks(deck_id):
     """ returns all the data for a specific deck's owner's decks """
     return Deck_crud.get_sibling_data(deck_id, parent_type="player")
 
