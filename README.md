@@ -16,6 +16,9 @@ MtG_log_MYSQL_DB    # must be "MtG_log"
 ### api/
 Contains API stuff.
 
+### crud/
+Contains all the functions related to creating, reading, updating, and deleting data.
+
 ### data/
 Contains stuff to do with the database.
 
@@ -26,4 +29,7 @@ Converts SQL tables to python classes.
 Contains html stuff.
 
 ### static/
-Contains css stuff.
+Contains css, javascript, and other front end stuff.
+
+### validation/
+Any time a piece of data is created or edited, they must pass the validators stored here.
