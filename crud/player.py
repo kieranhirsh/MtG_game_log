@@ -114,6 +114,25 @@ class Player_crud():
         return Player.all()
 
     @staticmethod
+    def get_parent_data(player_id, class_type):
+        """ Class method get the Parent data for a given Player """
+        output = {}
+
+        try:
+            player_data = storage.get(class_name="Player", key="id", value=player_id)
+        except IndexError as exc:
+            print("Error: ", exc)
+            return "Unable to find specific player!"
+
+        parent_data = getattr(player_data[0], class_type)
+        parent_columns = getattr(parent_data, "all_attribs")
+
+        for column in parent_columns:
+            output.update({column: getattr(parent_data, column)})
+
+        return jsonify(output)
+
+    @staticmethod
     def get_decks_data(player_id):
         """ Class method get the data for a Player's decks """
         output = []
