@@ -20,6 +20,26 @@ def input():
     """ Landing page for inputting data """
     return render_template('input.html')
 
+@app.route('/input/decks', methods=['POST'])
+def input_deck():
+    """ Data is inputted here """
+    if request.method == "POST":
+        player_name = request.form["name"]
+        player_data = storage.get(class_name="Player", key="name", value=player_name)
+
+        colour_identity = request.form["colour_identity"]
+        colour_identity_data = storage.get(class_name="Colour_Identity", key="colour_identity", value=colour_identity)
+
+        new_player = {
+            "commander": request.form["commander"],
+            "player_id": player_data[0].id,
+            "colour_identity_id": colour_identity_data[0].id
+            }
+
+        Deck_crud.create(data=jsonify(new_player))
+
+    return render_template('input.html')
+
 @app.route('/input/players', methods=['POST'])
 def input_player():
     """ Data is inputted here """
@@ -29,22 +49,6 @@ def input_player():
         }
 
         Player_crud.create(data=jsonify(new_player))
-
-    return render_template('input.html')
-
-@app.route('/input/decks', methods=['POST'])
-def input_deck():
-    """ Data is inputted here """
-    if request.method == "POST":
-        player_name = request.form["name"]
-        player_data = storage.get(class_name="Player", key="name", value=player_name)
-
-        new_player = {
-            "player_id": player_data[0].id,
-            "commander": request.form["commander"]
-            }
-
-        Deck_crud.create(data=jsonify(new_player))
 
     return render_template('input.html')
 
