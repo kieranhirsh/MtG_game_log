@@ -11,7 +11,7 @@ class Deck_validator():
 
         # if all checks are passed, we're good to go
         return True
-    
+
     def valid_player_id(player_id):
         # ensure that the specified player id actually exists before setting
         if storage.get('Player', player_id) is None:

@@ -121,7 +121,7 @@ class Colour_Identity_crud():
         return Colour_Identity_crud.all()
 
     @staticmethod
-    def get_parent_data(colour_identity_id, class_type):
+    def get_parent_data(colour_identity_id, parent_type):
         """ Class method get the parent data for a given colour identity """
         output = {}
 
@@ -131,7 +131,7 @@ class Colour_Identity_crud():
             print("Error: ", exc)
             return "Unable to find specific colour identity\n"
 
-        parent_data = getattr(colour_identity_data[0], class_type)
+        parent_data = getattr(colour_identity_data[0], parent_type)
         parent_columns = getattr(parent_data, "all_attribs")
 
         for column in parent_columns:
@@ -163,7 +163,7 @@ class Colour_Identity_crud():
         return jsonify(output)
 
     @staticmethod
-    def get_child_data(colour_identity_id, class_type):
+    def get_child_data(colour_identity_id, child_type):
         """ Class method get the child data for a given colour identity """
         output = []
 
@@ -173,7 +173,7 @@ class Colour_Identity_crud():
             print("Error: ", exc)
             return "Unable to find specific colour identity\n"
 
-        child_data = getattr(colour_identity_data[0], class_type)
+        child_data = getattr(colour_identity_data[0], child_type)
         child_columns = getattr(child_data[0], "all_attribs")
 
         i = 0
