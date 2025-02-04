@@ -127,7 +127,7 @@ class Deck_crud():
 
     @staticmethod
     def get_parent_data(deck_id, class_type):
-        """ Class method get the Parent data for a given Deck """
+        """ Class method get the parent data for a given Deck """
         output = {}
 
         try:
@@ -141,5 +141,30 @@ class Deck_crud():
 
         for column in parent_columns:
             output.update({column: getattr(parent_data, column)})
+
+        return jsonify(output)
+
+    @staticmethod
+    def get_child_data(deck_id, class_type):
+        """ Class method get the child data for a given Deck """
+        output = []
+
+        try:
+            deck_data = storage.get(class_name="Deck", key="id", value=deck_id)
+        except IndexError as exc:
+            print("Error: ", exc)
+            return "Unable to find specific deck!"
+
+        child_data = getattr(deck_data[0], class_type)
+        child_columns = getattr(child_data[0], "all_attribs")
+
+        i = 0
+        for child in child_data:
+            output.append({})
+
+            for column in child_columns:
+                output[i].update({column: getattr(child, column)})
+
+            i += 1
 
         return jsonify(output)
