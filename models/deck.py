@@ -8,8 +8,9 @@ from data import Base
 class Deck(Base):
     """ Representation of deck """
 
-    can_init   = ["commander", "player_id"]
-    can_update = ["commander", "player_id"]
+    all_attribs = ["id", "commander", "player_id"]
+    can_init    = ["commander", "player_id"]
+    can_update  = ["commander", "player_id"]
 
     # Class attributes defaults
     __tablename__ = 'Decks'

@@ -25,7 +25,7 @@ def decks_edit(deck_id):
 @api_routes.route('/decks/<deck_id>/player', methods=["GET"])
 def decks_specific_player_get(deck_id):
     """ returns the data for a specific deck's owner """
-    return Deck_crud.get_player_data(deck_id)
+    return Deck_crud.get_parent_data(deck_id, class_type="player")
 
 @api_routes.route('/decks/<deck_id>', methods=["DELETE"])
 def decks_delete(deck_id):

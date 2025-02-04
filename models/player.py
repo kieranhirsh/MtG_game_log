@@ -8,8 +8,9 @@ from data import Base
 class Player(Base):
     """ Representation of player """
 
-    can_init   = ["name"]
-    can_update = ["name"]
+    all_attribs = ["id", "name"]
+    can_init    = ["name"]
+    can_update  = ["name"]
 
     # Class attributes defaults
     __tablename__ = 'Players'
