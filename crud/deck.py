@@ -58,14 +58,20 @@ class Deck_crud():
             abort(400, "Missing commander")
         if 'player_id' not in data:
             abort(400, "Missing player id")
+        if 'colour_identity_id' not in data:
+            abort(400, "Missing colour identity id")
 
         exists = storage.get(class_name = 'Player', key = 'id', value = data["player_id"])
         if exists is None:
             abort(400, "Specified player does not exist")
+        exists = storage.get(class_name = 'Colour_Identity', key = 'id', value = data["colour_identity_id"])
+        if exists is None:
+            abort(400, "Specified colour identity does not exist")
 
         new_deck = Deck(
             commander=data["commander"],
-            player_id=data["player_id"]
+            player_id=data["player_id"],
+            colour_identity_id=data["colour_identity_id"]
         )
         is_valid = Deck_validator.is_valid(new_deck)
 
@@ -81,7 +87,8 @@ class Deck_crud():
         output = {
             "id": new_deck.id,
             "commander": new_deck.commander,
-            "player_id": new_deck.player_id
+            "player_id": new_deck.player_id,
+            "colour_identity_id": new_deck.colour_identity_id
         }
 
         return jsonify(output)
@@ -99,6 +106,8 @@ class Deck_crud():
             Deck_validator.valid_commander(data["commander"])
         if 'player_id' in data:
             Deck_validator.valid_player_id(data["player_id"])
+        if 'colour_identity_id' in data:
+            Deck_validator.valid_player_id(data["colour_identity_id"])
 
         try:
             result = storage.update('Deck', deck_id, data, Deck.can_update)
@@ -109,7 +118,8 @@ class Deck_crud():
         output = {
             "id": result.id,
             "commander": result.commander,
-            "player_id": result.player_id
+            "player_id": result.player_id,
+            "colour_identity_id": result.colour_identity_id
         }
 
         return jsonify(output)
