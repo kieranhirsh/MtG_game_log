@@ -24,7 +24,8 @@ class Deck_crud():
             output.append({
                 "id": row.id,
                 "commander": row.commander,
-                "player_id": row.player_id
+                "player_id": row.player_id,
+                "colour_identity_id": row.colour_identity_id
             })
 
         return jsonify(output)
@@ -41,7 +42,8 @@ class Deck_crud():
         output = {
             "id": result[0].id,
             "commander": result[0].commander,
-            "player_id": result[0].player_id
+            "player_id": result[0].player_id,
+            "colour_identity_id": result[0].colour_identity_id
         }
 
         return jsonify(output)
@@ -172,7 +174,8 @@ class Deck_crud():
             output.append({
                 "id": sibling.id,
                 "commander": sibling.commander,
-                "player_id": sibling.player_id
+                "player_id": sibling.player_id,
+                "colour_identity_id": sibling.colour_identity_id
             })
 
         return jsonify(output)
