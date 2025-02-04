@@ -25,7 +25,7 @@ def players_edit(player_id):
 @api_routes.route('/players/<player_id>/decks', methods=["GET"])
 def get_decks_data(player_id):
     """ returns all of a specific player's decks' data """
-    return Player_crud.get_decks_data(player_id)
+    return Player_crud.get_child_data(player_id, "decks")
 
 @api_routes.route('/players/<player_id>', methods=["DELETE"])
 def players_delete(player_id):

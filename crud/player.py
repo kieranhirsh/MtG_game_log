@@ -115,7 +115,7 @@ class Player_crud():
 
     @staticmethod
     def get_parent_data(player_id, class_type):
-        """ Class method get the Parent data for a given Player """
+        """ Class method get the parent data for a given Player """
         output = {}
 
         try:
@@ -133,8 +133,8 @@ class Player_crud():
         return jsonify(output)
 
     @staticmethod
-    def get_decks_data(player_id):
-        """ Class method get the data for a Player's decks """
+    def get_child_data(player_id, class_type):
+        """ Class method get the child data for a given Player """
         output = []
 
         try:
@@ -142,12 +142,17 @@ class Player_crud():
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to find specific deck!"
-        decks_data = player_data[0].decks
 
-        for deck in decks_data:
-            output.append({
-                "id": deck.id,
-                "commander": deck.commander
-            })
+        child_data = getattr(player_data[0], class_type)
+        child_columns = getattr(child_data[0], "all_attribs")
+
+        i = 0
+        for child in child_data:
+            output.append({})
+
+            for column in child_columns:
+                output[i].update({column: getattr(child, column)})
+
+            i += 1
 
         return jsonify(output)
