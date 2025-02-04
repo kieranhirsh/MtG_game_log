@@ -2,6 +2,7 @@
 from flask import Flask, render_template, request, jsonify
 from api.v1 import api_routes
 from data import storage
+from crud.colour_identity import Colour_Identity_crud
 from crud.deck import Deck_crud
 from crud.player import Player_crud
 
@@ -51,19 +52,31 @@ def input_deck():
 def data():
     """ Spreadsheets are displayed here """
     # Load the data we need before passing it to the template
+    colour_identities = Colour_Identity_crud.all(True)
     decks = Deck_crud.all(True)
     players = Player_crud.all(True)
 
-    return render_template('data.html', decks=decks, players=players)
+    return render_template(
+        'data.html',
+        colour_identities=colour_identities,
+        decks=decks,
+        players=players
+    )
 
 @app.route('/graphs')
 def graphs():
     """ Graphs are displayed here """
     # Load the data we need before passing it to the template
+    colour_identities = Colour_Identity_crud.all(True)
     decks = Deck_crud.all(True)
     players = Player_crud.all(True)
 
-    return render_template('graphs.html', decks=decks, players=players)
+    return render_template(
+        'graphs.html',
+        colour_identities=colour_identities,
+        decks=decks,
+        players=players
+    )
 
 # Set debug=True for the server to auto-reload when there are changes
 if __name__ == '__main__':
