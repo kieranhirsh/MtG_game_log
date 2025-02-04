@@ -15,7 +15,7 @@ class Player_crud():
             result = storage.get(class_name = 'Player')
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to load players!"
+            return "Unable to load players\n"
 
         if return_raw_result:
             return result
@@ -35,7 +35,7 @@ class Player_crud():
             result: Player = storage.get(class_name = 'Player', key = 'id', value = player_id)
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to load Player data!"
+            return "Unable to load Player data\n"
 
         output = {
             "id": result[0].id,
@@ -65,7 +65,7 @@ class Player_crud():
                 storage.add(new_player)
             except IndexError as exc:
                 print("Error: ", exc)
-                return "Unable to add new Player!"
+                return "Unable to add new Player\n"
         else:
             raise ValueError("Invalid player")
 
@@ -92,7 +92,7 @@ class Player_crud():
             result = storage.update('Player', player_id, data, Player.can_update)
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to update specified player!"
+            return "Unable to update specified player\n"
 
         output = {
             "id": result.id,
@@ -109,9 +109,9 @@ class Player_crud():
             storage.delete('Player', player_id)
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to delete specified player!"
+            return "Unable to delete specified player\n"
 
-        return Player.all()
+        return Player_crud.all()
 
     @staticmethod
     def get_parent_data(player_id, class_type):
@@ -122,7 +122,7 @@ class Player_crud():
             player_data = storage.get(class_name="Player", key="id", value=player_id)
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to find specific player!"
+            return "Unable to find specific player\n"
 
         parent_data = getattr(player_data[0], class_type)
         parent_columns = getattr(parent_data, "all_attribs")
@@ -141,7 +141,7 @@ class Player_crud():
             player_data = storage.get(class_name="Player", key="id", value=player_id)
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to find specific player!"
+            return "Unable to find specific player\n"
 
         parent_data = getattr(player_data[0], parent_type)
         sibling_data = getattr(parent_data, "players")
@@ -163,7 +163,7 @@ class Player_crud():
             player_data = storage.get(class_name="Player", key="id", value=player_id)
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to find specific player!"
+            return "Unable to find specific player\n"
 
         child_data = getattr(player_data[0], class_type)
         child_columns = getattr(child_data[0], "all_attribs")
