@@ -53,8 +53,9 @@ class Colour_Identity_validator():
 
     def valid_colours(colours):
         # there are only 5 valid colours, check that this lilst only contains those
+        colours_list = colours.split()
         allowed_colours = ["white", "blue", "black", "red", "green"]
-        if not all(elem in allowed_colours for elem in colours):
+        if not all(elem in allowed_colours for elem in colours_list):
             raise ValueError("Invalid colours specified: {}".format(colours))
 
         return True
