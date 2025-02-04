@@ -1,10 +1,9 @@
 #!/usr/bin/python3
-
 from flask import Flask, render_template, request, jsonify
 from api.v1 import api_routes
 from data import storage
-from models.deck import Deck
-from models.player import Player
+from crud.deck import Deck_crud
+from crud.player import Player_crud
 
 app = Flask(__name__)
 app.register_blueprint(api_routes)
@@ -28,10 +27,9 @@ def input_player():
             "name": request.form["name"]
         }
 
-        Player.create(data=jsonify(new_player))
+        Player_crud.create(data=jsonify(new_player))
 
     return render_template('input.html')
-
 
 @app.route('/input/decks', methods=['POST'])
 def input_deck():
@@ -45,7 +43,7 @@ def input_deck():
             "commander": request.form["commander"]
             }
 
-        Deck.create(data=jsonify(new_player))
+        Deck_crud.create(data=jsonify(new_player))
 
     return render_template('input.html')
 
@@ -53,8 +51,8 @@ def input_deck():
 def data():
     """ Spreadsheets are displayed here """
     # Load the data we need before passing it to the template
-    decks = Deck.all(True)
-    players = Player.all(True)
+    decks = Deck_crud.all(True)
+    players = Player_crud.all(True)
 
     return render_template('data.html', decks=decks, players=players)
 
@@ -62,8 +60,8 @@ def data():
 def graphs():
     """ Graphs are displayed here """
     # Load the data we need before passing it to the template
-    decks = Deck.all(True)
-    players = Player.all(True)
+    decks = Deck_crud.all(True)
+    players = Player_crud.all(True)
 
     return render_template('graphs.html', decks=decks, players=players)
 

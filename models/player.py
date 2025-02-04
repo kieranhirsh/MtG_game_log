@@ -1,17 +1,16 @@
 #!/usr/bin/python
 """ Player model """
 import uuid
-from flask import jsonify, request, abort
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
-from data import storage, Base
-from validation.player import Player_validator
+from data import Base
 
 class Player(Base):
     """ Representation of player """
 
-    can_init   = ["name"]
-    can_update = ["name"]
+    all_attribs = ["id", "name"]
+    can_init    = ["name"]
+    can_update  = ["name"]
 
     # Class attributes defaults
     __tablename__ = 'Players'
@@ -30,110 +29,3 @@ class Player(Base):
             for key, value in kwargs.items():
                 if key in self.can_init:
                     setattr(self, key, value)
-
-
-    # --- Static methods ---
-    @staticmethod
-    def all(return_raw_result = False):
-        """ Class method that returns all players data """
-        output = []
-
-        try:
-            result = storage.get(class_name = 'Player')
-        except IndexError as exc:
-            print("Error: ", exc)
-            return "Unable to load players!"
-
-        if return_raw_result:
-            return result
-
-        for row in result:
-            output.append({
-                "id": row.id,
-                "name": row.name,
-            })
-
-        return jsonify(output)
-
-    @staticmethod
-    def specific(player_id):
-        """ Class method that returns a specific player's data """
-        try:
-            result: Player = storage.get(class_name = 'Player', key = 'id', value = player_id)
-        except IndexError as exc:
-            print("Error: ", exc)
-            return "Unable to load Player data!"
-
-        output = {
-            "id": result[0].id,
-            "name": result[0].name
-        }
-
-        return jsonify(output)
-
-    @staticmethod
-    def create(data = ""):
-        """ Class method that creates a new player """
-        try:
-            data = request.get_json()
-        except:
-            data = data.get_json()
-
-        if 'name' not in data:
-            abort(400, "Missing name")
-
-        new_player = Player(
-            name=data["name"]
-        )
-        is_valid = Player_validator.is_valid(new_player)
-
-        if is_valid:
-            try:
-                storage.add(new_player)
-            except IndexError as exc:
-                print("Error: ", exc)
-                return "Unable to add new Player!"
-        else:
-            raise ValueError("Invalid player")
-
-        output = {
-            "id": new_player.id,
-            "name": new_player.name
-        }
-
-        return jsonify(output)
-
-    @staticmethod
-    def update(player_id):
-        ############# THIS IS SUPER OUTDATED #############
-        """ Class method that updates an existing player """
-        if request.get_json() is None:
-            abort(400, "Not a JSON")
-
-        data = request.get_json()
-
-        try:
-            # update the Player record. Only name can be changed
-            result = storage.update('Player', player_id, data, Player.can_update)
-        except IndexError as exc:
-            print("Error: ", exc)
-            return "Unable to update specified player!"
-
-        output = {
-            "id": result.id,
-            "name": result.name
-        }
-
-        return jsonify(output)
-
-    @staticmethod
-    def delete(player_id):
-        """ Class method that deletes an existing Player """
-        try:
-            # delete the Player record
-            storage.delete('Player', player_id)
-        except IndexError as exc:
-            print("Error: ", exc)
-            return "Unable to delete specified player!"
-
-        return Player.all()
