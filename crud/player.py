@@ -23,7 +23,7 @@ class Player_crud():
         for row in result:
             output.append({
                 "id": row.id,
-                "name": row.name,
+                "name": row.name
             })
 
         return jsonify(output)
@@ -114,7 +114,7 @@ class Player_crud():
         return Player_crud.all()
 
     @staticmethod
-    def get_parent_data(player_id, class_type):
+    def get_parent_data(player_id, parent_type):
         """ Class method get the parent data for a given Player """
         output = {}
 
@@ -124,7 +124,7 @@ class Player_crud():
             print("Error: ", exc)
             return "Unable to find specific player\n"
 
-        parent_data = getattr(player_data[0], class_type)
+        parent_data = getattr(player_data[0], parent_type)
         parent_columns = getattr(parent_data, "all_attribs")
 
         for column in parent_columns:
@@ -155,7 +155,7 @@ class Player_crud():
         return jsonify(output)
 
     @staticmethod
-    def get_child_data(player_id, class_type):
+    def get_child_data(player_id, child_type):
         """ Class method get the child data for a given Player """
         output = []
 
@@ -165,7 +165,7 @@ class Player_crud():
             print("Error: ", exc)
             return "Unable to find specific player\n"
 
-        child_data = getattr(player_data[0], class_type)
+        child_data = getattr(player_data[0], child_type)
         child_columns = getattr(child_data[0], "all_attribs")
 
         i = 0

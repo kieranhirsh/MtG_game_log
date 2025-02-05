@@ -24,7 +24,8 @@ class Deck_crud():
             output.append({
                 "id": row.id,
                 "commander": row.commander,
-                "player_id": row.player_id
+                "player_id": row.player_id,
+                "colour_identity_id": row.colour_identity_id
             })
 
         return jsonify(output)
@@ -41,7 +42,8 @@ class Deck_crud():
         output = {
             "id": result[0].id,
             "commander": result[0].commander,
-            "player_id": result[0].player_id
+            "player_id": result[0].player_id,
+            "colour_identity_id": result[0].colour_identity_id
         }
 
         return jsonify(output)
@@ -58,14 +60,20 @@ class Deck_crud():
             abort(400, "Missing commander")
         if 'player_id' not in data:
             abort(400, "Missing player id")
+        if 'colour_identity_id' not in data:
+            abort(400, "Missing colour identity id")
 
         exists = storage.get(class_name = 'Player', key = 'id', value = data["player_id"])
         if exists is None:
             abort(400, "Specified player does not exist")
+        exists = storage.get(class_name = 'Colour_Identity', key = 'id', value = data["colour_identity_id"])
+        if exists is None:
+            abort(400, "Specified colour identity does not exist")
 
         new_deck = Deck(
             commander=data["commander"],
-            player_id=data["player_id"]
+            player_id=data["player_id"],
+            colour_identity_id=data["colour_identity_id"]
         )
         is_valid = Deck_validator.is_valid(new_deck)
 
@@ -81,7 +89,8 @@ class Deck_crud():
         output = {
             "id": new_deck.id,
             "commander": new_deck.commander,
-            "player_id": new_deck.player_id
+            "player_id": new_deck.player_id,
+            "colour_identity_id": new_deck.colour_identity_id
         }
 
         return jsonify(output)
@@ -99,6 +108,8 @@ class Deck_crud():
             Deck_validator.valid_commander(data["commander"])
         if 'player_id' in data:
             Deck_validator.valid_player_id(data["player_id"])
+        if 'colour_identity_id' in data:
+            Deck_validator.valid_player_id(data["colour_identity_id"])
 
         try:
             result = storage.update('Deck', deck_id, data, Deck.can_update)
@@ -109,7 +120,8 @@ class Deck_crud():
         output = {
             "id": result.id,
             "commander": result.commander,
-            "player_id": result.player_id
+            "player_id": result.player_id,
+            "colour_identity_id": result.colour_identity_id
         }
 
         return jsonify(output)
@@ -126,7 +138,7 @@ class Deck_crud():
         return Deck_crud.all()
 
     @staticmethod
-    def get_parent_data(deck_id, class_type):
+    def get_parent_data(deck_id, parent_type):
         """ Class method get the parent data for a given Deck """
         output = {}
 
@@ -136,7 +148,7 @@ class Deck_crud():
             print("Error: ", exc)
             return "Unable to find specific deck\n"
 
-        parent_data = getattr(deck_data[0], class_type)
+        parent_data = getattr(deck_data[0], parent_type)
         parent_columns = getattr(parent_data, "all_attribs")
 
         for column in parent_columns:
@@ -162,13 +174,14 @@ class Deck_crud():
             output.append({
                 "id": sibling.id,
                 "commander": sibling.commander,
-                "player_id": sibling.player_id
+                "player_id": sibling.player_id,
+                "colour_identity_id": sibling.colour_identity_id
             })
 
         return jsonify(output)
 
     @staticmethod
-    def get_child_data(deck_id, class_type):
+    def get_child_data(deck_id, child_type):
         """ Class method get the child data for a given Deck """
         output = []
 
@@ -178,7 +191,7 @@ class Deck_crud():
             print("Error: ", exc)
             return "Unable to find specific deck\n"
 
-        child_data = getattr(deck_data[0], class_type)
+        child_data = getattr(deck_data[0], child_type)
         child_columns = getattr(child_data[0], "all_attribs")
 
         i = 0
