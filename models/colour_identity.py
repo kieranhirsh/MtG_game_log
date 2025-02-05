@@ -9,7 +9,7 @@ class Colour_Identity(Base):
     """ Representation of colour identity """
 
     all_attribs = ["id", "colour_identity", "colours"]
-    can_init    = ["colour_identity", "colours"]
+    can_init    = []
     can_update  = []
 
     # Class attributes defaults
