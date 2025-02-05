@@ -56,7 +56,7 @@ class Colour_Identity_validator():
         # there are only 5 valid colours, check that the colours are a subset of those
         # use regex to check this. this requires lookaheads and I don't get it, but it works
         # put the regex into regex101.com for a better explanation than I'll ever be able to give
-        if not re.search("^(?=[^w]*w?[^w]*$)(?=[^u]*u?[^u]*$)(?=[^b]*b?[^b]*$)(?=[^r]*r?[^r]*$)(?=[^g]*g?[^g]*$)[wubrg]+$", colours):
+        if not re.search("(^(?=[^w]*w?[^w]*$)(?=[^u]*u?[^u]*$)(?=[^b]*b?[^b]*$)(?=[^r]*r?[^r]*$)(?=[^g]*g?[^g]*$)[wubrg]+$|^$)", colours):
             raise ValueError("Invalid colours specified: {}".format(colours))
 
         return True
