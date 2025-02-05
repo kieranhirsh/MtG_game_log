@@ -18,7 +18,9 @@ def index():
 @app.route('/input')
 def input():
     """ Landing page for inputting data """
-    return render_template('input.html')
+    # Load the data we need before passing it to the template
+    colour_identities = Colour_Identity_crud.all(True)
+    return render_template('input.html', colour_identities=colour_identities)
 
 @app.route('/input/decks', methods=['POST'])
 def input_deck():
