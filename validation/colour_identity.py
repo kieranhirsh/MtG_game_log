@@ -1,5 +1,6 @@
 #!/usr/bin/python
 """ Colour Identity validation """
+import re
 
 class Colour_Identity_validator():
     def is_valid(new_colour_identity):
@@ -52,10 +53,10 @@ class Colour_Identity_validator():
         return True
 
     def valid_colours(colours):
-        # there are only 5 valid colours, check that this lilst only contains those
-        colours_list = colours.split()
-        allowed_colours = ["white", "blue", "black", "red", "green"]
-        if not all(elem in allowed_colours for elem in colours_list):
+        # there are only 5 valid colours, check that the colours are a subset of those
+        # use regex to check this. this requires lookaheads and I don't get it, but it works
+        # put the regex into regex101.com for a better explanation than I'll ever be able to give
+        if not re.search("^(?=[^w]*w?[^w]*$)(?=[^u]*u?[^u]*$)(?=[^b]*b?[^b]*$)(?=[^r]*r?[^r]*$)(?=[^g]*g?[^g]*$)[wubrg]+$", colours):
             raise ValueError("Invalid colours specified: {}".format(colours))
 
         return True
