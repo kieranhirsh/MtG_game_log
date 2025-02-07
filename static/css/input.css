@@ -37,6 +37,9 @@ header .navigation nav ul li .input {
 body .data_input {
   display: none;
 }
+body .data_input .type {
+  display: none;
+}
 
 a {
   color: black;

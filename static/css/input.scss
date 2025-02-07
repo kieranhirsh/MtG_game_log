@@ -47,6 +47,10 @@ header {
 body {
   .data_input {
     display: none;
+
+    .type {
+      display: none;
+    }
   }
 }
 
