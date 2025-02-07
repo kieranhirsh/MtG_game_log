@@ -25,8 +25,9 @@
     <div id="data_inputs">
         <div class="data_input" id="player">
             <h2>Create new player</h2>
-            <form action="/input/players" method="POST">
+            <form action="/input" method="POST">
                 <label for="name">Player Name: </label>
+                <input class="type" type="text" id="type" name="type" value="player">
                 <input type="text" id="name" name="name">
                 <input type="submit" value="Create player">
             </form>
@@ -44,8 +45,9 @@
                 <option value="{{ colour_identity.colour_identity }}">
                 {% endfor %}
             </datalist>
-            <form action="/input/decks" method="POST">
+            <form action="/input" method="POST">
                 <label for="commander">Commander: </label>
+                <input class="type" type="text" id="type" name="type" value="deck">
                 <input type="text" id="commander" name="commander">
                 <label for="name">Owner Name: </label>
                 <input type="search" id="name" name="name" list="players" autocomplete="off">
