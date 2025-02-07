@@ -25,7 +25,7 @@ def input():
     return render_template('input.html', colour_identities=colour_identities, players=players)
 
 @app.route('/input', methods=['POST'])
-def input_dqtq():
+def input_data():
     """ Data is inputted here """
     # First add the new item to the database
     input_type = request.form["type"]
