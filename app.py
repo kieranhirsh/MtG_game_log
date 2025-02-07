@@ -19,12 +19,18 @@ def index():
 def input():
     """ Landing page for inputting data """
     # Load the data we need before passing it to the template
+    players = Player_crud.all(True)
     colour_identities = Colour_Identity_crud.all(True)
-    return render_template('input.html', colour_identities=colour_identities)
+
+    return render_template('input.html', colour_identities=colour_identities, players=players)
 
 @app.route('/input/decks', methods=['POST'])
 def input_deck():
     """ Data is inputted here """
+    # Load the data we need before passing it to the template
+    players = Player_crud.all(True)
+    colour_identities = Colour_Identity_crud.all(True)
+
     if request.method == "POST":
         player_name = request.form["name"]
         player_data = storage.get(class_name="Player", key="name", value=player_name)
@@ -40,19 +46,24 @@ def input_deck():
 
         Deck_crud.create(data=jsonify(new_player))
 
-    return render_template('input.html')
+    return render_template('input.html', colour_identities=colour_identities, players=players)
 
 @app.route('/input/players', methods=['POST'])
 def input_player():
     """ Data is inputted here """
+    # Load the data we need before passing it to the template
+    players = Player_crud.all(True)
+    colour_identities = Colour_Identity_crud.all(True)
+
     if request.method == "POST":
+        print("request.form = ", request.form)
         new_player = {
             "name": request.form["name"]
         }
 
         Player_crud.create(data=jsonify(new_player))
 
-    return render_template('input.html')
+    return render_template('input.html', colour_identities=colour_identities, players=players)
 
 @app.route('/data')
 def data():
