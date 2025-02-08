@@ -17,9 +17,9 @@
     Show all:
     <select name="data_types" id="data_types" onchange="toggleDataType()">
       <option value="" selected disabled hidden>Choose data type</option>
-      <option value="colout_identity">Colour Identity</option>
-      <option value="deck">Deck</option>
-      <option value="player">Player</option>
+      <option value="colout_identity">Colour Identities</option>
+      <option value="deck">Decks</option>
+      <option value="player">Players</option>
     </select>
   </div>
 
@@ -43,8 +43,23 @@
   </div>
 
   <div id="data_tables">
+    {% if colour_identities is defined %}
+    <table class="data_table" id="colour_identity">
+      <tr>
+        <th>Colour Identity</th>
+        <th>Number of Decks</th>
+      </tr>
+      {% for colour_identity in colour_identities %}
+      <tr>
+        <td>{{ colour_identity.name }}</td>
+        <td>{{ colour_identity.number_of_decks }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+
+    {% if decks is defined %}
     <table class="data_table" id="deck">
-      {% if decks is defined %}
       <tr>
         <th>Deck Name</th>
         <th>Owner Name</th>
@@ -57,11 +72,11 @@
         <td>{{ deck.colour_identity.colour_identity }}</td>
       </tr>
       {% endfor %}
-      {% endif %}
     </table>
+    {% endif %}
 
+    {% if players is defined %}
     <table class="data_table" id="player">
-      {% if players is defined %}
       <tr>
         <th>Player Name</th>
         <th>Number of Decks</th>
@@ -72,8 +87,8 @@
         <td>{{ player.decks | length }}</td>
       </tr>
       {% endfor %}
-      {% endif %}
     </table>
+    {% endif %}
   </div>
   {% include "footer.html" %}
   <noscript>
