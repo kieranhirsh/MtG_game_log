@@ -5,20 +5,20 @@ function toggleDataType() {
   let DivPlayer = document.getElementById("player");
 
   switch (DataType) {
-    case "player":
-      DivPlayer.style.display = "block";
-      DivColourIdentity.style.display = "none";
+    case "colour_identity":
+      DivColourIdentity.style.display = "block";
       DivDeck.style.display = "none";
+      DivPlayer.style.display = "none";
       break;
     case "deck":
       DivDeck.style.display = "block";
       DivColourIdentity.style.display = "none";
       DivPlayer.style.display = "none";
       break;
-    case "deck":
-      DivColourIdentity.style.display = "block";
+    case "player":
+      DivPlayer.style.display = "block";
+      DivColourIdentity.style.display = "none";
       DivDeck.style.display = "none";
-      DivPlayer.style.display = "none";
       break;
   }
 }
