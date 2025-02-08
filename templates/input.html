@@ -26,9 +26,9 @@
         <div class="data_input" id="player">
             <h2>Create new player</h2>
             <form action="/input" method="POST">
-                <label for="name">Player Name: </label>
                 <input class="type" type="text" id="type" name="type" value="player">
-                <input type="text" id="name" name="name">
+                <label for="name">Player Name: </label>
+                <input type="text" id="name" name="name" autocomplete="off">
                 <input type="submit" value="Create player">
             </form>
         </div>
@@ -46,9 +46,9 @@
                 {% endfor %}
             </datalist>
             <form action="/input" method="POST">
-                <label for="commander">Commander: </label>
                 <input class="type" type="text" id="type" name="type" value="deck">
-                <input type="text" id="commander" name="commander">
+                <label for="commander">Commander: </label>
+                <input type="text" id="commander" name="commander" autocomplete="off">
                 <label for="name">Owner Name: </label>
                 <input type="search" id="name" name="name" list="players" autocomplete="off">
                 <label for="name">Colour Identity: </label>
