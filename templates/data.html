@@ -14,7 +14,7 @@
 <body pg-name="data" js="off">
   {% include "header.html" %}
   <div id="dropdown">
-    Show all:
+    Sort by:
     <select name="data_types" id="data_types" onchange="toggleDataType()">
       <option value="" selected disabled hidden>Choose data type</option>
       <option value="colour_identity">Colour Identities</option>
@@ -23,11 +23,14 @@
     </select>
   </div>
 
-  <div id="data_types">
+  <div id="menu">
+    Under the following conditions (leave a condition blank for no restriction):<br>
     <div class="data_type" id="colour_identity">
       <form action="/data" method="POST">
         <input class="type" type="text" id="type" name="type" value="colour_identity">
-        <input type="submit" value="Submit">
+        <label for="player_name">&emsp;Player Name = </label>
+        <input type="text" id="player_name" name="player_name" autocomplete="off">
+        <br><input type="submit" value="Submit">
       </form>
     </div>
 
@@ -37,6 +40,7 @@
         <input type="submit" value="Submit">
       </form>
     </div>
+
     <div class="data_type" id="player">
       <form action="/data" method="POST">
         <input class="type" type="text" id="type" name="type" value="player">
