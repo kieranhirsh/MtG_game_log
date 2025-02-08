@@ -46,11 +46,15 @@ header {
 
 body {
   .data_table {
-    tr:nth-child(odd) {
-      background-color: white;
+    td, th {
+      padding: 4px 8px;
     }
 
     tr:nth-child(even) {
+      background-color: white;
+    }
+
+    tr:nth-child(odd) {
       background-color: #E7E9EB;
     }
   }
