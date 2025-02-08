@@ -12,7 +12,30 @@
 
 <body pg-name="data" js="off">
     {% include "header.html" %}
-    The raw data belongs here
+    <table class="data_table" id="deck">
+      <tr>
+        <td>Deck Name</td>
+        <td>Owner Name</td>
+        <td>Colour Identity</td>
+      </tr>
+      {% for deck in decks %}
+      <tr>
+        <td>{{ deck.commander }}</td>
+        <td>{{ deck.player.name }}</td>
+        <td>{{ deck.colour_identity.colour_identity }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    <table class="data_table" id="player">
+      <tr>
+        <td>Player Name</td>
+      </tr>
+      {% for player in players %}
+      <tr>
+        <td>{{ player.name }}</td>
+      </tr>
+      {% endfor %}
+    </table>
     {% include "footer.html" %}
     <noscript><style>body { visibility: visible; }</style></noscript>
 </body>
