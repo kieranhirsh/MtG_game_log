@@ -58,28 +58,40 @@ def data_get():
 @app.route('/data', methods=['POST'])
 def data_post():
     """ Spreadsheets are displayed here """
-    colour_identity_data = []
+    # this desperately wants to be a select case, but I'm using Python 3.8 :(
+    if request.form["type"] == "colour_identity":
+        colour_identity_data = []
+        colour_identities = Colour_Identity_crud.all(True)
 
-    # Load the data we need before passing it to the template
-    colour_identities = Colour_Identity_crud.all(True)
-    decks = Deck_crud.all(True)
-    players = Player_crud.all(True)
+        for colour_identity in colour_identities:
+            num_decks = len(Colour_Identity_crud.get_child_data(colour_identity.id, "decks", True))
 
-    for colour_identity in colour_identities:
-        print("colour_identity = ", colour_identity)
-        num_decks = len(Colour_Identity_crud.get_child_data(colour_identity.id, "decks", True))
+            colour_identity_data.append({
+                "name": colour_identity.colour_identity,
+                "number_of_decks": num_decks
+            })
 
-        colour_identity_data.append({
-            "name": colour_identity.colour_identity,
-            "number_of_decks": num_decks
-        })
+        return render_template(
+            'data.html',
+            colour_identities=colour_identity_data
+        )
+    elif request.form["type"] == "deck":
+        decks = Deck_crud.all(True)
 
-    return render_template(
-        'data.html',
-        colour_identities=colour_identity_data,
-        decks=decks,
-        players=players
-    )
+        return render_template(
+            'data.html',
+            decks=decks
+        )
+    elif request.form["type"] == "player":
+        players = Player_crud.all(True)
+
+        return render_template(
+            'data.html',
+            players=players
+        )
+    
+
+    return render_template('data.html')
 
 @app.route('/graphs')
 def graphs():
