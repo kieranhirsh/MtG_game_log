@@ -29,10 +29,12 @@
     <table class="data_table" id="player">
       <tr>
         <td>Player Name</td>
+        <td>Number of Decks</td>
       </tr>
       {% for player in players %}
       <tr>
         <td>{{ player.name }}</td>
+        <td>{{ player.decks | length }}</td>
       </tr>
       {% endfor %}
     </table>
