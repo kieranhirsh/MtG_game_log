@@ -37,6 +37,9 @@ header .navigation nav ul li .data {
 body .data_type {
   display: none;
 }
+body .data_type .type {
+  display: none;
+}
 body .data_table td, body .data_table th {
   padding: 4px 8px;
 }

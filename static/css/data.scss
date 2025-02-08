@@ -47,6 +47,10 @@ header {
 body {
   .data_type {
     display: none;
+
+    .type {
+      display: none;
+    }
   }
 
   .data_table {
