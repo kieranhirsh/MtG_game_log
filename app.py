@@ -15,41 +15,34 @@ def index():
 
     return render_template('index.html')
 
-@app.route('/input')
+@app.route('/input', methods=['GET', 'POST'])
 def input():
-    """ Landing page for inputting data """
-    # Load the data we need before passing it to the template
-    players = Player_crud.all(True)
-    colour_identities = Colour_Identity_crud.all(True)
-
-    return render_template('input.html', colour_identities=colour_identities, players=players)
-
-@app.route('/input', methods=['POST'])
-def input_data():
     """ Data is inputted here """
-    # First add the new item to the database
-    input_type = request.form["type"]
+    if request.method == 'POST':
+        # First add the new item to the database
+        input_type = request.form["type"]
 
-    if input_type == "player":
-        new_player = {
-            "name": request.form["name"]
-        }
-
-        Player_crud.create(data=jsonify(new_player))
-    elif input_type == "data":
-        player_name = request.form["name"]
-        player_data = storage.get(class_name="Player", key="name", value=player_name)
-
-        colour_identity = request.form["colour_identity"]
-        colour_identity_data = storage.get(class_name="Colour_Identity", key="colour_identity", value=colour_identity)
-
-        new_player = {
-            "commander": request.form["commander"],
-            "player_id": player_data[0].id,
-            "colour_identity_id": colour_identity_data[0].id
+        # this desperately wants to be a select case, but I'm using Python 3.8 :(
+        if input_type == "player":
+            new_player = {
+                "name": request.form["name"]
             }
 
-        Deck_crud.create(data=jsonify(new_player))
+            Player_crud.create(data=jsonify(new_player))
+        elif input_type == "deck":
+            owner_name = request.form["owner"]
+            owner_data = storage.get(class_name="Player", key="name", value=owner_name)
+
+            colour_identity = request.form["colour_identity"]
+            colour_identity_data = storage.get(class_name="Colour_Identity", key="colour_identity", value=colour_identity)
+
+            new_deck = {
+                "commander": request.form["commander"],
+                "player_id": owner_data[0].id,
+                "colour_identity_id": colour_identity_data[0].id
+                }
+
+            Deck_crud.create(data=jsonify(new_deck))
 
     # Then load the data we need before passing it to the template
     players = Player_crud.all(True)
