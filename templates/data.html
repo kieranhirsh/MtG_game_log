@@ -14,9 +14,9 @@
     {% include "header.html" %}
     <table class="data_table" id="deck">
       <tr>
-        <td>Deck Name</td>
-        <td>Owner Name</td>
-        <td>Colour Identity</td>
+        <th>Deck Name</th>
+        <th>Owner Name</th>
+        <th>Colour Identity</th>
       </tr>
       {% for deck in decks %}
       <tr>
@@ -28,8 +28,8 @@
     </table>
     <table class="data_table" id="player">
       <tr>
-        <td>Player Name</td>
-        <td>Number of Decks</td>
+        <th>Player Name</th>
+        <th>Number of Decks</th>
       </tr>
       {% for player in players %}
       <tr>
