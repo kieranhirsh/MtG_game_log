@@ -45,6 +45,10 @@ header {
 }
 
 body {
+  .data_type {
+    display: none;
+  }
+
   .data_table {
     td, th {
       padding: 4px 8px;

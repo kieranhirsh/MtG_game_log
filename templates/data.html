@@ -1,18 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link type="text/css" rel="stylesheet" href="../static/css/data.css">
-    <script type="text/javascript" src="../static/js/data.js"></script>
-    <link rel="icon" type="img/png" href="../static/img/card_back.png">
-    <title>M:tG Game Logger</title>
-  </head>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link type="text/css" rel="stylesheet" href="../static/css/data.css">
+  <script type="text/javascript" src="../static/js/data.js"></script>
+  <link rel="icon" type="img/png" href="../static/img/card_back.png">
+  <title>M:tG Game Logger</title>
+</head>
 
 <body pg-name="data" js="off">
-    {% include "header.html" %}
+  {% include "header.html" %}
+  <div id="dropdown">
+    Show all:
+    <select name="data_types" id="data_types" onchange="toggleDataType()">
+      <option value="" selected disabled hidden>Choose data type</option>
+      <option value="colout_identity">Colour Identity</option>
+      <option value="deck">Deck</option>
+      <option value="player">Player</option>
+    </select>
+  </div>
+
+  <div id="data_types">
+    <div class="data_type" id="colour_identity">
+      <form action="/data" method="POST">
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+
+    <div class="data_type" id="deck">
+      <form action="/data" method="POST">
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+    <div class="data_type" id="player">
+      <form action="/data" method="POST">
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+  </div>
+
+  <div id="data_tables">
     <table class="data_table" id="deck">
+      {% if decks is defined %}
       <tr>
         <th>Deck Name</th>
         <th>Owner Name</th>
@@ -25,8 +57,11 @@
         <td>{{ deck.colour_identity.colour_identity }}</td>
       </tr>
       {% endfor %}
+      {% endif %}
     </table>
+
     <table class="data_table" id="player">
+      {% if players is defined %}
       <tr>
         <th>Player Name</th>
         <th>Number of Decks</th>
@@ -37,8 +72,17 @@
         <td>{{ player.decks | length }}</td>
       </tr>
       {% endfor %}
+      {% endif %}
     </table>
-    {% include "footer.html" %}
-    <noscript><style>body { visibility: visible; }</style></noscript>
+  </div>
+  {% include "footer.html" %}
+  <noscript>
+    <style>
+      body {
+        visibility: visible;
+      }
+    </style>
+  </noscript>
 </body>
+
 </html>

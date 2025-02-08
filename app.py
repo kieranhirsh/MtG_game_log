@@ -50,8 +50,13 @@ def input():
 
     return render_template('input.html', colour_identities=colour_identities, players=players)
 
-@app.route('/data')
-def data():
+@app.route('/data', methods=['GET'])
+def data_get():
+    """ Spreadsheets are called here """
+    return render_template('data.html')
+
+@app.route('/data', methods=['POST'])
+def data_post():
     """ Spreadsheets are displayed here """
     # Load the data we need before passing it to the template
     colour_identities = Colour_Identity_crud.all(True)

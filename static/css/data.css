@@ -34,6 +34,9 @@ header .navigation nav ul li .data {
   border-bottom: 6px solid darkslateblue;
 }
 
+body .data_type {
+  display: none;
+}
 body .data_table td, body .data_table th {
   padding: 4px 8px;
 }
