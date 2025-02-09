@@ -1,9 +1,10 @@
 #!/usr/bin/python
 """ CRUD layer """
-from flask import jsonify, request, abort
+from flask import request, abort
 from data import storage
 from models.colour_identity import Colour_Identity
 from validation.colour_identity import Colour_Identity_validator
+from sqlalchemy.inspection import inspect
 
 class Colour_Identity_crud():
     @staticmethod
@@ -27,7 +28,7 @@ class Colour_Identity_crud():
                 "colours": row.colours
             })
 
-        return jsonify(output)
+        return output
 
     @staticmethod
     def specific(colour_identity_id, return_raw_result = False):
@@ -47,7 +48,7 @@ class Colour_Identity_crud():
         if return_raw_result:
             return output
 
-        return jsonify(output)
+        return output
 
     @staticmethod
     def create(data = ""):
@@ -83,7 +84,7 @@ class Colour_Identity_crud():
             "olours": new_colour_identity.colours
         }
 
-        return jsonify(output)
+        return output
 
     @staticmethod
     def update(colour_identity_id, data = ""):
@@ -111,7 +112,7 @@ class Colour_Identity_crud():
             "colours": result.colours
         }
 
-        return jsonify(output)
+        return output
 
     @staticmethod
     def delete(colour_identity_id):
@@ -146,7 +147,7 @@ class Colour_Identity_crud():
         if return_raw_result:
             return output
 
-        return jsonify(output)
+        return output
 
     @staticmethod
     def get_sibling_data(colour_identity_id, parent_type, return_raw_result = False):
@@ -173,7 +174,7 @@ class Colour_Identity_crud():
         if return_raw_result:
             return output
 
-        return jsonify(output)
+        return output
 
     @staticmethod
     def get_child_data(colour_identity_id, child_type, return_raw_result = False):
@@ -181,12 +182,14 @@ class Colour_Identity_crud():
         output = []
 
         try:
-            colour_identity_data = storage.get(class_name="Colour_Identity", key="id", value=colour_identity_id)
+            child_data = storage.get(class_name=child_type, key="colour_identity_id", value=colour_identity_id)
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to find specific colour identity\n"
+            return "Unable to find specific %s\n" % (child_type)
 
-        child_data = getattr(colour_identity_data[0], child_type)
+        if return_raw_result:
+            return child_data
+
         if child_data:
             child_columns = getattr(child_data[0], "all_attribs")
 
@@ -199,7 +202,4 @@ class Colour_Identity_crud():
 
                 i += 1
 
-        if return_raw_result:
-            return output
-
-        return jsonify(output)
+        return output
