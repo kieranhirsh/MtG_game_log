@@ -69,13 +69,40 @@ def data_post():
         colour_identity_data = []
         colour_identities = Colour_Identity_crud.all(True)
 
-        for colour_identity in colour_identities:
-            num_decks = len(Colour_Identity_crud.get_child_data(colour_identity.id, "decks", True))
+        # if we have a restriction on the player name
+        if request.form['player_name']:
+            # loop over all colour identities
+            for colour_identity in colour_identities:
+                # find all decks of with the given colour identity
+                colour_identity_decks = Colour_Identity_crud.get_child_data(colour_identity.id, "Deck", True)
+                decks_to_remove = []
 
-            colour_identity_data.append({
-                "name": colour_identity.colour_identity,
-                "number_of_decks": num_decks
-            })
+                # loop over those decks
+                for deck in colour_identity_decks:
+                    # if they have the wrong owner, add them of the list of decks to remove
+                    if deck.player.name != request.form['player_name']:
+                        decks_to_remove.append(deck)
+
+                # loop over our list of decks to remove and remove them from our list of all decks
+                for deck_to_remove in decks_to_remove:
+                    colour_identity_decks.remove(deck_to_remove)
+
+                # find the number of each deck
+                num_decks = len(colour_identity_decks)
+
+                # and finally, append all the relevant data that has been requested
+                colour_identity_data.append({
+                    "name": colour_identity.colour_identity,
+                    "number_of_decks": num_decks
+                })
+        else:
+            for colour_identity in colour_identities:
+                num_decks = len(Colour_Identity_crud.get_child_data(colour_identity.id, "Deck", True))
+
+                colour_identity_data.append({
+                    "name": colour_identity.colour_identity,
+                    "number_of_decks": num_decks
+                })
 
         return render_template(
             'data.html',
