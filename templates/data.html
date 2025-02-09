@@ -17,9 +17,9 @@
     Sort by:
     <select name="data_types" id="data_types" onchange="toggleDataType()">
       <option value="" selected disabled hidden>Choose data type</option>
-      <option value="colour_identity">Colour Identities</option>
-      <option value="deck">Decks</option>
-      <option value="player">Players</option>
+      <option value="colour_identity">Colour Identity</option>
+      <option value="deck">Deck</option>
+      <option value="player">Player</option>
     </select>
   </div>
 
@@ -37,14 +37,16 @@
     <div class="data_type" id="deck">
       <form action="/data" method="POST">
         <input class="type" type="text" id="type" name="type" value="deck">
-        <input type="submit" value="Submit">
+        <label for="player_name">&emsp;Owner Name = </label>
+        <input type="text" id="player_name" name="player_name" autocomplete="off">
+        <br><input type="submit" value="Submit">
       </form>
     </div>
 
     <div class="data_type" id="player">
       <form action="/data" method="POST">
         <input class="type" type="text" id="type" name="type" value="player">
-        <input type="submit" value="Submit">
+        <br><input type="submit" value="Submit">
       </form>
     </div>
   </div>
