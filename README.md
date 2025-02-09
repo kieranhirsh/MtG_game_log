@@ -1,5 +1,5 @@
 # MtG_game_log
-Inspired by EDHRECast's game tracking.
+Inspired by EDHRECast's game tracking  (episodes 298 and 345).
 
 ## setup instructions
 
