@@ -7,6 +7,8 @@ from validation.player import Player_validator
 ######################## this needs to be fixed to match colour_identity
 ######################## more return_raw_result are needed
 ######################## and checks to make sure getting children, siblings, and parents don't error when empty
+######################## and move jsonify to api layer
+######################## and make get child work correctly (probably fix parent and sibling layers too)
 class Player_crud():
     @staticmethod
     def all(return_raw_result = False):

@@ -4,8 +4,7 @@ from flask import request, abort
 from data import storage
 from models.colour_identity import Colour_Identity
 from validation.colour_identity import Colour_Identity_validator
-from sqlalchemy.inspection import inspect
-
+######################## make get parent and sibling work as get child does
 class Colour_Identity_crud():
     @staticmethod
     def all(return_raw_result = False):
