@@ -30,7 +30,7 @@ class Colour_Identity_crud():
         return jsonify(output)
 
     @staticmethod
-    def specific(colour_identity_id):
+    def specific(colour_identity_id, return_raw_result = False):
         """ Class method that returns a specific colour identity's data """
         try:
             result: Colour_Identity = storage.get(class_name = 'Colour_Identity', key = 'id', value = colour_identity_id)
@@ -43,6 +43,9 @@ class Colour_Identity_crud():
             "colour_identity": result[0].colour_identity,
             "colours": result[0].colours
         }
+
+        if return_raw_result:
+            return output
 
         return jsonify(output)
 
@@ -123,7 +126,7 @@ class Colour_Identity_crud():
         return Colour_Identity_crud.all()
 
     @staticmethod
-    def get_parent_data(colour_identity_id, parent_type):
+    def get_parent_data(colour_identity_id, parent_type, return_raw_result = False):
         """ Class method get the parent data for a given colour identity """
         output = {}
 
@@ -134,15 +137,19 @@ class Colour_Identity_crud():
             return "Unable to find specific colour identity\n"
 
         parent_data = getattr(colour_identity_data[0], parent_type)
-        parent_columns = getattr(parent_data, "all_attribs")
+        if parent_data:
+            parent_columns = getattr(parent_data, "all_attribs")
 
-        for column in parent_columns:
-            output.update({column: getattr(parent_data, column)})
+            for column in parent_columns:
+                output.update({column: getattr(parent_data, column)})
+
+        if return_raw_result:
+            return output
 
         return jsonify(output)
 
     @staticmethod
-    def get_sibling_data(colour_identity_id, parent_type):
+    def get_sibling_data(colour_identity_id, parent_type, return_raw_result = False):
         """ Class method get the sibling data for a given colour identity """
         output = []
 
@@ -153,19 +160,23 @@ class Colour_Identity_crud():
             return "Unable to find specific colour identity\n"
 
         parent_data = getattr(colour_identity_data[0], parent_type)
-        sibling_data = getattr(parent_data, "colour_identities")
+        if parent_data:
+            sibling_data = getattr(parent_data, "colour_identities")
 
-        for sibling in sibling_data:
-            output.append({
-                "id": sibling.id,
-                "colour_identity": sibling.colour_identity,
-                "colours": sibling.colours
-            })
+            for sibling in sibling_data:
+                output.append({
+                    "id": sibling.id,
+                    "colour_identity": sibling.colour_identity,
+                    "colours": sibling.colours
+                })
+
+        if return_raw_result:
+            return output
 
         return jsonify(output)
 
     @staticmethod
-    def get_child_data(colour_identity_id, child_type):
+    def get_child_data(colour_identity_id, child_type, return_raw_result = False):
         """ Class method get the child data for a given colour identity """
         output = []
 
@@ -176,15 +187,19 @@ class Colour_Identity_crud():
             return "Unable to find specific colour identity\n"
 
         child_data = getattr(colour_identity_data[0], child_type)
-        child_columns = getattr(child_data[0], "all_attribs")
+        if child_data:
+            child_columns = getattr(child_data[0], "all_attribs")
 
-        i = 0
-        for child in child_data:
-            output.append({})
+            i = 0
+            for child in child_data:
+                output.append({})
 
-            for column in child_columns:
-                output[i].update({column: getattr(child, column)})
+                for column in child_columns:
+                    output[i].update({column: getattr(child, column)})
 
-            i += 1
+                i += 1
+
+        if return_raw_result:
+            return output
 
         return jsonify(output)

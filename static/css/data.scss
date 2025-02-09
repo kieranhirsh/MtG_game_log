@@ -44,6 +44,30 @@ header {
   }
 }
 
+body {
+  .data_type {
+    display: none;
+
+    .type {
+      display: none;
+    }
+  }
+
+  .data_table {
+    td, th {
+      padding: 4px 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: white;
+    }
+
+    tr:nth-child(odd) {
+      background-color: #E7E9EB;
+    }
+  }
+}
+
 a {
   color: black;
 }

@@ -4,7 +4,9 @@ from flask import jsonify, request, abort
 from data import storage
 from models.deck import Deck
 from validation.deck import Deck_validator
-
+######################## this needs to be fixed to match colour_identity
+######################## more return_raw_result are needed
+######################## and checks to make sure getting children, siblings, and parents don't error when empty
 class Deck_crud():
     @staticmethod
     def all(return_raw_result = False):

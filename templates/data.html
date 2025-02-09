@@ -1,19 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link type="text/css" rel="stylesheet" href="../static/css/data.css">
-    <script type="text/javascript" src="../static/js/data.js"></script>
-    <link rel="icon" type="img/png" href="../static/img/card_back.png">
-    <title>M:tG Game Logger</title>
-  </head>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link type="text/css" rel="stylesheet" href="../static/css/data.css">
+  <script type="text/javascript" src="../static/js/data.js"></script>
+  <link rel="icon" type="img/png" href="../static/img/card_back.png">
+  <title>M:tG Game Logger</title>
+</head>
 
 <body pg-name="data" js="off">
-    {% include "header.html" %}
-    The raw data belongs here
-    {% include "footer.html" %}
-    <noscript><style>body { visibility: visible; }</style></noscript>
+  {% include "header.html" %}
+  <div id="dropdown">
+    Show all:
+    <select name="data_types" id="data_types" onchange="toggleDataType()">
+      <option value="" selected disabled hidden>Choose data type</option>
+      <option value="colour_identity">Colour Identities</option>
+      <option value="deck">Decks</option>
+      <option value="player">Players</option>
+    </select>
+  </div>
+
+  <div id="data_types">
+    <div class="data_type" id="colour_identity">
+      <form action="/data" method="POST">
+        <input class="type" type="text" id="type" name="type" value="colour_identity">
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+
+    <div class="data_type" id="deck">
+      <form action="/data" method="POST">
+        <input class="type" type="text" id="type" name="type" value="deck">
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+    <div class="data_type" id="player">
+      <form action="/data" method="POST">
+        <input class="type" type="text" id="type" name="type" value="player">
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+  </div>
+
+  <div id="data_tables">
+    {% if colour_identities is defined %}
+    <table class="data_table" id="colour_identity">
+      <tr>
+        <th>Colour Identity</th>
+        <th>Number of Decks</th>
+      </tr>
+      {% for colour_identity in colour_identities %}
+      <tr>
+        <td>{{ colour_identity.name }}</td>
+        <td>{{ colour_identity.number_of_decks }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+
+    {% if decks is defined %}
+    <table class="data_table" id="deck">
+      <tr>
+        <th>Deck Name</th>
+        <th>Owner Name</th>
+        <th>Colour Identity</th>
+      </tr>
+      {% for deck in decks %}
+      <tr>
+        <td>{{ deck.commander }}</td>
+        <td>{{ deck.player.name }}</td>
+        <td>{{ deck.colour_identity.colour_identity }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+
+    {% if players is defined %}
+    <table class="data_table" id="player">
+      <tr>
+        <th>Player Name</th>
+        <th>Number of Decks</th>
+      </tr>
+      {% for player in players %}
+      <tr>
+        <td>{{ player.name }}</td>
+        <td>{{ player.decks | length }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+  </div>
+  {% include "footer.html" %}
+  <noscript>
+    <style>
+      body {
+        visibility: visible;
+      }
+    </style>
+  </noscript>
 </body>
+
 </html>
