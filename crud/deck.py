@@ -1,13 +1,12 @@
 #!/usr/bin/python
 """ CRUD layer """
-from flask import jsonify, request, abort
+from flask import request, abort
 from data import storage
 from models.deck import Deck
 from validation.deck import Deck_validator
 ######################## this needs to be fixed to match colour_identity
 ######################## more return_raw_result are needed
 ######################## and checks to make sure getting children, siblings, and parents don't error when empty
-######################## and move jsonify to api layer
 ######################## and make get child work correctly (probably fix parent and sibling layers too)
 class Deck_crud():
     @staticmethod
@@ -32,7 +31,7 @@ class Deck_crud():
                 "colour_identity_id": row.colour_identity_id
             })
 
-        return jsonify(output)
+        return output
 
     @staticmethod
     def specific(deck_id):
@@ -50,7 +49,7 @@ class Deck_crud():
             "colour_identity_id": result[0].colour_identity_id
         }
 
-        return jsonify(output)
+        return output
 
     @staticmethod
     def create(data = ""):
@@ -97,7 +96,7 @@ class Deck_crud():
             "colour_identity_id": new_deck.colour_identity_id
         }
 
-        return jsonify(output)
+        return output
 
     @staticmethod
     def update(deck_id, data = ""):
@@ -128,7 +127,7 @@ class Deck_crud():
             "colour_identity_id": result.colour_identity_id
         }
 
-        return jsonify(output)
+        return output
 
     @staticmethod
     def delete(deck_id):
@@ -158,7 +157,7 @@ class Deck_crud():
         for column in parent_columns:
             output.update({column: getattr(parent_data, column)})
 
-        return jsonify(output)
+        return output
 
     @staticmethod
     def get_sibling_data(deck_id, parent_type):
@@ -182,7 +181,7 @@ class Deck_crud():
                 "colour_identity_id": sibling.colour_identity_id
             })
 
-        return jsonify(output)
+        return output
 
     @staticmethod
     def get_child_data(deck_id, child_type):
@@ -207,4 +206,4 @@ class Deck_crud():
 
             i += 1
 
-        return jsonify(output)
+        return output
