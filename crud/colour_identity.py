@@ -4,7 +4,7 @@ from flask import request, abort
 from data import storage
 from models.colour_identity import Colour_Identity
 from validation.colour_identity import Colour_Identity_validator
-######################## make get parent and sibling work as get child does
+
 class Colour_Identity_crud():
     @staticmethod
     def all(return_model_object = False):
@@ -50,7 +50,7 @@ class Colour_Identity_crud():
         return output
 
     @staticmethod
-    def create(data = ""):
+    def create(data = "", return_model_object = False):
         """ Class method that creates a new colour identity """
         try:
             data = request.get_json()
@@ -77,6 +77,9 @@ class Colour_Identity_crud():
         else:
             raise ValueError("Invalid colour_identity")
 
+        if return_model_object:
+            return new_colour_identity
+
         output = {
             "id": new_colour_identity.id,
             "colour_identity": new_colour_identity.colour_identity,
@@ -86,7 +89,7 @@ class Colour_Identity_crud():
         return output
 
     @staticmethod
-    def update(colour_identity_id, data = ""):
+    def update(colour_identity_id, data = "", return_model_object = False):
         """ Class method that updates an existing colour identity """
         try:
             data = request.get_json()
@@ -104,6 +107,9 @@ class Colour_Identity_crud():
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to update specified colour identity\n"
+
+        if return_model_object:
+            return result
 
         output = {
             "id": result.id,
@@ -136,15 +142,20 @@ class Colour_Identity_crud():
             print("Error: ", exc)
             return "Unable to find specific colour identity\n"
 
-        parent_data = getattr(colour_identity_data[0], parent_type)
-        if parent_data:
-            parent_columns = getattr(parent_data, "all_attribs")
-
-            for column in parent_columns:
-                output.update({column: getattr(parent_data, column)})
+        parent_id = getattr(colour_identity_data[0], "%s_id" % (parent_type))
+        try:
+            parent_data = storage.get(class_name=parent_type, key="id" % (parent_type), value=parent_id)
+        except IndexError as exc:
+            print("Error: ", exc)
+            return "Unable to find specific %s\n" % (parent_type)
 
         if return_model_object:
-            return output
+            return parent_data
+
+        parent_columns = getattr(parent_data, "all_attribs")
+
+        for column in parent_columns:
+            output.update({column: getattr(parent_data, column)})
 
         return output
 
@@ -159,19 +170,22 @@ class Colour_Identity_crud():
             print("Error: ", exc)
             return "Unable to find specific colour identity\n"
 
-        parent_data = getattr(colour_identity_data[0], parent_type)
-        if parent_data:
-            sibling_data = getattr(parent_data, "colour_identities")
-
-            for sibling in sibling_data:
-                output.append({
-                    "id": sibling.id,
-                    "colour_identity": sibling.colour_identity,
-                    "colours": sibling.colours
-                })
+        parent_id = getattr(colour_identity_data[0], "%s_id" % (parent_type))
+        try:
+            sibling_data = storage.get(class_name="Colour_Identity", key="%s_id" % (parent_type), value=parent_id)
+        except IndexError as exc:
+            print("Error: ", exc)
+            return "Unable to find sibling colour identities\n"
 
         if return_model_object:
-            return output
+            return sibling_data
+
+        for sibling in sibling_data:
+            output.append({
+                "id": sibling.id,
+                "colour_identity": sibling.colour_identity,
+                "colours": sibling.colours
+            })
 
         return output
 

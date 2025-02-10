@@ -4,10 +4,7 @@ from flask import request, abort
 from data import storage
 from models.deck import Deck
 from validation.deck import Deck_validator
-######################## this needs to be fixed to match colour_identity
-######################## more return_model_object are needed
-######################## and checks to make sure getting children, siblings, and parents don't error when empty
-######################## and make get child work correctly (probably fix parent and sibling layers too)
+
 class Deck_crud():
     @staticmethod
     def all(return_model_object = False):
@@ -34,13 +31,16 @@ class Deck_crud():
         return output
 
     @staticmethod
-    def specific(deck_id):
+    def specific(deck_id, return_model_object = False):
         """ Class method that returns a specific deck's data """
         try:
             result: Deck = storage.get(class_name = 'Deck', key = 'id', value = deck_id)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to load Deck data\n"
+
+        if return_model_object:
+            return result
 
         output = {
             "id": result[0].id,
@@ -52,7 +52,7 @@ class Deck_crud():
         return output
 
     @staticmethod
-    def create(data = ""):
+    def create(data = "", return_model_object = False):
         """ Class method that creates a new deck """
         try:
             data = request.get_json()
@@ -89,6 +89,9 @@ class Deck_crud():
         else:
             raise ValueError("Invalid deck")
 
+        if return_model_object:
+            return new_deck
+
         output = {
             "id": new_deck.id,
             "commander": new_deck.commander,
@@ -99,7 +102,7 @@ class Deck_crud():
         return output
 
     @staticmethod
-    def update(deck_id, data = ""):
+    def update(deck_id, data = "", return_model_object = False):
         """ Class method that updates an existing deck """
         try:
             data = request.get_json()
@@ -119,6 +122,9 @@ class Deck_crud():
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to update specified deck\n"
+
+        if return_model_object:
+            return result
 
         output = {
             "id": result.id,
@@ -141,7 +147,7 @@ class Deck_crud():
         return Deck_crud.all()
 
     @staticmethod
-    def get_parent_data(deck_id, parent_type):
+    def get_parent_data(deck_id, parent_type, return_model_object = False):
         """ Class method get the parent data for a given Deck """
         output = {}
 
@@ -151,7 +157,16 @@ class Deck_crud():
             print("Error: ", exc)
             return "Unable to find specific deck\n"
 
-        parent_data = getattr(deck_data[0], parent_type)
+        parent_id = getattr(deck_data[0], "%s_id" % (parent_type))
+        try:
+            parent_data = storage.get(class_name=parent_type, key="id" % (parent_type), value=parent_id)
+        except IndexError as exc:
+            print("Error: ", exc)
+            return "Unable to find specific %s\n" % (parent_type)
+
+        if return_model_object:
+            return parent_data
+
         parent_columns = getattr(parent_data, "all_attribs")
 
         for column in parent_columns:
@@ -160,7 +175,7 @@ class Deck_crud():
         return output
 
     @staticmethod
-    def get_sibling_data(deck_id, parent_type):
+    def get_sibling_data(deck_id, parent_type, return_model_object = False):
         """ Class method get the sibling data for a given Deck """
         output = []
 
@@ -170,8 +185,15 @@ class Deck_crud():
             print("Error: ", exc)
             return "Unable to find specific deck\n"
 
-        parent_data = getattr(deck_data[0], parent_type)
-        sibling_data = getattr(parent_data, "decks")
+        parent_id = getattr(deck_data[0], "%s_id" % (parent_type))
+        try:
+            sibling_data = storage.get(class_name="Deck", key="%s_id" % (parent_type), value=parent_id)
+        except IndexError as exc:
+            print("Error: ", exc)
+            return "Unable to find sibling decks\n"
+
+        if return_model_object:
+            return sibling_data
 
         for sibling in sibling_data:
             output.append({
@@ -184,26 +206,29 @@ class Deck_crud():
         return output
 
     @staticmethod
-    def get_child_data(deck_id, child_type):
+    def get_child_data(deck_id, child_type, return_model_object = False):
         """ Class method get the child data for a given Deck """
         output = []
 
         try:
-            deck_data = storage.get(class_name="Deck", key="id", value=deck_id)
+            child_data = storage.get(class_name=child_type, key="deck_id", value=deck_id)
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to find specific deck\n"
+            return "Unable to find specific %s\n" % (child_type)
 
-        child_data = getattr(deck_data[0], child_type)
-        child_columns = getattr(child_data[0], "all_attribs")
+        if return_model_object:
+            return child_data
 
-        i = 0
-        for child in child_data:
-            output.append({})
+        if child_data:
+            child_columns = getattr(child_data[0], "all_attribs")
 
-            for column in child_columns:
-                output[i].update({column: getattr(child, column)})
+            i = 0
+            for child in child_data:
+                output.append({})
 
-            i += 1
+                for column in child_columns:
+                    output[i].update({column: getattr(child, column)})
+
+                i += 1
 
         return output

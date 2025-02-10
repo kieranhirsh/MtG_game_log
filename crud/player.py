@@ -4,10 +4,7 @@ from flask import request, abort
 from data import storage
 from models.player import Player
 from validation.player import Player_validator
-######################## this needs to be fixed to match colour_identity
-######################## more return_model_object are needed
-######################## and checks to make sure getting children, siblings, and parents don't error when empty
-######################## and make get child work correctly (probably fix parent and sibling layers too)
+
 class Player_crud():
     @staticmethod
     def all(return_model_object = False):
@@ -32,13 +29,16 @@ class Player_crud():
         return output
 
     @staticmethod
-    def specific(player_id):
+    def specific(player_id, return_model_object = False):
         """ Class method that returns a specific player's data """
         try:
             result: Player = storage.get(class_name = 'Player', key = 'id', value = player_id)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to load Player data\n"
+
+        if return_model_object:
+            return result
 
         output = {
             "id": result[0].id,
@@ -48,7 +48,7 @@ class Player_crud():
         return output
 
     @staticmethod
-    def create(data = ""):
+    def create(data = "", return_model_object = False):
         """ Class method that creates a new player """
         try:
             data = request.get_json()
@@ -72,6 +72,9 @@ class Player_crud():
         else:
             raise ValueError("Invalid player")
 
+        if return_model_object:
+            return new_player
+
         output = {
             "id": new_player.id,
             "name": new_player.name
@@ -80,7 +83,7 @@ class Player_crud():
         return output
 
     @staticmethod
-    def update(player_id, data = ""):
+    def update(player_id, data = "", return_model_object = False):
         """ Class method that updates an existing player """
         try:
             data = request.get_json()
@@ -96,6 +99,9 @@ class Player_crud():
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to update specified player\n"
+
+        if return_model_object:
+            return result
 
         output = {
             "id": result.id,
@@ -117,7 +123,7 @@ class Player_crud():
         return Player_crud.all()
 
     @staticmethod
-    def get_parent_data(player_id, parent_type):
+    def get_parent_data(player_id, parent_type, return_model_object = False):
         """ Class method get the parent data for a given Player """
         output = {}
 
@@ -127,7 +133,16 @@ class Player_crud():
             print("Error: ", exc)
             return "Unable to find specific player\n"
 
-        parent_data = getattr(player_data[0], parent_type)
+        parent_id = getattr(player_data[0], "%s_id" % (parent_type))
+        try:
+            parent_data = storage.get(class_name=parent_type, key="id" % (parent_type), value=parent_id)
+        except IndexError as exc:
+            print("Error: ", exc)
+            return "Unable to find specific %s\n" % (parent_type)
+
+        if return_model_object:
+            return parent_data
+
         parent_columns = getattr(parent_data, "all_attribs")
 
         for column in parent_columns:
@@ -136,7 +151,7 @@ class Player_crud():
         return output
 
     @staticmethod
-    def get_sibling_data(player_id, parent_type):
+    def get_sibling_data(player_id, parent_type, return_model_object = False):
         """ Class method get the sibling data for a given Player """
         output = []
 
@@ -146,38 +161,50 @@ class Player_crud():
             print("Error: ", exc)
             return "Unable to find specific player\n"
 
-        parent_data = getattr(player_data[0], parent_type)
-        sibling_data = getattr(parent_data, "players")
+        parent_id = getattr(player_data[0], "%s_id" % (parent_type))
+        try:
+            sibling_data = storage.get(class_name="Player", key="%s_id" % (parent_type), value=parent_id)
+        except IndexError as exc:
+            print("Error: ", exc)
+            return "Unable to find sibling players\n"
+
+        if return_model_object:
+            return sibling_data
 
         for sibling in sibling_data:
             output.append({
                 "id": sibling.id,
-                "name": sibling.name
+                "commander": sibling.commander,
+                "player_id": sibling.player_id,
+                "colour_identity_id": sibling.colour_identity_id
             })
 
         return output
 
     @staticmethod
-    def get_child_data(player_id, child_type):
+    def get_child_data(player_id, child_type, return_model_object = False):
         """ Class method get the child data for a given Player """
         output = []
 
         try:
-            player_data = storage.get(class_name="Player", key="id", value=player_id)
+            child_data = storage.get(class_name=child_type, key="player_id", value=player_id)
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to find specific player\n"
+            return "Unable to find specific %s\n" % (child_type)
 
-        child_data = getattr(player_data[0], child_type)
-        child_columns = getattr(child_data[0], "all_attribs")
+        if return_model_object:
+            return child_data
 
-        i = 0
-        for child in child_data:
-            output.append({})
+        if child_data:
+            child_columns = getattr(child_data[0], "all_attribs")
 
-            for column in child_columns:
-                output[i].update({column: getattr(child, column)})
+            i = 0
+            for child in child_data:
+                output.append({})
 
-            i += 1
+                for column in child_columns:
+                    output[i].update({column: getattr(child, column)})
+
+                i += 1
 
         return output
