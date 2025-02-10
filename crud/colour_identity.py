@@ -7,7 +7,7 @@ from validation.colour_identity import Colour_Identity_validator
 ######################## make get parent and sibling work as get child does
 class Colour_Identity_crud():
     @staticmethod
-    def all(return_raw_result = False):
+    def all(return_model_object = False):
         """ Class method that returns all colour identities data """
         output = []
 
@@ -17,7 +17,7 @@ class Colour_Identity_crud():
             print("Error: ", exc)
             return "Unable to load colour identities\n"
 
-        if return_raw_result:
+        if return_model_object:
             return result
 
         for row in result:
@@ -30,7 +30,7 @@ class Colour_Identity_crud():
         return output
 
     @staticmethod
-    def specific(colour_identity_id, return_raw_result = False):
+    def specific(colour_identity_id, return_model_object = False):
         """ Class method that returns a specific colour identity's data """
         try:
             result: Colour_Identity = storage.get(class_name = 'Colour_Identity', key = 'id', value = colour_identity_id)
@@ -38,14 +38,14 @@ class Colour_Identity_crud():
             print("Error: ", exc)
             return "Unable to load colour identity data\n"
 
+        if return_model_object:
+            return result
+
         output = {
             "id": result[0].id,
             "colour_identity": result[0].colour_identity,
             "colours": result[0].colours
         }
-
-        if return_raw_result:
-            return output
 
         return output
 
@@ -126,7 +126,7 @@ class Colour_Identity_crud():
         return Colour_Identity_crud.all()
 
     @staticmethod
-    def get_parent_data(colour_identity_id, parent_type, return_raw_result = False):
+    def get_parent_data(colour_identity_id, parent_type, return_model_object = False):
         """ Class method get the parent data for a given colour identity """
         output = {}
 
@@ -143,13 +143,13 @@ class Colour_Identity_crud():
             for column in parent_columns:
                 output.update({column: getattr(parent_data, column)})
 
-        if return_raw_result:
+        if return_model_object:
             return output
 
         return output
 
     @staticmethod
-    def get_sibling_data(colour_identity_id, parent_type, return_raw_result = False):
+    def get_sibling_data(colour_identity_id, parent_type, return_model_object = False):
         """ Class method get the sibling data for a given colour identity """
         output = []
 
@@ -170,13 +170,13 @@ class Colour_Identity_crud():
                     "colours": sibling.colours
                 })
 
-        if return_raw_result:
+        if return_model_object:
             return output
 
         return output
 
     @staticmethod
-    def get_child_data(colour_identity_id, child_type, return_raw_result = False):
+    def get_child_data(colour_identity_id, child_type, return_model_object = False):
         """ Class method get the child data for a given colour identity """
         output = []
 
@@ -186,7 +186,7 @@ class Colour_Identity_crud():
             print("Error: ", exc)
             return "Unable to find specific %s\n" % (child_type)
 
-        if return_raw_result:
+        if return_model_object:
             return child_data
 
         if child_data:

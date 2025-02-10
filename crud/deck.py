@@ -5,12 +5,12 @@ from data import storage
 from models.deck import Deck
 from validation.deck import Deck_validator
 ######################## this needs to be fixed to match colour_identity
-######################## more return_raw_result are needed
+######################## more return_model_object are needed
 ######################## and checks to make sure getting children, siblings, and parents don't error when empty
 ######################## and make get child work correctly (probably fix parent and sibling layers too)
 class Deck_crud():
     @staticmethod
-    def all(return_raw_result = False):
+    def all(return_model_object = False):
         """ Class method that returns all decks data """
         output = []
 
@@ -20,7 +20,7 @@ class Deck_crud():
             print("Error: ", exc)
             return "Unable to load decks\n"
 
-        if return_raw_result:
+        if return_model_object:
             return result
 
         for row in result:
