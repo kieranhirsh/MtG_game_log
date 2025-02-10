@@ -54,9 +54,9 @@ def input():
 def data_get():
     """ Spreadsheets are called here """
     # Load the data we need before passing it to the template
-    players_menu = Player_crud.all(True)
+    players = Player_crud.all(True)
 
-    return render_template('data.html', players_menu=players_menu)
+    return render_template('data.html', players=players)
 
 @app.route('/data', methods=['POST'])
 def data_post():
