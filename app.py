@@ -62,7 +62,7 @@ def data_get():
 def data_post():
     """ Spreadsheets are displayed here """
     # Load the data we need before passing it to the template
-    players_menu = Player_crud.all(True)
+    players = Player_crud.all(True)
 
     # this desperately wants to be a select case, but I'm using Python 3.8 :(
     if request.form["type"] == "colour_identity":
@@ -106,27 +106,27 @@ def data_post():
 
         return render_template(
             'data.html',
+            data_type="colour_identity",
             colour_identities=colour_identity_data,
-            players_menu=players_menu
+            players=players
         )
     elif request.form["type"] == "deck":
         decks = Deck_crud.all(True)
 
         return render_template(
             'data.html',
+            data_type="deck",
             decks=decks,
-            players_menu=players_menu
+            players=players
         )
     elif request.form["type"] == "player":
-        players = Player_crud.all(True)
-
         return render_template(
             'data.html',
-            players=players,
-            players_menu=players_menu
+            data_type="player",
+            players=players
         )
 
-    return render_template('data.html', players_menu=players_menu)
+    return render_template('data.html', players=players)
 
 @app.route('/graphs')
 def graphs():

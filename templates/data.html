@@ -26,7 +26,7 @@
   <div id="menu">
     Under the following conditions (leave a condition blank for no restriction):<br>
     <datalist id="players">
-      {% for player in players_menu %}
+      {% for player in players %}
       <option value="{{ player.name }}">
         {% endfor %}
     </datalist>
@@ -58,7 +58,7 @@
   </div>
 
   <div id="data_tables">
-    {% if colour_identities is defined %}
+    {% if data_type == "colour_identity" %}
     <table class="data_table" id="colour_identity">
       <tr>
         <th>Colour Identity</th>
@@ -73,7 +73,7 @@
     </table>
     {% endif %}
 
-    {% if decks is defined %}
+    {% if data_type == "deck" %}
     <table class="data_table" id="deck">
       <tr>
         <th>Deck Name</th>
@@ -90,7 +90,7 @@
     </table>
     {% endif %}
 
-    {% if players is defined %}
+    {% if data_type == "player" %}
     <table class="data_table" id="player">
       <tr>
         <th>Player Name</th>
