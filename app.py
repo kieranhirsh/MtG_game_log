@@ -114,12 +114,43 @@ def data_post():
         )
     elif request.form["type"] == "deck":
         decks = Deck_crud.all(True)
+        restrictions = []
+
+        for form_item in request.form:
+            # this wants to be a select case, but I'm using Python 3.8 :(
+            if form_item == "player_name":
+                class_type = "Player"
+            elif form_item == "ci_name":
+                class_type = "Colour_Identity"
+
+            if form_item != "type" and request.form[form_item]:
+                restrictions.append({
+                    "class_type": class_type,
+                    "key": form_item,
+                    "value": request.form[form_item]
+                })
+
+        if restrictions:
+            deck_data = decks
+            decks_to_remove = []
+
+            for deck in deck_data:
+                for restriction in restrictions:
+                    parent_data = Deck_crud.get_parent_data(deck.id, restriction["class_type"], True)
+                    if getattr(parent_data[0], restriction["key"]) != restriction["value"]:
+                        decks_to_remove.append(deck)
+                        break
+
+            for deck_to_remove in decks_to_remove:
+                deck_data.remove(deck_to_remove)
+        else:
+            deck_data = decks
 
         return render_template(
             'data.html',
             data_type="deck",
             colour_identities=colour_identities,
-            decks=decks,
+            decks=deck_data,
             players=players
         )
     elif request.form["type"] == "player":
