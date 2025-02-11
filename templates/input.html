@@ -27,8 +27,8 @@
             <h2>Create new player</h2>
             <form action="/input" method="POST">
                 <input class="type" type="text" id="type" name="type" value="player">
-                <label for="name">Player Name: </label>
-                <input type="text" id="name" name="name" autocomplete="off">
+                <label for="player_name">Player Name: </label>
+                <input type="text" id="player_name" name="player_name" autocomplete="off">
                 <input type="submit" value="Create player">
             </form>
         </div>
@@ -37,12 +37,12 @@
             <h2>Create new deck</h2>
             <datalist id="players">
                 {% for player in players %}
-                <option value="{{ player.name }}">
+                <option value="{{ player.player_name }}">
                 {% endfor %}
             </datalist>
             <datalist id="colour_identities">
                 {% for colour_identity in colour_identities %}
-                <option value="{{ colour_identity.colour_identity }}">
+                <option value="{{ colour_identity.ci_name }}">
                 {% endfor %}
             </datalist>
             <form action="/input" method="POST">
@@ -51,8 +51,8 @@
                 <input type="text" id="commander" name="commander" autocomplete="off">
                 <label for="owner">Owner Name: </label>
                 <input type="search" id="owner" name="owner" list="players" autocomplete="off">
-                <label for="colour_identity">Colour Identity: </label>
-                <input type="search" id="colour_identity" name="colour_identity" list="colour_identities" autocomplete="off">
+                <label for="ci_name">Colour Identity: </label>
+                <input type="search" id="ci_name" name="ci_name" list="colour_identities" autocomplete="off">
                 <input type="submit" value="Create deck">
             </form>
         </div>

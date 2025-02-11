@@ -4,13 +4,13 @@ USE MtG_log;
 
 CREATE TABLE Players (
   id varchar(64) NOT NULL,
-  name varchar(128) NOT NULL,
+  player_name varchar(128) NOT NULL,
   PRIMARY KEY (id)
 );
 
 CREATE TABLE Colour_Identities (
   id varchar(64) NOT NULL,
-  colour_identity varchar(128) NOT NULL,
+  ci_name varchar(128) NOT NULL,
   colours varchar(128) NOT NULL,
   PRIMARY KEY (id)
 );

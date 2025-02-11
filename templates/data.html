@@ -27,7 +27,12 @@
     Under the following conditions (leave a condition blank for no restriction):<br>
     <datalist id="players">
       {% for player in players %}
-      <option value="{{ player.name }}">
+      <option value="{{ player.player_name }}">
+        {% endfor %}
+    </datalist>
+    <datalist id="colour_identities">
+      {% for colour_identity in colour_identities %}
+      <option value="{{ colour_identity.ci_name }}">
         {% endfor %}
     </datalist>
 
@@ -45,6 +50,8 @@
         <input class="type" type="text" id="type" name="type" value="deck">
         <label for="player_name">&emsp;Owner Name = </label>
         <input type="text" id="player_name" name="player_name" list="players" autocomplete="off">
+        <label for="ci_name">&emsp;Colour Identity = </label>
+        <input type="text" id="ci_name" name="ci_name" list="colour_identities" autocomplete="off">
         <br><input type="submit" value="Submit">
       </form>
     </div>
@@ -52,6 +59,8 @@
     <div class="data_type" id="player">
       <form action="/data" method="POST">
         <input class="type" type="text" id="type" name="type" value="player">
+        <label for="ci_name">&emsp;Colour Identity = </label>
+        <input type="text" id="ci_name" name="ci_name" list="colour_identities" autocomplete="off">
         <br><input type="submit" value="Submit">
       </form>
     </div>
@@ -66,7 +75,7 @@
       </tr>
       {% for colour_identity in colour_identities %}
       <tr>
-        <td>{{ colour_identity.name }}</td>
+        <td>{{ colour_identity.ci_name }}</td>
         <td>{{ colour_identity.number_of_decks }}</td>
       </tr>
       {% endfor %}
@@ -83,8 +92,8 @@
       {% for deck in decks %}
       <tr>
         <td>{{ deck.commander }}</td>
-        <td>{{ deck.player.name }}</td>
-        <td>{{ deck.colour_identity.colour_identity }}</td>
+        <td>{{ deck.player.player_name }}</td>
+        <td>{{ deck.colour_identity.ci_name }}</td>
       </tr>
       {% endfor %}
     </table>
@@ -98,7 +107,7 @@
       </tr>
       {% for player in players %}
       <tr>
-        <td>{{ player.name }}</td>
+        <td>{{ player.player_name }}</td>
         <td>{{ player.decks | length }}</td>
       </tr>
       {% endfor %}

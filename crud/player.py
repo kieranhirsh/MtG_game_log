@@ -23,7 +23,7 @@ class Player_crud():
         for row in result:
             output.append({
                 "id": row.id,
-                "name": row.name
+                "player_name": row.player_name
             })
 
         return output
@@ -42,7 +42,7 @@ class Player_crud():
 
         output = {
             "id": result[0].id,
-            "name": result[0].name
+            "player_name": result[0].player_name
         }
 
         return output
@@ -55,11 +55,11 @@ class Player_crud():
         except:
             data = data.get_json()
 
-        if 'name' not in data:
-            abort(400, "Missing name")
+        if 'player_name' not in data:
+            abort(400, "Missing player_name")
 
         new_player = Player(
-            name=data["name"]
+            player_name=data["player_name"]
         )
         is_valid = Player_validator.is_valid(new_player)
 
@@ -77,7 +77,7 @@ class Player_crud():
 
         output = {
             "id": new_player.id,
-            "name": new_player.name
+            "player_name": new_player.player_name
         }
 
         return output
@@ -91,8 +91,8 @@ class Player_crud():
             data = data.get_json()
 
         # validate all possible inputs
-        if 'name' in data:
-            Player_validator.valid_name(data["name"])
+        if 'player_name' in data:
+            Player_validator.valid_player_name(data["player_name"])
 
         try:
             result = storage.update('Player', player_id, data, Player.can_update)
@@ -105,7 +105,7 @@ class Player_crud():
 
         output = {
             "id": result.id,
-            "name": result.name
+            "player_name": result.player_name
         }
 
         return output

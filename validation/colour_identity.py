@@ -5,13 +5,13 @@ import re
 class Colour_Identity_validator():
     def is_valid(new_colour_identity):
         # check all inputs are valid
-        Colour_Identity_validator.valid_colour_identity(new_colour_identity.colour_identity)
+        Colour_Identity_validator.valid_ci_name(new_colour_identity.ci_name)
         Colour_Identity_validator.valid_colours(new_colour_identity.colours)
 
         # if all checks are passed, we're good to go
         return True
 
-    def valid_colour_identity(colour_identity):
+    def valid_ci_name(ci_name):
         # there are only 32 valid colour identities, check that this is one of them
         allowed_colour_identities = [
             "Colourless",
@@ -47,8 +47,8 @@ class Colour_Identity_validator():
             "Yore-Tiller",
             "Rainbow"
         ]
-        if colour_identity not in allowed_colour_identities:
-            raise ValueError("Invalid colour identiy specified: {}".format(colour_identity))
+        if ci_name not in allowed_colour_identities:
+            raise ValueError("Invalid colour identiy specified: {}".format(ci_name))
 
         return True
 

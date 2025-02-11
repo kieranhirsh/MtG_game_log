@@ -8,15 +8,15 @@ from data import Base
 class Player(Base):
     """ Representation of player """
 
-    all_attribs = ["id", "name"]
-    can_init    = ["name"]
-    can_update  = ["name"]
+    all_attribs = ["id", "player_name"]
+    can_init    = ["player_name"]
+    can_update  = ["player_name"]
 
     # Class attributes defaults
     __tablename__ = 'Players'
-    id    = Column(String(64), nullable=False, primary_key=True)
-    name  = Column("name", String(128), nullable=False)
-    decks = relationship("Deck", back_populates="player", cascade="delete, delete-orphan")
+    id            = Column(String(64), nullable=False, primary_key=True)
+    player_name   = Column("player_name", String(128), nullable=False)
+    decks         = relationship("Deck", back_populates="player", cascade="delete, delete-orphan")
 
     # constructor
     def __init__(self, *args, **kwargs):

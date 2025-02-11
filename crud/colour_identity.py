@@ -23,7 +23,7 @@ class Colour_Identity_crud():
         for row in result:
             output.append({
                 "id": row.id,
-                "colour_identity": row.colour_identity,
+                "ci_name": row.ci_name,
                 "colours": row.colours
             })
 
@@ -43,7 +43,7 @@ class Colour_Identity_crud():
 
         output = {
             "id": result[0].id,
-            "colour_identity": result[0].colour_identity,
+            "ci_name": result[0].ci_name,
             "colours": result[0].colours
         }
 
@@ -57,13 +57,13 @@ class Colour_Identity_crud():
         except:
             data = data.get_json()
 
-        if 'colour_identity' not in data:
-            abort(400, "Missing colour_identity")
+        if 'ci_name' not in data:
+            abort(400, "Missing ci_name")
         if 'colours' not in data:
             abort(400, "Missing colours")
 
         new_colour_identity = Colour_Identity(
-            colour_identity=data["colour_identity"],
+            ci_name=data["ci_name"],
             colours=data["colours"]
         )
         is_valid = Colour_Identity_validator.is_valid(new_colour_identity)
@@ -82,8 +82,8 @@ class Colour_Identity_crud():
 
         output = {
             "id": new_colour_identity.id,
-            "colour_identity": new_colour_identity.colour_identity,
-            "olours": new_colour_identity.colours
+            "ci_name": new_colour_identity.ci_name,
+            "colours": new_colour_identity.colours
         }
 
         return output
@@ -97,8 +97,8 @@ class Colour_Identity_crud():
             data = data.get_json()
 
         # validate all possible inputs
-        if 'colour_identity' in data:
-            Colour_Identity_validator.valid_colour_identity(data["colour_identity"])
+        if 'ci_name' in data:
+            Colour_Identity_validator.valid_ci_name(data["ci_name"])
         if 'colours' in data:
             Colour_Identity_validator.valid_colours(data["colours"])
 
@@ -113,7 +113,7 @@ class Colour_Identity_crud():
 
         output = {
             "id": result.id,
-            "colour_identity": result.colour_identity,
+            "ci_name": result.ci_name,
             "colours": result.colours
         }
 
@@ -183,7 +183,7 @@ class Colour_Identity_crud():
         for sibling in sibling_data:
             output.append({
                 "id": sibling.id,
-                "colour_identity": sibling.colour_identity,
+                "ci_name": sibling.ci_name,
                 "colours": sibling.colours
             })
 

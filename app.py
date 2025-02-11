@@ -25,16 +25,16 @@ def input():
         # this desperately wants to be a select case, but I'm using Python 3.8 :(
         if input_type == "player":
             new_player = {
-                "name": request.form["name"]
+                "player_name": request.form["player_name"]
             }
 
             Player_crud.create(data=jsonify(new_player))
         elif input_type == "deck":
             owner_name = request.form["owner"]
-            owner_data = storage.get(class_name="Player", key="name", value=owner_name)
+            owner_data = storage.get(class_name="Player", key="player_name", value=owner_name)
 
-            colour_identity = request.form["colour_identity"]
-            colour_identity_data = storage.get(class_name="Colour_Identity", key="colour_identity", value=colour_identity)
+            ci_name = request.form["ci_name"]
+            colour_identity_data = storage.get(class_name="Colour_Identity", key="ci_name", value=ci_name)
 
             new_deck = {
                 "commander": request.form["commander"],
@@ -63,11 +63,11 @@ def data_post():
     """ Spreadsheets are displayed here """
     # Load the data we need before passing it to the template
     players = Player_crud.all(True)
+    colour_identities = Colour_Identity_crud.all(True)
 
     # this desperately wants to be a select case, but I'm using Python 3.8 :(
     if request.form["type"] == "colour_identity":
         colour_identity_data = []
-        colour_identities = Colour_Identity_crud.all(True)
 
         # if we have a restriction on the player name
         if request.form['player_name']:
@@ -80,7 +80,7 @@ def data_post():
                 # loop over those decks
                 for deck in colour_identity_decks:
                     # if they have the wrong owner, add them of the list of decks to remove
-                    if deck.player.name != request.form['player_name']:
+                    if deck.player.player_name != request.form['player_name']:
                         decks_to_remove.append(deck)
 
                 # loop over our list of decks to remove and remove them from our list of all decks
@@ -92,7 +92,7 @@ def data_post():
 
                 # and finally, append all the relevant data that has been requested
                 colour_identity_data.append({
-                    "name": colour_identity.colour_identity,
+                    "ci_name": colour_identity.ci_name,
                     "number_of_decks": num_decks
                 })
         else:
@@ -100,7 +100,7 @@ def data_post():
                 num_decks = len(Colour_Identity_crud.get_child_data(colour_identity.id, "Deck", True))
 
                 colour_identity_data.append({
-                    "name": colour_identity.colour_identity,
+                    "ci_name": colour_identity.ci_name,
                     "number_of_decks": num_decks
                 })
 
@@ -116,6 +116,7 @@ def data_post():
         return render_template(
             'data.html',
             data_type="deck",
+            colour_identities=colour_identities,
             decks=decks,
             players=players
         )
@@ -123,10 +124,11 @@ def data_post():
         return render_template(
             'data.html',
             data_type="player",
+            colour_identities=colour_identities,
             players=players
         )
 
-    return render_template('data.html', players=players)
+    return render_template('data.html', colour_identities=colour_identities, players=players)
 
 @app.route('/graphs')
 def graphs():
