@@ -174,9 +174,7 @@ class Player_crud():
         for sibling in sibling_data:
             output.append({
                 "id": sibling.id,
-                "commander": sibling.commander,
-                "player_id": sibling.player_id,
-                "colour_identity_id": sibling.colour_identity_id
+                "player_name": sibling.player_name
             })
 
         return output
