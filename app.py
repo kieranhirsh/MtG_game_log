@@ -37,7 +37,7 @@ def input():
             colour_identity_data = storage.get(class_name="Colour_Identity", key="ci_name", value=ci_name)
 
             new_deck = {
-                "commander": request.form["commander"],
+                "deck_name": request.form["deck_name"],
                 "player_id": owner_data[0].id,
                 "colour_identity_id": colour_identity_data[0].id
                 }

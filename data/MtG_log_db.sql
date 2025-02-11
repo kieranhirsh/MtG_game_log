@@ -21,7 +21,7 @@ INSERT INTO `Colour_Identities` VALUES ('018240aa-1533-4c89-9a7e-8f7d57d849a4','
 
 CREATE TABLE Decks (
   id varchar(64) NOT NULL,
-  commander varchar(128) NOT NULL,
+  deck_name varchar(128) NOT NULL,
   player_id varchar(64) NOT NULL,
   colour_identity_id varchar(64) NOT NULL,
   PRIMARY KEY (id),

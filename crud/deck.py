@@ -23,7 +23,7 @@ class Deck_crud():
         for row in result:
             output.append({
                 "id": row.id,
-                "commander": row.commander,
+                "deck_name": row.deck_name,
                 "player_id": row.player_id,
                 "colour_identity_id": row.colour_identity_id
             })
@@ -44,7 +44,7 @@ class Deck_crud():
 
         output = {
             "id": result[0].id,
-            "commander": result[0].commander,
+            "deck_name": result[0].deck_name,
             "player_id": result[0].player_id,
             "colour_identity_id": result[0].colour_identity_id
         }
@@ -59,8 +59,8 @@ class Deck_crud():
         except:
             data = data.get_json()
 
-        if 'commander' not in data:
-            abort(400, "Missing commander")
+        if 'deck_name' not in data:
+            abort(400, "Missing deck name")
         if 'player_id' not in data:
             abort(400, "Missing player id")
         if 'colour_identity_id' not in data:
@@ -74,7 +74,7 @@ class Deck_crud():
             abort(400, "Specified colour identity does not exist")
 
         new_deck = Deck(
-            commander=data["commander"],
+            deck_name=data["deck_name"],
             player_id=data["player_id"],
             colour_identity_id=data["colour_identity_id"]
         )
@@ -94,7 +94,7 @@ class Deck_crud():
 
         output = {
             "id": new_deck.id,
-            "commander": new_deck.commander,
+            "deck_name": new_deck.deck_name,
             "player_id": new_deck.player_id,
             "colour_identity_id": new_deck.colour_identity_id
         }
@@ -110,8 +110,8 @@ class Deck_crud():
             data = data.get_json()
 
         # validate all possible inputs
-        if 'commander' in data:
-            Deck_validator.valid_commander(data["commander"])
+        if 'deck_name' in data:
+            Deck_validator.valid_deck_name(data["deck_name"])
         if 'player_id' in data:
             Deck_validator.valid_player_id(data["player_id"])
         if 'colour_identity_id' in data:
@@ -128,7 +128,7 @@ class Deck_crud():
 
         output = {
             "id": result.id,
-            "commander": result.commander,
+            "deck_name": result.deck_name,
             "player_id": result.player_id,
             "colour_identity_id": result.colour_identity_id
         }
@@ -198,7 +198,7 @@ class Deck_crud():
         for sibling in sibling_data:
             output.append({
                 "id": sibling.id,
-                "commander": sibling.commander,
+                "deck_name": sibling.deck_name,
                 "player_id": sibling.player_id,
                 "colour_identity_id": sibling.colour_identity_id
             })

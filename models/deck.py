@@ -8,14 +8,14 @@ from data import Base
 class Deck(Base):
     """ Representation of deck """
 
-    all_attribs = ["id", "commander", "player_id", "colour_identity_id"]
-    can_init    = ["commander", "player_id", "colour_identity_id"]
-    can_update  = ["commander", "player_id", "colour_identity_id"]
+    all_attribs = ["id", "deck_name", "player_id", "colour_identity_id"]
+    can_init    = ["deck_name", "player_id", "colour_identity_id"]
+    can_update  = ["deck_name", "player_id", "colour_identity_id"]
 
     # Class attributes defaults
     __tablename__      = 'Decks'
     id                 = Column(String(64), nullable=False, primary_key=True)
-    commander          = Column("commander", String(128), nullable=False)
+    deck_name          = Column("deck_name", String(128), nullable=False)
     player_id          = Column("player_id", String(128), ForeignKey('Players.id'), nullable=False)
     colour_identity_id = Column("colour_identity_id", String(128), ForeignKey('Colour_Identities.id'), nullable=False)
     player             = relationship("Player", back_populates="decks")
