@@ -54,16 +54,17 @@ def input():
 def data_get():
     """ Spreadsheets are called here """
     # Load the data we need before passing it to the template
+    colour_identities = Colour_Identity_crud.all(True)
     players = Player_crud.all(True)
 
-    return render_template('data.html', players=players)
+    return render_template('data.html', colour_identities=colour_identities, players=players)
 
 @app.route('/data', methods=['POST'])
 def data_post():
     """ Spreadsheets are displayed here """
     # Load the data we need before passing it to the template
-    players = Player_crud.all(True)
     colour_identities = Colour_Identity_crud.all(True)
+    players = Player_crud.all(True)
 
     # this desperately wants to be a select case, but I'm using Python 3.8 :(
     if request.form["type"] == "colour_identity":
@@ -87,7 +88,7 @@ def data_post():
                 for deck_to_remove in decks_to_remove:
                     colour_identity_decks.remove(deck_to_remove)
 
-                # find the number of each deck
+                # find the number of decks of the given colour identity deck
                 num_decks = len(colour_identity_decks)
 
                 # and finally, append all the relevant data that has been requested
@@ -97,6 +98,7 @@ def data_post():
                 })
         else:
             for colour_identity in colour_identities:
+                # if we have no restriction the number of decks is just the length of the array
                 num_decks = len(Colour_Identity_crud.get_child_data(colour_identity.id, "Deck", True))
 
                 colour_identity_data.append({
@@ -121,11 +123,50 @@ def data_post():
             players=players
         )
     elif request.form["type"] == "player":
+        player_data = []
+
+        # if we have a restriction on the colour identity name
+        if request.form['ci_name']:
+
+            # loop over all players
+            for player in players:
+                # find all decks owned by a given player
+                player_decks = Player_crud.get_child_data(player.id, "Deck", True)
+                decks_to_remove = []
+
+                # loop over those decks
+                for deck in player_decks:
+                    # if they have the wrong colour identity, add them of the list of decks to remove
+                    if deck.colour_identity.ci_name != request.form['ci_name']:
+                        decks_to_remove.append(deck)
+
+                # loop over our list of decks to remove and remove them from our list of all decks
+                for deck_to_remove in decks_to_remove:
+                    player_decks.remove(deck_to_remove)
+
+                # find the number of decks the given player owns
+                num_decks = len(player_decks)
+
+                # and finally, append all the relevant data that has been requested
+                player_data.append({
+                    "player_name": player.player_name,
+                    "number_of_decks": num_decks
+                })
+        else:
+            for player in players:
+                # if we have no restriction the number of decks is just the length of the array
+                num_decks = len(Player_crud.get_child_data(player.id, "Deck", True))
+
+                player_data.append({
+                    "player_name": player.player_name,
+                    "number_of_decks": num_decks
+                })
+
         return render_template(
             'data.html',
             data_type="player",
             colour_identities=colour_identities,
-            players=players
+            players=player_data
         )
 
     return render_template('data.html', colour_identities=colour_identities, players=players)
