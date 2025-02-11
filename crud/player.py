@@ -133,9 +133,9 @@ class Player_crud():
             print("Error: ", exc)
             return "Unable to find specific player\n"
 
-        parent_id = getattr(player_data[0], "%s_id" % (parent_type))
+        parent_id = getattr(player_data[0], "%s_id" % (parent_type.lower()))
         try:
-            parent_data = storage.get(class_name=parent_type, key="%s_id" % (parent_type), value=parent_id)
+            parent_data = storage.get(class_name=parent_type, key="id", value=parent_id)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to find specific %s\n" % (parent_type)
