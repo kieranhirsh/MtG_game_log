@@ -58,6 +58,50 @@
             </form>
         </div>
 
+        {% elif method == "edit" %}
+        <div class="data_input" id="player">
+            <h2>Update player</h2>
+            <datalist id="players">
+                {% for player in players %}
+                <option value="{{ player.player_name }}">
+                {% endfor %}
+            </datalist>
+            <form action="/input/edit" method="POST">
+                <input class="type" type="text" id="type" name="type" value="player">
+                <label for="player_name">Player to update: </label>
+                <input type="search" id="player_name" name="player_name" list="players" autocomplete="off"><br>
+                <label for="new_player_name">Updated Player Name: </label>
+                <input type="text" id="new_player_name" name="new_player_name" autocomplete="off">
+                <input type="submit" value="Edit player">
+            </form>
+        </div>
+
+        <div class="data_input" id="deck">
+            <h2>Update deck</h2>
+            <datalist id="decks">
+                {% for deck in decks %}
+                <option value="{{ deck.deck_name }}">
+                {% endfor %}
+            </datalist>
+            <datalist id="colour_identities">
+                {% for colour_identity in colour_identities %}
+                <option value="{{ colour_identity.ci_name }}">
+                {% endfor %}
+            </datalist>
+            <form action="/input/edit" method="POST">
+                <input class="type" type="text" id="type" name="type" value="deck">
+                <label for="deck_name">Deck to update: </label>
+                <input type="search" id="deck_name" name="deck_name" list="decks" autocomplete="off"><br>
+                <label for="new_deck_name">Updated Deck Name: </label>
+                <input type="text" id="new_deck_name" name="new_deck_name" autocomplete="off">
+                <label for="owner">Updated Owner Name: </label>
+                <input type="search" id="owner" name="owner" list="players" autocomplete="off">
+                <label for="ci_name">Updated Colour Identity: </label>
+                <input type="search" id="ci_name" name="ci_name" list="colour_identities" autocomplete="off">
+                <input type="submit" value="Edit deck">
+            </form>
+        </div>
+
         {% elif method == "delete" %}
         <div class="data_input" id="player">
             <h2>Delete player</h2>

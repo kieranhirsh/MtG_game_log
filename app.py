@@ -50,6 +50,54 @@ def input():
 
     return render_template('input.html', method="create", colour_identities=colour_identities, players=players)
 
+@app.route('/input/edit', methods=['GET', 'POST'])
+def input_edit():
+    """ Data is edited here """
+    if request.method == 'POST':
+        # First add the new item to the database
+        input_type = request.form["type"]
+
+        # this desperately wants to be a select case, but I'm using Python 3.8 :(
+        if input_type == "player":
+            player_to_edit = Player_crud.specific('player_name', request.form['player_name'])
+            new_player_data = {}
+            if request.form["new_player_name"]:
+                new_player_data.update({
+                    "player_name": request.form["new_player_name"]
+                })
+
+            Player_crud.update(player_to_edit["id"], jsonify(new_player_data))
+        elif input_type == "deck":
+            deck_to_edit = Deck_crud.specific('deck_name', request.form['deck_name'])
+            new_deck_data = {}
+            if request.form["new_deck_name"]:
+                new_deck_data.update({
+                    "deck_name": request.form["new_deck_name"]
+                })
+            if request.form["owner"]:
+                owner_name = request.form["owner"]
+                owner_data = storage.get(class_name="Player", key="player_name", value=owner_name)
+
+                new_deck_data.update({
+                    "player_id": owner_data[0].id
+                })
+            if request.form["ci_name"]:
+                ci_name = request.form["ci_name"]
+                colour_identity_data = storage.get(class_name="Colour_Identity", key="ci_name", value=ci_name)
+
+                new_deck_data.update({
+                    "colour_identity_id": colour_identity_data[0].id
+                })
+
+            Deck_crud.update(deck_to_edit["id"], jsonify(new_deck_data))
+
+    # Then load the data we need before passing it to the template
+    colour_identities = Colour_Identity_crud.all(True)
+    decks = Deck_crud.all(True)
+    players = Player_crud.all(True)
+
+    return render_template('input.html', method="edit", colour_identities=colour_identities, decks=decks, players=players)
+
 @app.route('/input/delete', methods=['GET', 'POST'])
 def input_delete():
     """ Data is deleted here """
