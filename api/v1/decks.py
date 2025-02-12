@@ -16,7 +16,7 @@ def decks_get():
 @api_routes.route('/decks/<deck_id>', methods=["GET"])
 def decks_get_specific(deck_id):
     """ returns specific deck data """
-    return jsonify(Deck_crud.specific(deck_id))
+    return jsonify(Deck_crud.specific('id', deck_id))
 
 @api_routes.route('/decks/<deck_id>', methods=["PUT"])
 def decks_edit(deck_id):

@@ -30,10 +30,10 @@ class Colour_Identity_crud():
         return output
 
     @staticmethod
-    def specific(colour_identity_id, return_model_object = False):
+    def specific(key, value, return_model_object = False):
         """ Class method that returns a specific colour identity's data """
         try:
-            result: Colour_Identity = storage.get(class_name = 'Colour_Identity', key = 'id', value = colour_identity_id)
+            result: Colour_Identity = storage.get(class_name = 'Colour_Identity', key = key, value = value)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to load colour identity data\n"

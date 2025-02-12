@@ -31,10 +31,10 @@ class Deck_crud():
         return output
 
     @staticmethod
-    def specific(deck_id, return_model_object = False):
+    def specific(key, value, return_model_object = False):
         """ Class method that returns a specific deck's data """
         try:
-            result: Deck = storage.get(class_name = 'Deck', key = 'id', value = deck_id)
+            result: Deck = storage.get(class_name = 'Deck', key = key, value = value)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to load Deck data\n"

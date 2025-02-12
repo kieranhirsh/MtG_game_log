@@ -29,10 +29,10 @@ class Player_crud():
         return output
 
     @staticmethod
-    def specific(player_id, return_model_object = False):
+    def specific(key, value, return_model_object = False):
         """ Class method that returns a specific player's data """
         try:
-            result: Player = storage.get(class_name = 'Player', key = 'id', value = player_id)
+            result: Player = storage.get(class_name = 'Player', key = key, value = value)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to load Player data\n"

@@ -16,7 +16,7 @@ def colour_identities_get():
 @api_routes.route('/colour_identities/<colour_identity_id>', methods=["GET"])
 def colour_identities_get_specific(colour_identity_id):
     """ returns specific colour identity data """
-    return jsonify(Colour_Identity_crud.specific(colour_identity_id))
+    return jsonify(Colour_Identity_crud.specific('id', colour_identity_id))
 
 @api_routes.route('/colour_identities/<colour_identity_id>', methods=["PUT"])
 def colour_identities_edit(colour_identity_id):

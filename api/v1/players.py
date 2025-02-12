@@ -16,7 +16,7 @@ def players_get():
 @api_routes.route('/players/<player_id>', methods=["GET"])
 def players_get_specific(player_id):
     """ returns specific player data """
-    return jsonify(Player_crud.specific(player_id))
+    return jsonify(Player_crud.specific('id', player_id))
 
 @api_routes.route('/players/<player_id>', methods=["PUT"])
 def players_edit(player_id):
