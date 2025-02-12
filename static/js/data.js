@@ -25,9 +25,9 @@ function toggleDataType() {
   }
 }
 
-function sortCITable(n) {
+function sortTable(n) {
   var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-  table = document.getElementById("colour_identity_table");
+  table = document.getElementById("data_table");
   switching = true;
   // Set the sorting direction to ascending:
   dir = "asc";
