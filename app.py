@@ -45,10 +45,31 @@ def input():
             Deck_crud.create(data=jsonify(new_deck))
 
     # Then load the data we need before passing it to the template
-    players = Player_crud.all(True)
     colour_identities = Colour_Identity_crud.all(True)
+    players = Player_crud.all(True)
 
-    return render_template('input.html', colour_identities=colour_identities, players=players)
+    return render_template('input.html', method="create", colour_identities=colour_identities, players=players)
+
+@app.route('/input/delete', methods=['GET', 'POST'])
+def input_delete():
+    """ Data is deleted here """
+    if request.method == 'POST':
+        # First add the new item to the database
+        input_type = request.form["type"]
+
+        # this desperately wants to be a select case, but I'm using Python 3.8 :(
+        if input_type == "player":
+            player_to_delete = Player_crud.specific('player_name', request.form['player_name'])
+            Player_crud.delete(player_to_delete["id"])
+        elif input_type == "deck":
+            deck_to_delete = Deck_crud.specific('deck_name', request.form['deck_name'])
+            Deck_crud.delete(deck_to_delete["id"])
+
+    # Then load the data we need before passing it to the template
+    decks = Deck_crud.all(True)
+    players = Player_crud.all(True)
+
+    return render_template('input.html', method="delete", decks=decks, players=players)
 
 @app.route('/data', methods=['GET'])
 def data_get():
