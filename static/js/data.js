@@ -27,7 +27,7 @@ function toggleDataType() {
 
 function sortTable(n) {
   var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-  table = document.getElementById("data_table");
+  table = document.getElementsByClassName("data_table");
   switching = true;
   // Set the sorting direction to ascending:
   dir = "asc";
@@ -36,7 +36,7 @@ function sortTable(n) {
   while (switching) {
     // Start by saying: no switching is done:
     switching = false;
-    rows = table.rows;
+    rows = table[0].rows;
     /* Loop through all table rows (except the
     first, which contains table headers): */
     for (i = 1; i < (rows.length - 1); i++) {

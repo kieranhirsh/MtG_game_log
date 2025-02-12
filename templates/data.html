@@ -68,7 +68,7 @@
 
   <div id="data_tables">
     {% if data_type == "colour_identity" %}
-    <table class="data_table" id="data_table">
+    <table class="data_table" id="ci_table">
       <tr>
         <th onclick="sortTable(0)">Colour Identity</th>
         <th onclick="sortTable(1)">Number of Decks</th>
@@ -83,7 +83,7 @@
     {% endif %}
 
     {% if data_type == "deck" %}
-    <table class="data_table" id="data_table">
+    <table class="data_table" id="deck_table">
       <tr>
         <th onclick="sortTable(0)">Deck Name</th>
         <th onclick="sortTable(1)">Owner Name</th>
@@ -100,7 +100,7 @@
     {% endif %}
 
     {% if data_type == "player" %}
-    <table class="data_table" id="data_table">
+    <table class="data_table" id="player_table">
       <tr>
         <th onclick="sortTable(0)">Player Name</th>
         <th onclick="sortTable(1)">Number of Decks</th>
