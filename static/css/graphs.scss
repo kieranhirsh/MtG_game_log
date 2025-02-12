@@ -39,6 +39,26 @@ header {
             border-bottom: 6px solid darkslateblue;
           }
         }
+
+        .input_menu {
+          display: flex;
+          flex-direction: column;
+
+          &:hover {
+            .input_submenu {
+              display: flex;
+            }
+          }
+
+          .input_submenu {
+            display: none;
+
+            ul {
+              display: flex;
+              flex-direction: column;
+            }
+          }
+        }
       }
     }
   }
