@@ -58,6 +58,10 @@ body {
   }
 
   .data_table {
+    th {
+      cursor: pointer;
+    }
+
     td, th {
       padding: 4px 8px;
     }

@@ -43,6 +43,9 @@ body .data_type {
 body .data_type .type {
   display: none;
 }
+body .data_table th {
+  cursor: pointer;
+}
 body .data_table td, body .data_table th {
   padding: 4px 8px;
 }

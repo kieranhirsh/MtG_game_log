@@ -68,10 +68,10 @@
 
   <div id="data_tables">
     {% if data_type == "colour_identity" %}
-    <table class="data_table" id="colour_identity">
+    <table class="data_table" id="colour_identity_table">
       <tr>
-        <th>Colour Identity</th>
-        <th>Number of Decks</th>
+        <th onclick="sortCITable(0)">Colour Identity</th>
+        <th onclick="sortCITable(1)">Number of Decks</th>
       </tr>
       {% for colour_identity in colour_identities %}
       <tr>
@@ -83,7 +83,7 @@
     {% endif %}
 
     {% if data_type == "deck" %}
-    <table class="data_table" id="deck">
+    <table class="data_table" id="deck_table">
       <tr>
         <th>Deck Name</th>
         <th>Owner Name</th>
@@ -100,7 +100,7 @@
     {% endif %}
 
     {% if data_type == "player" %}
-    <table class="data_table" id="player">
+    <table class="data_table" id="player_table">
       <tr>
         <th>Player Name</th>
         <th>Number of Decks</th>
