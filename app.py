@@ -311,9 +311,8 @@ def graphs_bar():
     number_of_decks = []
 
     for player in players:
-        if len(player.decks) > 0:
-            player_names.append(player.player_name)
-            number_of_decks.append(len(player.decks))
+        player_names.append(player.player_name)
+        number_of_decks.append(len(player.decks))
 
     pie_chart = pie_charts.make_pie_chart(player_names, number_of_decks, "Number of Decks per Player")
     bar_chart = bar_charts.make_bar_chart(player_names, number_of_decks, "Player Name", "Number of Decks", "Number of Decks per Player")
@@ -340,9 +339,8 @@ def graphs_pie():
     number_of_decks = []
 
     for player in players:
-        if len(player.decks) > 0:
-            player_names.append(player.player_name)
-            number_of_decks.append(len(player.decks))
+        player_names.append(player.player_name)
+        number_of_decks.append(len(player.decks))
 
     pie_chart = pie_charts.make_pie_chart(player_names, number_of_decks, "Number of Decks per Player")
     bar_chart = bar_charts.make_bar_chart(player_names, number_of_decks, "Player Name", "Number of Decks", "Number of Decks per Player")
