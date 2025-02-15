@@ -284,18 +284,76 @@ def graphs():
     number_of_decks = []
 
     for player in players:
-        if len(player.decks) > 0:
-            player_names.append(player.player_name)
-            number_of_decks.append(len(player.decks))
+        player_names.append(player.player_name)
+        number_of_decks.append(len(player.decks))
 
-    pie_charts.make_pie_chart(player_names, number_of_decks, "Number of Decks per Player")
-    bar_charts.make_bar_chart(player_names, number_of_decks, "Player Name", "Number of Decks", "Number of Decks per Player")
+    pie_chart = pie_charts.make_pie_chart(player_names, number_of_decks, "Number of Decks per Player")
+    bar_chart = bar_charts.make_bar_chart(player_names, number_of_decks, "Player Name", "Number of Decks", "Number of Decks per Player")
 
     return render_template(
         'graphs.html',
         colour_identities=colour_identities,
         decks=decks,
-        players=players
+        players=players,
+        pie_chart=pie_chart,
+        bar_chart=bar_chart
+    )
+
+@app.route('/graphs/bar')
+def graphs_bar():
+    """ Graphs are displayed here """
+    # Load the data we need before passing it to the template
+    colour_identities = Colour_Identity_crud.all(True)
+    decks = Deck_crud.all(True)
+    players = Player_crud.all(True)
+
+    player_names = []
+    number_of_decks = []
+
+    for player in players:
+        if len(player.decks) > 0:
+            player_names.append(player.player_name)
+            number_of_decks.append(len(player.decks))
+
+    pie_chart = pie_charts.make_pie_chart(player_names, number_of_decks, "Number of Decks per Player")
+    bar_chart = bar_charts.make_bar_chart(player_names, number_of_decks, "Player Name", "Number of Decks", "Number of Decks per Player")
+
+    return render_template(
+        'graphs.html',
+        colour_identities=colour_identities,
+        decks=decks,
+        players=players,
+        pie_chart=pie_chart,
+        bar_chart=bar_chart
+    )
+
+
+@app.route('/graphs/pie')
+def graphs_pie():
+    """ Graphs are displayed here """
+    # Load the data we need before passing it to the template
+    colour_identities = Colour_Identity_crud.all(True)
+    decks = Deck_crud.all(True)
+    players = Player_crud.all(True)
+
+    player_names = []
+    number_of_decks = []
+
+    for player in players:
+        if len(player.decks) > 0:
+            player_names.append(player.player_name)
+            number_of_decks.append(len(player.decks))
+
+    pie_chart = pie_charts.make_pie_chart(player_names, number_of_decks, "Number of Decks per Player")
+    bar_chart = bar_charts.make_bar_chart(player_names, number_of_decks, "Player Name", "Number of Decks", "Number of Decks per Player")
+
+    return render_template(
+        'graphs.html',
+        colour_identities=colour_identities,
+        decks=decks,
+        players=players,
+        pie_chart=pie_chart,
+        bar_chart=bar_chart
     )
 
 # Set debug=True for the server to auto-reload when there are changes

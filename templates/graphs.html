@@ -12,7 +12,16 @@
 
 <body pg-name="graphs" js="off">
     {% include "header.html" %}
-    Graphs belong here
+    There are two types of graphs available: pie charts and bar charts.<br>
+    Below is an example of each, pie on the left and bar on the right, made from the same data.
+    i.e. the number of decks each player owns.<br>
+    Please click on the type of graph you would like to create, or use the nav bar above, to go to the relevant page.<br>
+    <a class="pie" href="/graphs/pie">
+      <img src="data:image/png;base64, {{ pie_chart }}">
+    </a>
+    <a class="pie" href="/graphs/bar">
+      <img src="data:image/png;base64, {{ bar_chart }}">
+    </a>
     {% include "footer.html" %}
     <noscript><style>body { visibility: visible; }</style></noscript>
 </body>
