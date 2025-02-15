@@ -5,7 +5,7 @@ from data import storage
 from crud.colour_identity import Colour_Identity_crud
 from crud.deck import Deck_crud
 from crud.player import Player_crud
-from graphs import pie_charts
+from graphs import pie_charts, bar_charts
 
 app = Flask(__name__)
 app.register_blueprint(api_routes)
@@ -288,7 +288,8 @@ def graphs():
             player_names.append(player.player_name)
             number_of_decks.append(len(player.decks))
 
-    pie_charts.make_pie_chart(player_names, number_of_decks)
+    pie_charts.make_pie_chart(player_names, number_of_decks, "Number of Decks per Player")
+    bar_charts.make_bar_chart(player_names, number_of_decks, "Player Name", "Number of Decks", "Number of Decks per Player")
 
     return render_template(
         'graphs.html',
