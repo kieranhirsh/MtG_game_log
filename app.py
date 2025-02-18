@@ -292,9 +292,7 @@ def graphs():
 
     return render_template(
         'graphs.html',
-        colour_identities=colour_identities,
-        decks=decks,
-        players=players,
+        graph_type="example",
         pie_chart=pie_chart,
         bar_chart=bar_chart
     )

@@ -12,6 +12,7 @@
 
 <body pg-name="graphs" js="off">
     {% include "header.html" %}
+    {% if graph_type == "example" %}
     There are two types of graphs available: pie charts and bar charts.<br>
     Below is an example of each, pie on the left and bar on the right, made from the same data.
     i.e. the number of decks each player owns.<br>
@@ -22,6 +23,7 @@
     <a class="pie" href="/graphs/bar">
       <img src="data:image/png;base64, {{ bar_chart }}">
     </a>
+    {% endif %}
     {% include "footer.html" %}
     <noscript><style>body { visibility: visible; }</style></noscript>
 </body>
