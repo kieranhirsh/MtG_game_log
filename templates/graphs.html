@@ -2,40 +2,92 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link type="text/css" rel="stylesheet" href="../static/css/graphs.css">
-    <script type="text/javascript" src="../static/js/graphs.js"></script>
-    <link rel="icon" type="img/png" href="../static/img/card_back.png">
-    <title>M:tG Game Logger</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link type="text/css" rel="stylesheet" href="../static/css/graphs.css">
+  <script type="text/javascript" src="../static/js/graphs.js"></script>
+  <link rel="icon" type="img/png" href="../static/img/card_back.png">
+  <title>M:tG Game Logger</title>
 </head>
 
 <body pg-name="graphs" js="off">
-    {% include "header.html" %}
-    {% if graph_type == "example" %}
-    There are two types of graphs available: pie charts and bar charts.<br>
-    Below is an example of each, pie on the left and bar on the right, made from the same data.
-    i.e. the number of decks each player owns.<br>
-    Please use the dropdown list below to select the type of graph you want to create.<br>
-    <a class="pie" href="/graphs/pie">
-        <img src="data:image/png;base64, {{ pie_chart }}">
-    </a>
-    <a class="pie" href="/graphs/bar">
-        <img src="data:image/png;base64, {{ bar_chart }}">
-    </a>
-    {% endif %}
+  {% include "header.html" %}
+  {% if graph_type == "example" %}
+  There are two types of graphs available: bar charts and pie charts.<br>
+  Below is an example of each, bar on the left and pie on the right, made from the same data.
+  i.e. the number of decks each player owns.<br>
+  Please use the dropdown list below to select the type of graph you want to create.<br>
+  <a class="pie" href="/graphs/bar">
+    <img src="data:image/png;base64, {{ bar_chart }}">
+  </a>
+  <a class="pie" href="/graphs/pie">
+    <img src="data:image/png;base64, {{ pie_chart }}">
+  </a>
+  {% endif %}
 
-    <div id="dropdown">
-        Data type:
-        <select name="data_types" id="data_types" onchange="toggleDataType()">
-            <option value="" selected disabled hidden>Choose input data type</option>
-            <option value="pie">Pie chart</option>
-            <option value="bar">Bar chart</option>
-        </select>
+  <div id="dropdown">
+    Data type:
+    <select name="data_types" id="data_types" onchange="toggleDataType()">
+      <option value="" selected disabled hidden>Choose input data type</option>
+      <option value="bar">Bar chart</option>
+      <option value="pie">Pie chart</option>
+    </select>
+  </div>
+
+  <div id="data_select">
+    <datalist id="data_type">
+      <option value="colour identity">
+      <option value="deck">
+      <option value="player">
+    </datalist>
+    <datalist id="colour_identity_type">
+      <option value="colour_identity_name">
+      <option value="num_decks">
+    </datalist>
+    <datalist id="deck_type">
+      <option value="deck_name">
+    </datalist>
+    <datalist id="player_type">
+      <option value="player_name">
+      <option value="num_decks">
+    </datalist>
+
+    {% if graph_type == "bar" %}
+    <div class="data_input" id="player">
+      <h2>Bar Chart</h2>
+      <form action="/graphs/bar" method="POST">
+        <input class="type" type="text" id="type" name="type" value="bar">
+        <label for="player_name">Y axis Model: </label>
+        <input type="search" id="bar_x_data" name="bar_x_data" list="data_type" autocomplete="off">
+        <label for="player_name">Y axis Column: </label>
+        <input type="search" id="bar_x_type" name="bar_x_type" list="player_type" autocomplete="off">
+        <label for="player_name">Y axis Model: </label>
+        <input type="search" id="bar_x_data" name="bar_x_data" list="data_type" autocomplete="off">
+        <label for="player_name">Y axis Column: </label>
+        <input type="search" id="bar_x_type" name="bar_x_type" list="player_type" autocomplete="off">
+        <input type="submit" value="Make bar">
+      </form>
     </div>
 
-    {% include "footer.html" %}
+    {% elif graph_type == "pie" %}
+    <div class="data_input" id="player">
+      <h2>Pie Chart</h2>
+      <form action="/graphs/pie" method="POST">
+        <input class="type" type="text" id="type" name="type" value="pie">
+        <label for="player_name">Data Type: </label>
+        <input type="search" id="pie_data" name="pie_data" list="data_type" autocomplete="off">
+        <label for="player_name">Divisions: </label>
+        <input type="search" id="pie_divisions" name="pie_divisions" list="player_type" autocomplete="off">
+        <input type="submit" value="Make pie">
+      </form>
+    </div>
+    {% endif %}
+  </div>
+
+
+
+  {% include "footer.html" %}
 </body>
 
 </html>

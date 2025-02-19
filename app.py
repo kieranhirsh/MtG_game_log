@@ -300,6 +300,7 @@ def graphs():
 @app.route('/graphs/bar')
 def graphs_bar():
     """ Graphs are displayed here """
+    print("request = ", request.form)
     # Load the data we need before passing it to the template
     colour_identities = Colour_Identity_crud.all(True)
     decks = Deck_crud.all(True)
@@ -317,6 +318,7 @@ def graphs_bar():
 
     return render_template(
         'graphs.html',
+        graph_type="bar",
         colour_identities=colour_identities,
         decks=decks,
         players=players,
@@ -328,6 +330,7 @@ def graphs_bar():
 @app.route('/graphs/pie')
 def graphs_pie():
     """ Graphs are displayed here """
+    print("request = ", request.form)
     # Load the data we need before passing it to the template
     colour_identities = Colour_Identity_crud.all(True)
     decks = Deck_crud.all(True)
@@ -345,6 +348,7 @@ def graphs_pie():
 
     return render_template(
         'graphs.html',
+        graph_type="pie",
         colour_identities=colour_identities,
         decks=decks,
         players=players,
