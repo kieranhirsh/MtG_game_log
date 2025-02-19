@@ -2,119 +2,120 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link type="text/css" rel="stylesheet" href="../static/css/input.css">
-    <script type="text/javascript" src="../static/js/input.js"></script>
-    <link rel="icon" type="img/png" href="../static/img/card_back.png">
-    <title>M:tG Game Logger</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link type="text/css" rel="stylesheet" href="../static/css/input.css">
+  <script type="text/javascript" src="../static/js/input.js"></script>
+  <link rel="icon" type="img/png" href="../static/img/card_back.png">
+  <title>M:tG Game Logger</title>
 </head>
 
 <body pg-name="input" js="off">
-    {% include "header.html" %}
-    <div id="dropdown">
-        Data type:
-        <select name="data_types" id="data_types" onchange="toggleDataType()">
-            <option value="" selected disabled hidden>Choose input data type</option>
-            <option value="deck">Deck</option>
-            <option value="player">Player</option>
-        </select>
+  {% include "header.html" %}
+  <div id="dropdown">
+    Data type:
+    <select name="data_types" id="data_types" onchange="toggleDataType()">
+      <option value="" selected disabled hidden>Choose input data type</option>
+      <option value="deck">Deck</option>
+      <option value="player">Player</option>
+    </select>
+  </div>
+
+  <div id="data_inputs">
+    <datalist id="colour_identities">
+      {% for colour_identity in colour_identities %}
+      <option value="{{ colour_identity.ci_name }}">
+        {% endfor %}
+    </datalist>
+    <datalist id="players">
+      {% for player in players %}
+      <option value="{{ player.player_name }}">
+        {% endfor %}
+    </datalist>
+    <datalist id="decks">
+      {% for deck in decks %}
+      <option value="{{ deck.deck_name }}">
+        {% endfor %}
+    </datalist>
+
+    {% if method == "create" %}
+    <div class="data_input" id="player">
+      <h2>Create new player</h2>
+      <form action="/input" method="POST">
+        <input class="type" type="text" id="type" name="type" value="player">
+        <label for="player_name">Player Name: </label>
+        <input type="text" id="player_name" name="player_name" autocomplete="off">
+        <input type="submit" value="Create player">
+      </form>
     </div>
 
-    <div id="data_inputs">
-        <datalist id="colour_identities">
-            {% for colour_identity in colour_identities %}
-            <option value="{{ colour_identity.ci_name }}">
-            {% endfor %}
-        </datalist>
-        <datalist id="players">
-            {% for player in players %}
-            <option value="{{ player.player_name }}">
-            {% endfor %}
-        </datalist>
-        <datalist id="decks">
-            {% for deck in decks %}
-            <option value="{{ deck.deck_name }}">
-            {% endfor %}
-        </datalist>
-        {% if method == "create" %}
-        <div class="data_input" id="player">
-            <h2>Create new player</h2>
-            <form action="/input" method="POST">
-                <input class="type" type="text" id="type" name="type" value="player">
-                <label for="player_name">Player Name: </label>
-                <input type="text" id="player_name" name="player_name" autocomplete="off">
-                <input type="submit" value="Create player">
-            </form>
-        </div>
-
-        <div class="data_input" id="deck">
-            <h2>Create new deck</h2>
-            <form action="/input" method="POST">
-                <input class="type" type="text" id="type" name="type" value="deck">
-                <label for="deck_name">Deck Name: </label>
-                <input type="text" id="deck_name" name="deck_name" autocomplete="off">
-                <label for="owner">Owner Name: </label>
-                <input type="search" id="owner" name="owner" list="players" autocomplete="off">
-                <label for="ci_name">Colour Identity: </label>
-                <input type="search" id="ci_name" name="ci_name" list="colour_identities" autocomplete="off">
-                <input type="submit" value="Create deck">
-            </form>
-        </div>
-
-        {% elif method == "edit" %}
-        <div class="data_input" id="player">
-            <h2>Update player</h2>
-            <form action="/input/edit" method="POST">
-                <input class="type" type="text" id="type" name="type" value="player">
-                <label for="player_name">Player to update: </label>
-                <input type="search" id="player_name" name="player_name" list="players" autocomplete="off"><br>
-                <label for="new_player_name">Updated Player Name: </label>
-                <input type="text" id="new_player_name" name="new_player_name" autocomplete="off">
-                <input type="submit" value="Edit player">
-            </form>
-        </div>
-
-        <div class="data_input" id="deck">
-            <h2>Update deck</h2>
-            <form action="/input/edit" method="POST">
-                <input class="type" type="text" id="type" name="type" value="deck">
-                <label for="deck_name">Deck to update: </label>
-                <input type="search" id="deck_name" name="deck_name" list="decks" autocomplete="off"><br>
-                <label for="new_deck_name">Updated Deck Name: </label>
-                <input type="text" id="new_deck_name" name="new_deck_name" autocomplete="off">
-                <label for="owner">Updated Owner Name: </label>
-                <input type="search" id="owner" name="owner" list="players" autocomplete="off">
-                <label for="ci_name">Updated Colour Identity: </label>
-                <input type="search" id="ci_name" name="ci_name" list="colour_identities" autocomplete="off">
-                <input type="submit" value="Edit deck">
-            </form>
-        </div>
-
-        {% elif method == "delete" %}
-        <div class="data_input" id="player">
-            <h2>Delete player</h2>
-            <form action="/input/delete" method="POST">
-                <input class="type" type="text" id="type" name="type" value="player">
-                <label for="player_name">Player Name: </label>
-                <input type="search" id="player_name" name="player_name" list="players" autocomplete="off">
-                <input type="submit" value="Delete player">
-            </form>
-        </div>
-
-        <div class="data_input" id="deck">
-            <h2>Delete deck</h2>
-            <form action="/input/delete" method="POST">
-                <input class="type" type="text" id="type" name="type" value="deck">
-                <label for="deck_name">Deck Name: </label>
-                <input type="search" id="deck_name" name="deck_name" list="decks" autocomplete="off">
-                <input type="submit" value="Delete deck">
-            </form>
-        </div>
-        {% endif %}
+    <div class="data_input" id="deck">
+      <h2>Create new deck</h2>
+      <form action="/input" method="POST">
+        <input class="type" type="text" id="type" name="type" value="deck">
+        <label for="deck_name">Deck Name: </label>
+        <input type="text" id="deck_name" name="deck_name" autocomplete="off">
+        <label for="owner">Owner Name: </label>
+        <input type="search" id="owner" name="owner" list="players" autocomplete="off">
+        <label for="ci_name">Colour Identity: </label>
+        <input type="search" id="ci_name" name="ci_name" list="colour_identities" autocomplete="off">
+        <input type="submit" value="Create deck">
+      </form>
     </div>
-    {% include "footer.html" %}
+
+    {% elif method == "edit" %}
+    <div class="data_input" id="player">
+      <h2>Update player</h2>
+      <form action="/input/edit" method="POST">
+        <input class="type" type="text" id="type" name="type" value="player">
+        <label for="player_name">Player to update: </label>
+        <input type="search" id="player_name" name="player_name" list="players" autocomplete="off"><br>
+        <label for="new_player_name">Updated Player Name: </label>
+        <input type="text" id="new_player_name" name="new_player_name" autocomplete="off">
+        <input type="submit" value="Edit player">
+      </form>
+    </div>
+
+    <div class="data_input" id="deck">
+      <h2>Update deck</h2>
+      <form action="/input/edit" method="POST">
+        <input class="type" type="text" id="type" name="type" value="deck">
+        <label for="deck_name">Deck to update: </label>
+        <input type="search" id="deck_name" name="deck_name" list="decks" autocomplete="off"><br>
+        <label for="new_deck_name">Updated Deck Name: </label>
+        <input type="text" id="new_deck_name" name="new_deck_name" autocomplete="off">
+        <label for="owner">Updated Owner Name: </label>
+        <input type="search" id="owner" name="owner" list="players" autocomplete="off">
+        <label for="ci_name">Updated Colour Identity: </label>
+        <input type="search" id="ci_name" name="ci_name" list="colour_identities" autocomplete="off">
+        <input type="submit" value="Edit deck">
+      </form>
+    </div>
+
+    {% elif method == "delete" %}
+    <div class="data_input" id="player">
+      <h2>Delete player</h2>
+      <form action="/input/delete" method="POST">
+        <input class="type" type="text" id="type" name="type" value="player">
+        <label for="player_name">Player Name: </label>
+        <input type="search" id="player_name" name="player_name" list="players" autocomplete="off">
+        <input type="submit" value="Delete player">
+      </form>
+    </div>
+
+    <div class="data_input" id="deck">
+      <h2>Delete deck</h2>
+      <form action="/input/delete" method="POST">
+        <input class="type" type="text" id="type" name="type" value="deck">
+        <label for="deck_name">Deck Name: </label>
+        <input type="search" id="deck_name" name="deck_name" list="decks" autocomplete="off">
+        <input type="submit" value="Delete deck">
+      </form>
+    </div>
+    {% endif %}
+  </div>
+  {% include "footer.html" %}
 </body>
 
 </html>
