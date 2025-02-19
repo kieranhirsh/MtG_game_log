@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -8,7 +9,7 @@
     <script type="text/javascript" src="../static/js/graphs.js"></script>
     <link rel="icon" type="img/png" href="../static/img/card_back.png">
     <title>M:tG Game Logger</title>
-  </head>
+</head>
 
 <body pg-name="graphs" js="off">
     {% include "header.html" %}
@@ -16,15 +17,32 @@
     There are two types of graphs available: pie charts and bar charts.<br>
     Below is an example of each, pie on the left and bar on the right, made from the same data.
     i.e. the number of decks each player owns.<br>
-    Please click on the type of graph you would like to create, or use the nav bar above, to go to the relevant page.<br>
+    Please use the dropdown list below to select the type of graph you want to create.<br>
     <a class="pie" href="/graphs/pie">
-      <img src="data:image/png;base64, {{ pie_chart }}">
+        <img src="data:image/png;base64, {{ pie_chart }}">
     </a>
     <a class="pie" href="/graphs/bar">
-      <img src="data:image/png;base64, {{ bar_chart }}">
+        <img src="data:image/png;base64, {{ bar_chart }}">
     </a>
     {% endif %}
+
+    <div id="dropdown">
+        Data type:
+        <select name="data_types" id="data_types" onchange="toggleDataType()">
+            <option value="" selected disabled hidden>Choose input data type</option>
+            <option value="pie">Pie chart</option>
+            <option value="bar">Bar chart</option>
+        </select>
+    </div>
+
     {% include "footer.html" %}
-    <noscript><style>body { visibility: visible; }</style></noscript>
+    <noscript>
+        <style>
+            body {
+                visibility: visible;
+            }
+        </style>
+    </noscript>
 </body>
+
 </html>
