@@ -16,3 +16,18 @@ function toggleGraphType() {
       break;
   }
 }
+
+function changeBarXColumnOptions() {
+  let input = document.getElementById("bar_x_data").value;
+  document.getElementById("bar_x_type").value = input;
+}
+
+function changeBarYColumnOptions() {
+  let input = document.getElementById("bar_y_data").value;
+  document.getElementById("bar_y_type").value = input;
+}
+
+function changePieDivisionsOptions() {
+  let input = document.getElementById("pie_data").value;
+  document.getElementById("pie_divisions").value = input;
+}
