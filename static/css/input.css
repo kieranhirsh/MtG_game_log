@@ -73,9 +73,6 @@ header .navigation nav ul .graphs_menu {
   display: flex;
   flex-direction: column;
 }
-header .navigation nav ul .graphs_menu:hover .graphs_submenu {
-  display: flex;
-}
 header .navigation nav ul .graphs_menu .graphs_submenu {
   display: none;
 }

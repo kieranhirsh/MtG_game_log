@@ -272,7 +272,7 @@ def data_post():
 
     return render_template('data.html', colour_identities=colour_identities, players=players)
 
-@app.route('/graphs')
+@app.route('/graphs', methods=['GET', 'POST'])
 def graphs():
     """ Graphs are displayed here """
     # Load the data we need before passing it to the template
@@ -293,61 +293,6 @@ def graphs():
         graph_type="example",
         example_bar_chart=example_bar_chart,
         example_pie_chart=example_pie_chart
-    )
-
-@app.route('/graphs/bar')
-def graphs_bar():
-    """ Graphs are displayed here """
-    print("request = ", request.form)
-    # Load the data we need before passing it to the template
-    colour_identities = Colour_Identity_crud.all(True)
-    decks = Deck_crud.all(True)
-    players = Player_crud.all(True)
-
-    player_names = []
-    number_of_decks = []
-
-    for player in players:
-        player_names.append(player.player_name)
-        number_of_decks.append(len(player.decks))
-
-#    pie_chart = pie_charts.make_pie_chart(player_names, number_of_decks, "Number of Decks per Player")
-#    bar_chart = bar_charts.make_bar_chart(player_names, number_of_decks, "Player Name", "Number of Decks", "Number of Decks per Player")
-
-    return render_template(
-        'graphs.html',
-        graph_type="bar",
-        colour_identities=colour_identities,
-        decks=decks,
-        players=players
-    )
-
-
-@app.route('/graphs/pie')
-def graphs_pie():
-    """ Graphs are displayed here """
-    print("request = ", request.form)
-    # Load the data we need before passing it to the template
-    colour_identities = Colour_Identity_crud.all(True)
-    decks = Deck_crud.all(True)
-    players = Player_crud.all(True)
-
-    player_names = []
-    number_of_decks = []
-
-    for player in players:
-        player_names.append(player.player_name)
-        number_of_decks.append(len(player.decks))
-
-#    pie_chart = pie_charts.make_pie_chart(player_names, number_of_decks, "Number of Decks per Player")
-#    bar_chart = bar_charts.make_bar_chart(player_names, number_of_decks, "Player Name", "Number of Decks", "Number of Decks per Player")
-
-    return render_template(
-        'graphs.html',
-        graph_type="pie",
-        colour_identities=colour_identities,
-        decks=decks,
-        players=players
     )
 
 # Set debug=True for the server to auto-reload when there are changes

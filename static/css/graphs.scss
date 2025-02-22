@@ -92,12 +92,6 @@ header {
           display: flex;
           flex-direction: column;
 
-          &:hover {
-            .graphs_submenu {
-              display: flex;
-            }
-          }
-
           .graphs_submenu {
             display: none;
 
