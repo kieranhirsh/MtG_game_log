@@ -58,13 +58,13 @@
       <h2>Bar Chart</h2>
       <form action="/graphs/bar" method="POST">
         <input class="type" type="text" id="type" name="type" value="bar">
-        <label for="player_name">Y axis Model: </label>
+        <label for="bar_x_data">Y axis Model: </label>
         <input type="search" id="bar_x_data" name="bar_x_data" list="data_type" autocomplete="off">
-        <label for="player_name">Y axis Column: </label>
+        <label for="bar_x_type">Y axis Column: </label>
         <input type="search" id="bar_x_type" name="bar_x_type" list="player_type" autocomplete="off">
-        <label for="player_name">Y axis Model: </label>
+        <label for="bar_x_data">Y axis Model: </label>
         <input type="search" id="bar_x_data" name="bar_x_data" list="data_type" autocomplete="off">
-        <label for="player_name">Y axis Column: </label>
+        <label for="bar_x_type">Y axis Column: </label>
         <input type="search" id="bar_x_type" name="bar_x_type" list="player_type" autocomplete="off">
         <input type="submit" value="Make bar">
       </form>
@@ -75,9 +75,9 @@
       <h2>Pie Chart</h2>
       <form action="/graphs/pie" method="POST">
         <input class="type" type="text" id="type" name="type" value="pie">
-        <label for="player_name">Data Type: </label>
+        <label for="pie_data">Data Type: </label>
         <input type="search" id="pie_data" name="pie_data" list="data_type" autocomplete="off">
-        <label for="player_name">Divisions: </label>
+        <label for="pie_divisions">Divisions: </label>
         <input type="search" id="pie_divisions" name="pie_divisions" list="player_type" autocomplete="off">
         <input type="submit" value="Make pie">
       </form>
