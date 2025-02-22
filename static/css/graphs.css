@@ -84,6 +84,13 @@ header .navigation nav ul .graphs_menu .graphs_submenu ul {
   flex-direction: column;
 }
 
+body .data_input {
+  display: none;
+}
+body .data_input .type {
+  display: none;
+}
+
 a {
   color: black;
 }

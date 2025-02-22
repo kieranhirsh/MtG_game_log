@@ -112,6 +112,16 @@ header {
   }
 }
 
+body {
+  .data_input {
+    display: none;
+
+    .type {
+      display: none;
+    }
+  }
+}
+
 a {
   color: black;
 }

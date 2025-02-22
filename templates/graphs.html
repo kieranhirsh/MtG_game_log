@@ -28,14 +28,14 @@
 
   <div id="dropdown">
     Data type:
-    <select name="data_types" id="data_types" onchange="toggleDataType()">
+    <select name="data_types" id="data_types" onchange="toggleGraphType()">
       <option value="" selected disabled hidden>Choose input data type</option>
       <option value="bar">Bar chart</option>
       <option value="pie">Pie chart</option>
     </select>
   </div>
 
-  <div id="data_select">
+  <div id="menu">
     <datalist id="data_type">
       <option value="colour identity">
       <option value="deck">
@@ -53,8 +53,7 @@
       <option value="num_decks">
     </datalist>
 
-    {% if graph_type == "bar" %}
-    <div class="data_input" id="player">
+    <div class="data_input" id="bar">
       <h2>Bar Chart</h2>
       <form action="/graphs/bar" method="POST">
         <input class="type" type="text" id="type" name="type" value="bar">
@@ -70,8 +69,7 @@
       </form>
     </div>
 
-    {% elif graph_type == "pie" %}
-    <div class="data_input" id="player">
+    <div class="data_input" id="pie">
       <h2>Pie Chart</h2>
       <form action="/graphs/pie" method="POST">
         <input class="type" type="text" id="type" name="type" value="pie">
@@ -82,10 +80,7 @@
         <input type="submit" value="Make pie">
       </form>
     </div>
-    {% endif %}
   </div>
-
-
 
   {% include "footer.html" %}
 </body>
