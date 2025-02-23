@@ -287,7 +287,7 @@ def graphs():
             ci_names.append(colour_identity.ci_name)
             number_of_decks.append(len(colour_identity.decks))
 
-        example_bar_chart = bar_charts.make_bar_chart(ci_names, number_of_decks, "Colour Identity Name", "Number of Decks", "Number of Decks per Player")
+        example_bar_chart = bar_charts.make_bar_chart(ci_names, number_of_decks, "Colour Identity Name", "Number of Decks", "Number of Decks per Colour Identity")
         example_pie_chart = pie_charts.make_pie_chart(ci_names, number_of_decks, "Number of Decks per Colour Identity")
 
         return render_template(
