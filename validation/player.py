@@ -12,7 +12,7 @@ class Player_validator():
 
     def valid_player_name(player_name):
         # ensure that the name is not spaces-only and only contains allowed characters (alphabet, latin letters, and some punctuation)
-        is_valid_name = len(player_name.strip()) > 0 and re.search("^[a-zA-ZÀ-ʯ,' ]+$", player_name)
+        is_valid_name = len(player_name.strip()) > 0 and re.search("^[a-zA-ZÀ-ʯ,' \-]+$", player_name)
         if not is_valid_name:
             raise ValueError("Invalid name specified: {}".format(player_name))
 
