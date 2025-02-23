@@ -316,14 +316,43 @@ def graphs():
         }
         titles = {
             "colour identity": "Colour Identity",
+            "colour_identity_name": "Colour Identity Name",
             "deck": "Deck",
             "num_decks": "Number of Decks",
-            "player": "Player"
+            "player": "Player",
+            "player_name": "Player Name"
         }
 
         if request.form['type'] == "bar":
-            print("========= welcome to bar town =============")
-            print("request.form = ", request.form)
+            if request.form["bar_data"] not in list(model_names.keys()):
+                raise ValueError("Incorrect Data Type specified: %s" % request.form["pie_data"])
+
+            crud_file = importlib.import_module("crud." + model_names[request.form["bar_data"]]["file"])
+            crud_class = getattr(crud_file, model_names[request.form["bar_data"]]["class"])
+            data = crud_class.all(True)
+
+            x_values = []
+            y_values = []
+
+            for datum in data:
+                # this wants to be a select case, but I'm using Python 3.8 :(
+                if request.form["bar_x_type"] == "%s_name" % model_names[request.form["bar_data"]]["file"]:
+                    x_values.append(getattr(datum, model_names[request.form["bar_data"]]["name_column"]))
+                else:
+                    raise ValueError("Incorrect X axis Column specified: %s" % request.form["bar_x_type"])
+                
+                # this wants to be a select case, but I'm using Python 3.8 :(
+                if request.form["bar_y_type"] == "num_decks":
+                    y_values.append(len(datum.decks))
+                else:
+                    raise ValueError("Incorrect Y axis Column specified: %s" % request.form["bar_y_type"])
+
+            plt_graph = bar_charts.make_bar_chart(x_values,
+                                                  y_values,
+                                                  titles[request.form["bar_x_type"]],
+                                                  titles[request.form["bar_y_type"]],
+                                                  titles[request.form["bar_y_type"]] + " per " + titles[request.form["bar_data"]])
+
         elif request.form['type'] == "pie":
             if request.form["pie_data"] not in list(model_names.keys()):
                 raise ValueError("Incorrect Data Type specified: %s" % request.form["pie_data"])
