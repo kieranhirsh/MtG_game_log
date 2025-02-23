@@ -325,6 +325,9 @@ def graphs():
             print("========= welcome to bar town =============")
             print("request.form = ", request.form)
         elif request.form['type'] == "pie":
+            if request.form["pie_data"] not in list(model_names.keys()):
+                raise ValueError("Incorrect Data Type specified: %s" % request.form["pie_data"])
+
             crud_file = importlib.import_module("crud." + model_names[request.form["pie_data"]]["file"])
             crud_class = getattr(crud_file, model_names[request.form["pie_data"]]["class"])
             data = crud_class.all(True)
@@ -334,7 +337,11 @@ def graphs():
 
             for datum in data:
                 labels.append(getattr(datum, model_names[request.form["pie_data"]]["name_column"]))
-                values.append(len(datum.decks))
+                # this wants to be a select case, but I'm using Python 3.8 :(
+                if request.form["pie_divisions"] == "num_decks":
+                    values.append(len(datum.decks))
+                else:
+                    raise ValueError("Incorrect Divisions specified: %s" % request.form["pie_divisions"])
 
             plt_graph = pie_charts.make_pie_chart(labels, values, titles[request.form["pie_divisions"]] + " per " + titles[request.form["pie_data"]])
 
