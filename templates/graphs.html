@@ -51,7 +51,7 @@
 
     <div class="data_input" id="bar">
       <h2>Bar Chart</h2>
-      <form action="/graphs/bar" method="POST">
+      <form action="/graphs" method="POST">
         <input class="type" type="text" id="type" name="type" value="bar">
         <label for="bar_y_data">Y axis Model: </label>
         <input type="search" id="bar_y_data" name="bar_y_data" list="data_type" autocomplete="off" onchange="changeBarYColumnOptions()">
@@ -67,7 +67,7 @@
 
     <div class="data_input" id="pie">
       <h2>Pie Chart</h2>
-      <form action="/graphs/pie" method="POST">
+      <form action="/graphs" method="POST">
         <input class="type" type="text" id="type" name="type" value="pie">
         <label for="pie_data">Data Type: </label>
         <input type="search" id="pie_data" name="pie_data" list="data_type" autocomplete="off"  onchange="changePieDivisionsOptions()">
