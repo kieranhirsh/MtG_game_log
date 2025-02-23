@@ -8,6 +8,8 @@ CREATE TABLE Players (
   PRIMARY KEY (id)
 );
 
+INSERT INTO `Players` VALUES ('bcdc66af-d20f-42e0-8bc2-21fee1c7ec26','Kieran H');
+
 CREATE TABLE Colour_Identities (
   id varchar(64) NOT NULL,
   ci_name varchar(128) NOT NULL,
@@ -30,3 +32,5 @@ CREATE TABLE Decks (
   CONSTRAINT decks_ibfk_1 FOREIGN KEY (player_id) REFERENCES Players (id),
   CONSTRAINT decks_ibfk_2 FOREIGN KEY (colour_identity_id) REFERENCES Colour_Identities (id)
 );
+
+INSERT INTO `Decks` VALUES ('15dec003-5456-43ea-a6da-cf981333f6a5','Xyris, Hedron Grinder','bcdc66af-d20f-42e0-8bc2-21fee1c7ec26','a3dec342-cc95-49ec-8dae-4f966da95624'),('238370d5-306e-4cde-a891-849b365ee683','Obeka, Brute Chronologist','bcdc66af-d20f-42e0-8bc2-21fee1c7ec26','880393b9-3191-4a6b-a4c5-42f97a659e2c'),('442a348e-0a25-460e-9b1f-0804fb716f93','Extus, suzerain de l\'Oriq','bcdc66af-d20f-42e0-8bc2-21fee1c7ec26','5d5f6800-e325-4507-a1d5-d8689cd714b9'),('66c75202-6a2b-45cc-b4d4-08585053e0ef','Réveiller l\'Avatar de sang','bcdc66af-d20f-42e0-8bc2-21fee1c7ec26','3de61941-7ac0-4230-aa3b-a8f079e64472'),('69393a02-7e5c-499f-8005-108740dee92f','General Ferrous Rokiric','bcdc66af-d20f-42e0-8bc2-21fee1c7ec26','7aa24b49-5e15-4fef-8e2a-8f8ee2984cc9'),('77fc2f5f-4551-484c-9551-e493f4828747','Nethroi, Apex of Death','bcdc66af-d20f-42e0-8bc2-21fee1c7ec26','ad5cec7a-e866-493a-a39c-a0bff8d46eef'),('8ad26608-ed95-4b9e-ab80-e8b2b1a5ed11','Ratadrabik of Urborg','bcdc66af-d20f-42e0-8bc2-21fee1c7ec26','5d5f6800-e325-4507-a1d5-d8689cd714b9'),('96ab08e8-30b2-4252-afac-8192840aa7fa','Zedruü au Grandcœur','bcdc66af-d20f-42e0-8bc2-21fee1c7ec26','b2f7fcf3-ce9f-4898-8d6b-d667de484db2'),('b1258ee1-fd42-4100-8dbe-911669dee69b','Soul of Lord Windgrace','bcdc66af-d20f-42e0-8bc2-21fee1c7ec26','8a0eed82-6019-46e7-9683-21b622c859b4'),('b7eebdbf-6687-46b5-877e-db9365f0bd5d','Niv-Mizzet revenu à la vie','bcdc66af-d20f-42e0-8bc2-21fee1c7ec26','ff8bc843-3aa7-4cd4-9db6-c378a69f57b7'),('ca12ce09-d714-44dd-82c1-89dc2de5e9c1','Atraxa, voix des praetors','bcdc66af-d20f-42e0-8bc2-21fee1c7ec26','d37e8574-23c4-4dd1-a017-d0b9209bac69'),('f76b4c40-3f06-4638-8053-5f1d96517fe7','Zaxara, the Exemplary','bcdc66af-d20f-42e0-8bc2-21fee1c7ec26','b5fa6356-25a5-48d5-b2dc-c08a7df6ebe9');
