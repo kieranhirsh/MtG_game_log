@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import importlib
 from flask import Flask, render_template, request, jsonify
 from api.v1 import api_routes
 from data import storage
@@ -276,24 +277,74 @@ def data_post():
 def graphs():
     """ Graphs are displayed here """
     # Load the data we need before passing it to the template
-    players = Player_crud.all(True)
+    if request.method == 'GET':
+        players = Player_crud.all(True)
 
-    player_names = []
-    number_of_decks = []
+        player_names = []
+        number_of_decks = []
 
-    for player in players:
-        player_names.append(player.player_name)
-        number_of_decks.append(len(player.decks))
+        for player in players:
+            player_names.append(player.player_name)
+            number_of_decks.append(len(player.decks))
 
-    example_bar_chart = bar_charts.make_bar_chart(player_names, number_of_decks, "Player Name", "Number of Decks", "Number of Decks per Player")
-    example_pie_chart = pie_charts.make_pie_chart(player_names, number_of_decks, "Number of Decks per Player")
+        example_bar_chart = bar_charts.make_bar_chart(player_names, number_of_decks, "Player Name", "Number of Decks", "Number of Decks per Player")
+        example_pie_chart = pie_charts.make_pie_chart(player_names, number_of_decks, "Number of Decks per Player")
 
-    return render_template(
-        'graphs.html',
-        graph_type="example",
-        example_bar_chart=example_bar_chart,
-        example_pie_chart=example_pie_chart
-    )
+        return render_template(
+            'graphs.html',
+            graph_type="example",
+            example_bar_chart=example_bar_chart,
+            example_pie_chart=example_pie_chart
+        )
+    elif request.method == 'POST':
+        model_names = {
+            "colour identity": {
+                "file": "colour_identity",
+                "class": "Colour_Identity_crud",
+                "name_column": "ci_name"
+            },
+            "deck": {
+                "file": "deck",
+                "class": "Deck_crud",
+                "name_column": "deck_name"
+            },
+            "player": {
+                "file": "player",
+                "class": "Player_crud",
+                "name_column": "player_name"
+            }
+        }
+        titles = {
+            "colour identity": "Colour Identity",
+            "deck": "Deck",
+            "num_decks": "Number of Decks",
+            "player": "Player"
+        }
+
+        if request.form['type'] == "bar":
+            print("========= welcome to bar town =============")
+            print("request.form = ", request.form)
+        elif request.form['type'] == "pie":
+            crud_file = importlib.import_module("crud." + model_names[request.form["pie_data"]]["file"])
+            crud_class = getattr(crud_file, model_names[request.form["pie_data"]]["class"])
+            data = crud_class.all(True)
+
+            player_names = []
+            number_of_decks = []
+
+            for datum in data:
+                player_names.append(getattr(datum, model_names[request.form["pie_data"]]["name_column"]))
+                number_of_decks.append(len(datum.decks))
+
+            plt_graph = pie_charts.make_pie_chart(player_names,
+                                                  number_of_decks,
+                                                  titles[request.form["pie_divisions"]] + " per " + titles[request.form["pie_data"]])
+
+        return render_template(
+            'graphs.html',
+            graph_type=request.form['type'],
+            plt_graph=plt_graph
+        )
 
 # Set debug=True for the server to auto-reload when there are changes
 if __name__ == '__main__':
