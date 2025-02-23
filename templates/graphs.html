@@ -24,6 +24,18 @@
   <img src="data:image/png;base64, {{ plt_graph }}">
   {% endif %}
 
+  {% if advanced == True %}
+  <div id="spiel">
+    So, you've decided my graphing options are too restrictive for you?<br>
+    You've decided that you don't want to have to plot all data at once, but would prefer subsets based on your coniditions?<br>
+    You've decided that you want a pie chart showing decks by colour idenitity, but only for a specific player?<br>
+    You've decided that you want a bar chart showing the number of decks owned by each player, but only for the specified colours or colour identities?<br>
+    Well, you've come to the right place... at the wrong time :(<br>
+    I'm still thinking about how best to implement this and have decided that it's best to go ahead with adding the game data capabilities to the database.<br>
+    Ultimately there are infinite minor improvements I could make to the current state of this app, but I want to actually get an MVP out the door, so have to prioritise.<br>
+    But watch this space, it'll come eventually!
+  </div>
+  {% else %}
   <div id="dropdown">
     Data type:
     <select name="data_types" id="data_types" onchange="toggleGraphType()">
@@ -77,6 +89,7 @@
       </form>
     </div>
   </div>
+  {% endif %}
 
   {% include "footer.html" %}
 </body>

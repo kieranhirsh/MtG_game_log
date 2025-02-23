@@ -380,6 +380,13 @@ def graphs():
             plt_graph=plt_graph
         )
 
+@app.route('/graphs/advanced')
+def graphs_advanced():
+        return render_template(
+            'graphs.html',
+            advanced=True
+        )
+
 # Set debug=True for the server to auto-reload when there are changes
 if __name__ == '__main__':
     app.run(host='localhost', port=5000, debug=True)
