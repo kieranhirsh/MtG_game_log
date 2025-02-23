@@ -329,16 +329,14 @@ def graphs():
             crud_class = getattr(crud_file, model_names[request.form["pie_data"]]["class"])
             data = crud_class.all(True)
 
-            player_names = []
-            number_of_decks = []
+            labels = []
+            values = []
 
             for datum in data:
-                player_names.append(getattr(datum, model_names[request.form["pie_data"]]["name_column"]))
-                number_of_decks.append(len(datum.decks))
+                labels.append(getattr(datum, model_names[request.form["pie_data"]]["name_column"]))
+                values.append(len(datum.decks))
 
-            plt_graph = pie_charts.make_pie_chart(player_names,
-                                                  number_of_decks,
-                                                  titles[request.form["pie_divisions"]] + " per " + titles[request.form["pie_data"]])
+            plt_graph = pie_charts.make_pie_chart(labels, values, titles[request.form["pie_divisions"]] + " per " + titles[request.form["pie_data"]])
 
         return render_template(
             'graphs.html',
