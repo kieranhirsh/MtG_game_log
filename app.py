@@ -6,7 +6,7 @@ from data import storage
 from crud.colour_identity import Colour_Identity_crud
 from crud.deck import Deck_crud
 from crud.player import Player_crud
-from graphs import pie_charts, bar_charts
+from graphs import pie_charts, xy_graphs
 
 app = Flask(__name__)
 app.register_blueprint(api_routes)
@@ -287,7 +287,7 @@ def graphs():
             ci_names.append(colour_identity.ci_name)
             number_of_decks.append(len(colour_identity.decks))
 
-        example_bar_chart = bar_charts.make_xy_chart("bar", ci_names, number_of_decks, "Colour Identity Name", "Number of Decks", "Number of Decks per Colour Identity")
+        example_bar_chart = xy_graphs.make_xy_graph("bar", ci_names, number_of_decks, "Colour Identity Name", "Number of Decks", "Number of Decks per Colour Identity")
         example_pie_chart = pie_charts.make_pie_chart(ci_names, number_of_decks, "Number of Decks per Colour Identity")
 
         return render_template(
@@ -347,12 +347,12 @@ def graphs():
                 else:
                     raise ValueError("Incorrect Y axis Column specified: %s" % request.form["bar_y_type"])
 
-            plt_graph = bar_charts.make_xy_chart("bar",
-                                                  x_values,
-                                                  y_values,
-                                                  titles[request.form["bar_x_type"]],
-                                                  titles[request.form["bar_y_type"]],
-                                                  titles[request.form["bar_y_type"]] + " per " + titles[request.form["bar_data"]])
+            plt_graph = xy_graphs.make_xy_graph("bar",
+                                                x_values,
+                                                y_values,
+                                                titles[request.form["bar_x_type"]],
+                                                titles[request.form["bar_y_type"]],
+                                                titles[request.form["bar_y_type"]] + " per " + titles[request.form["bar_data"]])
 
         elif request.form['type'] == "pie":
             if request.form["pie_data"] not in list(model_names.keys()):

@@ -3,7 +3,7 @@ import base64
 import matplotlib.pyplot as plt
 from io import BytesIO
 
-def make_xy_chart(display, x_values, y_values, x_label = "", y_label="", title=""):
+def make_xy_graph(display, x_values, y_values, x_label = "", y_label="", title=""):
     fig, ax = plt.subplots()
     plt.setp(ax.get_xticklabels(), rotation=45)
     if display == "line":
