@@ -36,18 +36,18 @@
   <div id="menu">
     <datalist id="data_type">
       <option value="colour identity">
-      <option value="deck">
       <option value="player">
     </datalist>
-    <datalist id="colour_identity_type">
+    <datalist id="colour_identity_x_axis">
       <option value="colour_identity_name">
+    </datalist>
+    <datalist id="colour_identity_y_axis">
       <option value="num_decks">
     </datalist>
-    <datalist id="deck_type">
-      <option value="deck_name">
-    </datalist>
-    <datalist id="player_type">
+    <datalist id="player_x_axis">
       <option value="player_name">
+    </datalist>
+    <datalist id="player_y_axis">
       <option value="num_decks">
     </datalist>
 
@@ -55,12 +55,10 @@
       <h2>Bar Chart</h2>
       <form action="/graphs" method="POST">
         <input class="type" type="text" id="type" name="type" value="bar">
-        <label for="bar_y_data">Y axis Model: </label>
-        <input type="search" id="bar_y_data" name="bar_y_data" list="data_type" autocomplete="off" onchange="changeBarYColumnOptions()">
+        <label for="bar_data">Y axis Model: </label>
+        <input type="search" id="bar_data" name="bar_data" list="data_type" autocomplete="off" onchange="changeBarColumnOptions()">
         <label for="bar_y_type">Y axis Column: </label>
         <input type="search" id="bar_y_type" name="bar_y_type" autocomplete="off">
-        <label for="bar_x_data">X axis Model: </label>
-        <input type="search" id="bar_x_data" name="bar_x_data" list="data_type" autocomplete="off" onchange="changeBarXColumnOptions()">
         <label for="bar_x_type">X axis Column: </label>
         <input type="search" id="bar_x_type" name="bar_x_type" autocomplete="off">
         <input type="submit" value="Make bar">

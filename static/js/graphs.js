@@ -17,25 +17,16 @@ function toggleGraphType() {
   }
 }
 
-function changeBarXColumnOptions() {
-  let input = document.getElementById("bar_x_data").value;
+function changeBarColumnOptions() {
+  let input = document.getElementById("bar_data").value;
 
   if (input === "colour identity") {
-    document.getElementById("bar_x_type").setAttribute("list","colour_identity_type");
+    document.getElementById("bar_x_type").setAttribute("list","colour_identity_x_axis");
+    document.getElementById("bar_y_type").setAttribute("list","colour_identity_y_axis");
   }
   else {
-    document.getElementById("bar_x_type").setAttribute("list",input.concat("_type"));
-  }
-}
-
-function changeBarYColumnOptions() {
-  let input = document.getElementById("bar_y_data").value;
-
-  if (input === "colour identity") {
-    document.getElementById("bar_y_type").setAttribute("list","colour_identity_type");
-  }
-  else {
-    document.getElementById("bar_y_type").setAttribute("list",input.concat("_type"));
+    document.getElementById("bar_x_type").setAttribute("list",input.concat("_x_axis"));
+    document.getElementById("bar_y_type").setAttribute("list",input.concat("_y_axis"));
   }
 }
 
@@ -43,9 +34,9 @@ function changePieDivisionsOptions() {
   let input = document.getElementById("pie_data").value;
 
   if (input === "colour identity") {
-    document.getElementById("pie_divisions").setAttribute("list","colour_identity_type");
+    document.getElementById("pie_divisions").setAttribute("list","colour_identity_y_axis");
   }
   else {
-    document.getElementById("pie_divisions").setAttribute("list",input.concat("_type"));
+    document.getElementById("pie_divisions").setAttribute("list",input.concat("_y_axis"));
   }
 }
