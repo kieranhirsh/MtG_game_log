@@ -307,7 +307,8 @@ def graphs():
         titles = {
             "colour identity": "Colour Identity",
             "colour_identity_name": "Colour Identity Name",
-            "deck": "Deck",
+            "deck": "Number of Decks",
+            "number of colours": "Number of Colours",
             "num_decks": "Number of Decks",
             "player": "Player",
             "player_name": "Player Name"
@@ -362,10 +363,25 @@ def graphs():
                     pie_data.update({getattr(colour_identity, "ci_name"): 0})
 
                 for datum in data:
-                    pie_data[getattr(getattr(datum, "colour_identity"), "ci_name")] += 1
+                    datum_ci_model = getattr(datum, "colour_identity")
+                    datum_ci_name = getattr(datum_ci_model, "ci_name")
+                    pie_data[datum_ci_name] += 1
 
                 labels = list(pie_data.keys())
                 values = list(pie_data.values())
+            elif request.form["pie_divisions"] == "number of colours":
+                for ii in list(range(0,6)):
+                    pie_data.update({"%s colours" % ii: 0})
+
+                for datum in data:
+                    datum_ci_model = getattr(datum, "colour_identity")
+                    datum_colours = getattr(datum_ci_model, "colours")
+                    datum_num_colours = len(datum_colours)
+                    pie_data["%s colours" % datum_num_colours] += 1
+
+                labels = list(pie_data.keys())
+                values = list(pie_data.values())
+
 
 #            for datum in data:
 #                labels.append(getattr(datum, model_names[request.form["pie_data"]]["name_column"]))
@@ -375,7 +391,7 @@ def graphs():
 #                else:
 #                    raise ValueError("Incorrect Divisions specified: %s" % request.form["pie_divisions"])
 
-            plt_graph = pie_charts.make_pie_chart(labels, values, titles[request.form["pie_divisions"]] + " per " + titles[request.form["pie_data"]])
+            plt_graph = pie_charts.make_pie_chart(labels, values, titles[request.form["pie_data"]] + " per " + titles[request.form["pie_divisions"]])
 
         return render_template(
             'graphs.html',
