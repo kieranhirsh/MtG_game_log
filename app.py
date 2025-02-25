@@ -278,17 +278,24 @@ def graphs():
     """ Graphs are displayed here """
     # Load the data we need before passing it to the template
     if request.method == 'GET':
-        colour_identities = Colour_Identity_crud.all(True)
+        deck_data = Deck_crud.all(True)
 
-        ci_names = []
-        number_of_decks = []
+        plt_data = {}
 
-        for colour_identity in colour_identities:
-            ci_names.append(colour_identity.ci_name)
-            number_of_decks.append(len(colour_identity.decks))
+        for ii in list(range(0,6)):
+            plt_data.update({"%s colours" % ii: 0})
 
-        example_bar_chart = xy_graphs.make_xy_graph("bar", ci_names, number_of_decks, "Colour Identity Name", "Number of Decks", "Number of Decks per Colour Identity")
-        example_pie_chart = pie_charts.make_pie_chart(ci_names, number_of_decks, "Number of Decks per Colour Identity")
+        for deck in deck_data:
+            deck_ci_model = getattr(deck, "colour_identity")
+            deck_colours = getattr(deck_ci_model, "colours")
+            deck_num_colours = len(deck_colours)
+            plt_data["%s colours" % deck_num_colours] += 1
+
+        number_of_colours = list(plt_data.keys())
+        number_of_decks = list(plt_data.values())
+
+        example_bar_chart = xy_graphs.make_xy_graph("bar", number_of_colours, number_of_decks, "Colour Identity Name", "Number of Decks", "Number of Decks per Colour Identity")
+        example_pie_chart = pie_charts.make_pie_chart(number_of_colours, number_of_decks, "Number of Decks per Colour Identity")
 
         return render_template(
             'graphs.html',
