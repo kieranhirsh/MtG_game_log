@@ -49,36 +49,25 @@
     <datalist id="data_type">
       <option value="deck">
     </datalist>
-    <datalist id="pie_bins">
+    <datalist id="deck_bins_and_x_axis">
       <option value="colour identity">
       <option value="number of colours">
       <option value="owner">
     </datalist>
-    <datalist id="colour_identity_x_axis">
-      <option value="colour_identity_name">
-    </datalist>
-    <datalist id="colour_identity_y_axis">
-      <option value="num_decks">
-    </datalist>
-    <datalist id="player_x_axis">
-      <option value="player_name">
-    </datalist>
-    <datalist id="player_y_axis">
-      <option value="num_decks">
+    <datalist id="deck_y_axis">
+      <option value="number of decks">
     </datalist>
 
     <div class="data_input" id="bar">
       <h2>Bar Chart</h2>
       <form action="/graphs" method="POST">
-        <!-- This needs to be rethought of as data_to_plot and binning_type (the menus might not change)  -->
-        <!-- Also add the option for line graphs  -->
         <input class="type" type="text" id="type" name="type" value="bar">
         <label for="bar_data">Data Type: </label>
         <input type="search" id="bar_data" name="bar_data" list="data_type" autocomplete="off" onchange="changeBarColumnOptions()">
-        <label for="bar_y_type">Y axis: </label>
-        <input type="search" id="bar_y_type" name="bar_y_type" autocomplete="off">
-        <label for="bar_x_type">X axis: </label>
-        <input type="search" id="bar_x_type" name="bar_x_type" autocomplete="off">
+        <label for="bar_y">Y axis: </label>
+        <input type="search" id="bar_y" name="bar_y" autocomplete="off">
+        <label for="bar_x">X axis: </label>
+        <input type="search" id="bar_x" name="bar_x" autocomplete="off">
         <input type="submit" value="Make bar">
       </form>
     </div>

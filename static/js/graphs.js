@@ -20,13 +20,13 @@ function toggleGraphType() {
 function changeBarColumnOptions() {
   let input = document.getElementById("bar_data").value;
 
-  if (input === "colour identity") {
-    document.getElementById("bar_x_type").setAttribute("list","colour_identity_x_axis");
-    document.getElementById("bar_y_type").setAttribute("list","colour_identity_y_axis");
+  if (input === "deck") {
+    document.getElementById("bar_x").setAttribute("list","deck_bins_and_x_axis");
+    document.getElementById("bar_y").setAttribute("list","deck_y_axis");
   }
   else {
-    document.getElementById("bar_x_type").setAttribute("list",input.concat("_x_axis"));
-    document.getElementById("bar_y_type").setAttribute("list",input.concat("_y_axis"));
+    document.getElementById("bar_x").removeAttribute("list");
+    document.getElementById("bar_y").removeAttribute("list");
   }
 }
 
@@ -34,7 +34,7 @@ function changePieDivisionsOptions() {
   let input = document.getElementById("pie_data").value;
 
   if (input === "deck") {
-    document.getElementById("pie_divisions").setAttribute("list","pie_bins");
+    document.getElementById("pie_divisions").setAttribute("list","deck_bins_and_x_axis");
   }
   else {
     document.getElementById("pie_divisions").removeAttribute("list");

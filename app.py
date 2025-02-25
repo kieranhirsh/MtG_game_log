@@ -294,8 +294,8 @@ def graphs():
         number_of_colours = list(plt_data.keys())
         number_of_decks = list(plt_data.values())
 
-        example_bar_chart = xy_graphs.make_xy_graph("bar", number_of_colours, number_of_decks, "Colour Identity Name", "Number of Decks", "Number of Decks per Colour Identity")
-        example_pie_chart = pie_charts.make_pie_chart(number_of_colours, number_of_decks, "Number of Decks per Colour Identity")
+        example_bar_chart = xy_graphs.make_xy_graph("bar", number_of_colours, number_of_decks, "Colour Identity Name", "Number of Decks", "Number of Decks per Number of Colours")
+        example_pie_chart = pie_charts.make_pie_chart(number_of_colours, number_of_decks, "Number of Decks per Number of Colours")
 
         return render_template(
             'graphs.html',
@@ -313,13 +313,10 @@ def graphs():
         }
         titles = {
             "colour identity": "Colour Identity",
-            "colour_identity_name": "Colour Identity Name",
             "deck": "Number of Decks",
             "number of colours": "Number of Colours",
-            "num_decks": "Number of Decks",
-            "owner": "Player",
-            "player": "Player",
-            "player_name": "Player Name"
+            "number of decks": "Number of Decks",
+            "owner": "Player"
         }
 
         if request.form['type'] == "bar":
@@ -330,28 +327,61 @@ def graphs():
             crud_class = getattr(crud_file, model_names[request.form["bar_data"]]["class"])
             data = crud_class.all(True)
 
-            x_values = []
-            y_values = []
+            xy_data = {}
 
-            for datum in data:
-                # this wants to be a select case, but I'm using Python 3.8 :(
-                if request.form["bar_x_type"] == "%s_name" % model_names[request.form["bar_data"]]["file"]:
-                    x_values.append(getattr(datum, model_names[request.form["bar_data"]]["name_column"]))
+            # this wants to be a select case, but I'm using Python 3.8 :(
+            if request.form["bar_x"] == "colour identity":
+                colour_identities = Colour_Identity_crud.all(True)
+
+                for colour_identity in colour_identities:
+                    ci_name = getattr(colour_identity, "ci_name")
+                    xy_data.update({ci_name: 0})
+
+                if request.form["bar_y"] == "number of decks":
+                    for datum in data:
+                        datum_ci_model = getattr(datum, "colour_identity")
+                        datum_ci_name = getattr(datum_ci_model, "ci_name")
+                        xy_data[datum_ci_name] += 1
                 else:
-                    raise ValueError("Incorrect X axis Column specified: %s" % request.form["bar_x_type"])
-                
-                # this wants to be a select case, but I'm using Python 3.8 :(
-                if request.form["bar_y_type"] == "num_decks":
-                    y_values.append(len(datum.decks))
+                    raise ValueError("Incorrect Y axis specified: %s" % request.form["bar_y"])
+            elif request.form["bar_x"] == "number of colours":
+                for ii in list(range(0,6)):
+                    xy_data.update({"%s colours" % ii: 0})
+
+                if request.form["bar_y"] == "number of decks":
+                    for datum in data:
+                        datum_ci_model = getattr(datum, "colour_identity")
+                        datum_colours = getattr(datum_ci_model, "colours")
+                        datum_num_colours = len(datum_colours)
+                        xy_data["%s colours" % datum_num_colours] += 1
                 else:
-                    raise ValueError("Incorrect Y axis Column specified: %s" % request.form["bar_y_type"])
+                    raise ValueError("Incorrect Y axis specified: %s" % request.form["bar_y"])
+            elif request.form["bar_x"] == "owner":
+                players = Player_crud.all(True)
+
+                for player in players:
+                    player_name = getattr(player, "player_name")
+                    xy_data.update({player_name: 0})
+
+                if request.form["bar_y"] == "number of decks":
+                    for datum in data:
+                        datum_player_model = getattr(datum, "player")
+                        datum_owner = getattr(datum_player_model, "player_name")
+                        xy_data[datum_owner] += 1
+                else:
+                    raise ValueError("Incorrect Y axis specified: %s" % request.form["bar_y"])
+            else:
+                raise ValueError("Incorrect Slices specified: %s" % request.form["pie_divisions"])
+
+            x_values = list(xy_data.keys())
+            y_values = list(xy_data.values())
 
             plt_graph = xy_graphs.make_xy_graph("bar",
                                                 x_values,
                                                 y_values,
-                                                titles[request.form["bar_x_type"]],
-                                                titles[request.form["bar_y_type"]],
-                                                titles[request.form["bar_y_type"]] + " per " + titles[request.form["bar_data"]])
+                                                titles[request.form["bar_x"]],
+                                                titles[request.form["bar_y"]],
+                                                titles[request.form["bar_y"]] + " per " + titles[request.form["bar_x"]])
 
         elif request.form['type'] == "pie":
             if request.form["pie_data"] not in list(model_names.keys()):
@@ -375,9 +405,6 @@ def graphs():
                     datum_ci_model = getattr(datum, "colour_identity")
                     datum_ci_name = getattr(datum_ci_model, "ci_name")
                     pie_data[datum_ci_name] += 1
-
-                labels = list(pie_data.keys())
-                values = list(pie_data.values())
             elif request.form["pie_divisions"] == "number of colours":
                 for ii in list(range(0,6)):
                     pie_data.update({"%s colours" % ii: 0})
@@ -387,9 +414,6 @@ def graphs():
                     datum_colours = getattr(datum_ci_model, "colours")
                     datum_num_colours = len(datum_colours)
                     pie_data["%s colours" % datum_num_colours] += 1
-
-                labels = list(pie_data.keys())
-                values = list(pie_data.values())
             elif request.form["pie_divisions"] == "owner":
                 players = Player_crud.all(True)
 
@@ -401,11 +425,11 @@ def graphs():
                     datum_player_model = getattr(datum, "player")
                     datum_owner = getattr(datum_player_model, "player_name")
                     pie_data[datum_owner] += 1
-
-                labels = list(pie_data.keys())
-                values = list(pie_data.values())
             else:
                 raise ValueError("Incorrect Slices specified: %s" % request.form["pie_divisions"])
+
+            labels = list(pie_data.keys())
+            values = list(pie_data.values())
 
             plt_graph = pie_charts.make_pie_chart(labels, values, titles[request.form["pie_data"]] + " per " + titles[request.form["pie_divisions"]])
 
