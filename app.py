@@ -310,6 +310,7 @@ def graphs():
             "deck": "Number of Decks",
             "number of colours": "Number of Colours",
             "num_decks": "Number of Decks",
+            "owner": "Player",
             "player": "Player",
             "player_name": "Player Name"
         }
@@ -360,7 +361,8 @@ def graphs():
                 colour_identities = Colour_Identity_crud.all(True)
 
                 for colour_identity in colour_identities:
-                    pie_data.update({getattr(colour_identity, "ci_name"): 0})
+                    ci_name = getattr(colour_identity, "ci_name")
+                    pie_data.update({ci_name: 0})
 
                 for datum in data:
                     datum_ci_model = getattr(datum, "colour_identity")
@@ -381,15 +383,22 @@ def graphs():
 
                 labels = list(pie_data.keys())
                 values = list(pie_data.values())
+            elif request.form["pie_divisions"] == "owner":
+                players = Player_crud.all(True)
 
+                for player in players:
+                    player_name = getattr(player, "player_name")
+                    pie_data.update({player_name: 0})
 
-#            for datum in data:
-#                labels.append(getattr(datum, model_names[request.form["pie_data"]]["name_column"]))
-#                # this wants to be a select case, but I'm using Python 3.8 :(
-#                if request.form["pie_divisions"] == "num_decks":
-#                    values.append(len(datum.decks))
-#                else:
-#                    raise ValueError("Incorrect Divisions specified: %s" % request.form["pie_divisions"])
+                for datum in data:
+                    datum_player_model = getattr(datum, "player")
+                    datum_owner = getattr(datum_player_model, "player_name")
+                    pie_data[datum_owner] += 1
+
+                labels = list(pie_data.keys())
+                values = list(pie_data.values())
+            else:
+                raise ValueError("Incorrect Slices specified: %s" % request.form["pie_divisions"])
 
             plt_graph = pie_charts.make_pie_chart(labels, values, titles[request.form["pie_data"]] + " per " + titles[request.form["pie_divisions"]])
 
