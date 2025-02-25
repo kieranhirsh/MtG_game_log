@@ -47,8 +47,12 @@
 
   <div id="menu">
     <datalist id="data_type">
+      <option value="deck">
+    </datalist>
+    <datalist id="pie_bins">
       <option value="colour identity">
-      <option value="player">
+      <option value="number of colours">
+      <option value="owner">
     </datalist>
     <datalist id="colour_identity_x_axis">
       <option value="colour_identity_name">
@@ -66,12 +70,14 @@
     <div class="data_input" id="bar">
       <h2>Bar Chart</h2>
       <form action="/graphs" method="POST">
+        <!-- This needs to be rethought of as data_to_plot and binning_type (the menus might not change)  -->
+        <!-- Also add the option for line graphs  -->
         <input class="type" type="text" id="type" name="type" value="bar">
-        <label for="bar_data">Data: </label>
+        <label for="bar_data">Data Type: </label>
         <input type="search" id="bar_data" name="bar_data" list="data_type" autocomplete="off" onchange="changeBarColumnOptions()">
-        <label for="bar_y_type">Y axis Column: </label>
+        <label for="bar_y_type">Y axis: </label>
         <input type="search" id="bar_y_type" name="bar_y_type" autocomplete="off">
-        <label for="bar_x_type">X axis Column: </label>
+        <label for="bar_x_type">X axis: </label>
         <input type="search" id="bar_x_type" name="bar_x_type" autocomplete="off">
         <input type="submit" value="Make bar">
       </form>
@@ -83,7 +89,7 @@
         <input class="type" type="text" id="type" name="type" value="pie">
         <label for="pie_data">Data Type: </label>
         <input type="search" id="pie_data" name="pie_data" list="data_type" autocomplete="off"  onchange="changePieDivisionsOptions()">
-        <label for="pie_divisions">Divisions: </label>
+        <label for="pie_divisions">Slices: </label>
         <input type="search" id="pie_divisions" name="pie_divisions" autocomplete="off">
         <input type="submit" value="Make pie">
       </form>

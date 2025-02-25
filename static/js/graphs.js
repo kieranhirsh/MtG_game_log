@@ -33,10 +33,10 @@ function changeBarColumnOptions() {
 function changePieDivisionsOptions() {
   let input = document.getElementById("pie_data").value;
 
-  if (input === "colour identity") {
-    document.getElementById("pie_divisions").setAttribute("list","colour_identity_y_axis");
+  if (input === "deck") {
+    document.getElementById("pie_divisions").setAttribute("list","pie_bins");
   }
   else {
-    document.getElementById("pie_divisions").setAttribute("list",input.concat("_y_axis"));
+    document.getElementById("pie_divisions").removeAttribute("list");
   }
 }

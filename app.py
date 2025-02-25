@@ -298,20 +298,10 @@ def graphs():
         )
     elif request.method == 'POST':
         model_names = {
-            "colour identity": {
-                "file": "colour_identity",
-                "class": "Colour_Identity_crud",
-                "name_column": "ci_name"
-            },
             "deck": {
                 "file": "deck",
                 "class": "Deck_crud",
                 "name_column": "deck_name"
-            },
-            "player": {
-                "file": "player",
-                "class": "Player_crud",
-                "name_column": "player_name"
             }
         }
         titles = {
@@ -362,16 +352,28 @@ def graphs():
             crud_class = getattr(crud_file, model_names[request.form["pie_data"]]["class"])
             data = crud_class.all(True)
 
-            labels = []
-            values = []
+            pie_data = {}
 
-            for datum in data:
-                labels.append(getattr(datum, model_names[request.form["pie_data"]]["name_column"]))
-                # this wants to be a select case, but I'm using Python 3.8 :(
-                if request.form["pie_divisions"] == "num_decks":
-                    values.append(len(datum.decks))
-                else:
-                    raise ValueError("Incorrect Divisions specified: %s" % request.form["pie_divisions"])
+            # this wants to be a select case, but I'm using Python 3.8 :(
+            if request.form["pie_divisions"] == "colour identity":
+                colour_identities = Colour_Identity_crud.all(True)
+
+                for colour_identity in colour_identities:
+                    pie_data.update({getattr(colour_identity, "ci_name"): 0})
+
+                for datum in data:
+                    pie_data[getattr(getattr(datum, "colour_identity"), "ci_name")] += 1
+
+                labels = list(pie_data.keys())
+                values = list(pie_data.values())
+
+#            for datum in data:
+#                labels.append(getattr(datum, model_names[request.form["pie_data"]]["name_column"]))
+#                # this wants to be a select case, but I'm using Python 3.8 :(
+#                if request.form["pie_divisions"] == "num_decks":
+#                    values.append(len(datum.decks))
+#                else:
+#                    raise ValueError("Incorrect Divisions specified: %s" % request.form["pie_divisions"])
 
             plt_graph = pie_charts.make_pie_chart(labels, values, titles[request.form["pie_divisions"]] + " per " + titles[request.form["pie_data"]])
 
