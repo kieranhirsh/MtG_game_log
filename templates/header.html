@@ -1,3 +1,7 @@
+<head>
+  <link type="text/css" rel="stylesheet" href="../static/css/header.css">
+</head>
+
 <header>
   <div class="title">
     M:tG Game Logger
@@ -6,7 +10,11 @@
     <nav>
       <ul>
         <li class="home_menu">
+          {% if request.path == "/" %}
+          <a class="home" data-current-menu="true" data-current-submenu="true" href="/">
+          {% else %}
           <a class="home" href="/">
+          {% endif %}
             Home
           </a>
           <div class="home_submenu">
@@ -25,18 +33,32 @@
           </div>
         </li>
         <li class="input_menu">
+          {% if request.path == "/input" %}
+          <a class="input" data-current-menu="true" data-current-submenu="true" href="/input">
+          {% elif request.path == "/input/edit" or request.path == "/input/delete" %}
+          <a class="input" data-current-menu="true" href="/input">
+          {% else %}
           <a class="input" href="/input">
+          {% endif %}
             Input
           </a>
           <div class="input_submenu">
             <ul>
               <li>
+                {% if request.path == "/input/edit" %}
+                <a class="input_edit" data-current-submenu="true" href="/input/edit">
+                {% else %}
                 <a class="input_edit" href="/input/edit">
+                {% endif %}
                   Edit
                 </a>
               </li>
               <li>
+                {% if request.path == "/input/delete" %}
+                <a class="input_delete" data-current-submenu="true" href="/input/delete">
+                {% else %}
                 <a class="input_delete" href="/input/delete">
+                {% endif %}
                   Delete
                 </a>
               </li>
@@ -44,7 +66,11 @@
           </div>
         </li>
         <li class="data_menu">
+          {% if request.path == "/data" %}
+          <a class="data" data-current-menu="true" data-current-submenu="true" href="/data">
+          {% else %}
           <a class="data" href="/data">
+          {% endif %}
             Data
           </a>
           <div class="data_submenu">
@@ -63,13 +89,23 @@
           </div>
         </li>
         <li class="graphs_menu">
+          {% if request.path == "/graphs" %}
+          <a class="graphs" data-current-menu="true" data-current-submenu="true" href="/graphs">
+          {% elif request.path == "/graphs/advanced" %}
+          <a class="graphs" data-current-menu="true" href="/graphs">
+          {% else %}
           <a class="graphs" href="/graphs">
+          {% endif %}
             Graphs
           </a>
           <div class="graphs_submenu">
             <ul>
               <li>
+                {% if request.path == "/graphs/advanced" %}
+                <a class="graphs_advanced" data-current-submenu="true" href="/graphs/advanced">
+                {% else %}
                 <a class="graphs_advanced" href="/graphs/advanced">
+                {% endif %}
                   Advanced
                 </a>
               </li>
