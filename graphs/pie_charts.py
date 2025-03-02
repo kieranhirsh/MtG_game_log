@@ -17,7 +17,7 @@ def make_pie_chart(labels, values, title=""):
         ax.set_title(title)
 
     tmpfile = BytesIO()
-    fig.savefig(tmpfile, format='png')
+    fig.savefig(tmpfile, format='svg')
     encoded = base64.b64encode(tmpfile.getvalue()).decode('utf-8')
 
     return encoded

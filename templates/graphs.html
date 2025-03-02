@@ -18,10 +18,10 @@
   Below is an example of each, bar on the left and pie on the right, made from the same data.
   i.e. the number of decks each player owns.<br>
   Please use the dropdown list below to select the type of graph you want to create.<br>
-  <img src="data:image/png;base64, {{ example_bar_chart }}">
-  <img src="data:image/png;base64, {{ example_pie_chart }}">
+  <img src="data:image/svg+xml;base64, {{ example_bar_chart }}">
+  <img src="data:image/svg+xml;base64, {{ example_pie_chart }}">
   {% elif plt_graph is defined %}
-  <img src="data:image/png;base64, {{ plt_graph }}">
+  <img src="data:image/svg+xml;base64, {{ plt_graph }}">
   {% endif %}
 
   {% if advanced == True %}

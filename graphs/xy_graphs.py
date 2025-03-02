@@ -23,7 +23,7 @@ def make_xy_graph(display, x_values, y_values, x_label="", y_label="", title="")
     plt.tight_layout()
 
     tmpfile = BytesIO()
-    fig.savefig(tmpfile, format='png')
+    fig.savefig(tmpfile, format='svg')
     encoded = base64.b64encode(tmpfile.getvalue()).decode('utf-8')
 
     return encoded
