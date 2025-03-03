@@ -5,12 +5,18 @@ from io import BytesIO
 
 def make_xy_graph(display, x_values, y_values, x_label="", y_label="", title=""):
     fig, ax = plt.subplots()
-    plt.setp(ax.get_xticklabels(), rotation=45)
+    plt.setp(ax.get_xticklabels(), rotation=45, horizontalalignment='right')
 
     if display == "line":
         ax.plot(x_values, y_values)
     elif display == "bar":
-        ax.bar(x_values, y_values)
+        if x_label == "Colour":
+            bar_colours = x_values
+            bar_colours[0] = "sienna"
+            ax.set_facecolor("lightgrey")
+        else:
+            bar_colours = None
+        ax.bar(x_values, y_values, color=bar_colours)
     else:
         raise ValueError("No graph display specified (must be bar or line)")
 
