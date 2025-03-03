@@ -27,10 +27,11 @@ def make_pie_chart(labels, values, title=""):
     # do the plotting
     patches, texts, autotexts = ax.pie(values, labels=labels, autopct=lambda pct: int(round(pct*sum(values)/100.0)), colors=pie_colours)
 
-    # change the inner text colour
-    for ii in range(len(pie_colours)):
-        if pie_colours[ii] == "black":
-            autotexts[ii].set_color("white")
+    # change the inner text colour if we're plotting vs colour
+    if re.match(r'^.*per Colour$', title):
+        for ii in range(len(pie_colours)):
+            if pie_colours[ii] == "black":
+                autotexts[ii].set_color("white")
 
     # add the title
     if title:
