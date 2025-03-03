@@ -312,6 +312,7 @@ def graphs():
             }
         }
         titles = {
+            "colour": "Colour",
             "colour identity": "Colour Identity",
             "deck": "Number of Decks",
             "number of colours": "Number of Colours",
@@ -330,7 +331,36 @@ def graphs():
             xy_data = {}
 
             # this wants to be a select case, but I'm using Python 3.8 :(
-            if request.form["bar_x"] == "colour identity":
+            if request.form["bar_x"] == "colour":
+                xy_data = {
+                    "colourless" : 0,
+                    "white" : 0,
+                    "blue" : 0,
+                    "black" : 0,
+                    "red" : 0,
+                    "green" : 0
+                }
+
+                if request.form["bar_y"] == "number of decks":
+                    for datum in data:
+                        datum_ci_model = getattr(datum, "colour_identity")
+                        datum_colours = getattr(datum_ci_model, "colours")
+                        if not datum_colours:
+                            xy_data["colourless"] += 1
+                            continue
+                        if "w" in datum_colours:
+                            xy_data["white"] += 1
+                        if "u" in datum_colours:
+                            xy_data["blue"] += 1
+                        if "b" in datum_colours:
+                            xy_data["black"] += 1
+                        if "r" in datum_colours:
+                            xy_data["red"] += 1
+                        if "g" in datum_colours:
+                            xy_data["green"] += 1
+                else:
+                    raise ValueError("Incorrect Y axis specified: %s" % request.form["bar_y"])
+            elif request.form["bar_x"] == "colour identity":
                 colour_identities = Colour_Identity_crud.all(True)
 
                 for colour_identity in colour_identities:
@@ -394,7 +424,33 @@ def graphs():
             pie_data = {}
 
             # this wants to be a select case, but I'm using Python 3.8 :(
-            if request.form["pie_divisions"] == "colour identity":
+            if request.form["pie_divisions"] == "colour":
+                pie_data = {
+                    "colourless" : 0,
+                    "white" : 0,
+                    "blue" : 0,
+                    "black" : 0,
+                    "red" : 0,
+                    "green" : 0
+                }
+
+                for datum in data:
+                    datum_ci_model = getattr(datum, "colour_identity")
+                    datum_colours = getattr(datum_ci_model, "colours")
+                    if not datum_colours:
+                        pie_data["colourless"] += 1
+                        continue
+                    if "w" in datum_colours:
+                        pie_data["white"] += 1
+                    if "u" in datum_colours:
+                        pie_data["blue"] += 1
+                    if "b" in datum_colours:
+                        pie_data["black"] += 1
+                    if "r" in datum_colours:
+                        pie_data["red"] += 1
+                    if "g" in datum_colours:
+                        pie_data["green"] += 1
+            elif request.form["pie_divisions"] == "colour identity":
                 colour_identities = Colour_Identity_crud.all(True)
 
                 for colour_identity in colour_identities:
