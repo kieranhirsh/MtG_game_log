@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import base64
+import copy
 import matplotlib.pyplot as plt
 import re
 from io import BytesIO
@@ -9,7 +10,7 @@ def make_pie_chart(labels, values, title=""):
 
     # if we're binning by colour
     if re.match(r'^.*per Colour$', title):
-        pie_colours = labels
+        pie_colours = copy.deepcopy(labels)
         pie_colours[0] = "sienna"
         fig.patch.set_facecolor("lightgrey")
         pie_colours, values = (list(i) for i in zip(*filter(all, zip(pie_colours, values))))

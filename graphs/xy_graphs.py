@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import base64
+import copy
 import matplotlib.pyplot as plt
 from io import BytesIO
 
@@ -11,7 +12,7 @@ def make_xy_graph(display, x_values, y_values, x_label="", y_label="", title="")
         ax.plot(x_values, y_values)
     elif display == "bar":
         if x_label == "Colour":
-            bar_colours = x_values
+            bar_colours = copy.deepcopy(x_values)
             bar_colours[0] = "sienna"
             ax.set_facecolor("lightgrey")
         else:
