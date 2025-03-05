@@ -1,17 +1,21 @@
 # MtG_game_log
-Inspired by EDHRECast's game tracking  (episodes 298 and 345).
+Inspired by EDHRECast's game tracking (episodes 298 and 345).
 
 ## setup instructions
 
-1. Make sure you have the following environment variables set:
+1. Make sure you have python installed on your machine.
+2. `pip install -r requirements.txt` to install the required packages.
+3. Make sure you have the following environment variables set:
 ```
 MtG_log_MYSQL_USER  # your MySQL username
 MtG_log_MYSQL_PWD   # your MySQL password
 MtG_log_MYSQL_HOST  # your MySQL host
 MtG_log_MYSQL_DB    # must be "MtG_log"
 ```
-2. Run the following command: `mysql < ${path_to_MtG_game_log_repo}/data/MtG_log_db.sql`. This sets up the database.
-3. Populate the database (I want to make a script that edits the .sql to do this automatically using the data from my database)
+4. `mysql < ${path_to_MtG_game_log_repo}/data/MtG_log_db.sql` to create the database and populate it with some data to get you started.
+5. `python app.py` to start the app.
+6. head to `http://127.0.0.1:5000` in your favourite browser.
+7. Have fun!
 
 ### api/
 Contains API stuff.
