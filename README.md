@@ -17,26 +17,26 @@ MtG_log_MYSQL_DB    # must be "MtG_log"
 6. Head to `http://127.0.0.1:5000` in your favourite browser.
 7. Have fun!
 
-[### api/](https://github.com/kieranhirsh/MtG_game_log/tree/main/api/v1)
+### [api/](https://github.com/kieranhirsh/MtG_game_log/tree/main/api/v1)
 Contains API stuff.
 
-[### crud/](https://github.com/kieranhirsh/MtG_game_log/tree/main/crud)
+### [crud/](https://github.com/kieranhirsh/MtG_game_log/tree/main/crud)
 Contains all the functions related to creating, reading, updating, and deleting data.
 
-[### data/](https://github.com/kieranhirsh/MtG_game_log/tree/main/data)
+### [data/](https://github.com/kieranhirsh/MtG_game_log/tree/main/data)
 Contains stuff to do with the database.
 
-[### graphs/](https://github.com/kieranhirsh/MtG_game_log/tree/main/graphs)
+### [graphs/](https://github.com/kieranhirsh/MtG_game_log/tree/main/graphs)
 Contains functions that plot graphs.
 
-[### models/](https://github.com/kieranhirsh/MtG_game_log/tree/main/models)
+### [models/](https://github.com/kieranhirsh/MtG_game_log/tree/main/models)
 Converts SQL tables to python classes.
 
-[### static/](https://github.com/kieranhirsh/MtG_game_log/tree/main/static)
+### [static/](https://github.com/kieranhirsh/MtG_game_log/tree/main/static)
 Contains css, javascript, and other front end stuff.
 
-[### templates/](https://github.com/kieranhirsh/MtG_game_log/tree/main/templates)
+### [templates/](https://github.com/kieranhirsh/MtG_game_log/tree/main/templates)
 Contains html stuff.
 
-[### validation/](https://github.com/kieranhirsh/MtG_game_log/tree/main/validation)
+### [validation/](https://github.com/kieranhirsh/MtG_game_log/tree/main/validation)
 Any time a piece of data is created or edited, they must pass the validators stored here.
