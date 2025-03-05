@@ -14,26 +14,29 @@ MtG_log_MYSQL_DB    # must be "MtG_log"
 ```
 4. `mysql < ${path_to_MtG_game_log_repo}/data/MtG_log_db.sql` to create the database and populate it with some data to get you started.
 5. `python app.py` to start the app.
-6. head to `http://127.0.0.1:5000` in your favourite browser.
+6. Head to `http://127.0.0.1:5000` in your favourite browser.
 7. Have fun!
 
-### api/
+[### api/](https://github.com/kieranhirsh/MtG_game_log/tree/main/api/v1)
 Contains API stuff.
 
-### crud/
+[### crud/](https://github.com/kieranhirsh/MtG_game_log/tree/main/crud)
 Contains all the functions related to creating, reading, updating, and deleting data.
 
-### data/
+[### data/](https://github.com/kieranhirsh/MtG_game_log/tree/main/data)
 Contains stuff to do with the database.
 
-### models/
+[### graphs/](https://github.com/kieranhirsh/MtG_game_log/tree/main/graphs)
+Contains functions that plot graphs.
+
+[### models/](https://github.com/kieranhirsh/MtG_game_log/tree/main/models)
 Converts SQL tables to python classes.
 
-### templates/
-Contains html stuff.
-
-### static/
+[### static/](https://github.com/kieranhirsh/MtG_game_log/tree/main/static)
 Contains css, javascript, and other front end stuff.
 
-### validation/
+[### templates/](https://github.com/kieranhirsh/MtG_game_log/tree/main/templates)
+Contains html stuff.
+
+[### validation/](https://github.com/kieranhirsh/MtG_game_log/tree/main/validation)
 Any time a piece of data is created or edited, they must pass the validators stored here.
