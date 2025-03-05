@@ -45,7 +45,7 @@
       <form action="/input" method="POST">
         <input class="type" type="text" id="type" name="type" value="player">
         <label for="player_name">Player Name: </label>
-        <input type="text" id="player_name" name="player_name" autocomplete="off">
+        <input type="text" id="player_name" name="player_name" autocomplete="off" required>
         <input type="submit" value="Create player">
       </form>
     </div>
@@ -55,7 +55,7 @@
       <form action="/input" method="POST">
         <input class="type" type="text" id="type" name="type" value="deck">
         <label for="deck_name">Deck Name: </label>
-        <input type="text" id="deck_name" name="deck_name" autocomplete="off">
+        <input type="text" id="deck_name" name="deck_name" autocomplete="off" required>
         <label for="owner">Owner Name: </label>
         <input type="search" id="owner" name="owner" list="players" autocomplete="off">
         <label for="ci_name">Colour Identity: </label>
@@ -70,9 +70,9 @@
       <form action="/input/edit" method="POST">
         <input class="type" type="text" id="type" name="type" value="player">
         <label for="player_name">Player to update: </label>
-        <input type="search" id="player_name" name="player_name" list="players" autocomplete="off"><br>
+        <input type="search" id="player_name" name="player_name" list="players" autocomplete="off" required><br>
         <label for="new_player_name">Updated Player Name: </label>
-        <input type="text" id="new_player_name" name="new_player_name" autocomplete="off">
+        <input type="text" id="new_player_name" name="new_player_name" autocomplete="off" required>
         <input type="submit" value="Edit player">
       </form>
     </div>
@@ -82,9 +82,9 @@
       <form action="/input/edit" method="POST">
         <input class="type" type="text" id="type" name="type" value="deck">
         <label for="deck_name">Deck to update: </label>
-        <input type="search" id="deck_name" name="deck_name" list="decks" autocomplete="off"><br>
+        <input type="search" id="deck_name" name="deck_name" list="decks" autocomplete="off" required><br>
         <label for="new_deck_name">Updated Deck Name: </label>
-        <input type="text" id="new_deck_name" name="new_deck_name" autocomplete="off">
+        <input type="text" id="new_deck_name" name="new_deck_name" autocomplete="off" required>
         <label for="owner">Updated Owner Name: </label>
         <input type="search" id="owner" name="owner" list="players" autocomplete="off">
         <label for="ci_name">Updated Colour Identity: </label>
@@ -99,7 +99,7 @@
       <form action="/input/delete" method="POST">
         <input class="type" type="text" id="type" name="type" value="player">
         <label for="player_name">Player Name: </label>
-        <input type="search" id="player_name" name="player_name" list="players" autocomplete="off">
+        <input type="search" id="player_name" name="player_name" list="players" autocomplete="off" required>
         <input type="submit" value="Delete player">
       </form>
     </div>
@@ -109,7 +109,7 @@
       <form action="/input/delete" method="POST">
         <input class="type" type="text" id="type" name="type" value="deck">
         <label for="deck_name">Deck Name: </label>
-        <input type="search" id="deck_name" name="deck_name" list="decks" autocomplete="off">
+        <input type="search" id="deck_name" name="deck_name" list="decks" autocomplete="off" required>
         <input type="submit" value="Delete deck">
       </form>
     </div>

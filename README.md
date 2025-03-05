@@ -2,7 +2,6 @@
 Inspired by EDHRECast's game tracking (episodes 298 and 345).
 
 ## setup instructions
-
 1. Make sure you have python installed on your machine.
 2. `pip install -r requirements.txt` to install the required packages.
 3. Make sure you have the following environment variables set:
