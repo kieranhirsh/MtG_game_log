@@ -17,6 +17,12 @@ def index():
 
     return render_template('index.html')
 
+@app.route('/hack')
+def hack():
+    """ access main security grid """
+
+    return render_template('hack.html')
+
 @app.route('/input', methods=['GET', 'POST'])
 def input():
     """ Data is inputted here """

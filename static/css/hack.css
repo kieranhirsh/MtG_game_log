@@ -1,0 +1,18 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+#uh_uh_uh_gif {
+  height: 75%;
+  width: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+/*# sourceMappingURL=hack.css.map */
