@@ -7,3 +7,8 @@ document.addEventListener('DOMContentLoaded', function() {
     gif.src = uh_uh_uh_gif;
   });
 });
+
+document.addEventListener('click', function() {
+  document.getElementById('uh_uh_uh_mp3').play();
+  document.removeEventListener('click', musicPlay);
+});
