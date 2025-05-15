@@ -306,7 +306,7 @@ def graphs():
         number_of_colours = list(plt_data.keys())
         number_of_decks = list(plt_data.values())
 
-        example_bar_chart = xy_graphs.make_xy_graph("bar", number_of_colours, number_of_decks, "Colour Identity Name", "Number of Decks", "Number of Decks per Number of Colours")
+        example_bar_chart = xy_graphs.make_xy_graph("bar", number_of_colours, number_of_decks, "Number of Colours", "Number of Decks", "Number of Decks per Number of Colours")
         example_pie_chart = pie_charts.make_pie_chart(number_of_colours, number_of_decks, "Number of Decks per Number of Colours")
 
         return render_template(
