@@ -36,7 +36,7 @@ class DBStorage():
         if db is None:
             raise TypeError("environment variable MtG_log_MYSQL_DB not set")
 
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(user, pwd, host, db))
+        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(user, pwd, host, db), pool_pre_ping=True)
 
         Base.metadata.create_all(self.__engine)
 
