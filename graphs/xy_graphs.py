@@ -27,7 +27,8 @@ def make_xy_graph(display, x_values, y_values, x_label="", y_label="", title="",
     elif display == "bar":
         if x_label == "Colour":
             bar_colours = copy.deepcopy(x_values)
-            bar_colours[0] = "sienna"
+            if bar_colours[0] == "colourless":
+                bar_colours[0] = "sienna"
             ax.set_facecolor("lightgrey")
         else:
             bar_colours = None
