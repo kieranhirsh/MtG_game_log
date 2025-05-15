@@ -173,6 +173,7 @@ def data_post():
                 # and finally, append all the relevant data that has been requested
                 colour_identity_data.append({
                     "ci_name": colour_identity.ci_name,
+                    "colours": colour_identity.colours,
                     "number_of_decks": num_decks
                 })
         else:
@@ -182,6 +183,7 @@ def data_post():
 
                 colour_identity_data.append({
                     "ci_name": colour_identity.ci_name,
+                    "colours": colour_identity.colours,
                     "number_of_decks": num_decks
                 })
 
@@ -375,12 +377,14 @@ def graphs():
 
                 for colour_identity in colour_identities:
                     ci_name = getattr(colour_identity, "ci_name")
-                    xy_data.update({ci_name: 0})
+                    ci_colours = getattr(colour_identity, "colours")
+                    xy_label = ci_name + " (" + ci_colours + ")"
+                    xy_data.update({xy_label: 0})
 
                 if request.form["bar_y"] == "number of decks":
                     for datum in data:
                         datum_ci_model = getattr(datum, "colour_identity")
-                        datum_ci_name = getattr(datum_ci_model, "ci_name")
+                        datum_ci_name = getattr(datum_ci_model, "ci_name") + " (" + getattr(datum_ci_model, "colours") + ")"
                         xy_data[datum_ci_name] += 1
                 else:
                     raise ValueError("Incorrect Y axis specified: %s" % request.form["bar_y"])
@@ -465,11 +469,13 @@ def graphs():
 
                 for colour_identity in colour_identities:
                     ci_name = getattr(colour_identity, "ci_name")
-                    pie_data.update({ci_name: 0})
+                    ci_colours = getattr(colour_identity, "colours")
+                    pie_label = ci_name + " (" + ci_colours + ")"
+                    pie_data.update({pie_label: 0})
 
                 for datum in data:
                     datum_ci_model = getattr(datum, "colour_identity")
-                    datum_ci_name = getattr(datum_ci_model, "ci_name")
+                    datum_ci_name = getattr(datum_ci_model, "ci_name") + " (" + getattr(datum_ci_model, "colours") + ")"
                     pie_data[datum_ci_name] += 1
             elif request.form["pie_divisions"] == "number of colours":
                 for ii in list(range(0,6)):
