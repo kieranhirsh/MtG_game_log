@@ -25,7 +25,7 @@
   <div id="data_inputs">
     <datalist id="colour_identities">
       {% for colour_identity in colour_identities %}
-      <option value="{{ colour_identity.ci_name }}">
+      <option value="{{ colour_identity.ci_name }} ({{ colour_identity.colours }})">
         {% endfor %}
     </datalist>
     <datalist id="players">

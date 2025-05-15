@@ -41,7 +41,8 @@ def input():
             owner_name = request.form["owner"]
             owner_data = storage.get(class_name="Player", key="player_name", value=owner_name)
 
-            ci_name = request.form["ci_name"]
+            ci_name_raw = request.form["ci_name"]
+            ci_name = ci_name_raw.split(' (', 1)[0]
             colour_identity_data = storage.get(class_name="Colour_Identity", key="ci_name", value=ci_name)
 
             new_deck = {
@@ -90,7 +91,8 @@ def input_edit():
                     "player_id": owner_data[0].id
                 })
             if request.form["ci_name"]:
-                ci_name = request.form["ci_name"]
+                ci_name_raw = request.form["ci_name"]
+                ci_name = ci_name_raw.split(' (', 1)[0]
                 colour_identity_data = storage.get(class_name="Colour_Identity", key="ci_name", value=ci_name)
 
                 new_deck_data.update({
@@ -234,7 +236,9 @@ def data_post():
         player_data = []
 
         # if we have a restriction on the colour identity name
-        if request.form['ci_name']:
+        if request.form["ci_name"]:
+            ci_name_raw = request.form["ci_name"]
+            ci_name = ci_name_raw.split(' (', 1)[0]
 
             # loop over all players
             for player in players:
@@ -245,7 +249,7 @@ def data_post():
                 # loop over those decks
                 for deck in player_decks:
                     # if they have the wrong colour identity, add them of the list of decks to remove
-                    if deck.colour_identity.ci_name != request.form['ci_name']:
+                    if deck.colour_identity.ci_name != ci_name:
                         decks_to_remove.append(deck)
 
                 # loop over our list of decks to remove and remove them from our list of all decks
