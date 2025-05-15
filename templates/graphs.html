@@ -64,11 +64,15 @@
       <form action="/graphs" method="POST">
         <input class="type" type="text" id="type" name="type" value="bar">
         <label for="bar_data">Data Type: </label>
-        <input type="search" id="bar_data" name="bar_data" list="data_type" autocomplete="off" onchange="changeBarColumnOptions()">
+        <input type="search" id="bar_data" name="bar_data" list="data_type" autocomplete="off" onchange="changeBarColumnOptions()"><br>
         <label for="bar_y">Y axis: </label>
-        <input type="search" id="bar_y" name="bar_y" autocomplete="off">
+        <input type="search" id="bar_y" name="bar_y" autocomplete="off"><br>
         <label for="bar_x">X axis: </label>
-        <input type="search" id="bar_x" name="bar_x" autocomplete="off">
+        <input type="search" id="bar_x" name="bar_x" autocomplete="off"><br>
+        <label>
+          Remove zero values from graph?
+          <input type="checkbox" id="no_zeroes" name="no_zeroes">
+        </label><br>
         <input type="submit" value="Make bar">
       </form>
     </div>

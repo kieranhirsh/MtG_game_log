@@ -334,7 +334,12 @@ def graphs():
 
         if request.form['type'] == "bar":
             if request.form["bar_data"] not in list(model_names.keys()):
-                raise ValueError("Incorrect Data Type specified: %s" % request.form["pie_data"])
+                raise ValueError("Incorrect Data Type specified: %s" % request.form["bar_data"])
+
+            if "no_zeroes" in request.form:
+                no_zeroes = True
+            else:
+                no_zeroes = False
 
             crud_file = importlib.import_module("crud." + model_names[request.form["bar_data"]]["file"])
             crud_class = getattr(crud_file, model_names[request.form["bar_data"]]["class"])
@@ -425,7 +430,8 @@ def graphs():
                                                 y_values,
                                                 titles[request.form["bar_x"]],
                                                 titles[request.form["bar_y"]],
-                                                titles[request.form["bar_y"]] + " per " + titles[request.form["bar_x"]])
+                                                titles[request.form["bar_y"]] + " per " + titles[request.form["bar_x"]],
+                                                no_zeroes)
 
         elif request.form['type'] == "pie":
             if request.form["pie_data"] not in list(model_names.keys()):
