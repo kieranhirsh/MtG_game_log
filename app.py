@@ -147,18 +147,20 @@ def input_edit():
 def input_delete():
     """ Data is deleted here """
     if request.method == 'POST':
-        # First add the new item to the database
+        # This dict maps an input, taken from the dropdown menu, to the relevant crud class
+        module_names = {
+            "deck": Deck_crud,
+            "player": Player_crud
+        }
+
+        # Find the type of data to delete
         input_type = request.form["type"]
 
-        # this desperately wants to be a select case, but I'm using Python 3.8 :(
-        if input_type == "player":
-            player_to_delete = Player_crud.specific('player_name', request.form['player_name'])
-            Player_crud.delete(player_to_delete["id"])
-        elif input_type == "deck":
-            deck_to_delete = Deck_crud.specific('deck_name', request.form['deck_name'])
-            Deck_crud.delete(deck_to_delete["id"])
+        # Find the specific entry to delete, and either delete it or return and error
+        entry_to_delete = module_names[input_type].specific("%s_name" % input_type, request.form["%s_name" % input_type])
+        module_names[input_type].delete(entry_to_delete['id'])
 
-    # Then load the data we need before passing it to the template
+    # Load the data we need before passing it to the template
     decks = Deck_crud.all(True)
     players = Player_crud.all(True)
 
