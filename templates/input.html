@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link type="text/css" rel="stylesheet" href="../static/css/input.css">
+  <link type="text/css" rel="stylesheet" href="../static/css/error.css">
   <script type="text/javascript" src="../static/js/input.js"></script>
   <link rel="icon" type="img/png" href="../static/img/card_back.png">
   <title>M:tG Game Logger</title>
@@ -13,6 +14,8 @@
 
 <body pg-name="input" js="off">
   {% include "header.html" %}
+  {% block error %}
+  {% endblock error %}
   <div id="dropdown">
     Data type:
     <select name="data_types" id="data_types" onchange="toggleDataType()">
@@ -26,17 +29,17 @@
     <datalist id="colour_identities">
       {% for colour_identity in colour_identities %}
       <option value="{{ colour_identity.ci_name }} ({{ colour_identity.colours }})">
-        {% endfor %}
+      {% endfor %}
     </datalist>
     <datalist id="players">
       {% for player in players %}
       <option value="{{ player.player_name }}">
-        {% endfor %}
+      {% endfor %}
     </datalist>
     <datalist id="decks">
       {% for deck in decks %}
       <option value="{{ deck.deck_name }}">
-        {% endfor %}
+      {% endfor %}
     </datalist>
 
     {% if method == "create" %}

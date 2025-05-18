@@ -1,0 +1,9 @@
+{% extends page %}
+{% block error %}
+<div class="error">
+  {% for error_message in error_messages %}
+  {{ error_message }}<br>
+  {% endfor %}
+  <br>
+</div>
+{% endblock error %}

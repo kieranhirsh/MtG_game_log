@@ -3,6 +3,7 @@ import importlib
 from flask import Flask, render_template, request, jsonify
 from api.v1 import api_routes
 from data import storage
+from errors import errors
 from crud.colour_identity import Colour_Identity_crud
 from crud.deck import Deck_crud
 from crud.player import Player_crud
@@ -38,12 +39,24 @@ def input():
 
             Player_crud.create(data=jsonify(new_player))
         elif input_type == "deck":
+            call_error = False
+            missing_entries = []
+
             owner_name = request.form["owner"]
             owner_data = storage.get(class_name="Player", key="player_name", value=owner_name)
+            if not owner_data:
+                call_error = True
+                missing_entries.append(["Player", "player_name", owner_name])
 
             ci_name_raw = request.form["ci_name"]
             ci_name = ci_name_raw.split(' (', 1)[0]
             colour_identity_data = storage.get(class_name="Colour_Identity", key="ci_name", value=ci_name)
+            if not colour_identity_data:
+                call_error = True
+                missing_entries.append(["Colour_Identity", "ci_name", ci_name])
+
+            if call_error:
+                return errors.entry_not_found('input.html', 'create', missing_entries)
 
             new_deck = {
                 "deck_name": request.form["deck_name"],
