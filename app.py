@@ -81,7 +81,11 @@ def input_edit():
 
         # this desperately wants to be a select case, but I'm using Python 3.8 :(
         if input_type == "player":
-            player_to_edit = Player_crud.specific('player_name', request.form['player_name'])
+            try:
+                player_to_edit = Player_crud.specific('player_name', request.form['player_name'])
+            except:
+                return errors.entry_not_found('input.html', 'edit', [['Player', 'player_name', request.form['player_name']]])
+
             new_player_data = {}
             if request.form["new_player_name"]:
                 new_player_data.update({
@@ -90,8 +94,15 @@ def input_edit():
 
             Player_crud.update(player_to_edit["id"], jsonify(new_player_data))
         elif input_type == "deck":
-            deck_to_edit = Deck_crud.specific('deck_name', request.form['deck_name'])
+            try:
+                deck_to_edit = Deck_crud.specific('deck_name', request.form['deck_name'])
+            except:
+                return errors.entry_not_found('input.html', 'edit', [['Deck', 'deck_name', request.form['deck_name']]])
+
             new_deck_data = {}
+            call_error = False
+            missing_entries = []
+
             if request.form["new_deck_name"]:
                 new_deck_data.update({
                     "deck_name": request.form["new_deck_name"]
@@ -100,17 +111,28 @@ def input_edit():
                 owner_name = request.form["owner"]
                 owner_data = storage.get(class_name="Player", key="player_name", value=owner_name)
 
-                new_deck_data.update({
-                    "player_id": owner_data[0].id
-                })
+                if owner_data:
+                    new_deck_data.update({
+                        "player_id": owner_data[0].id
+                    })
+                else:
+                    call_error = True
+                    missing_entries.append(["Player", "player_name", owner_name])
             if request.form["ci_name"]:
                 ci_name_raw = request.form["ci_name"]
                 ci_name = ci_name_raw.split(' (', 1)[0]
                 colour_identity_data = storage.get(class_name="Colour_Identity", key="ci_name", value=ci_name)
 
-                new_deck_data.update({
-                    "colour_identity_id": colour_identity_data[0].id
-                })
+                if colour_identity_data:
+                    new_deck_data.update({
+                        "colour_identity_id": colour_identity_data[0].id
+                    })
+                else:
+                    call_error = True
+                    missing_entries.append(["Colour_Identity", "ci_name", ci_name])
+
+            if call_error:
+                return errors.entry_not_found('input.html', 'edit', missing_entries)
 
             Deck_crud.update(deck_to_edit["id"], jsonify(new_deck_data))
 
