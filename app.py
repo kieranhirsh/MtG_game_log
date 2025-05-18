@@ -157,7 +157,13 @@ def input_delete():
         input_type = request.form["type"]
 
         # Find the specific entry to delete, and either delete it or return and error
-        entry_to_delete = module_names[input_type].specific("%s_name" % input_type, request.form["%s_name" % input_type])
+        try:
+            entry_to_delete = module_names[input_type].specific("%s_name" % input_type,
+                                                                request.form["%s_name" % input_type])
+        except:
+            return errors.entry_not_found('input.html', 'delete', [[input_type,
+                                                                    "%s_name" % input_type,
+                                                                    request.form["%s_name" % input_type]]])
         module_names[input_type].delete(entry_to_delete['id'])
 
     # Load the data we need before passing it to the template
