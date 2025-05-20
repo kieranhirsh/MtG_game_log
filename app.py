@@ -241,17 +241,20 @@ def data_post():
         restrictions = []
 
         for form_item in request.form:
-            # this wants to be a select case, but I'm using Python 3.8 :(
-            if form_item == "player_name":
-                class_type = "Player"
-            elif form_item == "ci_name":
-                class_type = "Colour_Identity"
-
             if form_item != "type" and request.form[form_item]:
+                value = request.form[form_item]
+
+                # this wants to be a select case, but I'm using Python 3.8 :(
+                if form_item == "player_name":
+                    class_type = "Player"
+                elif form_item == "ci_name":
+                    class_type = "Colour_Identity"
+                    value = value.split(' (', 1)[0]
+
                 restrictions.append({
                     "class_type": class_type,
                     "key": form_item,
-                    "value": request.form[form_item]
+                    "value": value
                 })
 
         if restrictions:
