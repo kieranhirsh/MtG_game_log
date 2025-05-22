@@ -128,11 +128,52 @@
         <label for="deck_name">Deck to update: </label>
         <input type="search" id="deck_name" name="deck_name" list="decks" autocomplete="off" required><br>
         <label for="new_deck_name">Updated Deck Name: </label>
-        <input type="text" id="new_deck_name" name="new_deck_name" autocomplete="off" required>
+        <input type="text" id="new_deck_name" name="new_deck_name" autocomplete="off">
         <label for="owner">Updated Owner Name: </label>
         <input type="search" id="owner" name="owner" list="players" autocomplete="off">
-        <label for="ci_name">Updated Colour Identity: </label>
-        <input type="search" id="ci_name" name="ci_name" list="colour_identities" autocomplete="off">
+        <div>
+          Updated Colour Identity:
+          <div>
+            <ul>
+              <li>
+                <label>
+                  <input id="white" type="checkbox" class="ci_coloured" name="ci_name" value="w" onchange="uncheckColours()"/>
+                  White
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input id="blue" type="checkbox" class="ci_coloured" name="ci_name" value="u" onchange="uncheckColours()"/>
+                  Blue
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input id="black" type="checkbox" class="ci_coloured" name="ci_name" value="b" onchange="uncheckColours()"/>
+                  Black
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input id="red" type="checkbox" class="ci_coloured" name="ci_name" value="r" onchange="uncheckColours()"/>
+                  Red
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input id="green" type="checkbox" class="ci_coloured" name="ci_name" value="g" onchange="uncheckColours()"/>
+                  Green
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input id="colourless" type="radio" class="ci_colourless" name="ci_name" value="c" onchange="uncheckColours()"/>
+                  Colourless
+                </label>
+              </li>
+            </ul>
+          </div>
+        </div>
         <input type="submit" value="Edit deck">
       </form>
     </div>
