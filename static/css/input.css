@@ -4,6 +4,59 @@ body {
   padding: 10px 0 30px 10px;
 }
 
+body ul {
+  list-style-type: none;
+}
+body .ci_coloured {
+  width: 13px;
+  height: 13px;
+  background-color: white;
+  border: 1px solid #152F41;
+  border-radius: 50%;
+  vertical-align: middle;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  cursor: pointer;
+  margin: 3px 3px 0px 5px;
+}
+body .ci_coloured:checked {
+  border-radius: 0%;
+  border: 0px;
+}
+body .ci_coloured:checked#white {
+  background-image: url(/static/img/mana_W.svg);
+}
+body .ci_coloured:checked#blue {
+  background-image: url(/static/img/mana_U.svg);
+}
+body .ci_coloured:checked#black {
+  background-image: url(/static/img/mana_B.svg);
+}
+body .ci_coloured:checked#red {
+  background-image: url(/static/img/mana_R.svg);
+}
+body .ci_coloured:checked#green {
+  background-image: url(/static/img/mana_G.svg);
+}
+body .ci_colourless {
+  width: 13px;
+  height: 13px;
+  background-color: white;
+  border: 1px solid #152F41;
+  border-radius: 50%;
+  vertical-align: middle;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  cursor: pointer;
+  margin: 3px 3px 0px 5px;
+}
+body .ci_colourless:checked {
+  border-radius: 0%;
+  border: 0px;
+  background-image: url(/static/img/mana_C.svg);
+}
 body .data_input {
   display: none;
 }

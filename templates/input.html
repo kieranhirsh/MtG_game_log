@@ -61,8 +61,49 @@
         <input type="text" id="deck_name" name="deck_name" autocomplete="off" required>
         <label for="owner">Owner Name: </label>
         <input type="search" id="owner" name="owner" list="players" autocomplete="off">
-        <label for="ci_name">Colour Identity: </label>
-        <input type="search" id="ci_name" name="ci_name" list="colour_identities" autocomplete="off">
+        <div>
+          Colour Identity:
+          <div>
+            <ul>
+              <li>
+                <label>
+                  <input id="white" type="checkbox" class="ci_coloured" name="ci_name" value="w" onchange="uncheckColours()"/>
+                  White
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input id="blue" type="checkbox" class="ci_coloured" name="ci_name" value="u" onchange="uncheckColours()"/>
+                  Blue
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input id="black" type="checkbox" class="ci_coloured" name="ci_name" value="b" onchange="uncheckColours()"/>
+                  Black
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input id="red" type="checkbox" class="ci_coloured" name="ci_name" value="r" onchange="uncheckColours()"/>
+                  Red
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input id="green" type="checkbox" class="ci_coloured" name="ci_name" value="g" onchange="uncheckColours()"/>
+                  Green
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input id="colourless" type="radio" class="ci_colourless" name="ci_name" value="c" onchange="uncheckColours()"/>
+                  Colourless
+                </label>
+              </li>
+            </ul>
+          </div>
+        </div>
         <input type="submit" value="Create deck">
       </form>
     </div>

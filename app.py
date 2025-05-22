@@ -48,12 +48,21 @@ def input():
                 call_error = True
                 missing_entries.append(["Player", "player_name", owner_name])
 
-            ci_name_raw = request.form["ci_name"]
-            ci_name = ci_name_raw.split(' (', 1)[0]
-            colour_identity_data = storage.get(class_name="Colour_Identity", key="ci_name", value=ci_name)
+            ci_raw_list = request.form.getlist("ci_name")
+            ci_abbr_string = ""
+            for abbr in ci_raw_list:
+                ci_abbr_string += abbr
+            all_ci = storage.get(class_name="Colour_Identity")
+            ci_abbr_list = []
+            for ci in all_ci:
+                ci_abbr_list.append(ci.colours)
+            for ci_abbr in ci_abbr_list:
+                if sorted(ci_abbr) == sorted(ci_abbr_string):
+                    desired_ci = ci_abbr
+            colour_identity_data = storage.get(class_name="Colour_Identity", key="colours", value=desired_ci)
             if not colour_identity_data:
                 call_error = True
-                missing_entries.append(["Colour_Identity", "ci_name", ci_name])
+                missing_entries.append(["Colour_Identity", "colours", desired_ci])
 
             if call_error:
                 return errors.entry_not_found('input.html', 'create', missing_entries)
@@ -466,7 +475,7 @@ def graphs():
                 else:
                     raise ValueError("Incorrect Y axis specified: %s" % request.form["bar_y"])
             else:
-                raise ValueError("Incorrect Slices specified: %s" % request.form["pie_divisions"])
+                raise ValueError("Incorrect X axis specified: %s" % request.form["bar_x"])
 
             x_values = list(xy_data.keys())
             y_values = list(xy_data.values())
