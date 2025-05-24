@@ -174,7 +174,7 @@ def input_delete():
         # Find the type of data to delete
         input_type = request.form["type"]
 
-        # Find the specific entry to delete, and either delete it or return and error
+        # Find the specific entry to delete, and either delete it or return an error
         try:
             entry_to_delete = module_names[input_type].specific("%s_name" % input_type,
                                                                 request.form["%s_name" % input_type])
@@ -212,7 +212,7 @@ def data_post():
 
         # if we have a restriction on the player name
         if request.form['player_name']:
-            # check that player exists in database
+            # check that player exists in database, return an error if it doesn't
             player_name = request.form["player_name"]
             player_data = storage.get(class_name="Player", key="player_name", value=player_name)
             if not player_data:
@@ -270,20 +270,29 @@ def data_post():
 
                 # this wants to be a select case, but I'm using Python 3.8 :(
                 if form_item == "player_name":
+                    # check that player exists in database, return an error if it doesn't
+                    player_data = storage.get(class_name="Player", key="player_name", value=value)
+                    if not player_data:
+                        return errors.entry_not_found('data.html', [["Player", "player_name", value]])
+
                     class_type = "Player"
+
                 elif form_item == "ci_name":
                     class_type = "Colour_Identity"
                     ci_raw_list = request.form.getlist("ci_name")
                     ci_abbr_string = ""
                     for abbr in ci_raw_list:
                         ci_abbr_string += abbr
+
                     all_ci = storage.get(class_name="Colour_Identity")
                     ci_abbr_list = []
                     for ci in all_ci:
                         ci_abbr_list.append(ci.colours)
+
                     for ci_abbr in ci_abbr_list:
                         if sorted(ci_abbr) == sorted(ci_abbr_string):
                             desired_ci = ci_abbr
+
                     value = storage.get(class_name="Colour_Identity", key="colours", value=desired_ci)[0].ci_name
 
                 restrictions.append({
