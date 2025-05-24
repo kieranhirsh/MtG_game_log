@@ -64,44 +64,7 @@
         <div>
           Colour Identity:
           <div>
-            <ul>
-              <li>
-                <label>
-                  <input id="white" type="checkbox" class="ci_coloured" name="ci_name" value="w" onchange="uncheckColours()"/>
-                  White
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input id="blue" type="checkbox" class="ci_coloured" name="ci_name" value="u" onchange="uncheckColours()"/>
-                  Blue
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input id="black" type="checkbox" class="ci_coloured" name="ci_name" value="b" onchange="uncheckColours()"/>
-                  Black
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input id="red" type="checkbox" class="ci_coloured" name="ci_name" value="r" onchange="uncheckColours()"/>
-                  Red
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input id="green" type="checkbox" class="ci_coloured" name="ci_name" value="g" onchange="uncheckColours()"/>
-                  Green
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input id="colourless" type="radio" class="ci_colourless" name="ci_name" value="c" onchange="uncheckColours()"/>
-                  Colourless
-                </label>
-              </li>
-            </ul>
+          {% include "ci_dropdown.html" %}
           </div>
         </div>
         <input type="submit" value="Create deck">
@@ -134,44 +97,7 @@
         <div>
           Updated Colour Identity:
           <div>
-            <ul>
-              <li>
-                <label>
-                  <input id="white" type="checkbox" class="ci_coloured" name="ci_name" value="w" onchange="uncheckColours()"/>
-                  White
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input id="blue" type="checkbox" class="ci_coloured" name="ci_name" value="u" onchange="uncheckColours()"/>
-                  Blue
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input id="black" type="checkbox" class="ci_coloured" name="ci_name" value="b" onchange="uncheckColours()"/>
-                  Black
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input id="red" type="checkbox" class="ci_coloured" name="ci_name" value="r" onchange="uncheckColours()"/>
-                  Red
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input id="green" type="checkbox" class="ci_coloured" name="ci_name" value="g" onchange="uncheckColours()"/>
-                  Green
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input id="colourless" type="radio" class="ci_colourless" name="ci_name" value="c" onchange="uncheckColours()"/>
-                  Colourless
-                </label>
-              </li>
-            </ul>
+          {% include "ci_dropdown.html" %}
           </div>
         </div>
         <input type="submit" value="Edit deck">
