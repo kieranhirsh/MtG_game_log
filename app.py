@@ -65,7 +65,7 @@ def input():
                 missing_entries.append(["Colour_Identity", "colours", desired_ci])
 
             if call_error:
-                return errors.entry_not_found('input.html', 'create', missing_entries)
+                return errors.entry_not_found('input.html', missing_entries, 'create')
 
             new_deck = {
                 "deck_name": request.form["deck_name"],
@@ -93,7 +93,7 @@ def input_edit():
             try:
                 player_to_edit = Player_crud.specific('player_name', request.form['player_name'])
             except:
-                return errors.entry_not_found('input.html', 'edit', [['Player', 'player_name', request.form['player_name']]])
+                return errors.entry_not_found('input.html', [['Player', 'player_name', request.form['player_name']]], 'edit')
 
             new_player_data = {}
             if request.form["new_player_name"]:
@@ -106,7 +106,7 @@ def input_edit():
             try:
                 deck_to_edit = Deck_crud.specific('deck_name', request.form['deck_name'])
             except:
-                return errors.entry_not_found('input.html', 'edit', [['Deck', 'deck_name', request.form['deck_name']]])
+                return errors.entry_not_found('input.html', [['Deck', 'deck_name', request.form['deck_name']]], 'edit')
 
             new_deck_data = {}
             call_error = False
@@ -150,7 +150,7 @@ def input_edit():
                     missing_entries.append(["Colour_Identity", "colours", desired_ci])
 
             if call_error:
-                return errors.entry_not_found('input.html', 'edit', missing_entries)
+                return errors.entry_not_found('input.html', missing_entries, 'edit')
 
             Deck_crud.update(deck_to_edit["id"], jsonify(new_deck_data))
 
@@ -179,9 +179,9 @@ def input_delete():
             entry_to_delete = module_names[input_type].specific("%s_name" % input_type,
                                                                 request.form["%s_name" % input_type])
         except:
-            return errors.entry_not_found('input.html', 'delete', [[input_type,
-                                                                    "%s_name" % input_type,
-                                                                    request.form["%s_name" % input_type]]])
+            return errors.entry_not_found('input.html',
+                                          [[input_type, "%s_name" % input_type, request.form["%s_name" % input_type]]],
+                                          'delete')
         module_names[input_type].delete(entry_to_delete['id'])
 
     # Load the data we need before passing it to the template
@@ -212,6 +212,12 @@ def data_post():
 
         # if we have a restriction on the player name
         if request.form['player_name']:
+            # check that player exists in database
+            player_name = request.form["player_name"]
+            player_data = storage.get(class_name="Player", key="player_name", value=player_name)
+            if not player_data:
+                return errors.entry_not_found('data.html', [["Player", "player_name", player_name]])
+
             # loop over all colour identities
             for colour_identity in colour_identities:
                 # find all decks of with the given colour identity

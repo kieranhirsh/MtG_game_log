@@ -3,7 +3,7 @@ from crud.colour_identity import Colour_Identity_crud
 from crud.deck import Deck_crud
 from crud.player import Player_crud
 
-def entry_not_found(page, method, missing_entries):
+def entry_not_found(page, missing_entries, method=""):
   # Initialise variables
   error_messages = []
 

@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link type="text/css" rel="stylesheet" href="../static/css/data.css">
+  <link type="text/css" rel="stylesheet" href="../static/css/error.css">
   <link type="text/css" rel="stylesheet" href="../static/css/ci_dropdown.css">
   <script type="text/javascript" src="../static/js/data.js"></script>
   <link rel="icon" type="img/png" href="../static/img/card_back.png">
@@ -14,6 +15,8 @@
 
 <body pg-name="data" js="off">
   {% include "header.html" %}
+  {% block error %}
+  {% endblock error %}
   <div id="dropdown">
     Sort by:
     <select name="data_types" id="data_types" onchange="toggleDataType()">
