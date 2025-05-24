@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link type="text/css" rel="stylesheet" href="../static/css/data.css">
+  <link type="text/css" rel="stylesheet" href="../static/css/ci_dropdown.css">
   <script type="text/javascript" src="../static/js/data.js"></script>
   <link rel="icon" type="img/png" href="../static/img/card_back.png">
   <title>M:tG Game Logger</title>
@@ -50,8 +51,12 @@
         <input class="type" type="text" id="type" name="type" value="deck">
         <label for="player_name">&emsp;Owner Name = </label>
         <input type="text" id="player_name" name="player_name" list="players" autocomplete="off">
-        <label for="ci_name">&emsp;Colour Identity = </label>
-        <input type="text" id="ci_name" name="ci_name" list="colour_identities" autocomplete="off">
+        <div>
+          Colour Identity:
+          <div>
+          {% include "ci_dropdown.html" %}
+          </div>
+        </div>
         <br><input type="submit" value="Submit">
       </form>
     </div>
@@ -59,8 +64,12 @@
     <div class="data_type" id="player">
       <form action="/data" method="POST">
         <input class="type" type="text" id="type" name="type" value="player">
-        <label for="ci_name">&emsp;Colour Identity = </label>
-        <input type="text" id="ci_name" name="ci_name" list="colour_identities" autocomplete="off">
+        <div>
+          Colour Identity:
+          <div>
+          {% include "ci_dropdown.html" %}
+          </div>
+        </div>
         <br><input type="submit" value="Submit">
       </form>
     </div>

@@ -9,65 +9,6 @@ body {
     list-style-type: none;
   }
 
-  .ci_coloured {
-    width: 13px;
-    height: 13px;
-    background-color: white;
-    border: 1px solid #152F41;
-    border-radius: 50%;
-    vertical-align: middle;
-    appearance: none;
-    -webkit-appearance: none;
-    outline: none;
-    cursor: pointer;
-    margin: 3px 3px 0px 5px;
-
-    &:checked {
-      border-radius: 0%;
-      border: 0px;
-
-      &#white {
-        background-image: url(/static/img/mana_W.svg);
-      }
-
-      &#blue {
-        background-image: url(/static/img/mana_U.svg);
-      }
-
-      &#black {
-        background-image: url(/static/img/mana_B.svg);
-      }
-
-      &#red {
-        background-image: url(/static/img/mana_R.svg);
-      }
-
-      &#green {
-        background-image: url(/static/img/mana_G.svg);
-      }
-    }
-  }
-
-  .ci_colourless {
-    width: 13px;
-    height: 13px;
-    background-color: white;
-    border: 1px solid #152F41;
-    border-radius: 50%;
-    vertical-align: middle;
-    appearance: none;
-    -webkit-appearance: none;
-    outline: none;
-    cursor: pointer;
-    margin: 3px 3px 0px 5px;
-
-    &:checked {
-      border-radius: 0%;
-      border: 0px;
-      background-image: url(/static/img/mana_C.svg);
-    }
-  }
-
   .data_input {
     display: none;
 

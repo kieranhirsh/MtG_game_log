@@ -267,7 +267,18 @@ def data_post():
                     class_type = "Player"
                 elif form_item == "ci_name":
                     class_type = "Colour_Identity"
-                    value = value.split(' (', 1)[0]
+                    ci_raw_list = request.form.getlist("ci_name")
+                    ci_abbr_string = ""
+                    for abbr in ci_raw_list:
+                        ci_abbr_string += abbr
+                    all_ci = storage.get(class_name="Colour_Identity")
+                    ci_abbr_list = []
+                    for ci in all_ci:
+                        ci_abbr_list.append(ci.colours)
+                    for ci_abbr in ci_abbr_list:
+                        if sorted(ci_abbr) == sorted(ci_abbr_string):
+                            desired_ci = ci_abbr
+                    value = storage.get(class_name="Colour_Identity", key="colours", value=desired_ci)[0].ci_name
 
                 restrictions.append({
                     "class_type": class_type,
@@ -302,9 +313,19 @@ def data_post():
         player_data = []
 
         # if we have a restriction on the colour identity name
-        if request.form["ci_name"]:
-            ci_name_raw = request.form["ci_name"]
-            ci_name = ci_name_raw.split(' (', 1)[0]
+        if request.form.getlist("ci_name"):
+            ci_raw_list = request.form.getlist("ci_name")
+            ci_abbr_string = ""
+            for abbr in ci_raw_list:
+                ci_abbr_string += abbr
+            all_ci = storage.get(class_name="Colour_Identity")
+            ci_abbr_list = []
+            for ci in all_ci:
+                ci_abbr_list.append(ci.colours)
+            for ci_abbr in ci_abbr_list:
+                if sorted(ci_abbr) == sorted(ci_abbr_string):
+                    desired_ci = ci_abbr
+            ci_name = storage.get(class_name="Colour_Identity", key="colours", value=desired_ci)[0].ci_name
 
             # loop over all players
             for player in players:
