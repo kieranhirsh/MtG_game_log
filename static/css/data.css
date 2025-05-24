@@ -25,6 +25,10 @@ body .data_table tr:nth-child(even) {
 body .data_table tr:nth-child(odd) {
   background-color: #E7E9EB;
 }
+body .mana_symbol {
+  height: 14px;
+  width: 14px;
+}
 
 a {
   color: black;

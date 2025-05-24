@@ -16,23 +16,23 @@
     border: 0px;
 
     &#white {
-      background-image: url(/static/img/mana_W.svg);
+      background-image: url(/static/img/mana_w.svg);
     }
 
     &#blue {
-      background-image: url(/static/img/mana_U.svg);
+      background-image: url(/static/img/mana_u.svg);
     }
 
     &#black {
-      background-image: url(/static/img/mana_B.svg);
+      background-image: url(/static/img/mana_b.svg);
     }
 
     &#red {
-      background-image: url(/static/img/mana_R.svg);
+      background-image: url(/static/img/mana_r.svg);
     }
 
     &#green {
-      background-image: url(/static/img/mana_G.svg);
+      background-image: url(/static/img/mana_g.svg);
     }
   }
 }
@@ -53,6 +53,6 @@
   &:checked {
     border-radius: 0%;
     border: 0px;
-    background-image: url(/static/img/mana_C.svg);
+    background-image: url(/static/img/mana_c.svg);
   }
 }

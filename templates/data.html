@@ -34,11 +34,6 @@
       <option value="{{ player.player_name }}">
         {% endfor %}
     </datalist>
-    <datalist id="colour_identities">
-      {% for colour_identity in colour_identities %}
-      <option value="{{ colour_identity.ci_name }} ({{ colour_identity.colours }})">
-        {% endfor %}
-    </datalist>
 
     <div class="data_type" id="colour_identity">
       <form action="/data" method="POST">
@@ -87,7 +82,12 @@
       </tr>
       {% for colour_identity in colour_identities %}
       <tr>
-        <td>{{ colour_identity.ci_name }} ({{ colour_identity.colours }})</td>
+        <td>
+          {{ colour_identity.ci_name }} (
+            {% for colour in colour_identity.colours %}
+            <img class="mana_symbol" src="../static/img/mana_{{ colour }}.svg">
+            {% endfor %})
+        </td>
         <td>{{ colour_identity.number_of_decks }}</td>
       </tr>
       {% endfor %}
@@ -105,7 +105,12 @@
       <tr>
         <td>{{ deck.deck_name }}</td>
         <td>{{ deck.player.player_name }}</td>
-        <td>{{ deck.colour_identity.ci_name }} ({{ deck.colour_identity.colours }})</td>
+        <td>
+          {{ deck.colour_identity.ci_name }} (
+            {% for colour in deck.colour_identity.colours %}
+            <img class="mana_symbol" src="../static/img/mana_{{ colour }}.svg">
+            {% endfor %})
+        </td>
       </tr>
       {% endfor %}
     </table>
