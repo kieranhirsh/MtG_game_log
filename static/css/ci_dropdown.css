@@ -1,3 +1,7 @@
+.ci_dropdown {
+  list-style-type: none;
+}
+
 .ci_coloured {
   width: 13px;
   height: 13px;

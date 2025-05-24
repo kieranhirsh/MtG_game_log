@@ -4,9 +4,6 @@ body {
   padding: 10px 0 30px 10px;
 }
 
-body ul {
-  list-style-type: none;
-}
 body .data_input {
   display: none;
 }
