@@ -8,6 +8,7 @@ from crud.colour_identity import Colour_Identity_crud
 from crud.deck import Deck_crud
 from crud.player import Player_crud
 from graphs import pie_charts, xy_graphs
+from utils import utils
 
 app = Flask(__name__)
 app.register_blueprint(api_routes)
@@ -48,18 +49,7 @@ def input():
                 call_error = True
                 missing_entries.append(["Player", "player_name", owner_name])
 
-            ci_raw_list = request.form.getlist("ci_name")
-            ci_abbr_string = ""
-            for abbr in ci_raw_list:
-                ci_abbr_string += abbr
-            all_ci = storage.get(class_name="Colour_Identity")
-            ci_abbr_list = []
-            for ci in all_ci:
-                ci_abbr_list.append(ci.colours)
-            for ci_abbr in ci_abbr_list:
-                if sorted(ci_abbr) == sorted(ci_abbr_string):
-                    desired_ci = ci_abbr
-            colour_identity_data = storage.get(class_name="Colour_Identity", key="colours", value=desired_ci)
+            colour_identity_data, desired_ci = utils.get_ci_data_from_dropdown_inputs(request.form)
             if not colour_identity_data:
                 call_error = True
                 missing_entries.append(["Colour_Identity", "colours", desired_ci])
@@ -127,20 +117,8 @@ def input_edit():
                 else:
                     call_error = True
                     missing_entries.append(["Player", "player_name", owner_name])
-            if request.form.getlist("ci_name"):
-                ci_raw_list = request.form.getlist("ci_name")
-                ci_abbr_string = ""
-                for abbr in ci_raw_list:
-                    ci_abbr_string += abbr
-                all_ci = storage.get(class_name="Colour_Identity")
-                ci_abbr_list = []
-                for ci in all_ci:
-                    ci_abbr_list.append(ci.colours)
-                for ci_abbr in ci_abbr_list:
-                    if sorted(ci_abbr) == sorted(ci_abbr_string):
-                        desired_ci = ci_abbr
-                colour_identity_data = storage.get(class_name="Colour_Identity", key="colours", value=desired_ci)
-
+            if request.form.getlist("ci_abbr"):
+                colour_identity_data, desired_ci = utils.get_ci_data_from_dropdown_inputs(request.form)
                 if colour_identity_data:
                     new_deck_data.update({
                         "colour_identity_id": colour_identity_data[0].id
@@ -266,39 +244,31 @@ def data_post():
 
         for form_item in request.form:
             if form_item != "type" and request.form[form_item]:
-                value = request.form[form_item]
+                restriction_key = form_item
+                restriction_value = request.form[form_item]
 
                 # this wants to be a select case, but I'm using Python 3.8 :(
                 if form_item == "player_name":
                     # check that player exists in database, return an error if it doesn't
-                    player_data = storage.get(class_name="Player", key="player_name", value=value)
+                    player_data = storage.get(class_name="Player", key="player_name", value=restriction_value)
                     if not player_data:
-                        return errors.entry_not_found('data.html', [["Player", "player_name", value]])
+                        return errors.entry_not_found('data.html', [["Player", "player_name", restriction_value]])
 
                     class_type = "Player"
 
-                elif form_item == "ci_name":
+                elif form_item == "ci_abbr":
+                    colour_identity_data, desired_ci = utils.get_ci_data_from_dropdown_inputs(request.form)
+                    if not colour_identity_data:
+                        return errors.entry_not_found(["Colour_Identity", "colours", desired_ci])
+                    restriction_key = "ci_name"
+                    restriction_value = colour_identity_data[0].ci_name
+
                     class_type = "Colour_Identity"
-                    ci_raw_list = request.form.getlist("ci_name")
-                    ci_abbr_string = ""
-                    for abbr in ci_raw_list:
-                        ci_abbr_string += abbr
-
-                    all_ci = storage.get(class_name="Colour_Identity")
-                    ci_abbr_list = []
-                    for ci in all_ci:
-                        ci_abbr_list.append(ci.colours)
-
-                    for ci_abbr in ci_abbr_list:
-                        if sorted(ci_abbr) == sorted(ci_abbr_string):
-                            desired_ci = ci_abbr
-
-                    value = storage.get(class_name="Colour_Identity", key="colours", value=desired_ci)[0].ci_name
 
                 restrictions.append({
                     "class_type": class_type,
-                    "key": form_item,
-                    "value": value
+                    "key": restriction_key,
+                    "value": restriction_value
                 })
 
         if restrictions:
@@ -328,19 +298,9 @@ def data_post():
         player_data = []
 
         # if we have a restriction on the colour identity name
-        if request.form.getlist("ci_name"):
-            ci_raw_list = request.form.getlist("ci_name")
-            ci_abbr_string = ""
-            for abbr in ci_raw_list:
-                ci_abbr_string += abbr
-            all_ci = storage.get(class_name="Colour_Identity")
-            ci_abbr_list = []
-            for ci in all_ci:
-                ci_abbr_list.append(ci.colours)
-            for ci_abbr in ci_abbr_list:
-                if sorted(ci_abbr) == sorted(ci_abbr_string):
-                    desired_ci = ci_abbr
-            ci_name = storage.get(class_name="Colour_Identity", key="colours", value=desired_ci)[0].ci_name
+        if request.form.getlist("ci_abbr"):
+            colour_identity_data, desired_ci = utils.get_ci_data_from_dropdown_inputs(request.form)
+            ci_name = colour_identity_data[0].ci_name
 
             # loop over all players
             for player in players:
