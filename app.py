@@ -358,7 +358,7 @@ def graphs():
             plt_data.update({"%s colours" % ii: 0})
 
         for deck in deck_data:
-            deck_num_colours = utils.find_number_of_colours(deck)
+            deck_num_colours = utils.find_number_of_colours_of_deck(deck)
             plt_data["%s colours" % deck_num_colours] += 1
 
         number_of_colours = list(plt_data.keys())
@@ -457,7 +457,7 @@ def graphs():
 
                 if request.form["bar_y"] == "number of decks":
                     for datum in data:
-                        datum_num_colours = utils.find_number_of_colours(datum)
+                        datum_num_colours = utils.find_number_of_colours_of_deck(datum)
                         xy_data["%s colours" % datum_num_colours] += 1
                 else:
                     raise ValueError("Incorrect Y axis specified: %s" % request.form["bar_y"])
@@ -544,7 +544,7 @@ def graphs():
                     pie_data.update({"%s colours" % ii: 0})
 
                 for datum in data:
-                    datum_num_colours = utils.find_number_of_colours(datum)
+                    datum_num_colours = utils.find_number_of_colours_of_deck(datum)
                     pie_data["%s colours" % datum_num_colours] += 1
             elif request.form["pie_divisions"] == "owner":
                 players = Player_crud.all(True)
