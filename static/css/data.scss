@@ -17,21 +17,31 @@ body {
     }
   }
 
-  .data_table {
-    th {
-      cursor: pointer;
-    }
+  #data_tables {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
 
-    td, th {
-      padding: 4px 8px;
-    }
+    .data_table {
+      &:not(#ci_table_0):not(#ci_table_1):not(#ci_table_2):not(#ci_table_3):not(#ci_table_4):not(#ci_table_5) {
+        th {
+          cursor: pointer;
+        }
+      }
 
-    tr:nth-child(even) {
-      background-color: white;
-    }
+      td,
+      th {
+        padding: 4px 8px;
+      }
 
-    tr:nth-child(odd) {
-      background-color: #E7E9EB;
+      tr:nth-child(even) {
+        background-color: white;
+      }
+
+      tr:nth-child(odd) {
+        background-color: #E7E9EB;
+      }
     }
   }
 

@@ -76,23 +76,31 @@
 
   <div id="data_tables">
     {% if data_type == "colour_identity" %}
-    <table class="data_table" id="ci_table">
+    {% for colour_identity_num_colours in colour_identities %}
+    <table class="data_table" id="ci_table_{{ colour_identity_num_colours[0].ci_name[0] }}">
       <tr>
-        <th onclick="sortTable(0)">Colour Identity</th>
-        <th onclick="sortTable(1)">Number of Decks</th>
+        <th>Colour Identity</th>
+        <th># Decks</th>
       </tr>
-      {% for colour_identity in colour_identities %}
+      {% for colour_identity in colour_identity_num_colours %}
       <tr>
         <td>
-          {{ colour_identity.ci_name }} (
+          {% if colour_identity.colours == "skip" %}<b>{% endif %}
+          {{ colour_identity.ci_name }}{% if colour_identity.colours != "skip" %} (
             {% for colour in colour_identity.colours %}
             <img class="mana_symbol" src="../static/img/mana_{{ colour }}.svg">
-            {% endfor %})
+            {% endfor %}){% endif %}
+          {% if colour_identity.colours == "skip" %}</b>{% endif %}
         </td>
-        <td>{{ colour_identity.number_of_decks }}</td>
+        <td>
+          {% if colour_identity.colours == "skip" %}<b>{% endif %}
+          {{ colour_identity.number_of_decks }}
+          {% if colour_identity.colours == "skip" %}</b>{% endif %}
+        </td>
       </tr>
       {% endfor %}
     </table>
+    {% endfor %}
     {% endif %}
 
     {% if data_type == "deck" %}

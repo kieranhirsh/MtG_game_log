@@ -186,7 +186,38 @@ def data_post():
 
     # this desperately wants to be a select case, but I'm using Python 3.8 :(
     if request.form["type"] == "colour_identity":
-        colour_identity_data = []
+        colour_identity_data = [
+            [{
+                "ci_name": "0 colours",
+                "colours": "skip",
+                "number_of_decks": 0
+            }],
+            [{
+                "ci_name": "1 colour",
+                "colours": "skip",
+                "number_of_decks": 0
+            }],
+            [{
+                "ci_name": "2 colours",
+                "colours": "skip",
+                "number_of_decks": 0
+            }],
+            [{
+                "ci_name": "3 colours",
+                "colours": "skip",
+                "number_of_decks": 0
+            }],
+            [{
+                "ci_name": "4 colours",
+                "colours": "skip",
+                "number_of_decks": 0
+            }],
+            [{
+                "ci_name": "5 colours",
+                "colours": "skip",
+                "number_of_decks": 0
+            }]
+        ]
 
         # if we have a restriction on the player name
         if request.form['player_name']:
@@ -215,8 +246,12 @@ def data_post():
                 # find the number of decks of the given colour identity deck
                 num_decks = len(colour_identity_decks)
 
-                # and finally, append all the relevant data that has been requested
-                colour_identity_data.append({
+                # find the number of colours of the given colour identity
+                num_colours = utils.find_number_of_colours_of_ci(colour_identity)
+
+                # add all the relevant data that has been requested
+                colour_identity_data[num_colours][0]["number_of_decks"] += num_decks
+                colour_identity_data[num_colours].append({
                     "ci_name": colour_identity.ci_name,
                     "colours": colour_identity.colours,
                     "number_of_decks": num_decks
@@ -226,12 +261,18 @@ def data_post():
                 # if we have no restriction the number of decks is just the length of the array
                 num_decks = len(Colour_Identity_crud.get_child_data(colour_identity.id, "Deck", True))
 
-                colour_identity_data.append({
+                # find the number of colours of the given colour identity
+                num_colours = utils.find_number_of_colours_of_ci(colour_identity)
+
+                # add all the relevant data that has been requested
+                colour_identity_data[num_colours][0]["number_of_decks"] += num_decks
+                colour_identity_data[num_colours].append({
                     "ci_name": colour_identity.ci_name,
                     "colours": colour_identity.colours,
                     "number_of_decks": num_decks
                 })
 
+        print("colour_identity_data = ", colour_identity_data)
         return render_template(
             'data.html',
             data_type="colour_identity",

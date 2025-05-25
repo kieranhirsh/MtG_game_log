@@ -13,16 +13,23 @@ body .data_type {
 body .data_type .type {
   display: none;
 }
-body .data_table th {
+body #data_tables {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+body #data_tables .data_table:not(#ci_table_0):not(#ci_table_1):not(#ci_table_2):not(#ci_table_3):not(#ci_table_4):not(#ci_table_5) th {
   cursor: pointer;
 }
-body .data_table td, body .data_table th {
+body #data_tables .data_table td,
+body #data_tables .data_table th {
   padding: 4px 8px;
 }
-body .data_table tr:nth-child(even) {
+body #data_tables .data_table tr:nth-child(even) {
   background-color: white;
 }
-body .data_table tr:nth-child(odd) {
+body #data_tables .data_table tr:nth-child(odd) {
   background-color: #E7E9EB;
 }
 body .mana_symbol {
