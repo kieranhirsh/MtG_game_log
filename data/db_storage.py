@@ -63,6 +63,10 @@ class DBStorage():
                 rows = self.__session.query(class_).where(getattr(class_, key) == value).all()
             except:
                 raise IndexError("Unable to load Model data. Attribute " + key + " not found")
+        elif key != "" and value == "":
+            rows = []
+        elif key == "" and value != "":
+            raise ValueError("You have speicied a value without a key, that makes no sense")
         else:
             rows = self.__session.query(class_).all()
 
