@@ -358,12 +358,7 @@ def graphs():
             plt_data.update({"%s colours" % ii: 0})
 
         for deck in deck_data:
-            deck_ci_model = getattr(deck, "colour_identity")
-            deck_colours = getattr(deck_ci_model, "colours")
-            deck_num_colours = len(deck_colours)
-            # need to hard code an exception here for colourless decks
-            if deck_colours == "c":
-                deck_num_colours = 0
+            deck_num_colours = utils.find_number_of_colours(deck)
             plt_data["%s colours" % deck_num_colours] += 1
 
         number_of_colours = list(plt_data.keys())
@@ -462,12 +457,7 @@ def graphs():
 
                 if request.form["bar_y"] == "number of decks":
                     for datum in data:
-                        datum_ci_model = getattr(datum, "colour_identity")
-                        datum_colours = getattr(datum_ci_model, "colours")
-                        datum_num_colours = len(datum_colours)
-                        # need to hard code an exception here for colourless decks
-                        if datum_colours == "c":
-                            datum_num_colours = 0
+                        datum_num_colours = utils.find_number_of_colours(datum)
                         xy_data["%s colours" % datum_num_colours] += 1
                 else:
                     raise ValueError("Incorrect Y axis specified: %s" % request.form["bar_y"])
@@ -554,12 +544,7 @@ def graphs():
                     pie_data.update({"%s colours" % ii: 0})
 
                 for datum in data:
-                    datum_ci_model = getattr(datum, "colour_identity")
-                    datum_colours = getattr(datum_ci_model, "colours")
-                    datum_num_colours = len(datum_colours)
-                    # need to hard code an exception here for colourless decks
-                    if datum_colours == "c":
-                        datum_num_colours = 0
+                    datum_num_colours = utils.find_number_of_colours(datum)
                     pie_data["%s colours" % datum_num_colours] += 1
             elif request.form["pie_divisions"] == "owner":
                 players = Player_crud.all(True)

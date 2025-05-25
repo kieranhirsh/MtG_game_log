@@ -29,3 +29,16 @@ def get_ci_data_from_dropdown_inputs(request_form):
     colour_identity_data = storage.get(class_name="Colour_Identity", key="colours", value=desired_ci)
 
     return colour_identity_data, desired_ci
+
+def find_number_of_colours(deck):
+    # get the colour identity object associated with the input deck objoect
+    deck_ci_model = getattr(deck, "colour_identity")
+    # get the colours of the deck
+    deck_colours = getattr(deck_ci_model, "colours")
+    # count the number of colours
+    deck_num_colours = len(deck_colours)
+    # need to hard code an exception here for colourless decks since len("c") = 1, but we want 0
+    if deck_colours == "c":
+        deck_num_colours = 0
+
+    return deck_num_colours
