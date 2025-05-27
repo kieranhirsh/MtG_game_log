@@ -272,7 +272,6 @@ def data_post():
                     "number_of_decks": num_decks
                 })
 
-        print("colour_identity_data = ", colour_identity_data)
         return render_template(
             'data.html',
             data_type="colour_identity",
