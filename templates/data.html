@@ -76,13 +76,13 @@
 
   <div id="data_tables">
     {% if data_type == "colour_identity" %}
-    {% for colour_identity_num_colours in colour_identities %}
-    <table class="data_table" id="ci_table_{{ colour_identity_num_colours[0].ci_name[0] }}">
+    {% for colour_identity_group_by_num_colours in colour_identities %}
+    <table class="colour_data_table" id="{{ colour_identity_group_by_num_colours[1].num_colours }}_colours_table">
       <tr>
-        <th>Colour Identity</th>
-        <th># Decks</th>
+        <th onclick="sortColourTables(0, 1)">Colour Identity</th>
+        <th onclick="sortColourTables(1, 1)"># Decks</th>
       </tr>
-      {% for colour_identity in colour_identity_num_colours %}
+      {% for colour_identity in colour_identity_group_by_num_colours %}
       <tr>
         <td>
           {% if colour_identity.colours == "skip" %}<b>{% endif %}

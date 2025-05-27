@@ -243,7 +243,7 @@ def data_post():
                 for deck_to_remove in decks_to_remove:
                     colour_identity_decks.remove(deck_to_remove)
 
-                # find the number of decks of the given colour identity deck
+                # find the number of decks of the given colour identity
                 num_decks = len(colour_identity_decks)
 
                 # find the number of colours of the given colour identity
@@ -254,7 +254,8 @@ def data_post():
                 colour_identity_data[num_colours].append({
                     "ci_name": colour_identity.ci_name,
                     "colours": colour_identity.colours,
-                    "number_of_decks": num_decks
+                    "number_of_decks": num_decks,
+                    "num_colours": num_colours
                 })
         else:
             for colour_identity in colour_identities:
@@ -269,7 +270,8 @@ def data_post():
                 colour_identity_data[num_colours].append({
                     "ci_name": colour_identity.ci_name,
                     "colours": colour_identity.colours,
-                    "number_of_decks": num_decks
+                    "number_of_decks": num_decks,
+                    "num_colours": num_colours
                 })
 
         return render_template(
