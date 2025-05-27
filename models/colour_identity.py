@@ -1,7 +1,7 @@
 #!/usr/bin/python
 """ Colour Identity model """
 import uuid
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, Integer
 from sqlalchemy.orm import relationship
 from data import Base
 
@@ -17,6 +17,7 @@ class Colour_Identity(Base):
     id            = Column(String(64), nullable=False, primary_key=True)
     ci_name       = Column("ci_name", String(128), nullable=False)
     colours       = Column("colours", String(128), nullable=False)
+    num_colours   = Column("num_colours", Integer, nullable=False)
     decks         = relationship("Deck", back_populates="colour_identity", cascade="delete, delete-orphan")
 
     # constructor

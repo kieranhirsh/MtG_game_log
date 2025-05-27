@@ -247,7 +247,7 @@ def data_post():
                 num_decks = len(colour_identity_decks)
 
                 # find the number of colours of the given colour identity
-                num_colours = utils.find_number_of_colours_of_ci(colour_identity)
+                num_colours = colour_identity.num_colours
 
                 # add all the relevant data that has been requested
                 colour_identity_data[num_colours][0]["number_of_decks"] += num_decks
@@ -262,7 +262,7 @@ def data_post():
                 num_decks = len(Colour_Identity_crud.get_child_data(colour_identity.id, "Deck", True))
 
                 # find the number of colours of the given colour identity
-                num_colours = utils.find_number_of_colours_of_ci(colour_identity)
+                num_colours = colour_identity.num_colours
 
                 # add all the relevant data that has been requested
                 colour_identity_data[num_colours][0]["number_of_decks"] += num_decks
@@ -398,7 +398,7 @@ def graphs():
             plt_data.update({"%s colours" % ii: 0})
 
         for deck in deck_data:
-            deck_num_colours = utils.find_number_of_colours_of_deck(deck)
+            deck_num_colours = deck.colour_identity.num_colours
             plt_data["%s colours" % deck_num_colours] += 1
 
         number_of_colours = list(plt_data.keys())
@@ -497,7 +497,7 @@ def graphs():
 
                 if request.form["bar_y"] == "number of decks":
                     for datum in data:
-                        datum_num_colours = utils.find_number_of_colours_of_deck(datum)
+                        datum_num_colours = datum.colour_identity.num_colours
                         xy_data["%s colours" % datum_num_colours] += 1
                 else:
                     raise ValueError("Incorrect Y axis specified: %s" % request.form["bar_y"])
@@ -584,7 +584,7 @@ def graphs():
                     pie_data.update({"%s colours" % ii: 0})
 
                 for datum in data:
-                    datum_num_colours = utils.find_number_of_colours_of_deck(datum)
+                    datum_num_colours = deck.colour_identity.num_colours
                     pie_data["%s colours" % datum_num_colours] += 1
             elif request.form["pie_divisions"] == "owner":
                 players = Player_crud.all(True)
