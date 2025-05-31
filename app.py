@@ -467,7 +467,7 @@ def graphs():
                     for datum in data:
                         datum_ci_model = getattr(datum, "colour_identity")
                         datum_colours = getattr(datum_ci_model, "colours")
-                        if not datum_colours:
+                        if "c" in datum_colours:
                             xy_data["colourless"] += 1
                             continue
                         if "w" in datum_colours:
@@ -568,7 +568,7 @@ def graphs():
                 for datum in data:
                     datum_ci_model = getattr(datum, "colour_identity")
                     datum_colours = getattr(datum_ci_model, "colours")
-                    if not datum_colours:
+                    if "c" in datum_colours:
                         pie_data["colourless"] += 1
                         continue
                     if "w" in datum_colours:
