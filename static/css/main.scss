@@ -132,10 +132,10 @@ header {
 }
 
 body {
-  min-height: 100vh;
+  min-height: calc(100vh - 20px);
   margin: 0;
   position: relative;
-  padding: 0 0 0 10px;
+  padding: 0 0 10px 10px;
 }
 
 body::after {
@@ -147,8 +147,9 @@ body::after {
 footer {
   position: absolute;
   bottom: 0;
-  width: 100%;
+  width: calc(100% - 20px);
   height: 20px;
+  border-top: thick solid black;
 }
 
 a {
