@@ -100,7 +100,6 @@ header .navigation nav ul .graphs_menu .graphs_submenu ul {
 
 body {
   min-height: calc(100vh - 20px);
-  margin: 0;
   position: relative;
   padding: 0 0 10px 10px;
 }
