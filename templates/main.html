@@ -11,11 +11,9 @@
   {% endblock head %}
 </head>
 
-<div class="container">
-  {% include "header.html" %}
-  {% block body %}
-  {% endblock body %}
-  {% include "footer.html" %}
-</div>
+{% include "header.html" %}
+{% block body %}
+{% endblock body %}
+{% include "footer.html" %}
 
 </html>
