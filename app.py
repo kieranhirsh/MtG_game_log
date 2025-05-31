@@ -612,7 +612,7 @@ def graphs():
                     pie_data.update({"%s colours" % ii: 0})
 
                 for datum in data:
-                    datum_num_colours = deck.colour_identity.num_colours
+                    datum_num_colours = datum.colour_identity.num_colours
                     pie_data["%s colours" % datum_num_colours] += 1
             elif request.form["pie_divisions"] == "owner":
                 players = Player_crud.all(True)
