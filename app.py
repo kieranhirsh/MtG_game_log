@@ -546,7 +546,9 @@ def graphs():
 
         elif request.form['type'] == "pie":
             if request.form["pie_data"] not in list(model_names.keys()):
-                raise ValueError("Incorrect Data Type specified: %s" % request.form["pie_data"])
+                call_error = True
+                missing_entries.append([request.form["pie_data"], 'Data Type'])
+                return errors.option_not_available('graphs.html', missing_entries)
 
             crud_file = importlib.import_module("crud." + model_names[request.form["pie_data"]]["file"])
             crud_class = getattr(crud_file, model_names[request.form["pie_data"]]["class"])
@@ -613,7 +615,11 @@ def graphs():
                     datum_owner = getattr(datum_player_model, "player_name")
                     pie_data[datum_owner] += 1
             else:
-                raise ValueError("Incorrect Slices specified: %s" % request.form["pie_divisions"])
+                call_error = True
+                missing_entries.append([request.form["pie_divisions"], 'Slices'])
+
+            if call_error:
+                return errors.option_not_available('graphs.html', missing_entries)
 
             labels = list(pie_data.keys())
             values = list(pie_data.values())
