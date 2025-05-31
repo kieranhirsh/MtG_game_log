@@ -14,16 +14,20 @@ def get_ci_data_from_dropdown_inputs(request_form):
     for abbr in ci_raw_list:
         ci_abbr_string += abbr
 
-    # loop over all the colour identities and add their colour abbreviations to a list
-    for ci in all_ci:
-        ci_abbr_list.append(ci.colours)
+    # if no colour identity was selected, we need a useful string for our errors
+    if not ci_abbr_string:
+        desired_ci = "{none}"
+    else:
+        # loop over all the colour identities and add their colour abbreviations to a list
+        for ci in all_ci:
+            ci_abbr_list.append(ci.colours)
 
-    # loop over this list of colour abbreviations and compare each item to the input string
-    for ci_abbr in ci_abbr_list:
-        # the strings are sorted so that anagrams match
-        if sorted(ci_abbr) == sorted(ci_abbr_string):
-            desired_ci = ci_abbr
-            break
+        # loop over this list of colour abbreviations and compare each item to the input string
+        for ci_abbr in ci_abbr_list:
+            # the strings are sorted so that anagrams match
+            if sorted(ci_abbr) == sorted(ci_abbr_string):
+                desired_ci = ci_abbr
+                break
 
     # find the desired colour identity object (will be empty is the desired colour identity doesn't exist)
     colour_identity_data = storage.get(class_name="Colour_Identity", key="colours", value=desired_ci)
