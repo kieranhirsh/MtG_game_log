@@ -1,9 +1,3 @@
-html,
-body {
-  margin: 0;
-  padding: 10px 0 30px 10px;
-}
-
 body #menu {
   display: none;
 }
@@ -36,10 +30,6 @@ body #data_tables .data_table tr:nth-child(odd), body #data_tables .colour_data_
 body .mana_symbol {
   height: 14px;
   width: 14px;
-}
-
-a {
-  color: black;
 }
 
 /*# sourceMappingURL=data.css.map */

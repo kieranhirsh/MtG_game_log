@@ -1,20 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "main.html" %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link type="text/css" rel="stylesheet" href="../static/css/data.css">
-  <link type="text/css" rel="stylesheet" href="../static/css/error.css">
-  <link type="text/css" rel="stylesheet" href="../static/css/ci_dropdown.css">
+  {% block head %}
+  <link rel="stylesheet" type="text/css" href="../static/css/data.css">
+  <link rel="stylesheet" type="text/css" href="../static/css/error.css">
+  <link rel="stylesheet" type="text/css" href="../static/css/ci_dropdown.css">
   <script type="text/javascript" src="../static/js/data.js"></script>
   <script type="text/javascript" src="../static/js/ci_dropdown.js"></script>
-  <link rel="icon" type="img/png" href="../static/img/card_back.png">
   <title>M:tG Game Logger</title>
-</head>
+  {% endblock head %}
 
-{% include "header.html" %}
+{% block body %}
 <body pg-name="data" js="off">
   {% block error %}
   {% endblock error %}
@@ -141,5 +136,4 @@
     {% endif %}
   </div>
 </body>
-{% include "footer.html" %}
-</html>
+{% endblock body %}

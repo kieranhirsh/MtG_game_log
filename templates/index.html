@@ -1,15 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link type="text/css" rel="stylesheet" href="../static/css/index.css">
-    <link rel="icon" type="img/png" href="../static/img/card_back.png">
-    <title>M:tG Game Logger</title>
-  </head>
+{% extends "main.html" %}
 
-{% include "header.html" %}
+  {% block head %}
+  <title>M:tG Game Logger</title>
+  {% endblock head %}
+
+{% block body %}
 <body pg-name="index" js="off">
     Welcome to Kieran's Magic: the Gathering game logger, for all your game tracking needs.<br><br>
     To get started, head to the Input page and create a player for yourself.<br>
@@ -20,5 +15,4 @@
     Select "Player" to view how many decks each player owns.<br><br>
     The Graphs page lets you view data in either bar chart or pie chart form.
 </body>
-{% include "footer.html" %}
-</html>
+{% endblock body %}

@@ -1,18 +1,8 @@
-html,
-body {
-  margin: 0;
-  padding: 10px 0 30px 10px;
-}
-
 body .data_input {
   display: none;
 }
 body .data_input .type {
   display: none;
-}
-
-a {
-  color: black;
 }
 
 /*# sourceMappingURL=graphs.css.map */
