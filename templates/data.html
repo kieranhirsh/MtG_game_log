@@ -14,8 +14,8 @@
   <title>M:tG Game Logger</title>
 </head>
 
+{% include "header.html" %}
 <body pg-name="data" js="off">
-  {% include "header.html" %}
   {% block error %}
   {% endblock error %}
   <div id="dropdown">
@@ -140,7 +140,6 @@
     </table>
     {% endif %}
   </div>
-  {% include "footer.html" %}
 </body>
-
+{% include "footer.html" %}
 </html>

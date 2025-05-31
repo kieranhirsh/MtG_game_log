@@ -12,8 +12,8 @@
   <title>M:tG Game Logger</title>
 </head>
 
+{% include "header.html" %}
 <body pg-name="graphs" js="off">
-  {% include "header.html" %}
   {% block error %}
   {% endblock error %}
   {% if graph_type == "example" %}
@@ -93,8 +93,6 @@
     </div>
   </div>
   {% endif %}
-
-  {% include "footer.html" %}
 </body>
-
+{% include "footer.html" %}
 </html>
