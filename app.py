@@ -65,11 +65,15 @@ def input():
 
             Deck_crud.create(data=jsonify(new_deck))
 
-    # Then load the data we need before passing it to the template
+    # Then load the data we need
     colour_identities = Colour_Identity_crud.all(True)
     players = Player_crud.all(True)
 
-    return render_template('input.html', method="create", colour_identities=colour_identities, players=players)
+    # prepare data to pass to the template
+    html_data = {"colour_identities": colour_identities,
+                 "players": players}
+
+    return render_template('input.html', method="create", data=html_data)
 
 @app.route('/input/edit', methods=['GET', 'POST'])
 def input_edit():
@@ -132,12 +136,10 @@ def input_edit():
 
             Deck_crud.update(deck_to_edit["id"], jsonify(new_deck_data))
 
-    # Then load the data we need before passing it to the template
-    colour_identities = Colour_Identity_crud.all(True)
-    decks = Deck_crud.all(True)
-    players = Player_crud.all(True)
+    # Then load all the database data to pass to the template
+    html_data = utils.load_all_db_data()
 
-    return render_template('input.html', method="edit", colour_identities=colour_identities, decks=decks, players=players)
+    return render_template('input.html', method="edit", data=html_data)
 
 @app.route('/input/delete', methods=['GET', 'POST'])
 def input_delete():
@@ -162,20 +164,28 @@ def input_delete():
                                           'delete')
         module_names[input_type].delete(entry_to_delete['id'])
 
-    # Load the data we need before passing it to the template
+    # Load the data we need
     decks = Deck_crud.all(True)
     players = Player_crud.all(True)
 
-    return render_template('input.html', method="delete", decks=decks, players=players)
+    # prepare data to pass to the template
+    html_data = {"deck": decks,
+                 "players": players}
+
+    return render_template('input.html', method="delete", data=html_data)
 
 @app.route('/data', methods=['GET'])
 def data_get():
     """ Spreadsheets are called here """
-    # Load the data we need before passing it to the template
+    # Load the data we need
     colour_identities = Colour_Identity_crud.all(True)
     players = Player_crud.all(True)
 
-    return render_template('data.html', colour_identities=colour_identities, players=players)
+    # prepare data to pass to the template
+    html_data = {"colour_identities": colour_identities,
+                 "players": players}
+
+    return render_template('data.html', data=html_data)
 
 @app.route('/data', methods=['POST'])
 def data_post():
@@ -274,12 +284,11 @@ def data_post():
                     "num_colours": num_colours
                 })
 
-        return render_template(
-            'data.html',
-            data_type="colour_identity",
-            colour_identities=colour_identity_data,
-            players=players
-        )
+        # prepare data to pass to the template
+        html_data = {"colour_identities": colour_identity_data,
+                     "players": players}
+
+        return render_template('data.html', data_type="colour_identity", data=html_data)
     elif request.form["type"] == "deck":
         decks = Deck_crud.all(True)
         restrictions = []
@@ -329,13 +338,10 @@ def data_post():
         else:
             deck_data = decks
 
-        return render_template(
-            'data.html',
-            data_type="deck",
-            colour_identities=colour_identities,
-            decks=deck_data,
-            players=players
-        )
+        # Then load all the database data to pass to the template
+        html_data = utils.load_all_db_data()
+
+        return render_template('data.html', data_type="deck", data=html_data)
     elif request.form["type"] == "player":
         player_data = []
 
@@ -378,14 +384,17 @@ def data_post():
                     "number_of_decks": num_decks
                 })
 
-        return render_template(
-            'data.html',
-            data_type="player",
-            colour_identities=colour_identities,
-            players=player_data
-        )
+        # prepare data to pass to the template
+        html_data = {"colour_identities": colour_identities,
+                     "players": players}
 
-    return render_template('data.html', colour_identities=colour_identities, players=players)
+        return render_template('data.html', data_type="player", data=html_data)
+
+    # prepare data to pass to the template
+    html_data = {"colour_identities": colour_identities,
+                 "players": players}
+
+    return render_template('data.html', data=html_data)
 
 @app.route('/graphs', methods=['GET', 'POST'])
 def graphs():

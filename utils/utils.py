@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+from crud.colour_identity import Colour_Identity_crud
+from crud.deck import Deck_crud
+from crud.player import Player_crud
 from data import storage
 
 def get_ci_data_from_dropdown_inputs(request_form):
@@ -33,3 +36,14 @@ def get_ci_data_from_dropdown_inputs(request_form):
     colour_identity_data = storage.get(class_name="Colour_Identity", key="colours", value=desired_ci)
 
     return colour_identity_data, desired_ci
+
+def load_all_db_data():
+    colour_identities = Colour_Identity_crud.all(True)
+    decks = Deck_crud.all(True)
+    players = Player_crud.all(True)
+
+    return {
+            "colour_identities": colour_identities,
+            "decks": decks,
+            "players": players
+            }

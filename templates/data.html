@@ -31,7 +31,7 @@
   <div id="menu">
     Under the following conditions (leave a condition blank for no restriction):<br>
     <datalist id="players">
-      {% for player in players %}
+      {% for player in data["players"] %}
       <option value="{{ player.player_name }}">
         {% endfor %}
     </datalist>
@@ -76,7 +76,7 @@
 
   <div id="data_tables">
     {% if data_type == "colour_identity" %}
-    {% for colour_identity_group_by_num_colours in colour_identities %}
+    {% for colour_identity_group_by_num_colours in data["colour_identities"] %}
     <table class="colour_data_table" id="{{ colour_identity_group_by_num_colours[1].num_colours }}_colours_table">
       <tr>
         <th onclick="sortColourTables(0)">Colour Identity</th>
@@ -110,7 +110,7 @@
         <th onclick="sortTable(1)">Owner Name</th>
         <th onclick="sortTable(2)">Colour Identity</th>
       </tr>
-      {% for deck in decks %}
+      {% for deck in data["decks"] %}
       <tr>
         <td>{{ deck.deck_name }}</td>
         <td>{{ deck.player.player_name }}</td>
@@ -131,7 +131,7 @@
         <th onclick="sortTable(0)">Player Name</th>
         <th onclick="sortTable(1)">Number of Decks</th>
       </tr>
-      {% for player in players %}
+      {% for player in data["players"] %}
       <tr>
         <td>{{ player.player_name }}</td>
         <td>{{ player.number_of_decks }}</td>
