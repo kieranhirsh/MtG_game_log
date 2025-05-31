@@ -69,7 +69,7 @@ def input():
     colour_identities = Colour_Identity_crud.all(True)
     players = Player_crud.all(True)
 
-    # prepare data to pass to the template
+    # Prepare data to pass to the template
     html_data = {"colour_identities": colour_identities,
                  "players": players}
 
@@ -168,8 +168,8 @@ def input_delete():
     decks = Deck_crud.all(True)
     players = Player_crud.all(True)
 
-    # prepare data to pass to the template
-    html_data = {"deck": decks,
+    # Prepare data to pass to the template
+    html_data = {"decks": decks,
                  "players": players}
 
     return render_template('input.html', method="delete", data=html_data)
@@ -181,7 +181,7 @@ def data_get():
     colour_identities = Colour_Identity_crud.all(True)
     players = Player_crud.all(True)
 
-    # prepare data to pass to the template
+    # Prepare data to pass to the template
     html_data = {"colour_identities": colour_identities,
                  "players": players}
 
@@ -190,7 +190,7 @@ def data_get():
 @app.route('/data', methods=['POST'])
 def data_post():
     """ Spreadsheets are displayed here """
-    # Load the data we need before passing it to the template
+    # Load the data we need
     colour_identities = Colour_Identity_crud.all(True)
     players = Player_crud.all(True)
 
@@ -284,7 +284,7 @@ def data_post():
                     "num_colours": num_colours
                 })
 
-        # prepare data to pass to the template
+        # Prepare data to pass to the template
         html_data = {"colour_identities": colour_identity_data,
                      "players": players}
 
@@ -338,8 +338,10 @@ def data_post():
         else:
             deck_data = decks
 
-        # Then load all the database data to pass to the template
-        html_data = utils.load_all_db_data()
+        # Prepare data to pass to the template
+        html_data = {"colour_identities": colour_identities,
+                     "decks": deck_data,
+                     "players": players}
 
         return render_template('data.html', data_type="deck", data=html_data)
     elif request.form["type"] == "player":
@@ -384,13 +386,13 @@ def data_post():
                     "number_of_decks": num_decks
                 })
 
-        # prepare data to pass to the template
+        # Prepare data to pass to the template
         html_data = {"colour_identities": colour_identities,
-                     "players": players}
+                     "players": player_data}
 
         return render_template('data.html', data_type="player", data=html_data)
 
-    # prepare data to pass to the template
+    # Prepare data to pass to the template
     html_data = {"colour_identities": colour_identities,
                  "players": players}
 
