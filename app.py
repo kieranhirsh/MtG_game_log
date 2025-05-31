@@ -416,6 +416,9 @@ def graphs():
             example_pie_chart=example_pie_chart
         )
     elif request.method == 'POST':
+        call_error = False
+        missing_entries = []
+
         model_names = {
             "deck": {
                 "file": "deck",
@@ -434,7 +437,11 @@ def graphs():
 
         if request.form['type'] == "bar":
             if request.form["bar_data"] not in list(model_names.keys()):
-                raise ValueError("Incorrect Data Type specified: %s" % request.form["bar_data"])
+                call_error = True
+                missing_entries.append([request.form["bar_data"], 'Data Type'])
+                return errors.option_not_available('graphs.html', missing_entries)
+
+            xy_data = {}
 
             if "no_zeroes" in request.form:
                 no_zeroes = True
@@ -444,8 +451,6 @@ def graphs():
             crud_file = importlib.import_module("crud." + model_names[request.form["bar_data"]]["file"])
             crud_class = getattr(crud_file, model_names[request.form["bar_data"]]["class"])
             data = crud_class.all(True)
-
-            xy_data = {}
 
             # this wants to be a select case, but I'm using Python 3.8 :(
             if request.form["bar_x"] == "colour":
@@ -476,7 +481,8 @@ def graphs():
                         if "g" in datum_colours:
                             xy_data["green"] += 1
                 else:
-                    raise ValueError("Incorrect Y axis specified: %s" % request.form["bar_y"])
+                    call_error = True
+                    missing_entries.append([request.form["bar_y"], 'Y axis'])
             elif request.form["bar_x"] == "colour identity":
                 colour_identities = Colour_Identity_crud.all(True)
 
@@ -492,7 +498,8 @@ def graphs():
                         datum_ci_name = getattr(datum_ci_model, "ci_name") + " (" + getattr(datum_ci_model, "colours") + ")"
                         xy_data[datum_ci_name] += 1
                 else:
-                    raise ValueError("Incorrect Y axis specified: %s" % request.form["bar_y"])
+                    call_error = True
+                    missing_entries.append([request.form["bar_y"], 'Y axis'])
             elif request.form["bar_x"] == "number of colours":
                 for ii in list(range(0,6)):
                     xy_data.update({"%s colours" % ii: 0})
@@ -502,7 +509,8 @@ def graphs():
                         datum_num_colours = datum.colour_identity.num_colours
                         xy_data["%s colours" % datum_num_colours] += 1
                 else:
-                    raise ValueError("Incorrect Y axis specified: %s" % request.form["bar_y"])
+                    call_error = True
+                    missing_entries.append([request.form["bar_y"], 'Y axis'])
             elif request.form["bar_x"] == "owner":
                 players = Player_crud.all(True)
 
@@ -516,9 +524,14 @@ def graphs():
                         datum_owner = getattr(datum_player_model, "player_name")
                         xy_data[datum_owner] += 1
                 else:
-                    raise ValueError("Incorrect Y axis specified: %s" % request.form["bar_y"])
+                    call_error = True
+                    missing_entries.append([request.form["bar_y"], 'Y axis'])
             else:
-                raise ValueError("Incorrect X axis specified: %s" % request.form["bar_x"])
+                call_error = True
+                missing_entries.append([request.form["bar_x"], 'X axis'])
+
+            if call_error:
+                return errors.option_not_available('graphs.html', missing_entries)
 
             x_values = list(xy_data.keys())
             y_values = list(xy_data.values())
