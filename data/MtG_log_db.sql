@@ -72,6 +72,30 @@ INSERT INTO `Decks` VALUES ('15dec003-5456-43ea-a6da-cf981333f6a5','Xyris, Hedro
 UNLOCK TABLES;
 
 --
+-- Table structure for table `Games`
+--
+
+DROP TABLE IF EXISTS `Games`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Games` (
+  `id` varchar(64) NOT NULL,
+  `start` datetime DEFAULT NULL,
+  `end` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Games`
+--
+
+LOCK TABLES `Games` WRITE;
+/*!40000 ALTER TABLE `Games` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Games` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `Players`
 --
 
@@ -107,12 +131,15 @@ CREATE TABLE `Seats` (
   `seat_no` int NOT NULL,
   `ko_turn` int DEFAULT NULL,
   `deck_id` varchar(64) NOT NULL,
+  `game_id` varchar(64) NOT NULL,
   `player_id` varchar(64) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `deck_id` (`deck_id`),
+  KEY `game_id` (`game_id`),
   KEY `player_id` (`player_id`),
-  CONSTRAINT `seats_ibfk_1` FOREIGN KEY (`player_id`) REFERENCES `Players` (`id`),
-  CONSTRAINT `seats_ibfk_2` FOREIGN KEY (`deck_id`) REFERENCES `Decks` (`id`)
+  CONSTRAINT `seats_ibfk_1` FOREIGN KEY (`deck_id`) REFERENCES `Decks` (`id`),
+  CONSTRAINT `seats_ibfk_2` FOREIGN KEY (`game_id`) REFERENCES `game_id` (`id`),
+  CONSTRAINT `seats_ibfk_3` FOREIGN KEY (`player_id`) REFERENCES `Players` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -134,4 +161,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-01 23:04:56
+-- Dump completed on 2025-06-01 23:13:36
