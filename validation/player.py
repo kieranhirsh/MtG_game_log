@@ -1,5 +1,5 @@
 #!/usr/bin/python
-""" Deck validation """
+""" Player validation """
 import re
 
 class Player_validator():
