@@ -33,6 +33,11 @@ def decks_get_player_decks(deck_id):
     """ returns all the data for a specific deck's owner's decks """
     return jsonify(Deck_crud.get_sibling_data(deck_id, parent_type="player"))
 
+@api_routes.route('/decks/<deck_id>/colour_identity', methods=["GET"])
+def decks_get_colour_identity(deck_id):
+    """ returns the data for a specific deck's colour identity """
+    return jsonify(Deck_crud.get_parent_data(deck_id, parent_type="colour_identity"))
+
 @api_routes.route('/decks/<deck_id>/colour_identity_decks', methods=["GET"])
 def decks_get_colour_identity_decks(deck_id):
     """ returns the data for all deck's that share a specific deck's colour identity """
