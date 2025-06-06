@@ -66,28 +66,24 @@ class Deck_crud():
         if 'colour_identity_id' not in data:
             abort(400, "Missing colour identity id")
 
-        exists = storage.get(class_name = 'Player', key = 'id', value = data["player_id"])
-        if exists is None:
-            abort(400, "Specified player does not exist")
-        exists = storage.get(class_name = 'Colour_Identity', key = 'id', value = data["colour_identity_id"])
-        if exists is None:
-            abort(400, "Specified colour identity does not exist")
+        test_deck = {
+            "deck_name": data["deck_name"],
+            "player_id": data["player_id"],
+            "colour_identity_id": data["colour_identity_id"]
+        }
+        Deck_validator.is_valid(test_deck)
 
         new_deck = Deck(
             deck_name=data["deck_name"],
             player_id=data["player_id"],
             colour_identity_id=data["colour_identity_id"]
         )
-        is_valid = Deck_validator.is_valid(new_deck)
 
-        if is_valid:
-            try:
-                storage.add(new_deck)
-            except IndexError as exc:
-                print("Error: ", exc)
-                return "Unable to add new Deck\n"
-        else:
-            raise ValueError("Invalid deck")
+        try:
+            storage.add(new_deck)
+        except IndexError as exc:
+            print("Error: ", exc)
+            return "Unable to add new Deck\n"
 
         if return_model_object:
             return new_deck
@@ -110,12 +106,12 @@ class Deck_crud():
             data = data.get_json()
 
         # validate all possible inputs
-        if 'deck_name' in data:
-            Deck_validator.valid_deck_name(data["deck_name"])
-        if 'player_id' in data:
-            Deck_validator.valid_player_id(data["player_id"])
-        if 'colour_identity_id' in data:
-            Deck_validator.valid_player_id(data["colour_identity_id"])
+        test_deck = {
+            "deck_name": data["deck_name"],
+            "player_id": data["player_id"],
+            "colour_identity_id": data["colour_identity_id"]
+        }
+        Deck_validator.is_valid(test_deck)
 
         try:
             result = storage.update('Deck', deck_id, data, Deck.can_update)

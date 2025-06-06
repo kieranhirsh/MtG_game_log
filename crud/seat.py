@@ -74,15 +74,14 @@ class Seat_crud():
         if 'player_id' not in data:
             abort(400, "Missing player id")
 
-        exists = storage.get(class_name = 'Deck', key = 'id', value = data["deck_id"])
-        if exists is None:
-            abort(400, "Specified deck does not exist")
-        exists = storage.get(class_name = 'Game', key = 'id', value = data["game_id"])
-        if exists is None:
-            abort(400, "Specified game does not exist")
-        exists = storage.get(class_name = 'Player', key = 'id', value = data["player_id"])
-        if exists is None:
-            abort(400, "Specified player does not exist")
+        test_seat = {
+            "seat_no": data["seat_no"],
+            "ko_turn": data["ko_turn"],
+            "deck_id": data["deck_id"],
+            "game_id": data["game_id"],
+            "player_id": data["player_id"]
+        }
+        Seat_validator.is_valid(test_seat)
 
         new_seat = Seat(
             seat_no=data["seat_no"],
@@ -91,16 +90,12 @@ class Seat_crud():
             game_id=data["game_id"],
             player_id=data["player_id"]
         )
-        is_valid = Seat_validator.is_valid(new_seat)
 
-        if is_valid:
-            try:
-                storage.add(new_seat)
-            except IndexError as exc:
-                print("Error: ", exc)
-                return "Unable to add new Seat\n"
-        else:
-            raise ValueError("Invalid seat")
+        try:
+            storage.add(new_seat)
+        except IndexError as exc:
+            print("Error: ", exc)
+            return "Unable to add new Seat\n"
 
         if return_model_object:
             return new_seat
@@ -125,16 +120,14 @@ class Seat_crud():
             data = data.get_json()
 
         # validate all possible inputs
-        if 'seat_no' in data:
-            Seat_validator.valid_seat_no(data["seat_no"])
-        if 'ko_turn' in data:
-            Seat_validator.valid_ko_turn(data["ko_turn"])
-        if 'deck_id' in data:
-            Seat_validator.valid_deck_id(data["deck_id"])
-        if 'game_id' in data:
-            Seat_validator.valid_game_id(data["game_id"])
-        if 'player_id' in data:
-            Seat_validator.valid_player_id(data["player_id"])
+        test_seat = {
+            "seat_no": data["seat_no"],
+            "ko_turn": data["ko_turn"],
+            "deck_id": data["deck_id"],
+            "game_id": data["game_id"],
+            "player_id": data["player_id"]
+        }
+        Seat_validator.is_valid(test_seat)
 
         try:
             result = storage.update('Seat', seat_id, data, Seat.can_update)

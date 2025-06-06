@@ -5,9 +5,9 @@ import re
 class Colour_Identity_validator():
     def is_valid(new_colour_identity):
         # check all inputs are valid
-        Colour_Identity_validator.valid_ci_name(new_colour_identity.ci_name)
-        Colour_Identity_validator.valid_colours(new_colour_identity.colours)
-        Colour_Identity_validator.valid_num_colours(new_colour_identity.num_colours)
+        Colour_Identity_validator.valid_ci_name(new_colour_identity["ci_name"])
+        Colour_Identity_validator.valid_colours(new_colour_identity["colours"])
+        Colour_Identity_validator.valid_num_colours(new_colour_identity["num_colours"])
 
         # if all checks are passed, we're good to go
         return True

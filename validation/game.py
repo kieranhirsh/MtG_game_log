@@ -5,8 +5,8 @@ import re
 class Game_validator():
     def is_valid(new_game):
         # check all inputs are valid
-        Game_validator.valid_datetime(new_game.game_start_time)
-        Game_validator.valid_datetime(new_game.game_end_time)
+        Game_validator.valid_datetime(new_game["game_start_time"])
+        Game_validator.valid_datetime(new_game["game_end_time"])
 
         # ensure that end time is after start time
         if new_game.game_start_time > new_game.game_end_time:

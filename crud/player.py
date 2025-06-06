@@ -58,19 +58,20 @@ class Player_crud():
         if 'player_name' not in data:
             abort(400, "Missing player_name")
 
+        test_player = {
+            "player_name": data["player_name"]
+        }
+        Player_validator.is_valid(test_player)
+
         new_player = Player(
             player_name=data["player_name"]
         )
-        is_valid = Player_validator.is_valid(new_player)
 
-        if is_valid:
-            try:
-                storage.add(new_player)
-            except IndexError as exc:
-                print("Error: ", exc)
-                return "Unable to add new Player\n"
-        else:
-            raise ValueError("Invalid player")
+        try:
+            storage.add(new_player)
+        except IndexError as exc:
+            print("Error: ", exc)
+            return "Unable to add new Player\n"
 
         if return_model_object:
             return new_player
@@ -91,8 +92,10 @@ class Player_crud():
             data = data.get_json()
 
         # validate all possible inputs
-        if 'player_name' in data:
-            Player_validator.valid_player_name(data["player_name"])
+        test_player = {
+            "player_name": data["player_name"]
+        }
+        Player_validator.is_valid(test_player)
 
         try:
             result = storage.update('Player', player_id, data, Player.can_update)

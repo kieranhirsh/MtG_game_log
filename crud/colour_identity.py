@@ -62,20 +62,24 @@ class Colour_Identity_crud():
         if 'colours' not in data:
             abort(400, "Missing colours")
 
+        test_colour_identity = {
+            "ci_name": data["ci_name"],
+            "colours": data["colours"],
+            "num_colours": data["num_colours"]
+        }
+        Colour_Identity_validator.is_valid(test_colour_identity)
+
         new_colour_identity = Colour_Identity(
             ci_name=data["ci_name"],
-            colours=data["colours"]
+            colours=data["colours"],
+            num_colours=data["num_colours"]
         )
-        is_valid = Colour_Identity_validator.is_valid(new_colour_identity)
 
-        if is_valid:
-            try:
-                storage.add(new_colour_identity)
-            except IndexError as exc:
-                print("Error: ", exc)
-                return "Unable to add new colour_identity\n"
-        else:
-            raise ValueError("Invalid colour_identity")
+        try:
+            storage.add(new_colour_identity)
+        except IndexError as exc:
+            print("Error: ", exc)
+            return "Unable to add new colour_identity\n"
 
         if return_model_object:
             return new_colour_identity
@@ -97,10 +101,12 @@ class Colour_Identity_crud():
             data = data.get_json()
 
         # validate all possible inputs
-        if 'ci_name' in data:
-            Colour_Identity_validator.valid_ci_name(data["ci_name"])
-        if 'colours' in data:
-            Colour_Identity_validator.valid_colours(data["colours"])
+        test_colour_identity = {
+            "ci_name": data["ci_name"],
+            "colours": data["colours"],
+            "num_colours": data["num_colours"]
+        }
+        Colour_Identity_validator.is_valid(test_colour_identity)
 
         try:
             result = storage.update('Colour_Identity', colour_identity_id, data, Colour_Identity.can_update)

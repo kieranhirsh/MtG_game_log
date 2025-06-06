@@ -5,7 +5,7 @@ import re
 class Player_validator():
     def is_valid(new_player):
         # check all inputs are valid
-        Player_validator.valid_player_name(new_player.player_name)
+        Player_validator.valid_player_name(new_player["player_name"])
 
         # if all checks are passed, we're good to go
         return True

@@ -57,20 +57,22 @@ class Game_crud():
         except:
             data = data.get_json()
 
+        test_game = {
+            "game_start_time": data["game_start_time"],
+            "game_end_time": data["game_end_time"]
+        }
+        Game_validator.is_valid(test_game)
+
         new_game = Game(
             game_start_time=data["game_start_time"],
             game_end_time=data["game_end_time"]
         )
-        is_valid = Game_validator.is_valid(new_game)
 
-        if is_valid:
-            try:
-                storage.add(new_game)
-            except IndexError as exc:
-                print("Error: ", exc)
-                return "Unable to add new Game\n"
-        else:
-            raise ValueError("Invalid game")
+        try:
+            storage.add(new_game)
+        except IndexError as exc:
+            print("Error: ", exc)
+            return "Unable to add new Game\n"
 
         if return_model_object:
             return new_game
@@ -92,10 +94,11 @@ class Game_crud():
             data = data.get_json()
 
         # validate all possible inputs
-        if 'game_start_time' in data:
-            Game_validator.valid_datetime(data["game_start_time"])
-        if 'game_end_time' in data:
-            Game_validator.valid_datetime(data["game_end_time"])
+        test_game = {
+            "game_start_time": data["game_start_time"],
+            "game_end_time": data["game_end_time"]
+        }
+        Game_validator.is_valid(test_game)
 
         try:
             result = storage.update('Game', game_id, data, Game.can_update)
