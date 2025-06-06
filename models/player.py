@@ -17,6 +17,7 @@ class Player(Base):
     id            = Column(String(64), nullable=False, primary_key=True)
     player_name   = Column("player_name", String(128), nullable=False)
     decks         = relationship("Deck", back_populates="player", cascade="delete, delete-orphan")
+    seats         = relationship("Seat", back_populates="player", cascade="delete, delete-orphan")
 
     # constructor
     def __init__(self, *args, **kwargs):

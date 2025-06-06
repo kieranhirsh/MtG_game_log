@@ -20,6 +20,7 @@ class Deck(Base):
     colour_identity_id = Column("colour_identity_id", String(128), ForeignKey('Colour_Identities.id'), nullable=False)
     player             = relationship("Player", back_populates="decks")
     colour_identity    = relationship("Colour_Identity", back_populates="decks")
+    seats              = relationship("Seat", back_populates="deck", cascade="delete, delete-orphan")
 
     # constructor
     def __init__(self, *args, **kwargs):

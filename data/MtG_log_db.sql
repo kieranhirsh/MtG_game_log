@@ -138,7 +138,7 @@ CREATE TABLE `Seats` (
   KEY `game_id` (`game_id`),
   KEY `player_id` (`player_id`),
   CONSTRAINT `seats_ibfk_1` FOREIGN KEY (`deck_id`) REFERENCES `Decks` (`id`),
-  CONSTRAINT `seats_ibfk_2` FOREIGN KEY (`game_id`) REFERENCES `game_id` (`id`),
+  CONSTRAINT `seats_ibfk_2` FOREIGN KEY (`game_id`) REFERENCES `Games` (`id`),
   CONSTRAINT `seats_ibfk_3` FOREIGN KEY (`player_id`) REFERENCES `Players` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

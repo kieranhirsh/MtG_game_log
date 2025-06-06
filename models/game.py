@@ -17,7 +17,7 @@ class Game(Base):
     id            = Column(String(64), nullable=False, primary_key=True)
     start_time    = Column("start_time", DateTime)
     end_time      = Column("end_time", DateTime)
-#    seats         = relationship("Seat", back_populates="game", cascade="delete, delete-orphan")
+    seats         = relationship("Seat", back_populates="game", cascade="delete, delete-orphan")
 
     # constructor
     def __init__(self, *args, **kwargs):

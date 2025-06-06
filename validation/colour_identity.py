@@ -63,10 +63,8 @@ class Colour_Identity_validator():
         return True
 
     def valid_num_colours(num_colours):
-        # there are only 5 valid colours, check that the colours are a subset of those
-        # use regex to check this. this requires lookaheads and I don't get it, but it works
-        # put the regex into regex101.com for a better explanation than I'll ever be able to give
-        if not num_colours % 1 == 0:
+        # ensure that the specified number of colours is an integer
+        if not num_colours % 1. == 0.:
             raise ValueError("Invalid colours specified: {}".format(num_colours))
 
         return True
