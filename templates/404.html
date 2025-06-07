@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="../static/css/main.css">
   <link rel="icon" type="img/png" href="../static/img/card_back.png">
+  {% block head %}
+  {% endblock head %}
 </head>
 
 {% include "header.html" %}
@@ -17,5 +19,7 @@
   </h1>
   The page you're looking for is<br><img src="../static/img/unexpectedly_absent.jpg" height=400>
 </body>
+
+{% include "footer.html" %}
 
 </html>
