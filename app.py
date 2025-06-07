@@ -13,6 +13,9 @@ from utils import utils
 app = Flask(__name__)
 app.register_blueprint(api_routes)
 
+#################
+# Regular pages #
+#################
 @app.route('/')
 def index():
     """ Landing page for the site """
@@ -645,10 +648,17 @@ def graphs():
 
 @app.route('/graphs/advanced')
 def graphs_advanced():
-        return render_template(
-            'graphs.html',
-            advanced=True
-        )
+    return render_template(
+        'graphs.html',
+        advanced=True
+    )
+
+###############
+# Error pages #
+###############
+@app.errorhandler(404)
+def error_404(e):
+    return render_template('404.html')
 
 # Set debug=True for the server to auto-reload when there are changes
 if __name__ == '__main__':
