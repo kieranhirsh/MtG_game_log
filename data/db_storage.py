@@ -15,7 +15,8 @@ class DBStorage():
         "Colour_Identity": "colour_identity",
         "Deck": "deck",
         "Game": "game",
-        "Player": "player"
+        "Player": "player",
+        "Seat": "seat"
     }
 
     def __init__(self, Base):
