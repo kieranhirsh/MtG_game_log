@@ -8,9 +8,9 @@ from data import Base
 class Game(Base):
     """ Representation of game """
 
-    all_attribs = ["id", "start_time", "end_time"]
-    can_init    = ["start_time", "end_time"]
-    can_update  = ["start_time", "end_time"]
+    all_attribs = ["id", "game_name", "start_time", "end_time"]
+    can_init    = ["game_name", "start_time", "end_time"]
+    can_update  = ["game_name", "start_time", "end_time"]
 
     # Class attributes defaults
     __tablename__ = 'Games'
