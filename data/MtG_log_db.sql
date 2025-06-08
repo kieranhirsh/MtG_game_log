@@ -80,6 +80,7 @@ DROP TABLE IF EXISTS `Games`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Games` (
   `id` varchar(64) NOT NULL,
+  `game_name` varchar(1024) DEFAULT NULL,
   `start_time` datetime DEFAULT NULL,
   `end_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -161,4 +162,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-01 23:13:36
+-- Dump completed on 2025-06-09  1:36:44

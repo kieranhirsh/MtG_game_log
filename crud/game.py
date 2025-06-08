@@ -58,14 +58,14 @@ class Game_crud():
             data = data.get_json()
 
         test_game = {
-            "game_start_time": data["game_start_time"],
-            "game_end_time": data["game_end_time"]
+            "start_time": data["start_time"],
+            "end_time": data["end_time"]
         }
         Game_validator.is_valid(test_game)
 
         new_game = Game(
-            game_start_time=data["game_start_time"],
-            game_end_time=data["game_end_time"]
+            start_time=data["start_time"],
+            end_time=data["end_time"]
         )
 
         try:
@@ -95,8 +95,8 @@ class Game_crud():
 
         # validate all possible inputs
         test_game = {
-            "game_start_time": data["game_start_time"],
-            "game_end_time": data["game_end_time"]
+            "start_time": data["start_time"],
+            "end_time": data["end_time"]
         }
         Game_validator.is_valid(test_game)
 
