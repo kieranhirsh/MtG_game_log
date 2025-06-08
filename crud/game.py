@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """ CRUD layer """
-from flask import request
+from flask import request, jsonify
 from data import storage
 from models.game import Game
 from validation.game import Game_validator
@@ -123,6 +123,28 @@ class Game_crud():
         }
 
         return output
+
+    @staticmethod
+    def update_game_name(game_id):
+        # find the game entry to be updated
+        game_object = Game_crud.specific("id", game_id)
+
+        # get the data we need to generate the name
+        start_time = str(game_object["start_time"])
+        end_time = str(game_object["end_time"])
+
+        # generate the name
+        game_name = start_time[:-3] + " - " + end_time[-8:-3]
+
+        # create an updated game dict
+        updated_game = {
+            "game_name": game_name,
+            "start_time": start_time,
+            "end_time": end_time,
+        }
+
+        # update the game entry
+        return Game_crud.update(game_id, data=jsonify(updated_game))
 
     @staticmethod
     def delete(game_id):
