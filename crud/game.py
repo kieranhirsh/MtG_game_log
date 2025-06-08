@@ -23,6 +23,7 @@ class Game_crud():
         for row in result:
             output.append({
                 "id": row.id,
+                "game_name": row.game_name,
                 "start_time": row.start_time,
                 "end_time": row.end_time
             })
@@ -43,6 +44,7 @@ class Game_crud():
 
         output = {
             "id": result[0].id,
+            "game_name": result[0].game_name,
             "start_time": result[0].start_time,
             "end_time": result[0].end_time
         }
@@ -57,17 +59,17 @@ class Game_crud():
         except:
             data = data.get_json()
 
-        test_game = {
-            "game_name": data["game_name"],
-            "start_time": data["start_time"],
-            "end_time": data["end_time"]
-        }
+        test_game = {}
+        for field in Game.can_init:
+            test_game[field] = ""
+        for key in data:
+            test_game[key] = data[key]
         Game_validator.is_valid(test_game)
 
         new_game = Game(
-            game_name=data["game_name"],
-            start_time=data["start_time"],
-            end_time=data["end_time"]
+            game_name=test_game["game_name"],
+            start_time=test_game["start_time"],
+            end_time=test_game["end_time"]
         )
 
         try:
