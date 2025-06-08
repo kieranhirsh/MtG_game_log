@@ -58,12 +58,14 @@ class Game_crud():
             data = data.get_json()
 
         test_game = {
+            "game_name": data["game_name"],
             "start_time": data["start_time"],
             "end_time": data["end_time"]
         }
         Game_validator.is_valid(test_game)
 
         new_game = Game(
+            game_name=data["game_name"],
             start_time=data["start_time"],
             end_time=data["end_time"]
         )
@@ -79,6 +81,7 @@ class Game_crud():
 
         output = {
             "id": new_game.id,
+            "game_name": new_game.game_name,
             "start_time": new_game.start_time,
             "end_time": new_game.end_time
         }
@@ -95,6 +98,7 @@ class Game_crud():
 
         # validate all possible inputs
         test_game = {
+            "game_name": data["game_name"],
             "start_time": data["start_time"],
             "end_time": data["end_time"]
         }
@@ -111,6 +115,7 @@ class Game_crud():
 
         output = {
             "id": result.id,
+            "game_name": result.game_name,
             "start_time": result.start_time,
             "end_time": result.end_time
         }
@@ -181,6 +186,7 @@ class Game_crud():
         for sibling in sibling_data:
             output.append({
                 "id": sibling.id,
+                "game_name": sibling.game_name,
                 "start_time": sibling.start_time,
                 "end_time": sibling.end_time
             })

@@ -15,6 +15,7 @@ class Game(Base):
     # Class attributes defaults
     __tablename__ = 'Games'
     id            = Column(String(64), nullable=False, primary_key=True)
+    game_name     = Column("game_name", String(1024))
     start_time    = Column("start_time", DateTime)
     end_time      = Column("end_time", DateTime)
     seats         = relationship("Seat", back_populates="game", cascade="delete, delete-orphan")
