@@ -102,11 +102,15 @@ class Game_crud():
         except:
             data = data.get_json()
 
+        call_validator = False
         game_to_update = Game_crud.specific("id", game_id)
         for key in data:
             game_to_update[key] = data[key]
+            if key == "start_time" or key == "end_time":
+                call_validator = True
 
-        Game_validator.is_valid(game_to_update)
+        if call_validator:
+            Game_validator.is_valid(game_to_update)
 
         try:
             result = storage.update('Game', game_id, data, Game.can_update)
