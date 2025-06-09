@@ -25,7 +25,8 @@ class Game_crud():
                 "id": row.id,
                 "game_name": row.game_name,
                 "start_time": row.start_time,
-                "end_time": row.end_time
+                "end_time": row.end_time,
+                "game_time": row.game_time
             })
 
         return output
@@ -46,7 +47,8 @@ class Game_crud():
             "id": result[0].id,
             "game_name": result[0].game_name,
             "start_time": result[0].start_time,
-            "end_time": result[0].end_time
+            "end_time": result[0].end_time,
+            "game_time": result[0].game_time
         }
 
         return output
@@ -69,7 +71,8 @@ class Game_crud():
         new_game = Game(
             game_name=test_game["game_name"],
             start_time=test_game["start_time"],
-            end_time=test_game["end_time"]
+            end_time=test_game["end_time"],
+            game_time=test_game["game_time"]
         )
 
         try:
@@ -85,7 +88,8 @@ class Game_crud():
             "id": new_game.id,
             "game_name": new_game.game_name,
             "start_time": new_game.start_time,
-            "end_time": new_game.end_time
+            "end_time": new_game.end_time,
+            "game_time": new_game.game_time
         }
 
         return output
@@ -117,7 +121,8 @@ class Game_crud():
             "id": result.id,
             "game_name": result.game_name,
             "start_time": result.start_time,
-            "end_time": result.end_time
+            "end_time": result.end_time,
+            "game_time": result.game_time
         }
 
         return output
@@ -136,9 +141,27 @@ class Game_crud():
 
         # create an updated game dict
         updated_game = {
-            "game_name": game_name,
-            "start_time": start_time,
-            "end_time": end_time,
+            "game_name": game_name
+        }
+
+        # update the game entry
+        return Game_crud.update(game_id, data=jsonify(updated_game))
+
+    @staticmethod
+    def update_game_time(game_id):
+        # find the game entry to be updated
+        game_object = Game_crud.specific("id", game_id)
+
+        # get the data we need to generate the name
+        start_time = game_object["start_time"]
+        end_time = game_object["end_time"]
+
+        # generate the name
+        game_time = str(end_time - start_time)
+
+        # create an updated game dict
+        updated_game = {
+            "game_time": game_time
         }
 
         # update the game entry
@@ -210,7 +233,8 @@ class Game_crud():
                 "id": sibling.id,
                 "game_name": sibling.game_name,
                 "start_time": sibling.start_time,
-                "end_time": sibling.end_time
+                "end_time": sibling.end_time,
+                "game_time": sibling.game_time
             })
 
         return output

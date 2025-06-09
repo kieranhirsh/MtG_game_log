@@ -73,6 +73,7 @@ def input():
             # logic on creating seats goes here
 
             Game_crud.update_game_name(new_game_object["id"])
+            Game_crud.update_game_time(new_game_object["id"])
         elif input_type == "player":
             new_player = {
                 "player_name": request.form["player_name"]
@@ -158,6 +159,7 @@ def input_edit():
             # logic on updating seats goes here
 
             Game_crud.update_game_name(game_to_edit["id"])
+            Game_crud.update_game_time(game_to_edit["id"])
         elif input_type == "player":
             try:
                 player_to_edit = Player_crud.specific('player_name', request.form['player_name'])

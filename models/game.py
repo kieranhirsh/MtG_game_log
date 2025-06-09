@@ -8,9 +8,9 @@ from data import Base
 class Game(Base):
     """ Representation of game """
 
-    all_attribs = ["id", "game_name", "start_time", "end_time"]
-    can_init    = ["game_name", "start_time", "end_time"]
-    can_update  = ["game_name", "start_time", "end_time"]
+    all_attribs = ["id", "game_name", "start_time", "end_time", "game_time"]
+    can_init    = ["game_name", "start_time", "end_time", "game_time"]
+    can_update  = ["game_name", "start_time", "end_time", "game_time"]
 
     # Class attributes defaults
     __tablename__ = 'Games'
@@ -18,6 +18,7 @@ class Game(Base):
     game_name     = Column("game_name", String(1024))
     start_time    = Column("start_time", DateTime)
     end_time      = Column("end_time", DateTime)
+    game_time     = Column("game_time", String(64))
     seats         = relationship("Seat", back_populates="game", cascade="delete, delete-orphan")
 
     # constructor
