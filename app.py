@@ -6,6 +6,7 @@ from data import storage
 from errors import errors
 from crud.colour_identity import Colour_Identity_crud
 from crud.deck import Deck_crud
+from crud.game import Game_crud
 from crud.player import Player_crud
 from graphs import pie_charts, xy_graphs
 from utils import utils
@@ -36,13 +37,7 @@ def input():
         input_type = request.form["type"]
 
         # this desperately wants to be a select case, but I'm using Python 3.8 :(
-        if input_type == "player":
-            new_player = {
-                "player_name": request.form["player_name"]
-            }
-
-            Player_crud.create(data=jsonify(new_player))
-        elif input_type == "deck":
+        if input_type == "deck":
             call_error = False
             missing_entries = []
 
@@ -67,6 +62,23 @@ def input():
                 }
 
             Deck_crud.create(data=jsonify(new_deck))
+        elif input_type == "game":
+            new_game = {
+                "start_time": request.form["start_time"],
+                "end_time": request.form["end_time"],
+            }
+
+            new_game_object = Game_crud.create(data=jsonify(new_game))
+
+            # logic on creating seats goes here
+
+            Game_crud.update_game_name(new_game_object["id"])
+        elif input_type == "player":
+            new_player = {
+                "player_name": request.form["player_name"]
+            }
+
+            Player_crud.create(data=jsonify(new_player))
 
     # Then load the data we need
     colour_identities = Colour_Identity_crud.all(True)
@@ -86,20 +98,7 @@ def input_edit():
         input_type = request.form["type"]
 
         # this desperately wants to be a select case, but I'm using Python 3.8 :(
-        if input_type == "player":
-            try:
-                player_to_edit = Player_crud.specific('player_name', request.form['player_name'])
-            except:
-                return errors.entry_not_found('input.html', [['Player', 'player_name', request.form['player_name']]], 'edit')
-
-            new_player_data = {}
-            if request.form["new_player_name"]:
-                new_player_data.update({
-                    "player_name": request.form["new_player_name"]
-                })
-
-            Player_crud.update(player_to_edit["id"], jsonify(new_player_data))
-        elif input_type == "deck":
+        if input_type == "deck":
             try:
                 deck_to_edit = Deck_crud.specific('deck_name', request.form['deck_name'])
             except:
@@ -138,6 +137,40 @@ def input_edit():
                 return errors.entry_not_found('input.html', missing_entries, 'edit')
 
             Deck_crud.update(deck_to_edit["id"], jsonify(new_deck_data))
+        elif input_type == "game":
+            try:
+                game_to_edit = Game_crud.specific('game_name', request.form['game_name'])
+            except:
+                return errors.entry_not_found('input.html', [['Game', 'game_name', request.form['game_name']]], 'edit')
+
+            new_game_data = {}
+            if request.form["new_start_time"]:
+                new_game_data.update({
+                    "start_time": request.form["new_start_time"]
+                })
+            if request.form["new_end_time"]:
+                new_game_data.update({
+                    "end_time": request.form["new_end_time"]
+                })
+
+            Game_crud.update(game_to_edit["id"], jsonify(new_game_data))
+
+            # logic on updating seats goes here
+
+            Game_crud.update_game_name(game_to_edit["id"])
+        elif input_type == "player":
+            try:
+                player_to_edit = Player_crud.specific('player_name', request.form['player_name'])
+            except:
+                return errors.entry_not_found('input.html', [['Player', 'player_name', request.form['player_name']]], 'edit')
+
+            new_player_data = {}
+            if request.form["new_player_name"]:
+                new_player_data.update({
+                    "player_name": request.form["new_player_name"]
+                })
+
+            Player_crud.update(player_to_edit["id"], jsonify(new_player_data))
 
     # Then load all the database data to pass to the template
     html_data = utils.load_all_db_data()
@@ -151,6 +184,7 @@ def input_delete():
         # This dict maps an input, taken from the dropdown menu, to the relevant crud class
         module_names = {
             "deck": Deck_crud,
+            "game": Game_crud,
             "player": Player_crud
         }
 
@@ -169,10 +203,12 @@ def input_delete():
 
     # Load the data we need
     decks = Deck_crud.all(True)
+    games = Game_crud.all(True)
     players = Player_crud.all(True)
 
     # Prepare data to pass to the template
     html_data = {"decks": decks,
+                 "games": games,
                  "players": players}
 
     return render_template('input.html', method="delete", data=html_data)

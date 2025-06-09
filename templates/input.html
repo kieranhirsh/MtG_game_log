@@ -18,7 +18,9 @@
     <select name="data_types" id="data_types" onchange="toggleDataType()">
       <option value="" selected disabled hidden>Choose input data type</option>
       <option value="deck">Deck</option>
+      <option value="game">Game</option>
       <option value="player">Player</option>
+      <option value="seat">Seat</option>
     </select>
   </div>
 
@@ -28,28 +30,23 @@
       <option value="{{ colour_identity.ci_name }} ({{ colour_identity.colours }})">
       {% endfor %}
     </datalist>
-    <datalist id="players">
-      {% for player in data["players"] %}
-      <option value="{{ player.player_name }}">
-      {% endfor %}
-    </datalist>
     <datalist id="decks">
       {% for deck in data["decks"] %}
       <option value="{{ deck.deck_name }}">
       {% endfor %}
     </datalist>
+    <datalist id="games">
+      {% for game in data["games"] %}
+      <option value="{{ game.game_name }}">
+      {% endfor %}
+    </datalist>
+    <datalist id="players">
+      {% for player in data["players"] %}
+      <option value="{{ player.player_name }}">
+      {% endfor %}
+    </datalist>
 
     {% if method == "create" %}
-    <div class="data_input" id="player">
-      <h2>Create new player</h2>
-      <form action="/input" method="POST">
-        <input class="type" type="text" id="type" name="type" value="player">
-        <label for="player_name">Player Name: </label>
-        <input type="text" id="player_name" name="player_name" autocomplete="off" required>
-        <input type="submit" value="Create player">
-      </form>
-    </div>
-
     <div class="data_input" id="deck">
       <h2>Create new deck</h2>
       <form action="/input" method="POST">
@@ -68,19 +65,30 @@
       </form>
     </div>
 
-    {% elif method == "edit" %}
-    <div class="data_input" id="player">
-      <h2>Update player</h2>
-      <form action="/input/edit" method="POST">
-        <input class="type" type="text" id="type" name="type" value="player">
-        <label for="player_name">Player to update: </label>
-        <input type="search" id="player_name" name="player_name" list="players" autocomplete="off" required><br>
-        <label for="new_player_name">Updated Player Name: </label>
-        <input type="text" id="new_player_name" name="new_player_name" autocomplete="off" required>
-        <input type="submit" value="Edit player">
+    <div class="data_input" id="game">
+      <h2>Create new game</h2>
+      Time should be in the format YYYY-MM-DD hh:mm:ss (date is required, time is optional)
+      <form action="/input" method="POST">
+        <input class="type" type="text" id="type" name="type" value="game">
+        <label for="start_time">Start Time: </label>
+        <input type="text" id="start_time" name="start_time" autocomplete="off">
+        <label for="end_time">End Time: </label>
+        <input type="text" id="end_time" name="end_time" autocomplete="off">
+        <input type="submit" value="Create game">
       </form>
     </div>
 
+    <div class="data_input" id="player">
+      <h2>Create new player</h2>
+      <form action="/input" method="POST">
+        <input class="type" type="text" id="type" name="type" value="player">
+        <label for="player_name">Player Name: </label>
+        <input type="text" id="player_name" name="player_name" autocomplete="off" required>
+        <input type="submit" value="Create player">
+      </form>
+    </div>
+
+    {% elif method == "edit" %}
     <div class="data_input" id="deck">
       <h2>Update deck</h2>
       <form action="/input/edit" method="POST">
@@ -101,17 +109,34 @@
       </form>
     </div>
 
-    {% elif method == "delete" %}
-    <div class="data_input" id="player">
-      <h2>Delete player</h2>
-      <form action="/input/delete" method="POST">
-        <input class="type" type="text" id="type" name="type" value="player">
-        <label for="player_name">Player Name: </label>
-        <input type="search" id="player_name" name="player_name" list="players" autocomplete="off" required>
-        <input type="submit" value="Delete player">
+    <div class="data_input" id="game">
+      <h2>Update game</h2>
+      Time should be in the format YYYY-MM-DD hh:mm:ss (date is required, time is optional)
+      <form action="/input/edit" method="POST">
+        <input class="type" type="text" id="type" name="type" value="game">
+        <label for="game_name">Game to update: </label>
+        <input type="search" id="game_name" name="game_name" list="games" autocomplete="off" required><br>
+        <label for="new_start_time">Start Time: </label>
+        <input type="text" id="new_start_time" name="new_start_time" autocomplete="off">
+        <label for="new_end_time">End Time: </label>
+        <input type="text" id="new_end_time" name="new_end_time" autocomplete="off">
+        <input type="submit" value="Edit game">
       </form>
     </div>
 
+    <div class="data_input" id="player">
+      <h2>Update player</h2>
+      <form action="/input/edit" method="POST">
+        <input class="type" type="text" id="type" name="type" value="player">
+        <label for="player_name">Player to update: </label>
+        <input type="search" id="player_name" name="player_name" list="players" autocomplete="off" required><br>
+        <label for="new_player_name">Updated Player Name: </label>
+        <input type="text" id="new_player_name" name="new_player_name" autocomplete="off" required>
+        <input type="submit" value="Edit player">
+      </form>
+    </div>
+
+    {% elif method == "delete" %}
     <div class="data_input" id="deck">
       <h2>Delete deck</h2>
       <form action="/input/delete" method="POST">
@@ -119,6 +144,26 @@
         <label for="deck_name">Deck Name: </label>
         <input type="search" id="deck_name" name="deck_name" list="decks" autocomplete="off" required>
         <input type="submit" value="Delete deck">
+      </form>
+    </div>
+
+    <div class="data_input" id="game">
+      <h2>Delete game</h2>
+      <form action="/input/delete" method="POST">
+        <input class="type" type="text" id="type" name="type" value="game">
+        <label for="game_name">Game Start Time: </label>
+        <input type="search" id="game_name" name="game_name" list="games" autocomplete="off" required>
+        <input type="submit" value="Delete game">
+      </form>
+    </div>
+
+    <div class="data_input" id="player">
+      <h2>Delete player</h2>
+      <form action="/input/delete" method="POST">
+        <input class="type" type="text" id="type" name="type" value="player">
+        <label for="player_name">Player Name: </label>
+        <input type="search" id="player_name" name="player_name" list="players" autocomplete="off" required>
+        <input type="submit" value="Delete player">
       </form>
     </div>
     {% endif %}
