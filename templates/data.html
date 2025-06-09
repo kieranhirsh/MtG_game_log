@@ -139,7 +139,7 @@
       <tr>
         <td>{{ (game.start_time|string)[0:10] }}</td>
         <td>{{ (game.start_time|string)[11:16] }}</td>
-        <td>{{ game.game_time }}</td>
+        <td>{{ game.game_time[:-3] }}</td>
       </tr>
       {% endfor %}
     </table>
