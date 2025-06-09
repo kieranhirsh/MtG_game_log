@@ -19,6 +19,7 @@
       <option value="" selected disabled hidden>Choose data type</option>
       <option value="colour_identity">Colour Identity</option>
       <option value="deck">Deck</option>
+      <option value="game">Game</option>
       <option value="player">Player</option>
     </select>
   </div>
@@ -51,6 +52,13 @@
           {% include "ci_dropdown.html" %}
           </div>
         </div>
+        <br><input type="submit" value="Submit">
+      </form>
+    </div>
+
+    <div class="data_type" id="game">
+      <form action="/data" method="POST">
+        <input class="type" type="text" id="type" name="type" value="game">
         <br><input type="submit" value="Submit">
       </form>
     </div>
@@ -115,6 +123,23 @@
             <img class="mana_symbol" src="../static/img/mana_{{ colour }}.svg">
             {% endfor %})
         </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+
+    {% if data_type == "game" %}
+    <table class="data_table" id="game_table">
+      <tr>
+        <th onclick="sortTable(0)">Date</th>
+        <th onclick="sortTable(1)">Start Time</th>
+        <th onclick="sortTable(2)">Game Length (Time)</th>
+      </tr>
+      {% for game in data["games"] %}
+      <tr>
+        <td>{{ (game.start_time|string)[0:10] }}</td>
+        <td>{{ (game.start_time|string)[11:16] }}</td>
+        <td>{{ game.game_time }}</td>
       </tr>
       {% endfor %}
     </table>

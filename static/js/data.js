@@ -3,6 +3,7 @@ function toggleDataType() {
   let DataType = document.getElementById("data_types").value;
   let DivColourIdentity = document.getElementById("colour_identity");
   let DivDeck = document.getElementById("deck");
+  let DivGame = document.getElementById("game");
   let DivPlayer = document.getElementById("player");
 
   DivMenu.style.display = "block";
@@ -10,10 +11,18 @@ function toggleDataType() {
     case "colour_identity":
       DivColourIdentity.style.display = "block";
       DivDeck.style.display = "none";
+      DivGame.style.display = "none";
       DivPlayer.style.display = "none";
       break;
     case "deck":
       DivDeck.style.display = "block";
+      DivColourIdentity.style.display = "none";
+      DivGame.style.display = "none";
+      DivPlayer.style.display = "none";
+      break;
+    case "game":
+      DivGame.style.display = "block";
+      DivDeck.style.display = "none";
       DivColourIdentity.style.display = "none";
       DivPlayer.style.display = "none";
       break;
@@ -21,6 +30,7 @@ function toggleDataType() {
       DivPlayer.style.display = "block";
       DivColourIdentity.style.display = "none";
       DivDeck.style.display = "none";
+      DivGame.style.display = "none";
       break;
   }
 }

@@ -385,6 +385,18 @@ def data_post():
                      "players": players}
 
         return render_template('data.html', data_type="deck", data=html_data)
+    elif request.form["type"] == "game":
+        # Load the data we need
+        colour_identities = Colour_Identity_crud.all(True)
+        games = Game_crud.all(True)
+        players = Player_crud.all(True)
+
+        # Prepare data to pass to the template
+        html_data = {"colour_identities": colour_identities,
+                     "games": games,
+                     "players": players}
+
+        return render_template('data.html', data_type="game", data=html_data)
     elif request.form["type"] == "player":
         player_data = []
 
