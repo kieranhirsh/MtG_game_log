@@ -40,6 +40,7 @@ class Game_crud():
                 "id": row.id,
                 "game_name": row.game_name,
                 "month": row.month,
+                "year": row.year,
                 "start_time": row.start_time,
                 "end_time": row.end_time,
                 "game_time": row.game_time
@@ -63,6 +64,7 @@ class Game_crud():
             "id": result[0].id,
             "game_name": result[0].game_name,
             "month": result[0].month,
+            "year": result[0].year,
             "start_time": result[0].start_time,
             "end_time": result[0].end_time,
             "game_time": result[0].game_time
@@ -84,13 +86,16 @@ class Game_crud():
         for key in data:
             test_game[key] = data[key]
 
-        month_num = test_game["start_time"][5:7]
+        month_num = data["start_time"][5:7]
         test_game["month"] = month_dict[month_num]
+        year = int(data["start_time"][0:4])
+        test_game["year"] = year
         Game_validator.is_valid(test_game)
 
         new_game = Game(
             game_name=test_game["game_name"],
             month=month_dict[month_num],
+            year=year,
             start_time=test_game["start_time"],
             end_time=test_game["end_time"],
             game_time=test_game["game_time"]
@@ -109,6 +114,7 @@ class Game_crud():
             "id": new_game.id,
             "game_name": new_game.game_name,
             "month": new_game.month,
+            "year": new_game.year,
             "start_time": new_game.start_time,
             "end_time": new_game.end_time,
             "game_time": new_game.game_time
@@ -134,6 +140,10 @@ class Game_crud():
         if "start_time" in data:
             month_num = data["start_time"][5:7]
             game_to_update["month"] = month_dict[month_num]
+            data["month"] = month_dict[month_num]
+            year = int(data["start_time"][0:4])
+            game_to_update["year"] = year
+            data["year"] = year
 
         if call_validator:
             Game_validator.is_valid(game_to_update)
@@ -151,6 +161,7 @@ class Game_crud():
             "id": result.id,
             "game_name": result.game_name,
             "month": result.month,
+            "year": result.year,
             "start_time": result.start_time,
             "end_time": result.end_time,
             "game_time": result.game_time
