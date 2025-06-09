@@ -25,7 +25,7 @@ Contains all the functions related to creating, reading, updating, and deleting 
 ### [data/](https://github.com/kieranhirsh/MtG_game_log/tree/main/data)
 Contains stuff to do with the database.
 
-### [data/](https://github.com/kieranhirsh/MtG_game_log/tree/main/errors)
+### [errors/](https://github.com/kieranhirsh/MtG_game_log/tree/main/errors)
 Contains functions to make error handling less ugly.
 
 ### [graphs/](https://github.com/kieranhirsh/MtG_game_log/tree/main/graphs)
@@ -40,7 +40,7 @@ Contains css, javascript, and other front end stuff.
 ### [templates/](https://github.com/kieranhirsh/MtG_game_log/tree/main/templates)
 Contains html stuff.
 
-### [templates/](https://github.com/kieranhirsh/MtG_game_log/tree/main/utils)
+### [utils/](https://github.com/kieranhirsh/MtG_game_log/tree/main/utils)
 Contains utility functions.
 
 ### [validation/](https://github.com/kieranhirsh/MtG_game_log/tree/main/validation)
