@@ -91,11 +91,11 @@ class Player_crud():
         except:
             data = data.get_json()
 
-        # validate all possible inputs
-        test_player = {
-            "player_name": data["player_name"]
-        }
-        Player_validator.is_valid(test_player)
+        player_to_update = Player_crud.specific("id", player_id)
+        for key in data:
+            player_to_update[key] = data[key]
+
+        Player_validator.is_valid(player_to_update)
 
         try:
             result = storage.update('Player', player_id, data, Player.can_update)

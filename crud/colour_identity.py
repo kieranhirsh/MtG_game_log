@@ -100,13 +100,11 @@ class Colour_Identity_crud():
         except:
             data = data.get_json()
 
-        # validate all possible inputs
-        test_colour_identity = {
-            "ci_name": data["ci_name"],
-            "colours": data["colours"],
-            "num_colours": data["num_colours"]
-        }
-        Colour_Identity_validator.is_valid(test_colour_identity)
+        colour_identity_to_update = Colour_Identity_crud.specific("id", colour_identity_id)
+        for key in data:
+            colour_identity_to_update[key] = data[key]
+
+        Colour_Identity_validator.is_valid(colour_identity_to_update)
 
         try:
             result = storage.update('Colour_Identity', colour_identity_id, data, Colour_Identity.can_update)

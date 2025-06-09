@@ -98,13 +98,11 @@ class Game_crud():
         except:
             data = data.get_json()
 
-        # validate all possible inputs
-        test_game = {
-            "game_name": data["game_name"],
-            "start_time": data["start_time"],
-            "end_time": data["end_time"]
-        }
-        Game_validator.is_valid(test_game)
+        game_to_update = Game_crud.specific("id", game_id)
+        for key in data:
+            game_to_update[key] = data[key]
+
+        Game_validator.is_valid(game_to_update)
 
         try:
             result = storage.update('Game', game_id, data, Game.can_update)

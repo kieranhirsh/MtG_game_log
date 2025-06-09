@@ -105,13 +105,11 @@ class Deck_crud():
         except:
             data = data.get_json()
 
-        # validate all possible inputs
-        test_deck = {
-            "deck_name": data["deck_name"],
-            "player_id": data["player_id"],
-            "colour_identity_id": data["colour_identity_id"]
-        }
-        Deck_validator.is_valid(test_deck)
+        deck_to_update = Deck_crud.specific("id", deck_id)
+        for key in data:
+            deck_to_update[key] = data[key]
+
+        Deck_validator.is_valid(deck_to_update)
 
         try:
             result = storage.update('Deck', deck_id, data, Deck.can_update)

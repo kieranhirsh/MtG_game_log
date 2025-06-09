@@ -119,15 +119,11 @@ class Seat_crud():
         except:
             data = data.get_json()
 
-        # validate all possible inputs
-        test_seat = {
-            "seat_no": data["seat_no"],
-            "ko_turn": data["ko_turn"],
-            "deck_id": data["deck_id"],
-            "game_id": data["game_id"],
-            "player_id": data["player_id"]
-        }
-        Seat_validator.is_valid(test_seat)
+        seat_to_update = Seat_crud.specific("id", seat_id)
+        for key in data:
+            seat_to_update[key] = data[key]
+
+        Seat_validator.is_valid(seat_to_update)
 
         try:
             result = storage.update('Seat', seat_id, data, Seat.can_update)
