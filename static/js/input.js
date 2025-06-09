@@ -4,19 +4,21 @@ function toggleDataType() {
   let DivGame = document.getElementById("game");
   let DivPlayer = document.getElementById("player");
 
-  if (DataType === "deck") {
-    DivDeck.style.display = "block";
-    DivGame.style.display = "none";
-    DivPlayer.style.display = "none";
-  }
-  else if (DataType === "game") {
-    DivGame.style.display = "block";
-    DivDeck.style.display = "none";
-    DivPlayer.style.display = "none";
-  }
-  else if (DataType === "player") {
-    DivPlayer.style.display = "block";
-    DivDeck.style.display = "none";
-    DivGame.style.display = "none";
+  switch (DataType) {
+    case "deck":
+      DivDeck.style.display = "block";
+      DivGame.style.display = "none";
+      DivPlayer.style.display = "none";
+      break;
+    case "game":
+      DivGame.style.display = "block";
+      DivDeck.style.display = "none";
+      DivPlayer.style.display = "none";
+      break;
+    case "player":
+      DivPlayer.style.display = "block";
+      DivDeck.style.display = "none";
+      DivGame.style.display = "none";
+      break;
   }
 }
