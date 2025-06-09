@@ -5,6 +5,21 @@ from data import storage
 from models.game import Game
 from validation.game import Game_validator
 
+month_dict = {
+    "01": "January",
+    "02": "February",
+    "03": "March",
+    "04": "April",
+    "05": "May",
+    "06": "June",
+    "07": "July",
+    "08": "August",
+    "09": "September",
+    "10": "October",
+    "11": "November",
+    "12": "December"
+}
+
 class Game_crud():
     @staticmethod
     def all(return_model_object = False):
@@ -24,6 +39,7 @@ class Game_crud():
             output.append({
                 "id": row.id,
                 "game_name": row.game_name,
+                "month": row.month,
                 "start_time": row.start_time,
                 "end_time": row.end_time,
                 "game_time": row.game_time
@@ -46,6 +62,7 @@ class Game_crud():
         output = {
             "id": result[0].id,
             "game_name": result[0].game_name,
+            "month": result[0].month,
             "start_time": result[0].start_time,
             "end_time": result[0].end_time,
             "game_time": result[0].game_time
@@ -66,10 +83,14 @@ class Game_crud():
             test_game[field] = ""
         for key in data:
             test_game[key] = data[key]
+
+        month_num = test_game["start_time"][5:7]
+        test_game["month"] = month_dict[month_num]
         Game_validator.is_valid(test_game)
 
         new_game = Game(
             game_name=test_game["game_name"],
+            month=month_dict[month_num],
             start_time=test_game["start_time"],
             end_time=test_game["end_time"],
             game_time=test_game["game_time"]
@@ -87,6 +108,7 @@ class Game_crud():
         output = {
             "id": new_game.id,
             "game_name": new_game.game_name,
+            "month": new_game.month,
             "start_time": new_game.start_time,
             "end_time": new_game.end_time,
             "game_time": new_game.game_time
@@ -109,6 +131,10 @@ class Game_crud():
             if key == "start_time" or key == "end_time":
                 call_validator = True
 
+        if "start_time" in data:
+            month_num = data["start_time"][5:7]
+            game_to_update["month"] = month_dict[month_num]
+
         if call_validator:
             Game_validator.is_valid(game_to_update)
 
@@ -124,6 +150,7 @@ class Game_crud():
         output = {
             "id": result.id,
             "game_name": result.game_name,
+            "month": result.month,
             "start_time": result.start_time,
             "end_time": result.end_time,
             "game_time": result.game_time
