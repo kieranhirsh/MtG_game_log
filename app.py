@@ -8,6 +8,7 @@ from crud.colour_identity import Colour_Identity_crud
 from crud.deck import Deck_crud
 from crud.game import Game_crud
 from crud.player import Player_crud
+from crud.seat import Seat_crud
 from graphs import pie_charts, xy_graphs
 from utils import utils
 
@@ -63,15 +64,47 @@ def input():
 
             Deck_crud.create(data=jsonify(new_deck))
         elif input_type == "game":
+            # get the data needed to create a new Game
             new_game = {
                 "start_time": request.form["start_time"],
                 "end_time": request.form["end_time"],
             }
 
+            # create the new Game
             new_game_object = Game_crud.create(data=jsonify(new_game))
 
-            # logic on creating seats goes here
+            # get the data needed to create new Seats
+            game_decks = request.form.getlist("game_decks")
+            game_players = request.form.getlist("game_players")
+            game_ko_turns = request.form.getlist("game_ko_turns")
 
+            # make sure each seat has a deck, player, and ko_turn
+            if (len(game_decks) != len(game_players)) or (len(game_decks) != len(game_ko_turns)):
+                raise ValueError("Error: a Game must have the same number of decks, players, and ko turns")
+
+            # loop over number of seats
+            for i in range(len(game_decks)):
+                # find the deck and player id, and ko_turn, for each seat
+                desired_deck = Deck_crud.specific(key="deck_name", value=game_decks[i])
+                desired_player = Player_crud.specific(key="player_name", value=game_players[i])
+                if game_ko_turns[i]:
+                    ko_turn = int(game_ko_turns[i])
+                else:
+                    ko_turn = None
+
+                new_seat = {
+                    "seat_no": i + 1,
+                    "ko_turn": ko_turn,
+                    "deck_id": desired_deck["id"],
+                    "game_id": new_game_object["id"],
+                    "player_id": desired_player["id"]
+                }
+
+                # create the new seat
+                Seat_crud.create(data=jsonify(new_seat))
+
+            # update the game name, game length in time, game length in turns, and game winner
+            # these were left empty because they are derived quantities, so it's easiet to wait until all inputs were added to the database
             Game_crud.update_game_name(new_game_object["id"])
             Game_crud.update_game_time(new_game_object["id"])
         elif input_type == "player":
@@ -83,10 +116,12 @@ def input():
 
     # Then load the data we need
     colour_identities = Colour_Identity_crud.all(True)
+    decks = Deck_crud.all(True)
     players = Player_crud.all(True)
 
     # Prepare data to pass to the template
     html_data = {"colour_identities": colour_identities,
+                 "decks": decks,
                  "players": players}
 
     return render_template('input.html', method="create", data=html_data)

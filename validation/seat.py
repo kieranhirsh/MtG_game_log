@@ -23,7 +23,7 @@ class Seat_validator():
 
     def valid_ko_turn(ko_turn):
         # ensure that the specified knock-out turn is an integer
-        if ko_turn % 1. != 0.:
+        if (ko_turn is not None) and (ko_turn % 1. != 0.):
             raise ValueError("Invalid seat_no specified: {}".format(ko_turn))
 
         return True
