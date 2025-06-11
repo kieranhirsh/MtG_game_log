@@ -21,7 +21,7 @@ class Seat(Base):
     game_id       = Column("game_id", String(128), ForeignKey('Games.id'), nullable=False)
     player_id     = Column("player_id", String(128), ForeignKey('Players.id'), nullable=False)
     deck          = relationship("Deck", back_populates="seats")
-    game          = relationship("Game", back_populates="seats")
+    game          = relationship("Game", back_populates="seats", cascade="delete")
     player        = relationship("Player", back_populates="seats")
 
     # constructor
