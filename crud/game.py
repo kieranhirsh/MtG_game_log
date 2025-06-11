@@ -180,13 +180,13 @@ class Game_crud():
         return output
 
     @staticmethod
-    def update_game_name(game_id):
+    def update_game_name(game_id, return_model_object = False):
         # find the game entry to be updated
-        game_object = Game_crud.specific("id", game_id)
+        game_object = Game_crud.specific("id", game_id, True)
 
         # get the data we need to generate the name
-        start_time = str(game_object["start_time"])
-        end_time = str(game_object["end_time"])
+        start_time = str(game_object[0].start_time)
+        end_time = str(game_object[0].end_time)
 
         # generate the name
         game_name = start_time[:-3] + " - " + end_time[-8:-3]
@@ -197,16 +197,16 @@ class Game_crud():
         }
 
         # update the game entry
-        return Game_crud.update(game_id, data=jsonify(updated_game))
+        return Game_crud.update(game_id=game_id, data=jsonify(updated_game), return_model_object=return_model_object)
 
     @staticmethod
-    def update_game_time(game_id):
+    def update_game_time(game_id, return_model_object = False):
         # find the game entry to be updated
-        game_object = Game_crud.specific("id", game_id)
+        game_object = Game_crud.specific("id", game_id, True)
 
         # get the data we need to generate the name
-        start_time = game_object["start_time"]
-        end_time = game_object["end_time"]
+        start_time = game_object[0].start_time
+        end_time = game_object[0].end_time
 
         # generate the name
         game_time = str(end_time - start_time)
@@ -217,10 +217,10 @@ class Game_crud():
         }
 
         # update the game entry
-        return Game_crud.update(game_id, data=jsonify(updated_game))
+        return Game_crud.update(game_id=game_id, data=jsonify(updated_game), return_model_object=return_model_object)
 
     @staticmethod
-    def update_game_winner(game_id):
+    def update_game_winner(game_id, return_model_object = False):
         # find the game entry to be updated
         game_object = Game_crud.specific("id", game_id, True)
 
@@ -236,7 +236,7 @@ class Game_crud():
                 print(updated_game)
 
         # update the game entry
-        return Game_crud.update(game_id, data=jsonify(updated_game))
+        return Game_crud.update(game_id=game_id, data=jsonify(updated_game), return_model_object=return_model_object)
 
     @staticmethod
     def delete(game_id):
