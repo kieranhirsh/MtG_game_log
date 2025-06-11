@@ -134,12 +134,20 @@
         <th onclick="sortTable(0)">Date</th>
         <th onclick="sortTable(1)">Start Time</th>
         <th onclick="sortTable(2)">Game Length (Time)</th>
+        <th onclick="sortTable(3)">Winner</th>
+        {% for i in range(data["num_seats"]) %}
+        <th onclick="sortTable({{ i + 4 }})">Player {{ i + 1 }}</th>
+        {% endfor %}
       </tr>
       {% for game in data["games"] %}
       <tr>
         <td>{{ (game.start_time|string)[0:10] }}</td>
         <td>{{ (game.start_time|string)[11:16] }}</td>
         <td>{{ game.game_time[:-3] }}</td>
+        <td>{{ game.winner }}</td>
+        {% for j in range(game.player|length) %}
+        <td>{{ game.player[j].player_name }} - {{ game.deck[j].deck_name }}</td>
+        {% endfor %}
       </tr>
       {% endfor %}
     </table>

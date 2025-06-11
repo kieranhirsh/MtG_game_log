@@ -425,11 +425,25 @@ def data_post():
         colour_identities = Colour_Identity_crud.all(True)
         games = Game_crud.all(True)
         players = Player_crud.all(True)
+        num_seats = 0
+
+        for game in games:
+            seats = Game_crud.get_child_data(game.id, "Seat", True)
+            game.player = [None] * len(seats)
+            game.deck = [None] * len(seats)
+
+            for seat in seats:
+                game.player[seat.seat_no - 1] = seat.player
+                game.deck[seat.seat_no - 1] = seat.deck
+
+            if len(seats) > num_seats:
+                num_seats = len(seats)
 
         # Prepare data to pass to the template
         html_data = {"colour_identities": colour_identities,
                      "games": games,
-                     "players": players}
+                     "players": players,
+                     "num_seats": num_seats}
 
         return render_template('data.html', data_type="game", data=html_data)
     elif request.form["type"] == "player":
