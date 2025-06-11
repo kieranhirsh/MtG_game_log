@@ -43,7 +43,9 @@ class Game_crud():
                 "year": row.year,
                 "start_time": row.start_time,
                 "end_time": row.end_time,
-                "game_time": row.game_time
+                "game_time": row.game_time,
+                "winning_deck_id": row.winning_deck_id,
+                "winning_player_id": row.winning_player_id
             })
 
         return output
@@ -67,7 +69,9 @@ class Game_crud():
             "year": result[0].year,
             "start_time": result[0].start_time,
             "end_time": result[0].end_time,
-            "game_time": result[0].game_time
+            "game_time": result[0].game_time,
+            "winning_deck_id": result[0].winning_deck_id,
+            "winning_player_id": result[0].winning_player_id
         }
 
         return output
@@ -98,7 +102,9 @@ class Game_crud():
             year=year,
             start_time=test_game["start_time"],
             end_time=test_game["end_time"],
-            game_time=test_game["game_time"]
+            game_time=test_game["game_time"],
+            winning_deck_id=None,
+            winning_player_id=None
         )
 
         try:
@@ -117,7 +123,9 @@ class Game_crud():
             "year": new_game.year,
             "start_time": new_game.start_time,
             "end_time": new_game.end_time,
-            "game_time": new_game.game_time
+            "game_time": new_game.game_time,
+            "winning_deck_id": new_game.winning_deck_id,
+            "winning_player_id": new_game.winning_player_id
         }
 
         return output
@@ -164,7 +172,9 @@ class Game_crud():
             "year": result.year,
             "start_time": result.start_time,
             "end_time": result.end_time,
-            "game_time": result.game_time
+            "game_time": result.game_time,
+            "winning_deck_id": result.winning_deck_id,
+            "winning_player_id": result.winning_player_id
         }
 
         return output
@@ -205,6 +215,25 @@ class Game_crud():
         updated_game = {
             "game_time": game_time
         }
+
+        # update the game entry
+        return Game_crud.update(game_id, data=jsonify(updated_game))
+
+    @staticmethod
+    def update_game_winner(game_id):
+        # find the game entry to be updated
+        game_object = Game_crud.specific("id", game_id, True)
+
+        seats = Game_crud.get_child_data(game_object[0].id, "Seat", True)
+
+        for seat in seats:
+            print(seat.ko_turn)
+            if seat.ko_turn is None:
+                updated_game = {
+                    "winning_deck_id": seat.deck_id,
+                    "winning_player_id": seat.player_id
+                }
+                print(updated_game)
 
         # update the game entry
         return Game_crud.update(game_id, data=jsonify(updated_game))

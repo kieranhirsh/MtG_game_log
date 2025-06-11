@@ -1,27 +1,31 @@
 #!/usr/bin/python
 """ Game model """
 import uuid
-from sqlalchemy import Column, String, Integer, DateTime
+from sqlalchemy import Column, String, Integer, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from data import Base
 
 class Game(Base):
     """ Representation of game """
 
-    all_attribs = ["id", "game_name", "month", "year", "start_time", "end_time", "game_time"]
-    can_init    = ["game_name", "month", "year", "start_time", "end_time", "game_time"]
-    can_update  = ["game_name", "month", "year", "start_time", "end_time", "game_time"]
+    all_attribs = ["id", "game_name", "month", "year", "start_time", "end_time", "game_time", "winning_deck_id", "winning_player_id"]
+    can_init    = ["game_name", "month", "year", "start_time", "end_time", "game_time", "winning_deck_id", "winning_player_id"]
+    can_update  = ["game_name", "month", "year", "start_time", "end_time", "game_time", "winning_deck_id", "winning_player_id"]
 
     # Class attributes defaults
-    __tablename__ = 'Games'
-    id            = Column(String(64), nullable=False, primary_key=True)
-    month         = Column("month", String(16))
-    year          = Column("year", Integer)
-    game_name     = Column("game_name", String(1024))
-    start_time    = Column("start_time", DateTime)
-    end_time      = Column("end_time", DateTime)
-    game_time     = Column("game_time", String(64))
-    seats         = relationship("Seat", back_populates="game", cascade="delete, delete-orphan")
+    __tablename__     = 'Games'
+    id                = Column(String(64), nullable=False, primary_key=True)
+    month             = Column("month", String(16))
+    year              = Column("year", Integer)
+    game_name         = Column("game_name", String(1024))
+    start_time        = Column("start_time", DateTime)
+    end_time          = Column("end_time", DateTime)
+    game_time         = Column("game_time", String(64))
+    winning_deck_id   = Column("winning_deck_id", String(128), ForeignKey('Decks.id'), nullable=False)
+    winning_player_id = Column("winning_player_id", String(128), ForeignKey('Players.id'), nullable=False)
+    winning_deck      = relationship("Deck", back_populates="games_won")
+    winning_player    = relationship("Player", back_populates="games_won")
+    seats             = relationship("Seat", back_populates="game", cascade="delete, delete-orphan")
 
     # constructor
     def __init__(self, *args, **kwargs):

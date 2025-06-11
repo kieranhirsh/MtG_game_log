@@ -107,6 +107,7 @@ def input():
             # these were left empty because they are derived quantities, so it's easiet to wait until all inputs were added to the database
             Game_crud.update_game_name(new_game_object["id"])
             Game_crud.update_game_time(new_game_object["id"])
+            Game_crud.update_game_winner(new_game_object["id"])
         elif input_type == "player":
             new_player = {
                 "player_name": request.form["player_name"]
@@ -431,6 +432,8 @@ def data_post():
             seats = Game_crud.get_child_data(game.id, "Seat", True)
             game.player = [None] * len(seats)
             game.deck = [None] * len(seats)
+
+            game.winner = game.winning_player.player_name + " - " + game.winning_deck.deck_name
 
             for seat in seats:
                 game.player[seat.seat_no - 1] = seat.player
