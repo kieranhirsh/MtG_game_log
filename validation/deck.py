@@ -15,7 +15,7 @@ class Deck_validator():
 
     def valid_deck_name(deck_name):
         # ensure that the deck name is not spaces-only and only contains allowed characters (alphabet, latin letters, and some punctuation)
-        is_valid_deck_name = len(deck_name.strip()) > 0 and re.search("^[a-zA-ZÀ-ʯ,' ()\"\!\?\\\/\-]*$", deck_name)
+        is_valid_deck_name = len(deck_name.strip()) > 0 and re.search("^[a-zA-ZÀ-ʯ,' ()\"\!\?\\\/\-&]*$", deck_name)
         if not is_valid_deck_name:
             raise ValueError("Invalid deck_name specified: {}".format(deck_name))
 
