@@ -36,7 +36,7 @@ function toggleDataType() {
 }
 
 function sortTable(n) {
-  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  var table, rows, switching, i, x, y, header, shouldSwitch, dir, switchcount = 0;
   table = document.getElementsByClassName("data_table");
   switching = true;
   // Set the sorting direction to ascending:
@@ -56,6 +56,7 @@ function sortTable(n) {
       one from current row and one from the next: */
       x = rows[i].getElementsByTagName("td")[n];
       y = rows[i + 1].getElementsByTagName("td")[n];
+      header = rows[0].getElementsByTagName("th")[n].innerHTML;
       /* Check if the two rows should switch place,
       based on the direction, asc or desc: */
       if (dir == "asc") {
@@ -69,16 +70,34 @@ function sortTable(n) {
           switching = true;
           continue;
         }
-        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase() || x.innerHTML.toLowerCase() == 0) {
-          // If so, mark as a switch and break the loop:
-          shouldSwitch = true;
-          break;
+        // Check whether the data is a number of a string
+        if (header === "Game Length (Turns)") {
+          if (parseInt(x.innerHTML) > parseInt(y.innerHTML) || parseInt(x.innerHTML) == 0) {
+            // If we want to switch, mark as a switch and break the loop:
+            shouldSwitch = true;
+            break;
+          }
+        } else {
+          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase() || x.innerHTML.toLowerCase() == 0) {
+            // If we want to switch, mark as a switch and break the loop:
+            shouldSwitch = true;
+            break;
+          }
         }
       } else if (dir == "desc") {
-        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-          // If so, mark as a switch and break the loop:
-          shouldSwitch = true;
-          break;
+        // Check whether the data is a number of a string
+        if (header === "Game Length (Turns)") {
+          if (parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
+            // If so, mark as a switch and break the loop:
+            shouldSwitch = true;
+            break;
+          }
+        } else {
+          if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+            // If so, mark as a switch and break the loop:
+            shouldSwitch = true;
+            break;
+          }
         }
       }
     }
