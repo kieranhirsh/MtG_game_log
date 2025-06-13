@@ -107,6 +107,7 @@ def input():
             # these were left empty because they are derived quantities, so it's easiet to wait until all inputs were added to the database
             Game_crud.update_game_name(new_game_object["id"])
             Game_crud.update_game_time(new_game_object["id"])
+            Game_crud.update_game_turns(new_game_object["id"])
             Game_crud.update_game_winner(new_game_object["id"])
         elif input_type == "player":
             new_player = {
