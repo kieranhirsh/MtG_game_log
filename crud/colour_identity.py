@@ -38,7 +38,7 @@ class Colour_Identity_crud():
             print("Error: ", exc)
             return "Unable to load colour identity data\n"
 
-        if return_model_object:
+        if return_model_object or not result:
             return result
 
         output = {

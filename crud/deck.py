@@ -39,7 +39,7 @@ class Deck_crud():
             print("Error: ", exc)
             return "Unable to load Deck data\n"
 
-        if return_model_object:
+        if return_model_object or not result:
             return result
 
         output = {
