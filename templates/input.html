@@ -66,7 +66,7 @@
 
     <div class="data_input" id="game">
       <h2>Create new game</h2>
-      Time should be in the format YYYY-MM-DD hh:mm:ss (date is required, time is optional)
+      Time must be in the format YYYY-MM-DD hh:mm:ss (date is required, time is optional)
       <form action="/input" method="POST">
         <input class="type" type="text" id="type" name="type" value="game">
         <label for="start_time">Start Time: </label>
@@ -138,14 +138,14 @@
 
     <div class="data_input" id="game">
       <h2>Update game</h2>
-      Time should be in the format YYYY-MM-DD hh:mm:ss (date is required, time is optional)
+      Time must be in the format YYYY-MM-DD hh:mm:ss (date is required, time is optional)
       <form action="/input/edit" method="POST">
         <input class="type" type="text" id="type" name="type" value="game">
         <label for="game_name">Game to update: </label>
         <input type="search" id="game_name" name="game_name" list="games" autocomplete="off" required><br>
-        <label for="new_start_time">Start Time: </label>
+        <label for="new_start_time">Updated Start Time: </label>
         <input type="text" id="new_start_time" name="new_start_time" autocomplete="off">
-        <label for="new_end_time">End Time: </label>
+        <label for="new_end_time">Updated End Time: </label>
         <input type="text" id="new_end_time" name="new_end_time" autocomplete="off">
         <input type="submit" value="Edit game">
       </form>
