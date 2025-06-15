@@ -39,6 +39,14 @@ function sortTable(n) {
   var table, rows, switching, i, x, y, header, shouldSwitch, dir, switchcount = 0;
   table = document.getElementsByClassName("data_table");
   switching = true;
+  header = table[0].rows[0].getElementsByTagName("th")[n].innerHTML;
+  // If the row is "Win Rate", we need to remove the trailing % to be able to convert to a int
+  if (header === "Win Rate") {
+    for (i = 1; i < (table[0].rows.length); i++) {
+      x = table[0].rows[i].getElementsByTagName("td")[n];
+      x.innerHTML = x.innerHTML.slice(0,-1);
+    }
+  }
   // Set the sorting direction to ascending:
   dir = "asc";
   /* Make a loop that will continue until
@@ -56,7 +64,6 @@ function sortTable(n) {
       one from current row and one from the next: */
       x = rows[i].getElementsByTagName("td")[n];
       y = rows[i + 1].getElementsByTagName("td")[n];
-      header = rows[0].getElementsByTagName("th")[n].innerHTML;
       /* Check if the two rows should switch place,
       based on the direction, asc or desc: */
       if (dir == "asc") {
@@ -71,7 +78,13 @@ function sortTable(n) {
           continue;
         }
         // Check whether the data is a number of a string
-        if (header === "Game Length (Turns)") {
+        if (
+          header === "# Decks" ||
+          header === "Games Played" ||
+          header === "Win Rate" ||
+          header === "Game Length (Turns)" ||
+          header === "Number of Decks"
+        ) {
           if (parseInt(x.innerHTML) > parseInt(y.innerHTML) || parseInt(x.innerHTML) == 0) {
             // If we want to switch, mark as a switch and break the loop:
             shouldSwitch = true;
@@ -86,7 +99,13 @@ function sortTable(n) {
         }
       } else if (dir == "desc") {
         // Check whether the data is a number of a string
-        if (header === "Game Length (Turns)") {
+        if (
+          header === "# Decks" ||
+          header === "Games Played" ||
+          header === "Win Rate" ||
+          header === "Game Length (Turns)" ||
+          header === "Number of Decks"
+        ) {
           if (parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
             // If so, mark as a switch and break the loop:
             shouldSwitch = true;
@@ -115,6 +134,13 @@ function sortTable(n) {
         dir = "desc";
         switching = true;
       }
+    }
+  }
+  // If the row is "Win Rate", we need to add the trailing % back
+  if (header === "Win Rate") {
+    for (i = 1; i < (table[0].rows.length); i++) {
+      x = table[0].rows[i].getElementsByTagName("td")[n];
+      x.innerHTML = x.innerHTML + "%";
     }
   }
 }
