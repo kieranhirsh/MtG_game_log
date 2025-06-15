@@ -488,6 +488,7 @@ def data_post():
 
                 # and finally, append all the relevant data that has been requested
                 player_data.append({
+                    "id": player.id,
                     "player_name": player.player_name,
                     "number_of_decks": num_decks
                 })
@@ -497,9 +498,24 @@ def data_post():
                 num_decks = len(Player_crud.get_child_data(player.id, "Deck", True))
 
                 player_data.append({
+                    "id": player.id,
                     "player_name": player.player_name,
                     "number_of_decks": num_decks
                 })
+
+        # find number of games played and win rate
+        # start by looping over all players
+        for player in player_data:
+            # number of games played is the number of child seats
+            player["games_played"] = len(Player_crud.get_child_data(player["id"], "Seat", True))
+
+            # if they've played no games we need to set the win rate manually to avoid divide by zero errors
+            if player["games_played"] == 0:
+                player["win_rate"] = 0
+            else:
+                # number of games won is the number of games with winning_player_id equal to the player's id
+                games_won = len(Game_crud.specific("winning_player_id", player["id"], True))
+                player["win_rate"] = games_won / player["games_played"] * 100
 
         # Prepare data to pass to the template
         html_data = {"colour_identities": colour_identities,

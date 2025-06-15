@@ -164,11 +164,15 @@
       <tr>
         <th onclick="sortTable(0)">Player Name</th>
         <th onclick="sortTable(1)">Number of Decks</th>
+        <th onclick="sortTable(2)">Games Played</th>
+        <th onclick="sortTable(3)">Win Rate</th>
       </tr>
       {% for player in data["players"] %}
       <tr>
         <td>{{ player.player_name }}</td>
         <td>{{ player.number_of_decks }}</td>
+        <td>{{ player.games_played }}</td>
+        <td>{{ player.win_rate }}%</td>
       </tr>
       {% endfor %}
     </table>
