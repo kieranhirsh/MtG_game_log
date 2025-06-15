@@ -105,7 +105,7 @@ class Game_crud():
             start_time=test_game["start_time"],
             end_time=test_game["end_time"],
             game_time=test_game["game_time"],
-            game_turns=test_game["game_turns"],
+            game_turns=None,
             winning_deck_id=None,
             winning_player_id=None
         )
