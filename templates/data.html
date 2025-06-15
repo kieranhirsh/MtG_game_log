@@ -126,7 +126,7 @@
             {% endfor %})
         </td>
         <td>{{ deck.games_played }}</td>
-        <td>{{ deck.win_rate }}%</td>
+        <td>{{ '%0.2f'|format(deck.win_rate) }}%</td>
       </tr>
       {% endfor %}
     </table>
@@ -172,7 +172,7 @@
         <td>{{ player.player_name }}</td>
         <td>{{ player.number_of_decks }}</td>
         <td>{{ player.games_played }}</td>
-        <td>{{ player.win_rate }}%</td>
+        <td>{{ '%0.2f'|format(player.win_rate) }}%</td>
       </tr>
       {% endfor %}
     </table>
