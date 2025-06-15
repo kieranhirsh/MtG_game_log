@@ -416,6 +416,15 @@ def data_post():
         else:
             deck_data = decks
 
+        for deck in deck_data:
+            deck.games_played = len(Deck_crud.get_child_data(deck.id, "Seat", True))
+
+            if deck.games_played == 0:
+                deck.win_rate = 0
+            else:
+                games_won = len(Game_crud.specific("winning_deck_id", deck.id, True))
+                deck.win_rate = games_won / deck.games_played * 100
+
         # Prepare data to pass to the template
         html_data = {"colour_identities": colour_identities,
                      "decks": deck_data,

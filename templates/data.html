@@ -112,6 +112,8 @@
         <th onclick="sortTable(0)">Deck Name</th>
         <th onclick="sortTable(1)">Owner Name</th>
         <th onclick="sortTable(2)">Colour Identity</th>
+        <th onclick="sortTable(3)">Games Played</th>
+        <th onclick="sortTable(4)">Win Rate</th>
       </tr>
       {% for deck in data["decks"] %}
       <tr>
@@ -123,6 +125,8 @@
             <img class="mana_symbol" src="../static/img/mana_{{ colour }}.svg">
             {% endfor %})
         </td>
+        <td>{{ deck.games_played }}</td>
+        <td>{{ deck.win_rate }}%</td>
       </tr>
       {% endfor %}
     </table>
