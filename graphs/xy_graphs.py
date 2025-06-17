@@ -2,6 +2,7 @@
 import base64
 import copy
 import matplotlib.pyplot as plt
+import numpy as np
 from io import BytesIO
 
 def remove_zeroes(x_values, y_values):
@@ -35,6 +36,12 @@ def make_xy_graph(display, x_values, y_values, x_label="", y_label="", title="",
         ax.bar(x_values, y_values, color=bar_colours)
     else:
         raise ValueError("No graph display specified (must be bar or line)")
+
+    if y_label == "Win Rate":
+        ax.set_ylim([0, 100])
+        yticks = np.arange(0, 101, 20)
+        ylabels = [f"{y}%" for y in yticks]
+        ax.set_yticks(yticks, ylabels)
 
     if x_label:
         ax.set_xlabel(x_label)

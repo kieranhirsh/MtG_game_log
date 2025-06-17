@@ -574,7 +574,8 @@ def graphs():
             "deck": "Number of Decks",
             "number of colours": "Number of Colours",
             "number of decks": "Number of Decks",
-            "owner": "Player"
+            "owner": "Player",
+            "win rate": "Win Rate"
         }
 
         if request.form['type'] == "bar":
@@ -665,9 +666,37 @@ def graphs():
                         datum_player_model = getattr(datum, "player")
                         datum_owner = getattr(datum_player_model, "player_name")
                         xy_data[datum_owner] += 1
+                elif request.form["bar_y"] == "win rate":
+                    for datum in data:
+                        datum_player_model = getattr(datum, "player")
+                        datum_owner = getattr(datum_player_model, "player_name")
+                        games_played = len(Player_crud.get_child_data(getattr(datum_player_model, "id"), "Seat", True))
+
+                        if games_played == 0:
+                            xy_data[datum_owner] = 0
+                        else:
+                            games_won = len(Game_crud.specific("winning_player_id", getattr(datum_player_model, "id"), True))
+                            xy_data[datum_owner] = games_won/games_played * 100
                 else:
                     call_error = True
                     missing_entries.append([request.form["bar_y"], 'Y axis'])
+            elif request.form["bar_x"] == "deck":
+                decks = Deck_crud.all(True)
+
+                for deck in decks:
+                    deck_name = getattr(deck, "deck_name")
+                    xy_data.update({deck_name: 0})
+
+                if request.form["bar_y"] == "win rate":
+                    for datum in data:
+                        datum_name = getattr(datum, "deck_name")
+                        games_played = len(Deck_crud.get_child_data(getattr(datum, "id"), "Seat", True))
+
+                        if games_played == 0:
+                            xy_data[datum_name] = 0
+                        else:
+                            games_won = len(Game_crud.specific("winning_deck_id", getattr(datum, "id"), True))
+                            xy_data[datum_name] = games_won/games_played * 100
             else:
                 call_error = True
                 missing_entries.append([request.form["bar_x"], 'X axis'])
