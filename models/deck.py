@@ -1,11 +1,11 @@
 #!/usr/bin/python
-""" Deck model """
+""" deck model """
 import uuid
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 from data import Base
 
-class Deck(Base):
+class deck(Base):
     """ Representation of deck """
 
     all_attribs = ["id", "deck_name", "player_id", "colour_identity_id"]
@@ -13,7 +13,7 @@ class Deck(Base):
     can_update  = ["deck_name", "player_id", "colour_identity_id"]
 
     # Class attributes defaults
-    __tablename__      = 'Decks'
+    __tablename__      = 'decks'
     id                 = Column(String(64), nullable=False, primary_key=True)
     deck_name          = Column("deck_name", String(128), nullable=False)
     player_id          = Column("player_id", String(128), ForeignKey('Players.id'), nullable=False)

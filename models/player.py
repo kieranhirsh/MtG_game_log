@@ -16,7 +16,7 @@ class Player(Base):
     __tablename__ = 'Players'
     id            = Column(String(64), nullable=False, primary_key=True)
     player_name   = Column("player_name", String(128), nullable=False)
-    decks         = relationship("Deck", back_populates="player", cascade="delete, delete-orphan")
+    decks         = relationship("deck", back_populates="player", cascade="delete, delete-orphan")
     seats         = relationship("Seat", back_populates="player", cascade="delete, delete-orphan")
     games_won     = relationship("Game", back_populates="winning_player", cascade="delete, delete-orphan")
 

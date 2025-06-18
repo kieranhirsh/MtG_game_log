@@ -17,10 +17,10 @@ class Seat(Base):
     id            = Column(String(64), nullable=False, primary_key=True)
     seat_no       = Column("seat_no", Integer, nullable=False)
     ko_turn       = Column("ko_turn", Integer)
-    deck_id       = Column("deck_id", String(128), ForeignKey('Decks.id'), nullable=False)
+    deck_id       = Column("deck_id", String(128), ForeignKey('decks.id'), nullable=False)
     game_id       = Column("game_id", String(128), ForeignKey('Games.id'), nullable=False)
     player_id     = Column("player_id", String(128), ForeignKey('Players.id'), nullable=False)
-    deck          = relationship("Deck", back_populates="seats")
+    deck          = relationship("deck", back_populates="seats")
     game          = relationship("Game", back_populates="seats", cascade="delete")
     player        = relationship("Player", back_populates="seats")
 

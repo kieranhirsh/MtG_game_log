@@ -13,7 +13,7 @@ class DBStorage():
     __session = None
     __module_names = {
         "Colour_Identity": "colour_identity",
-        "Deck": "deck",
+        "deck": "deck",
         "Game": "game",
         "Player": "player",
         "Seat": "seat"

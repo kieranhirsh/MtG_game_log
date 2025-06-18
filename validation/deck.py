@@ -1,12 +1,12 @@
 #!/usr/bin/python
-""" Deck validation """
+""" deck validation """
 import re
 from validation import common
 
-class Deck_validator():
+class deck_validator():
     def is_valid(new_deck):
         # check all inputs are valid
-        Deck_validator.valid_deck_name(new_deck["deck_name"])
+        deck_validator.valid_deck_name(new_deck["deck_name"])
         common.valid_id("Player", new_deck["player_id"])
         common.valid_id("Colour_Identity", new_deck["colour_identity_id"])
 

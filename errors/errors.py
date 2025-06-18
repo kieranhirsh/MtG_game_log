@@ -1,7 +1,4 @@
 from flask import render_template
-from crud.colour_identity import Colour_Identity_crud
-from crud.deck import Deck_crud
-from crud.player import Player_crud
 from utils import utils
 
 def entry_not_found(page, missing_entries, method=""):

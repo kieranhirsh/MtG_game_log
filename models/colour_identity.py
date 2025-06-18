@@ -18,7 +18,7 @@ class Colour_Identity(Base):
     ci_name       = Column("ci_name", String(128), nullable=False)
     colours       = Column("colours", String(128), nullable=False)
     num_colours   = Column("num_colours", Integer, nullable=False)
-    decks         = relationship("Deck", back_populates="colour_identity", cascade="delete, delete-orphan")
+    decks         = relationship("deck", back_populates="colour_identity", cascade="delete, delete-orphan")
 
     # constructor
     def __init__(self, *args, **kwargs):

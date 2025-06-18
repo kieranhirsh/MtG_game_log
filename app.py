@@ -5,7 +5,7 @@ from api.v1 import api_routes
 from data import storage
 from errors import errors
 from crud.colour_identity import Colour_Identity_crud
-from crud.deck import Deck_crud
+from crud.deck import deck_crud
 from crud.game import Game_crud
 from crud.player import Player_crud
 from crud.seat import Seat_crud
@@ -62,7 +62,7 @@ def input():
                 "colour_identity_id": colour_identity_data[0].id
                 }
 
-            Deck_crud.create(data=jsonify(new_deck))
+            deck_crud.create(data=jsonify(new_deck))
         elif input_type == "game":
             # get the data needed to create a new Game
             new_game = {
@@ -85,7 +85,7 @@ def input():
             # loop over number of seats
             for i in range(len(game_decks)):
                 # find the deck and player id, and ko_turn, for each seat
-                desired_deck = Deck_crud.specific(key="deck_name", value=game_decks[i])
+                desired_deck = deck_crud.specific(key="deck_name", value=game_decks[i])
                 desired_player = Player_crud.specific(key="player_name", value=game_players[i])
                 if game_ko_turns[i]:
                     ko_turn = int(game_ko_turns[i])
@@ -118,7 +118,7 @@ def input():
 
     # Then load the data we need
     colour_identities = Colour_Identity_crud.all(True)
-    decks = Deck_crud.all(True)
+    decks = deck_crud.all(True)
     players = Player_crud.all(True)
 
     # Prepare data to pass to the template
@@ -138,9 +138,9 @@ def input_edit():
         # this desperately wants to be a select case, but I'm using Python 3.8 :(
         if input_type == "deck":
             try:
-                deck_to_edit = Deck_crud.specific('deck_name', request.form['deck_name'])
+                deck_to_edit = deck_crud.specific('deck_name', request.form['deck_name'])
             except:
-                return errors.entry_not_found('input.html', [['Deck', 'deck_name', request.form['deck_name']]], 'edit')
+                return errors.entry_not_found('input.html', [['deck', 'deck_name', request.form['deck_name']]], 'edit')
 
             new_deck_data = {}
             call_error = False
@@ -174,7 +174,7 @@ def input_edit():
             if call_error:
                 return errors.entry_not_found('input.html', missing_entries, 'edit')
 
-            Deck_crud.update(deck_to_edit["id"], jsonify(new_deck_data))
+            deck_crud.update(deck_to_edit["id"], jsonify(new_deck_data))
         elif input_type == "game":
             try:
                 game_to_edit = Game_crud.specific('game_name', request.form['game_name'])
@@ -222,7 +222,7 @@ def input_delete():
     if request.method == 'POST':
         # This dict maps an input, taken from the dropdown menu, to the relevant crud class
         module_names = {
-            "deck": Deck_crud,
+            "deck": deck_crud,
             "game": Game_crud,
             "player": Player_crud
         }
@@ -241,7 +241,7 @@ def input_delete():
         module_names[input_type].delete(entry_to_delete['id'])
 
     # Load the data we need
-    decks = Deck_crud.all(True)
+    decks = deck_crud.all(True)
     games = Game_crud.all(True)
     players = Player_crud.all(True)
 
@@ -318,7 +318,7 @@ def data_post():
             # loop over all colour identities
             for colour_identity in colour_identities:
                 # find all decks of with the given colour identity
-                colour_identity_decks = Colour_Identity_crud.get_child_data(colour_identity.id, "Deck", True)
+                colour_identity_decks = Colour_Identity_crud.get_child_data(colour_identity.id, "deck", True)
                 decks_to_remove = []
 
                 # loop over those decks
@@ -348,7 +348,7 @@ def data_post():
         else:
             for colour_identity in colour_identities:
                 # if we have no restriction the number of decks is just the length of the array
-                num_decks = len(Colour_Identity_crud.get_child_data(colour_identity.id, "Deck", True))
+                num_decks = len(Colour_Identity_crud.get_child_data(colour_identity.id, "deck", True))
 
                 # find the number of colours of the given colour identity
                 num_colours = colour_identity.num_colours
@@ -368,7 +368,7 @@ def data_post():
 
         return render_template('data.html', data_type="colour_identity", data=html_data)
     elif request.form["type"] == "deck":
-        decks = Deck_crud.all(True)
+        decks = deck_crud.all(True)
         restrictions = []
 
         for form_item in request.form:
@@ -406,7 +406,7 @@ def data_post():
 
             for deck in deck_data:
                 for restriction in restrictions:
-                    parent_data = Deck_crud.get_parent_data(deck.id, restriction["class_type"], True)
+                    parent_data = deck_crud.get_parent_data(deck.id, restriction["class_type"], True)
                     if getattr(parent_data[0], restriction["key"]) != restriction["value"]:
                         decks_to_remove.append(deck)
                         break
@@ -417,7 +417,7 @@ def data_post():
             deck_data = decks
 
         for deck in deck_data:
-            deck.games_played = len(Deck_crud.get_child_data(deck.id, "Seat", True))
+            deck.games_played = len(deck_crud.get_child_data(deck.id, "Seat", True))
 
             if deck.games_played == 0:
                 deck.win_rate = 0
@@ -470,7 +470,7 @@ def data_post():
             # loop over all players
             for player in players:
                 # find all decks owned by a given player
-                player_decks = Player_crud.get_child_data(player.id, "Deck", True)
+                player_decks = Player_crud.get_child_data(player.id, "deck", True)
                 decks_to_remove = []
 
                 # loop over those decks
@@ -495,7 +495,7 @@ def data_post():
         else:
             for player in players:
                 # if we have no restriction the number of decks is just the length of the array
-                num_decks = len(Player_crud.get_child_data(player.id, "Deck", True))
+                num_decks = len(Player_crud.get_child_data(player.id, "deck", True))
 
                 player_data.append({
                     "id": player.id,
@@ -534,7 +534,7 @@ def graphs():
     """ Graphs are displayed here """
     # Load the data we need before passing it to the template
     if request.method == 'GET':
-        deck_data = Deck_crud.all(True)
+        deck_data = deck_crud.all(True)
 
         plt_data = {}
 
@@ -564,7 +564,7 @@ def graphs():
         model_names = {
             "deck": {
                 "file": "deck",
-                "class": "Deck_crud",
+                "class": "deck_crud",
                 "name_column": "deck_name"
             }
         }
@@ -681,7 +681,7 @@ def graphs():
                     call_error = True
                     missing_entries.append([request.form["bar_y"], 'Y axis'])
             elif request.form["bar_x"] == "deck":
-                decks = Deck_crud.all(True)
+                decks = deck_crud.all(True)
 
                 for deck in decks:
                     deck_name = getattr(deck, "deck_name")
@@ -690,7 +690,7 @@ def graphs():
                 if request.form["bar_y"] == "win rate":
                     for datum in data:
                         datum_name = getattr(datum, "deck_name")
-                        games_played = len(Deck_crud.get_child_data(getattr(datum, "id"), "Seat", True))
+                        games_played = len(deck_crud.get_child_data(getattr(datum, "id"), "Seat", True))
 
                         if games_played == 0:
                             xy_data[datum_name] = 0

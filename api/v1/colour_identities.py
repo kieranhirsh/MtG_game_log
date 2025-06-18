@@ -26,7 +26,7 @@ def colour_identities_edit(colour_identity_id):
 @api_routes.route('/colour_identities/<colour_identity_id>/decks', methods=["GET"])
 def colour_identities_get_decks(colour_identity_id):
     """ returns all decks with a given colour identity """
-    return jsonify(Colour_Identity_crud.get_child_data(colour_identity_id, child_type="Deck"))
+    return jsonify(Colour_Identity_crud.get_child_data(colour_identity_id, child_type="deck"))
 
 @api_routes.route('/colour_identities/<colour_identity_id>', methods=["DELETE"])
 def colour_identities_delete(colour_identity_id):

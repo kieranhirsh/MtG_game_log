@@ -22,9 +22,9 @@ class Game(Base):
     end_time          = Column("end_time", DateTime)
     game_time         = Column("game_time", String(64))
     game_turns        = Column("game_turns", Integer)
-    winning_deck_id   = Column("winning_deck_id", String(128), ForeignKey('Decks.id'), nullable=True)
+    winning_deck_id   = Column("winning_deck_id", String(128), ForeignKey('decks.id'), nullable=True)
     winning_player_id = Column("winning_player_id", String(128), ForeignKey('Players.id'), nullable=True)
-    winning_deck      = relationship("Deck", back_populates="games_won")
+    winning_deck      = relationship("deck", back_populates="games_won")
     winning_player    = relationship("Player", back_populates="games_won")
     seats             = relationship("Seat", back_populates="game", cascade="delete, delete-orphan")
 

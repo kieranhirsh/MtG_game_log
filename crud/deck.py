@@ -3,17 +3,17 @@
 from flask import request, abort
 from crud.base_crud import Base_crud
 from data import storage
-from models.deck import Deck
-from validation.deck import Deck_validator
+from models.deck import deck
+from validation.deck import deck_validator
 
-class Deck_crud():
+class deck_crud():
     @staticmethod
     def all(return_model_object = False):
         """ Class method that returns all decks data """
         output = []
 
         try:
-            result = storage.get(class_name = 'Deck')
+            result = storage.get(class_name = 'deck')
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to load decks\n"
@@ -35,10 +35,10 @@ class Deck_crud():
     def specific(key, value, return_model_object = False):
         """ Class method that returns a specific deck's data """
         try:
-            result: Deck = storage.get(class_name = 'Deck', key = key, value = value)
+            result = storage.get(class_name = 'deck', key = key, value = value)
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to load Deck data\n"
+            return "Unable to load deck data\n"
 
         if return_model_object or not result:
             return result
@@ -72,9 +72,9 @@ class Deck_crud():
             "player_id": data["player_id"],
             "colour_identity_id": data["colour_identity_id"]
         }
-        Deck_validator.is_valid(test_deck)
+        deck_validator.is_valid(test_deck)
 
-        new_deck = Deck(
+        new_deck = deck(
             deck_name=data["deck_name"],
             player_id=data["player_id"],
             colour_identity_id=data["colour_identity_id"]
@@ -84,7 +84,7 @@ class Deck_crud():
             storage.add(new_deck)
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to add new Deck\n"
+            return "Unable to add new deck\n"
 
         if return_model_object:
             return new_deck
@@ -106,14 +106,14 @@ class Deck_crud():
         except:
             data = data.get_json()
 
-        deck_to_update = Deck_crud.specific("id", deck_id)
+        deck_to_update = deck_crud.specific("id", deck_id)
         for key in data:
             deck_to_update[key] = data[key]
 
-        Deck_validator.is_valid(deck_to_update)
+        deck_validator.is_valid(deck_to_update)
 
         try:
-            result = storage.update('Deck', deck_id, data, Deck.can_update)
+            result = storage.update('deck', deck_id, data, deck.can_update)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to update specified deck\n"
@@ -132,36 +132,36 @@ class Deck_crud():
 
     @staticmethod
     def delete(deck_id):
-        """ Class method that deletes an existing Deck """
+        """ Class method that deletes an existing deck """
         try:
-            storage.delete('Deck', deck_id)
+            storage.delete('deck', deck_id)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to delete specified deck\n"
 
-        return Deck_crud.all()
+        return deck_crud.all()
 
     @staticmethod
     def get_parent_data(deck_id, parent_type, return_model_object = False):
         return Base_crud.get_parent_data(object_id=deck_id,
-                                         object_type="Deck",
+                                         object_type="deck",
                                          parent_type=parent_type,
                                          return_model_object=return_model_object)
 
     @staticmethod
     def get_sibling_data(deck_id, parent_type, return_model_object = False):
-        """ Class method get the sibling data for a given Deck """
+        """ Class method get the sibling data for a given deck """
         output = []
 
         try:
-            deck_data = storage.get(class_name="Deck", key="id", value=deck_id)
+            deck_data = storage.get(class_name="deck", key="id", value=deck_id)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to find specific deck\n"
 
         parent_id = getattr(deck_data[0], "%s_id" % (parent_type))
         try:
-            sibling_data = storage.get(class_name="Deck", key="%s_id" % (parent_type), value=parent_id)
+            sibling_data = storage.get(class_name="deck", key="%s_id" % (parent_type), value=parent_id)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to find sibling decks\n"
