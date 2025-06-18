@@ -158,8 +158,8 @@ class Seat_crud():
         return Seat_crud.all()
 
     @staticmethod
-    def get_parent_data(colour_identity_id, parent_type, return_model_object = False):
-        return Base_crud.get_parent_data(object_id=colour_identity_id,
+    def get_parent_data(seat_id, parent_type, return_model_object = False):
+        return Base_crud.get_parent_data(object_id=seat_id,
                                          object_type="Seat",
                                          parent_type=parent_type,
                                          return_model_object=return_model_object)

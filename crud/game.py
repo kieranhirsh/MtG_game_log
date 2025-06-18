@@ -279,8 +279,8 @@ class Game_crud():
         return Game_crud.all()
 
     @staticmethod
-    def get_parent_data(colour_identity_id, parent_type, return_model_object = False):
-        return Base_crud.get_parent_data(object_id=colour_identity_id,
+    def get_parent_data(game_id, parent_type, return_model_object = False):
+        return Base_crud.get_parent_data(object_id=game_id,
                                          object_type="Game",
                                          parent_type=parent_type,
                                          return_model_object=return_model_object)
