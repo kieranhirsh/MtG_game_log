@@ -26,7 +26,7 @@ def games_edit(game_id):
 @api_routes.route('/games/<game_id>/seats', methods=["GET"])
 def games_get_seats(game_id):
     """ returns all of a specific game's seats' data """
-    return jsonify(Game_crud.get_child_data(game_id, child_type="seats"))
+    return jsonify(Game_crud.get_child_data(game_id, child_type="Seat"))
 
 @api_routes.route('/games/<game_id>', methods=["DELETE"])
 def games_delete(game_id):

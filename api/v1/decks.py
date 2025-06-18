@@ -26,7 +26,7 @@ def decks_edit(deck_id):
 @api_routes.route('/decks/<deck_id>/player', methods=["GET"])
 def decks_get_player(deck_id):
     """ returns the data for a specific deck's owner """
-    return jsonify(Deck_crud.get_parent_data(deck_id, parent_type="player"))
+    return jsonify(Deck_crud.get_parent_data(deck_id, parent_type="Player"))
 
 @api_routes.route('/decks/<deck_id>/player_decks', methods=["GET"])
 def decks_get_player_decks(deck_id):
@@ -36,7 +36,7 @@ def decks_get_player_decks(deck_id):
 @api_routes.route('/decks/<deck_id>/colour_identity', methods=["GET"])
 def decks_get_colour_identity(deck_id):
     """ returns the data for a specific deck's colour identity """
-    return jsonify(Deck_crud.get_parent_data(deck_id, parent_type="colour_identity"))
+    return jsonify(Deck_crud.get_parent_data(deck_id, parent_type="Colour_Identity"))
 
 @api_routes.route('/decks/<deck_id>/colour_identity_decks', methods=["GET"])
 def decks_get_colour_identity_decks(deck_id):

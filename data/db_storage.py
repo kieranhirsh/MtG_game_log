@@ -68,7 +68,7 @@ class DBStorage():
         elif key != "" and value == "":
             rows = []
         elif key == "" and value != "":
-            raise ValueError("You have speicied a value without a key, that makes no sense")
+            raise ValueError("You have specified a value without a key, that makes no sense")
         else:
             rows = self.__session.query(class_).all()
 
