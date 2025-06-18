@@ -1,6 +1,7 @@
 #!/usr/bin/python
 """ CRUD layer """
 from flask import request, abort
+from crud.base_crud import Base_crud
 from data import storage
 from models.colour_identity import Colour_Identity
 from validation.colour_identity import Colour_Identity_validator
@@ -156,10 +157,10 @@ class Colour_Identity_crud():
         if return_model_object:
             return parent_data
 
-        parent_columns = getattr(parent_data, "all_attribs")
+        parent_columns = getattr(parent_data[0], "all_attribs")
 
         for column in parent_columns:
-            output.update({column: getattr(parent_data, column)})
+            output.update({column: getattr(parent_data[0], column)})
 
         return output
 
@@ -195,28 +196,7 @@ class Colour_Identity_crud():
 
     @staticmethod
     def get_child_data(colour_identity_id, child_type, return_model_object = False):
-        """ Class method get the child data for a given colour identity """
-        output = []
-
-        try:
-            child_data = storage.get(class_name=child_type, key="colour_identity_id", value=colour_identity_id)
-        except IndexError as exc:
-            print("Error: ", exc)
-            return "Unable to find specific %s\n" % (child_type)
-
-        if return_model_object:
-            return child_data
-
-        if child_data:
-            child_columns = getattr(child_data[0], "all_attribs")
-
-            i = 0
-            for child in child_data:
-                output.append({})
-
-                for column in child_columns:
-                    output[i].update({column: getattr(child, column)})
-
-                i += 1
-
-        return output
+        return Base_crud.get_child_data(object_id=colour_identity_id,
+                                        object_type="colour_identity",
+                                        child_type=child_type,
+                                        return_model_object=return_model_object)
