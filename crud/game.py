@@ -279,32 +279,11 @@ class Game_crud():
         return Game_crud.all()
 
     @staticmethod
-    def get_parent_data(game_id, parent_type, return_model_object = False):
-        """ Class method get the parent data for a given Game """
-        output = {}
-
-        try:
-            game_data = storage.get(class_name="Game", key="id", value=game_id)
-        except IndexError as exc:
-            print("Error: ", exc)
-            return "Unable to find specific game\n"
-
-        parent_id = getattr(game_data[0], "%s_id" % (parent_type.lower()))
-        try:
-            parent_data = storage.get(class_name=parent_type, key="id", value=parent_id)
-        except IndexError as exc:
-            print("Error: ", exc)
-            return "Unable to find specific %s\n" % (parent_type)
-
-        if return_model_object:
-            return parent_data
-
-        parent_columns = getattr(parent_data[0], "all_attribs")
-
-        for column in parent_columns:
-            output.update({column: getattr(parent_data[0], column)})
-
-        return output
+    def get_parent_data(colour_identity_id, parent_type, return_model_object = False):
+        return Base_crud.get_parent_data(object_id=colour_identity_id,
+                                         object_type="Game",
+                                         parent_type=parent_type,
+                                         return_model_object=return_model_object)
 
     @staticmethod
     def get_sibling_data(game_id, parent_type, return_model_object = False):

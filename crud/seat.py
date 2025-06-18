@@ -158,32 +158,11 @@ class Seat_crud():
         return Seat_crud.all()
 
     @staticmethod
-    def get_parent_data(seat_id, parent_type, return_model_object = False):
-        """ Class method get the parent data for a given Seat """
-        output = {}
-
-        try:
-            seat_data = storage.get(class_name="Seat", key="id", value=seat_id)
-        except IndexError as exc:
-            print("Error: ", exc)
-            return "Unable to find specific seat\n"
-
-        parent_id = getattr(seat_data[0], "%s_id" % (parent_type.lower()))
-        try:
-            parent_data = storage.get(class_name=parent_type, key="id", value=parent_id)
-        except IndexError as exc:
-            print("Error: ", exc)
-            return "Unable to find specific %s\n" % (parent_type)
-
-        if return_model_object:
-            return parent_data
-
-        parent_columns = getattr(parent_data[0], "all_attribs")
-
-        for column in parent_columns:
-            output.update({column: getattr(parent_data[0], column)})
-
-        return output
+    def get_parent_data(colour_identity_id, parent_type, return_model_object = False):
+        return Base_crud.get_parent_data(object_id=colour_identity_id,
+                                         object_type="Seat",
+                                         parent_type=parent_type,
+                                         return_model_object=return_model_object)
 
     @staticmethod
     def get_sibling_data(seat_id, parent_type, return_model_object = False):

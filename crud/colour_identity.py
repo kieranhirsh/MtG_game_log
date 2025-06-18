@@ -138,31 +138,10 @@ class Colour_Identity_crud():
 
     @staticmethod
     def get_parent_data(colour_identity_id, parent_type, return_model_object = False):
-        """ Class method get the parent data for a given colour identity """
-        output = {}
-
-        try:
-            colour_identity_data = storage.get(class_name="Colour_Identity", key="id", value=colour_identity_id)
-        except IndexError as exc:
-            print("Error: ", exc)
-            return "Unable to find specific colour identity\n"
-
-        parent_id = getattr(colour_identity_data[0], "%s_id" % (parent_type.lower()))
-        try:
-            parent_data = storage.get(class_name=parent_type, key="id", value=parent_id)
-        except IndexError as exc:
-            print("Error: ", exc)
-            return "Unable to find specific %s\n" % (parent_type)
-
-        if return_model_object:
-            return parent_data
-
-        parent_columns = getattr(parent_data[0], "all_attribs")
-
-        for column in parent_columns:
-            output.update({column: getattr(parent_data[0], column)})
-
-        return output
+        return Base_crud.get_parent_data(object_id=colour_identity_id,
+                                         object_type="Colour_Identity",
+                                         parent_type=parent_type,
+                                         return_model_object=return_model_object)
 
     @staticmethod
     def get_sibling_data(colour_identity_id, parent_type, return_model_object = False):
