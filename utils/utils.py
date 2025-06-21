@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from crud.colour_identity import Colour_Identity_crud
+from crud.colour_identity import colour_identity_crud
 from crud.deck import deck_crud
 from crud.game import Game_crud
 from crud.player import Player_crud
@@ -13,7 +13,7 @@ def get_ci_data_from_dropdown_inputs(request_form):
 
     # get the list of inputs and all colour identity data
     ci_raw_list = request_form.getlist("ci_abbr")
-    all_ci = storage.get(class_name="Colour_Identity")
+    all_ci = storage.get(class_name="colour_identity")
 
     # loop over the raw list of inputs and add its character to a string
     for abbr in ci_raw_list:
@@ -35,7 +35,7 @@ def get_ci_data_from_dropdown_inputs(request_form):
                 break
 
     # find the desired colour identity object (will be empty is the desired colour identity doesn't exist)
-    colour_identity_data = storage.get(class_name="Colour_Identity", key="colours", value=desired_ci)
+    colour_identity_data = storage.get(class_name="colour_identity", key="colours", value=desired_ci)
 
     return colour_identity_data, desired_ci
 
@@ -44,7 +44,7 @@ def load_all_db_data():
         Function that loads every table from the database.
         This exists to save my sanity every time I update the database.
     '''
-    colour_identities = Colour_Identity_crud.all(True)
+    colour_identities = colour_identity_crud.all(True)
     decks = deck_crud.all(True)
     games = Game_crud.all(True)
     players = Player_crud.all(True)

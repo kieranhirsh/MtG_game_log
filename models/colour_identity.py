@@ -5,7 +5,7 @@ from sqlalchemy import Column, String, Integer
 from sqlalchemy.orm import relationship
 from data import Base
 
-class Colour_Identity(Base):
+class colour_identity(Base):
     """ Representation of colour identity """
 
     all_attribs = ["id", "ci_name", "colours"]
@@ -13,7 +13,7 @@ class Colour_Identity(Base):
     can_update  = []
 
     # Class attributes defaults
-    __tablename__ = 'Colour_Identities'
+    __tablename__ = 'colour_identities'
     id            = Column(String(64), nullable=False, primary_key=True)
     ci_name       = Column("ci_name", String(128), nullable=False)
     colours       = Column("colours", String(128), nullable=False)

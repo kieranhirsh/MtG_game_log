@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, jsonify
 from api.v1 import api_routes
 from data import storage
 from errors import errors
-from crud.colour_identity import Colour_Identity_crud
+from crud.colour_identity import colour_identity_crud
 from crud.deck import deck_crud
 from crud.game import Game_crud
 from crud.player import Player_crud
@@ -51,7 +51,7 @@ def input():
             colour_identity_data, desired_ci = utils.get_ci_data_from_dropdown_inputs(request.form)
             if not colour_identity_data:
                 call_error = True
-                missing_entries.append(["Colour_Identity", "colours", desired_ci])
+                missing_entries.append(["colour_identity", "colours", desired_ci])
 
             if call_error:
                 return errors.entry_not_found('input.html', missing_entries, 'create')
@@ -117,7 +117,7 @@ def input():
             Player_crud.create(data=jsonify(new_player))
 
     # Then load the data we need
-    colour_identities = Colour_Identity_crud.all(True)
+    colour_identities = colour_identity_crud.all(True)
     decks = deck_crud.all(True)
     players = Player_crud.all(True)
 
@@ -169,7 +169,7 @@ def input_edit():
                     })
                 else:
                     call_error = True
-                    missing_entries.append(["Colour_Identity", "colours", desired_ci])
+                    missing_entries.append(["colour_identity", "colours", desired_ci])
 
             if call_error:
                 return errors.entry_not_found('input.html', missing_entries, 'edit')
@@ -256,7 +256,7 @@ def input_delete():
 def data_get():
     """ Spreadsheets are called here """
     # Load the data we need
-    colour_identities = Colour_Identity_crud.all(True)
+    colour_identities = colour_identity_crud.all(True)
     players = Player_crud.all(True)
 
     # Prepare data to pass to the template
@@ -269,7 +269,7 @@ def data_get():
 def data_post():
     """ Spreadsheets are displayed here """
     # Load the data we need
-    colour_identities = Colour_Identity_crud.all(True)
+    colour_identities = colour_identity_crud.all(True)
     players = Player_crud.all(True)
 
     # this desperately wants to be a select case, but I'm using Python 3.8 :(
@@ -318,7 +318,7 @@ def data_post():
             # loop over all colour identities
             for colour_identity in colour_identities:
                 # find all decks of with the given colour identity
-                colour_identity_decks = Colour_Identity_crud.get_child_data(colour_identity.id, "deck", True)
+                colour_identity_decks = colour_identity_crud.get_child_data(colour_identity.id, "deck", True)
                 decks_to_remove = []
 
                 # loop over those decks
@@ -348,7 +348,7 @@ def data_post():
         else:
             for colour_identity in colour_identities:
                 # if we have no restriction the number of decks is just the length of the array
-                num_decks = len(Colour_Identity_crud.get_child_data(colour_identity.id, "deck", True))
+                num_decks = len(colour_identity_crud.get_child_data(colour_identity.id, "deck", True))
 
                 # find the number of colours of the given colour identity
                 num_colours = colour_identity.num_colours
@@ -388,11 +388,11 @@ def data_post():
                 elif form_item == "ci_abbr":
                     colour_identity_data, desired_ci = utils.get_ci_data_from_dropdown_inputs(request.form)
                     if not colour_identity_data:
-                        return errors.entry_not_found(["Colour_Identity", "colours", desired_ci])
+                        return errors.entry_not_found(["colour_identity", "colours", desired_ci])
                     restriction_key = "ci_name"
                     restriction_value = colour_identity_data[0].ci_name
 
-                    class_type = "Colour_Identity"
+                    class_type = "colour_identity"
 
                 restrictions.append({
                     "class_type": class_type,
@@ -433,7 +433,7 @@ def data_post():
         return render_template('data.html', data_type="deck", data=html_data)
     elif request.form["type"] == "game":
         # Load the data we need
-        colour_identities = Colour_Identity_crud.all(True)
+        colour_identities = colour_identity_crud.all(True)
         games = Game_crud.all(True)
         players = Player_crud.all(True)
         num_seats = 0
@@ -627,7 +627,7 @@ def graphs():
                     call_error = True
                     missing_entries.append([request.form["bar_y"], 'Y axis'])
             elif request.form["bar_x"] == "colour identity":
-                colour_identities = Colour_Identity_crud.all(True)
+                colour_identities = colour_identity_crud.all(True)
 
                 for colour_identity in colour_identities:
                     ci_name = getattr(colour_identity, "ci_name")
@@ -755,7 +755,7 @@ def graphs():
                     if "g" in datum_colours:
                         pie_data["green"] += 1
             elif request.form["pie_divisions"] == "colour identity":
-                colour_identities = Colour_Identity_crud.all(True)
+                colour_identities = colour_identity_crud.all(True)
 
                 for colour_identity in colour_identities:
                     ci_name = getattr(colour_identity, "ci_name")

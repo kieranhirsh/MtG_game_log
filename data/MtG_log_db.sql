@@ -16,13 +16,13 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `Colour_Identities`
+-- Table structure for table `colour_identities`
 --
 
-DROP TABLE IF EXISTS `Colour_Identities`;
+DROP TABLE IF EXISTS `colour_identities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Colour_Identities` (
+CREATE TABLE `colour_identities` (
   `id` varchar(64) NOT NULL,
   `ci_name` varchar(128) NOT NULL,
   `colours` varchar(128) NOT NULL,
@@ -32,13 +32,13 @@ CREATE TABLE `Colour_Identities` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Colour_Identities`
+-- Dumping data for table `colour_identities`
 --
 
-LOCK TABLES `Colour_Identities` WRITE;
-/*!40000 ALTER TABLE `Colour_Identities` DISABLE KEYS */;
-INSERT INTO `Colour_Identities` VALUES ('018240aa-1533-4c89-9a7e-8f7d57d849a4','Colourless','c',0),('04f42ef3-d4be-45ea-a289-031b7261ab38','Mono-white','w',1),('1447712e-0fb2-4a08-a23e-9345923f3be1','Mono-blue','u',1),('218a0838-cbe1-4308-aabb-8de17cc5873b','Mono-black','b',1),('26842c69-c93d-4ad2-8627-cbe100b600f7','Mono-red','r',1),('302f8628-53b7-44e1-8d77-2aaf65538ba8','Mono-green','g',1),('3256d58c-f465-46ff-94f7-435625da0a3a','Azorius','wu',2),('3b391a97-4c58-4132-8200-68bc2898aef9','Dimir','ub',2),('3de61941-7ac0-4230-aa3b-a8f079e64472','Rakdos','br',2),('532de6fb-59c1-487b-8931-47e70d5cefb2','Gruul','rg',2),('59cb4e07-0520-4b9e-b59c-96088df32978','Selesnya','gw',2),('5d5f6800-e325-4507-a1d5-d8689cd714b9','Orzhov','wb',2),('62eb1f23-0289-46f6-8d3e-ed016a341945','Golgari','bg',2),('702360b8-7181-41a6-b8ac-662eeace3cf2','Simic','gu',2),('71f2e91c-12aa-4358-ae0b-affd4f823cb2','Izzet','ur',2),('7aa24b49-5e15-4fef-8e2a-8f8ee2984cc9','Boros','rw',2),('7c705ad4-f0c3-467e-b480-63a9a809871c','Bant','gwu',3),('7eda5111-5c65-493c-bc32-92a6261ce547','Esper','wub',3),('880393b9-3191-4a6b-a4c5-42f97a659e2c','Grixis','ubr',3),('8a0eed82-6019-46e7-9683-21b622c859b4','Jund','brg',3),('9aa54b57-e5f0-44b6-9c26-09b357a4d54f','Naya','rgw',3),('9fb8539e-2258-4239-bc87-de29d55565e0','Mardu','rwb',3),('a3dec342-cc95-49ec-8dae-4f966da95624','Temur','gur',3),('ad5cec7a-e866-493a-a39c-a0bff8d46eef','Abzan','wbg',3),('b2f7fcf3-ce9f-4898-8d6b-d667de484db2','Jeskai','urw',3),('b5fa6356-25a5-48d5-b2dc-c08a7df6ebe9','Sultai','bgu',3),('b6092dea-04b5-4c40-a089-6d297fb86cfb','Glint-Eye','ubrg',4),('c3daee5a-4ce2-4ccd-bec1-43953ee105c5','Dune-Brood','brgw',4),('cf77b2f2-70ea-432b-8af0-46bfae139e50','Ink-Treader','rgwu',4),('d37e8574-23c4-4dd1-a017-d0b9209bac69','Witch-Maw','gwub',4),('ee1465f8-e828-4a00-baf7-adf39653c678','Yore-Tiller','wubr',4),('ff8bc843-3aa7-4cd4-9db6-c378a69f57b7','Rainbow','wubrg',5);
-/*!40000 ALTER TABLE `Colour_Identities` ENABLE KEYS */;
+LOCK TABLES `colour_identities` WRITE;
+/*!40000 ALTER TABLE `colour_identities` DISABLE KEYS */;
+INSERT INTO `colour_identities` VALUES ('018240aa-1533-4c89-9a7e-8f7d57d849a4','Colourless','c',0),('04f42ef3-d4be-45ea-a289-031b7261ab38','Mono-white','w',1),('1447712e-0fb2-4a08-a23e-9345923f3be1','Mono-blue','u',1),('218a0838-cbe1-4308-aabb-8de17cc5873b','Mono-black','b',1),('26842c69-c93d-4ad2-8627-cbe100b600f7','Mono-red','r',1),('302f8628-53b7-44e1-8d77-2aaf65538ba8','Mono-green','g',1),('3256d58c-f465-46ff-94f7-435625da0a3a','Azorius','wu',2),('3b391a97-4c58-4132-8200-68bc2898aef9','Dimir','ub',2),('3de61941-7ac0-4230-aa3b-a8f079e64472','Rakdos','br',2),('532de6fb-59c1-487b-8931-47e70d5cefb2','Gruul','rg',2),('59cb4e07-0520-4b9e-b59c-96088df32978','Selesnya','gw',2),('5d5f6800-e325-4507-a1d5-d8689cd714b9','Orzhov','wb',2),('62eb1f23-0289-46f6-8d3e-ed016a341945','Golgari','bg',2),('702360b8-7181-41a6-b8ac-662eeace3cf2','Simic','gu',2),('71f2e91c-12aa-4358-ae0b-affd4f823cb2','Izzet','ur',2),('7aa24b49-5e15-4fef-8e2a-8f8ee2984cc9','Boros','rw',2),('7c705ad4-f0c3-467e-b480-63a9a809871c','Bant','gwu',3),('7eda5111-5c65-493c-bc32-92a6261ce547','Esper','wub',3),('880393b9-3191-4a6b-a4c5-42f97a659e2c','Grixis','ubr',3),('8a0eed82-6019-46e7-9683-21b622c859b4','Jund','brg',3),('9aa54b57-e5f0-44b6-9c26-09b357a4d54f','Naya','rgw',3),('9fb8539e-2258-4239-bc87-de29d55565e0','Mardu','rwb',3),('a3dec342-cc95-49ec-8dae-4f966da95624','Temur','gur',3),('ad5cec7a-e866-493a-a39c-a0bff8d46eef','Abzan','wbg',3),('b2f7fcf3-ce9f-4898-8d6b-d667de484db2','Jeskai','urw',3),('b5fa6356-25a5-48d5-b2dc-c08a7df6ebe9','Sultai','bgu',3),('b6092dea-04b5-4c40-a089-6d297fb86cfb','Glint-Eye','ubrg',4),('c3daee5a-4ce2-4ccd-bec1-43953ee105c5','Dune-Brood','brgw',4),('cf77b2f2-70ea-432b-8af0-46bfae139e50','Ink-Treader','rgwu',4),('d37e8574-23c4-4dd1-a017-d0b9209bac69','Witch-Maw','gwub',4),('ee1465f8-e828-4a00-baf7-adf39653c678','Yore-Tiller','wubr',4),('ff8bc843-3aa7-4cd4-9db6-c378a69f57b7','Rainbow','wubrg',5);
+/*!40000 ALTER TABLE `colour_identities` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -57,7 +57,7 @@ CREATE TABLE `decks` (
   KEY `player_id` (`player_id`),
   KEY `colour_identity_id` (`colour_identity_id`),
   CONSTRAINT `decks_ibfk_1` FOREIGN KEY (`player_id`) REFERENCES `Players` (`id`),
-  CONSTRAINT `decks_ibfk_2` FOREIGN KEY (`colour_identity_id`) REFERENCES `Colour_Identities` (`id`)
+  CONSTRAINT `decks_ibfk_2` FOREIGN KEY (`colour_identity_id`) REFERENCES `colour_identities` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
