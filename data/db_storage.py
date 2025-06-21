@@ -11,13 +11,6 @@ class DBStorage():
     """ Class for reading data from the database """
     __engine = None
     __session = None
-    __module_names = {
-        "colour_identity": "colour_identity",
-        "deck": "deck",
-        "game": "game",
-        "player": "player",
-        "seat": "seat"
-    }
 
     def __init__(self, Base):
         """Instantiate a DBStorage object"""
@@ -50,14 +43,10 @@ class DBStorage():
     def get(self, class_name = "", key = "", value = ""):
         """ Returns data for specified class name with or without record id"""
 
-        if class_name == "":
+        if class_name.strip() == "":
             raise IndexError("Unable to load Model data. No class name specified")
 
-        if not self.__module_names[class_name]:
-            raise IndexError("Unable to load Model data. %s name not found" % class_name)
-
-        namespace = self.__module_names[class_name]
-        module = importlib.import_module("models." + namespace)
+        module = importlib.import_module("models." + class_name)
         class_ = getattr(module, class_name)
 
         if key != "" and value != "":
@@ -94,11 +83,10 @@ class DBStorage():
     def update(self, class_name, record_id, update_data, allowed = None):
         """ Updates existing record of specified class """
 
-        if class_name.strip() == "" or not self.__module_names[class_name]:
-            raise IndexError("Specified class name is not valid")
+        if class_name.strip() == "":
+            raise IndexError("Unable to load Model data. No class name specified")
 
-        namespace = self.__module_names[class_name]
-        module = importlib.import_module("models." + namespace)
+        module = importlib.import_module("models." + class_name)
         class_ = getattr(module, class_name)
 
         try:
@@ -125,14 +113,10 @@ class DBStorage():
     def delete(self, class_name, record_id):
         """ Deletes specific record of specified class """
 
-        if class_name == "":
+        if class_name.strip() == "":
             raise IndexError("Unable to load Model data. No class name specified")
 
-        if not self.__module_names[class_name]:
-            raise IndexError("Unable to load Model data. %s class not found" % class_name)
-
-        namespace = self.__module_names[class_name]
-        module = importlib.import_module("models." + namespace)
+        module = importlib.import_module("models." + class_name)
         class_ = getattr(module, class_name)
 
         try:
@@ -151,14 +135,10 @@ class DBStorage():
 
         ids_count = len(ids_list)
 
-        if not self.__module_names[class_name]:
-            raise IndexError("Unable to load Model data. Specified class name not found")
-
         if ids_count == 0:
             raise IndexError("No record ids specified.")
 
-        namespace = self.__module_names[class_name]
-        module = importlib.import_module("models." + namespace)
+        module = importlib.import_module("models." + class_name)
         class_ = getattr(module, class_name)
 
         rows = self.__session.query(class_).where(
