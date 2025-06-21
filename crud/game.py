@@ -3,8 +3,8 @@
 from flask import request, jsonify
 from crud.base_crud import Base_crud
 from data import storage
-from models.game import Game
-from validation.game import Game_validator
+from models.game import game
+from validation.game import game_validator
 
 month_dict = {
     "01": "January",
@@ -21,14 +21,14 @@ month_dict = {
     "12": "December"
 }
 
-class Game_crud():
+class game_crud():
     @staticmethod
     def all(return_model_object = False):
         """ Class method that returns all games data """
         output = []
 
         try:
-            result = storage.get(class_name = 'Game')
+            result = storage.get(class_name = 'game')
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to load games\n"
@@ -56,10 +56,10 @@ class Game_crud():
     def specific(key, value, return_model_object = False):
         """ Class method that returns a specific game's data """
         try:
-            result: Game = storage.get(class_name = 'Game', key = key, value = value)
+            result = storage.get(class_name = 'game', key = key, value = value)
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to load Game data\n"
+            return "Unable to load game data\n"
 
         if return_model_object or not result:
             return result
@@ -88,7 +88,7 @@ class Game_crud():
             data = data.get_json()
 
         test_game = {}
-        for field in Game.can_init:
+        for field in game.can_init:
             test_game[field] = ""
         for key in data:
             test_game[key] = data[key]
@@ -97,9 +97,9 @@ class Game_crud():
         test_game["month"] = month_dict[month_num]
         year = int(data["start_time"][0:4])
         test_game["year"] = year
-        Game_validator.is_valid(test_game)
+        game_validator.is_valid(test_game)
 
-        new_game = Game(
+        new_game = game(
             game_name=test_game["game_name"],
             month=month_dict[month_num],
             year=year,
@@ -115,7 +115,7 @@ class Game_crud():
             storage.add(new_game)
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to add new Game\n"
+            return "Unable to add new game\n"
 
         if return_model_object:
             return new_game
@@ -144,7 +144,7 @@ class Game_crud():
             data = data.get_json()
 
         call_validator = False
-        game_to_update = Game_crud.specific("id", game_id)
+        game_to_update = game_crud.specific("id", game_id)
         for key in data:
             game_to_update[key] = data[key]
             if key == "start_time" or key == "end_time":
@@ -159,10 +159,10 @@ class Game_crud():
             data["year"] = year
 
         if call_validator:
-            Game_validator.is_valid(game_to_update)
+            game_validator.is_valid(game_to_update)
 
         try:
-            result = storage.update('Game', game_id, data, Game.can_update)
+            result = storage.update('game', game_id, data, game.can_update)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to update specified game\n"
@@ -188,7 +188,7 @@ class Game_crud():
     @staticmethod
     def update_game_name(game_id, return_model_object = False):
         # find the game entry to be updated
-        game_object = Game_crud.specific("id", game_id, True)
+        game_object = game_crud.specific("id", game_id, True)
 
         # get the data we need to generate the name
         start_time = str(game_object[0].start_time)
@@ -203,12 +203,12 @@ class Game_crud():
         }
 
         # update the game entry
-        return Game_crud.update(game_id=game_id, data=jsonify(updated_game), return_model_object=return_model_object)
+        return game_crud.update(game_id=game_id, data=jsonify(updated_game), return_model_object=return_model_object)
 
     @staticmethod
     def update_game_time(game_id, return_model_object = False):
         # find the game entry to be updated
-        game_object = Game_crud.specific("id", game_id, True)
+        game_object = game_crud.specific("id", game_id, True)
 
         # get the data we need to generate the name
         start_time = game_object[0].start_time
@@ -223,15 +223,15 @@ class Game_crud():
         }
 
         # update the game entry
-        return Game_crud.update(game_id=game_id, data=jsonify(updated_game), return_model_object=return_model_object)
+        return game_crud.update(game_id=game_id, data=jsonify(updated_game), return_model_object=return_model_object)
 
     @staticmethod
     def update_game_turns(game_id, return_model_object = False):
         # find the game entry to be updated
-        game_object = Game_crud.specific("id", game_id, True)
+        game_object = game_crud.specific("id", game_id, True)
 
         # get the data we need to generate the name
-        seats = Game_crud.get_child_data(game_object[0].id, "Seat", True)
+        seats = game_crud.get_child_data(game_object[0].id, "Seat", True)
 
         # calculate the game length in turns
         game_turns = 0
@@ -245,14 +245,14 @@ class Game_crud():
         }
 
         # update the game entry
-        return Game_crud.update(game_id=game_id, data=jsonify(updated_game), return_model_object=return_model_object)
+        return game_crud.update(game_id=game_id, data=jsonify(updated_game), return_model_object=return_model_object)
 
     @staticmethod
     def update_game_winner(game_id, return_model_object = False):
         # find the game entry to be updated
-        game_object = Game_crud.specific("id", game_id, True)
+        game_object = game_crud.specific("id", game_id, True)
 
-        seats = Game_crud.get_child_data(game_object[0].id, "Seat", True)
+        seats = game_crud.get_child_data(game_object[0].id, "Seat", True)
 
         for seat in seats:
             print(seat.ko_turn)
@@ -264,41 +264,41 @@ class Game_crud():
                 print(updated_game)
 
         # update the game entry
-        return Game_crud.update(game_id=game_id, data=jsonify(updated_game), return_model_object=return_model_object)
+        return game_crud.update(game_id=game_id, data=jsonify(updated_game), return_model_object=return_model_object)
 
     @staticmethod
     def delete(game_id):
-        """ Class method that deletes an existing Game """
+        """ Class method that deletes an existing game """
         try:
-            # delete the Game record
-            storage.delete('Game', game_id)
+            # delete the game record
+            storage.delete('game', game_id)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to delete specified game\n"
 
-        return Game_crud.all()
+        return game_crud.all()
 
     @staticmethod
     def get_parent_data(game_id, parent_type, return_model_object = False):
         return Base_crud.get_parent_data(object_id=game_id,
-                                         object_type="Game",
+                                         object_type="game",
                                          parent_type=parent_type,
                                          return_model_object=return_model_object)
 
     @staticmethod
     def get_sibling_data(game_id, parent_type, return_model_object = False):
-        """ Class method get the sibling data for a given Game """
+        """ Class method get the sibling data for a given game """
         output = []
 
         try:
-            game_data = storage.get(class_name="Game", key="id", value=game_id)
+            game_data = storage.get(class_name="game", key="id", value=game_id)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to find specific game\n"
 
         parent_id = getattr(game_data[0], "%s_id" % (parent_type))
         try:
-            sibling_data = storage.get(class_name="Game", key="%s_id" % (parent_type), value=parent_id)
+            sibling_data = storage.get(class_name="game", key="%s_id" % (parent_type), value=parent_id)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to find sibling games\n"

@@ -18,10 +18,10 @@ class Seat(Base):
     seat_no       = Column("seat_no", Integer, nullable=False)
     ko_turn       = Column("ko_turn", Integer)
     deck_id       = Column("deck_id", String(128), ForeignKey('decks.id'), nullable=False)
-    game_id       = Column("game_id", String(128), ForeignKey('Games.id'), nullable=False)
+    game_id       = Column("game_id", String(128), ForeignKey('games.id'), nullable=False)
     player_id     = Column("player_id", String(128), ForeignKey('Players.id'), nullable=False)
     deck          = relationship("deck", back_populates="seats")
-    game          = relationship("Game", back_populates="seats", cascade="delete")
+    game          = relationship("game", back_populates="seats", cascade="delete")
     player        = relationship("Player", back_populates="seats")
 
     # constructor

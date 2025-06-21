@@ -1,13 +1,13 @@
 #!/usr/bin/python
-""" Game validation """
+""" game validation """
 import datetime
 import re
 
-class Game_validator():
+class game_validator():
     def is_valid(new_game):
         # check all inputs are valid
-        Game_validator.valid_time(new_game["start_time"])
-        Game_validator.valid_time(new_game["end_time"])
+        game_validator.valid_time(new_game["start_time"])
+        game_validator.valid_time(new_game["end_time"])
 
         # ensure that end time is after start time
         if str(new_game["start_time"]) > str(new_game["end_time"]):

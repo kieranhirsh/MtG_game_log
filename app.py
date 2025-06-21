@@ -6,7 +6,7 @@ from data import storage
 from errors import errors
 from crud.colour_identity import colour_identity_crud
 from crud.deck import deck_crud
-from crud.game import Game_crud
+from crud.game import game_crud
 from crud.player import Player_crud
 from crud.seat import Seat_crud
 from graphs import pie_charts, xy_graphs
@@ -64,14 +64,14 @@ def input():
 
             deck_crud.create(data=jsonify(new_deck))
         elif input_type == "game":
-            # get the data needed to create a new Game
+            # get the data needed to create a new game
             new_game = {
                 "start_time": request.form["start_time"],
                 "end_time": request.form["end_time"],
             }
 
-            # create the new Game
-            new_game_object = Game_crud.create(data=jsonify(new_game))
+            # create the new game
+            new_game_object = game_crud.create(data=jsonify(new_game))
 
             # get the data needed to create new Seats
             game_decks = request.form.getlist("game_decks")
@@ -80,7 +80,7 @@ def input():
 
             # make sure each seat has a deck, player, and ko_turn
             if (len(game_decks) != len(game_players)) or (len(game_decks) != len(game_ko_turns)):
-                raise ValueError("Error: a Game must have the same number of decks, players, and ko turns")
+                raise ValueError("Error: a game must have the same number of decks, players, and ko turns")
 
             # loop over number of seats
             for i in range(len(game_decks)):
@@ -105,10 +105,10 @@ def input():
 
             # update the game name, game length in time, game length in turns, and game winner
             # these were left empty because they are derived quantities, so it's easiet to wait until all inputs were added to the database
-            Game_crud.update_game_name(new_game_object["id"])
-            Game_crud.update_game_time(new_game_object["id"])
-            Game_crud.update_game_turns(new_game_object["id"])
-            Game_crud.update_game_winner(new_game_object["id"])
+            game_crud.update_game_name(new_game_object["id"])
+            game_crud.update_game_time(new_game_object["id"])
+            game_crud.update_game_turns(new_game_object["id"])
+            game_crud.update_game_winner(new_game_object["id"])
         elif input_type == "player":
             new_player = {
                 "player_name": request.form["player_name"]
@@ -177,9 +177,9 @@ def input_edit():
             deck_crud.update(deck_to_edit["id"], jsonify(new_deck_data))
         elif input_type == "game":
             try:
-                game_to_edit = Game_crud.specific('game_name', request.form['game_name'])
+                game_to_edit = game_crud.specific('game_name', request.form['game_name'])
             except:
-                return errors.entry_not_found('input.html', [['Game', 'game_name', request.form['game_name']]], 'edit')
+                return errors.entry_not_found('input.html', [['game', 'game_name', request.form['game_name']]], 'edit')
 
             new_game_data = {}
             if request.form["new_start_time"]:
@@ -191,12 +191,12 @@ def input_edit():
                     "end_time": request.form["new_end_time"]
                 })
 
-            Game_crud.update(game_to_edit["id"], jsonify(new_game_data))
+            game_crud.update(game_to_edit["id"], jsonify(new_game_data))
 
             # logic on updating seats goes here
 
-            Game_crud.update_game_name(game_to_edit["id"])
-            Game_crud.update_game_time(game_to_edit["id"])
+            game_crud.update_game_name(game_to_edit["id"])
+            game_crud.update_game_time(game_to_edit["id"])
         elif input_type == "player":
             try:
                 player_to_edit = Player_crud.specific('player_name', request.form['player_name'])
@@ -223,7 +223,7 @@ def input_delete():
         # This dict maps an input, taken from the dropdown menu, to the relevant crud class
         module_names = {
             "deck": deck_crud,
-            "game": Game_crud,
+            "game": game_crud,
             "player": Player_crud
         }
 
@@ -242,7 +242,7 @@ def input_delete():
 
     # Load the data we need
     decks = deck_crud.all(True)
-    games = Game_crud.all(True)
+    games = game_crud.all(True)
     players = Player_crud.all(True)
 
     # Prepare data to pass to the template
@@ -422,7 +422,7 @@ def data_post():
             if deck.games_played == 0:
                 deck.win_rate = 0
             else:
-                games_won = len(Game_crud.specific("winning_deck_id", deck.id, True))
+                games_won = len(game_crud.specific("winning_deck_id", deck.id, True))
                 deck.win_rate = games_won / deck.games_played * 100
 
         # Prepare data to pass to the template
@@ -434,12 +434,12 @@ def data_post():
     elif request.form["type"] == "game":
         # Load the data we need
         colour_identities = colour_identity_crud.all(True)
-        games = Game_crud.all(True)
+        games = game_crud.all(True)
         players = Player_crud.all(True)
         num_seats = 0
 
         for game in games:
-            seats = Game_crud.get_child_data(game.id, "Seat", True)
+            seats = game_crud.get_child_data(game.id, "Seat", True)
             game.player = [None] * len(seats)
             game.deck = [None] * len(seats)
 
@@ -514,7 +514,7 @@ def data_post():
                 player["win_rate"] = 0
             else:
                 # number of games won is the number of games with winning_player_id equal to the player's id
-                games_won = len(Game_crud.specific("winning_player_id", player["id"], True))
+                games_won = len(game_crud.specific("winning_player_id", player["id"], True))
                 player["win_rate"] = games_won / player["games_played"] * 100
 
         # Prepare data to pass to the template
@@ -675,7 +675,7 @@ def graphs():
                         if games_played == 0:
                             xy_data[datum_owner] = 0
                         else:
-                            games_won = len(Game_crud.specific("winning_player_id", getattr(datum_player_model, "id"), True))
+                            games_won = len(game_crud.specific("winning_player_id", getattr(datum_player_model, "id"), True))
                             xy_data[datum_owner] = games_won/games_played * 100
                 else:
                     call_error = True
@@ -695,7 +695,7 @@ def graphs():
                         if games_played == 0:
                             xy_data[datum_name] = 0
                         else:
-                            games_won = len(Game_crud.specific("winning_deck_id", getattr(datum, "id"), True))
+                            games_won = len(game_crud.specific("winning_deck_id", getattr(datum, "id"), True))
                             xy_data[datum_name] = games_won/games_played * 100
             else:
                 call_error = True

@@ -1,11 +1,11 @@
 #!/usr/bin/python
-""" Game model """
+""" game model """
 import uuid
 from sqlalchemy import Column, String, Integer, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from data import Base
 
-class Game(Base):
+class game(Base):
     """ Representation of game """
 
     all_attribs = ["id", "game_name", "month", "year", "start_time", "end_time", "game_time", "game_turns", "winning_deck_id", "winning_player_id"]
@@ -13,7 +13,7 @@ class Game(Base):
     can_update  = ["game_name", "month", "year", "start_time", "end_time", "game_time", "game_turns", "winning_deck_id", "winning_player_id"]
 
     # Class attributes defaults
-    __tablename__     = 'Games'
+    __tablename__     = 'games'
     id                = Column(String(64), nullable=False, primary_key=True)
     month             = Column("month", String(16))
     year              = Column("year", Integer)

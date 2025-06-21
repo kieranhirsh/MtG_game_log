@@ -14,7 +14,7 @@ class DBStorage():
     __module_names = {
         "colour_identity": "colour_identity",
         "deck": "deck",
-        "Game": "game",
+        "game": "game",
         "Player": "player",
         "Seat": "seat"
     }

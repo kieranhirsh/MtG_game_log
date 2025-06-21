@@ -72,13 +72,13 @@ INSERT INTO `decks` VALUES ('07e23f42-63ec-4c82-9ecf-4cf07ce8c901','Slimefoot & 
 UNLOCK TABLES;
 
 --
--- Table structure for table `Games`
+-- Table structure for table `games`
 --
 
-DROP TABLE IF EXISTS `Games`;
+DROP TABLE IF EXISTS `games`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Games` (
+CREATE TABLE `games` (
   `id` varchar(64) NOT NULL,
   `game_name` varchar(1024) DEFAULT NULL,
   `month` varchar(16) DEFAULT NULL,
@@ -98,13 +98,13 @@ CREATE TABLE `Games` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Games`
+-- Dumping data for table `games`
 --
 
-LOCK TABLES `Games` WRITE;
-/*!40000 ALTER TABLE `Games` DISABLE KEYS */;
-INSERT INTO `Games` VALUES ('11e45865-09b3-4c32-aafe-18caaaed35cb','2025-06-02 17:29 - 19:29','June',2025,'2025-06-02 17:29:00','2025-06-02 19:29:00','2:00:00',12,'e527deb5-3666-4385-a3ef-f3ae959e20ea','494925c2-0147-4381-9b5d-eb1b15622f73'),('3287a41e-23ee-46ae-822d-eb4cc35f8753','2025-02-17 17:33 - 19:30','February',2025,'2025-02-17 17:33:00','2025-02-17 19:30:00','1:57:00',14,'b3d362cf-bf31-4826-8056-adfec5fac8a4','f73a2cf1-38a2-4ae6-b4d5-ea3c68f10db5'),('4093f31c-6122-4f82-bd5d-40140ffc585b','2025-03-17 19:35 - 20:48','March',2025,'2025-03-17 19:35:00','2025-03-17 20:48:00','1:13:00',8,'d9e2a41f-6f60-4ec0-a45a-9595cc725536','7d5d6490-bb57-4a6d-a268-92c6d0fc6d43'),('5e4ac305-c8f7-4b83-bc4e-4b9efea1deb3','2025-03-17 17:12 - 18:20','March',2025,'2025-03-17 17:12:00','2025-03-17 18:20:00','1:08:00',7,'6c30333c-1ef4-4a96-9af2-537edfda94b1','be1d79dd-b907-4fcc-8ead-1bd50eb01571'),('815f4404-cebc-4885-9222-6d1d4784f8c2','2025-05-30 19:35 - 20:14','May',2025,'2025-05-30 19:35:00','2025-05-30 20:14:00','0:39:00',7,'ce3adffa-6113-48f4-baa2-ade8b4f312bf','f73a2cf1-38a2-4ae6-b4d5-ea3c68f10db5'),('8f4cf8e7-0b0f-42a7-8f06-1eac617c423f','2025-02-17 19:37 - 20:45','February',2025,'2025-02-17 19:37:00','2025-02-17 20:45:00','1:08:00',13,'8eb54151-0939-43e5-a433-defea8048355','494925c2-0147-4381-9b5d-eb1b15622f73'),('991e0ee3-c5fa-4cc5-943b-4de3e6ed8505','2025-05-30 18:51 - 19:28','May',2025,'2025-05-30 18:51:00','2025-05-30 19:28:00','0:37:00',7,'d166c651-2f14-4c54-a28d-bcb6990f8772','f73a2cf1-38a2-4ae6-b4d5-ea3c68f10db5'),('b0947f69-f401-42b0-93d6-951dab5c6e84','2025-05-30 21:13 - 22:13','May',2025,'2025-05-30 21:13:00','2025-05-30 22:13:00','1:00:00',9,'b6b1cfef-78e4-4fff-a30a-15bad0280f2b','18f2bada-2f3c-419e-921c-0fac96324e41'),('c9924d51-69e4-4ad8-8d2c-491f5b039fbb','2025-05-30 17:36 - 18:41','May',2025,'2025-05-30 17:36:00','2025-05-30 18:41:00','1:05:00',10,'8fa9c10a-9a9a-4c75-bdd7-cc95d9591850','7c847407-d519-479c-99bd-b57d01a98670'),('cb62d32a-cbc8-41b2-8fa7-269198bd1e5a','2025-06-02 19:37 - 20:22','June',2025,'2025-06-02 19:37:00','2025-06-02 20:22:00','0:45:00',6,'07e23f42-63ec-4c82-9ecf-4cf07ce8c901','31c2bb6a-1161-4981-98ef-ca9d4cc302c6'),('d0eb425a-682f-4bd4-807e-82d064ad9364','2025-03-17 18:26 - 19:31','March',2025,'2025-03-17 18:26:00','2025-03-17 19:31:00','1:05:00',9,'913ce649-0495-4197-9aa4-aeb49bfa25d4','be1d79dd-b907-4fcc-8ead-1bd50eb01571'),('fd0a1582-ef87-4a4c-9530-7dfa8f6237f5','2025-05-30 20:20 - 21:07','May',2025,'2025-05-30 20:20:00','2025-05-30 21:07:00','0:47:00',7,'b008d2cb-fd63-4530-bab9-e4944bfae79f','18f2bada-2f3c-419e-921c-0fac96324e41');
-/*!40000 ALTER TABLE `Games` ENABLE KEYS */;
+LOCK TABLES `games` WRITE;
+/*!40000 ALTER TABLE `games` DISABLE KEYS */;
+INSERT INTO `games` VALUES ('11e45865-09b3-4c32-aafe-18caaaed35cb','2025-06-02 17:29 - 19:29','June',2025,'2025-06-02 17:29:00','2025-06-02 19:29:00','2:00:00',12,'e527deb5-3666-4385-a3ef-f3ae959e20ea','494925c2-0147-4381-9b5d-eb1b15622f73'),('3287a41e-23ee-46ae-822d-eb4cc35f8753','2025-02-17 17:33 - 19:30','February',2025,'2025-02-17 17:33:00','2025-02-17 19:30:00','1:57:00',14,'b3d362cf-bf31-4826-8056-adfec5fac8a4','f73a2cf1-38a2-4ae6-b4d5-ea3c68f10db5'),('4093f31c-6122-4f82-bd5d-40140ffc585b','2025-03-17 19:35 - 20:48','March',2025,'2025-03-17 19:35:00','2025-03-17 20:48:00','1:13:00',8,'d9e2a41f-6f60-4ec0-a45a-9595cc725536','7d5d6490-bb57-4a6d-a268-92c6d0fc6d43'),('5e4ac305-c8f7-4b83-bc4e-4b9efea1deb3','2025-03-17 17:12 - 18:20','March',2025,'2025-03-17 17:12:00','2025-03-17 18:20:00','1:08:00',7,'6c30333c-1ef4-4a96-9af2-537edfda94b1','be1d79dd-b907-4fcc-8ead-1bd50eb01571'),('815f4404-cebc-4885-9222-6d1d4784f8c2','2025-05-30 19:35 - 20:14','May',2025,'2025-05-30 19:35:00','2025-05-30 20:14:00','0:39:00',7,'ce3adffa-6113-48f4-baa2-ade8b4f312bf','f73a2cf1-38a2-4ae6-b4d5-ea3c68f10db5'),('8f4cf8e7-0b0f-42a7-8f06-1eac617c423f','2025-02-17 19:37 - 20:45','February',2025,'2025-02-17 19:37:00','2025-02-17 20:45:00','1:08:00',13,'8eb54151-0939-43e5-a433-defea8048355','494925c2-0147-4381-9b5d-eb1b15622f73'),('991e0ee3-c5fa-4cc5-943b-4de3e6ed8505','2025-05-30 18:51 - 19:28','May',2025,'2025-05-30 18:51:00','2025-05-30 19:28:00','0:37:00',7,'d166c651-2f14-4c54-a28d-bcb6990f8772','f73a2cf1-38a2-4ae6-b4d5-ea3c68f10db5'),('b0947f69-f401-42b0-93d6-951dab5c6e84','2025-05-30 21:13 - 22:13','May',2025,'2025-05-30 21:13:00','2025-05-30 22:13:00','1:00:00',9,'b6b1cfef-78e4-4fff-a30a-15bad0280f2b','18f2bada-2f3c-419e-921c-0fac96324e41'),('c9924d51-69e4-4ad8-8d2c-491f5b039fbb','2025-05-30 17:36 - 18:41','May',2025,'2025-05-30 17:36:00','2025-05-30 18:41:00','1:05:00',10,'8fa9c10a-9a9a-4c75-bdd7-cc95d9591850','7c847407-d519-479c-99bd-b57d01a98670'),('cb62d32a-cbc8-41b2-8fa7-269198bd1e5a','2025-06-02 19:37 - 20:22','June',2025,'2025-06-02 19:37:00','2025-06-02 20:22:00','0:45:00',6,'07e23f42-63ec-4c82-9ecf-4cf07ce8c901','31c2bb6a-1161-4981-98ef-ca9d4cc302c6'),('d0eb425a-682f-4bd4-807e-82d064ad9364','2025-03-17 18:26 - 19:31','March',2025,'2025-03-17 18:26:00','2025-03-17 19:31:00','1:05:00',9,'913ce649-0495-4197-9aa4-aeb49bfa25d4','be1d79dd-b907-4fcc-8ead-1bd50eb01571'),('fd0a1582-ef87-4a4c-9530-7dfa8f6237f5','2025-05-30 20:20 - 21:07','May',2025,'2025-05-30 20:20:00','2025-05-30 21:07:00','0:47:00',7,'b008d2cb-fd63-4530-bab9-e4944bfae79f','18f2bada-2f3c-419e-921c-0fac96324e41');
+/*!40000 ALTER TABLE `games` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -150,7 +150,7 @@ CREATE TABLE `Seats` (
   KEY `game_id` (`game_id`),
   KEY `player_id` (`player_id`),
   CONSTRAINT `seats_ibfk_1` FOREIGN KEY (`deck_id`) REFERENCES `decks` (`id`),
-  CONSTRAINT `seats_ibfk_2` FOREIGN KEY (`game_id`) REFERENCES `Games` (`id`),
+  CONSTRAINT `seats_ibfk_2` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`),
   CONSTRAINT `seats_ibfk_3` FOREIGN KEY (`player_id`) REFERENCES `Players` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

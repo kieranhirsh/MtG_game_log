@@ -46,7 +46,7 @@ def seats_get_deck_seats(seat_id):
 @api_routes.route('/seats/<seat_id>/game', methods=["GET"])
 def seats_get_game(seat_id):
     """ returns the data for a specific seat's game """
-    return jsonify(Seat_crud.get_parent_data(seat_id, parent_type="Game"))
+    return jsonify(Seat_crud.get_parent_data(seat_id, parent_type="game"))
 
 @api_routes.route('/seats/<seat_id>/game_seats', methods=["GET"])
 def seats_get_game_seats(seat_id):

@@ -21,7 +21,7 @@ class deck(Base):
     player             = relationship("Player", back_populates="decks")
     colour_identity    = relationship("colour_identity", back_populates="decks")
     seats              = relationship("Seat", back_populates="deck", cascade="delete, delete-orphan")
-    games_won          = relationship("Game", back_populates="winning_deck", cascade="delete, delete-orphan")
+    games_won          = relationship("game", back_populates="winning_deck", cascade="delete, delete-orphan")
 
     # constructor
     def __init__(self, *args, **kwargs):
