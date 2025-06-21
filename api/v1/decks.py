@@ -26,7 +26,7 @@ def decks_edit(deck_id):
 @api_routes.route('/decks/<deck_id>/player', methods=["GET"])
 def decks_get_player(deck_id):
     """ returns the data for a specific deck's owner """
-    return jsonify(deck_crud.get_parent_data(deck_id, parent_type="Player"))
+    return jsonify(deck_crud.get_parent_data(deck_id, parent_type="player"))
 
 @api_routes.route('/decks/<deck_id>/player_decks', methods=["GET"])
 def decks_get_player_decks(deck_id):

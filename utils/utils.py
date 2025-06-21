@@ -2,7 +2,7 @@
 from crud.colour_identity import colour_identity_crud
 from crud.deck import deck_crud
 from crud.game import game_crud
-from crud.player import Player_crud
+from crud.player import player_crud
 from crud.seat import Seat_crud
 from data import storage
 
@@ -47,7 +47,7 @@ def load_all_db_data():
     colour_identities = colour_identity_crud.all(True)
     decks = deck_crud.all(True)
     games = game_crud.all(True)
-    players = Player_crud.all(True)
+    players = player_crud.all(True)
     seats = Seat_crud.all(True)
 
     return {

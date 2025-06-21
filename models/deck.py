@@ -16,9 +16,9 @@ class deck(Base):
     __tablename__      = 'decks'
     id                 = Column(String(64), nullable=False, primary_key=True)
     deck_name          = Column("deck_name", String(128), nullable=False)
-    player_id          = Column("player_id", String(128), ForeignKey('Players.id'), nullable=False)
+    player_id          = Column("player_id", String(128), ForeignKey('players.id'), nullable=False)
     colour_identity_id = Column("colour_identity_id", String(128), ForeignKey('colour_identities.id'), nullable=False)
-    player             = relationship("Player", back_populates="decks")
+    player             = relationship("player", back_populates="decks")
     colour_identity    = relationship("colour_identity", back_populates="decks")
     seats              = relationship("Seat", back_populates="deck", cascade="delete, delete-orphan")
     games_won          = relationship("game", back_populates="winning_deck", cascade="delete, delete-orphan")

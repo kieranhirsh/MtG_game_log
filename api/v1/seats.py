@@ -26,7 +26,7 @@ def seats_edit(seat_id):
 @api_routes.route('/seats/<seat_id>/player', methods=["GET"])
 def seats_get_player(seat_id):
     """ returns the data for a specific seat's player """
-    return jsonify(Seat_crud.get_parent_data(seat_id, parent_type="Player"))
+    return jsonify(Seat_crud.get_parent_data(seat_id, parent_type="player"))
 
 @api_routes.route('/seats/<seat_id>/player_seats', methods=["GET"])
 def seats_get_player_seats(seat_id):

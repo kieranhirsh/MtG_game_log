@@ -56,7 +56,7 @@ CREATE TABLE `decks` (
   PRIMARY KEY (`id`),
   KEY `player_id` (`player_id`),
   KEY `colour_identity_id` (`colour_identity_id`),
-  CONSTRAINT `decks_ibfk_1` FOREIGN KEY (`player_id`) REFERENCES `Players` (`id`),
+  CONSTRAINT `decks_ibfk_1` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`),
   CONSTRAINT `decks_ibfk_2` FOREIGN KEY (`colour_identity_id`) REFERENCES `colour_identities` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -93,7 +93,7 @@ CREATE TABLE `games` (
   KEY `games_ibfk_1` (`winning_deck_id`),
   KEY `games_ibfk_2` (`winning_player_id`),
   CONSTRAINT `games_ibfk_1` FOREIGN KEY (`winning_deck_id`) REFERENCES `decks` (`id`),
-  CONSTRAINT `games_ibfk_2` FOREIGN KEY (`winning_player_id`) REFERENCES `Players` (`id`)
+  CONSTRAINT `games_ibfk_2` FOREIGN KEY (`winning_player_id`) REFERENCES `players` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -108,13 +108,13 @@ INSERT INTO `games` VALUES ('11e45865-09b3-4c32-aafe-18caaaed35cb','2025-06-02 1
 UNLOCK TABLES;
 
 --
--- Table structure for table `Players`
+-- Table structure for table `players`
 --
 
-DROP TABLE IF EXISTS `Players`;
+DROP TABLE IF EXISTS `players`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Players` (
+CREATE TABLE `players` (
   `id` varchar(64) NOT NULL,
   `player_name` varchar(128) NOT NULL,
   PRIMARY KEY (`id`)
@@ -122,13 +122,13 @@ CREATE TABLE `Players` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Players`
+-- Dumping data for table `players`
 --
 
-LOCK TABLES `Players` WRITE;
-/*!40000 ALTER TABLE `Players` DISABLE KEYS */;
-INSERT INTO `Players` VALUES ('18f2bada-2f3c-419e-921c-0fac96324e41','Jay F'),('31c2bb6a-1161-4981-98ef-ca9d4cc302c6','Bailey M'),('494925c2-0147-4381-9b5d-eb1b15622f73','Liam R'),('7c847407-d519-479c-99bd-b57d01a98670','Arik H'),('7d5d6490-bb57-4a6d-a268-92c6d0fc6d43','Zoltán M'),('9f16663c-f653-471a-8bb3-b4eb26524b67','Dean P'),('bcd17dd0-e430-40b5-954f-9a7289a8bac7','Dan F'),('bcdc66af-d20f-42e0-8bc2-21fee1c7ec26','Kieran H'),('be1d79dd-b907-4fcc-8ead-1bd50eb01571','Brayden M'),('f73a2cf1-38a2-4ae6-b4d5-ea3c68f10db5','Cyrus T');
-/*!40000 ALTER TABLE `Players` ENABLE KEYS */;
+LOCK TABLES `players` WRITE;
+/*!40000 ALTER TABLE `players` DISABLE KEYS */;
+INSERT INTO `players` VALUES ('18f2bada-2f3c-419e-921c-0fac96324e41','Jay F'),('31c2bb6a-1161-4981-98ef-ca9d4cc302c6','Bailey M'),('494925c2-0147-4381-9b5d-eb1b15622f73','Liam R'),('7c847407-d519-479c-99bd-b57d01a98670','Arik H'),('7d5d6490-bb57-4a6d-a268-92c6d0fc6d43','Zoltán M'),('9f16663c-f653-471a-8bb3-b4eb26524b67','Dean P'),('bcd17dd0-e430-40b5-954f-9a7289a8bac7','Dan F'),('bcdc66af-d20f-42e0-8bc2-21fee1c7ec26','Kieran H'),('be1d79dd-b907-4fcc-8ead-1bd50eb01571','Brayden M'),('f73a2cf1-38a2-4ae6-b4d5-ea3c68f10db5','Cyrus T');
+/*!40000 ALTER TABLE `players` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -151,7 +151,7 @@ CREATE TABLE `Seats` (
   KEY `player_id` (`player_id`),
   CONSTRAINT `seats_ibfk_1` FOREIGN KEY (`deck_id`) REFERENCES `decks` (`id`),
   CONSTRAINT `seats_ibfk_2` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`),
-  CONSTRAINT `seats_ibfk_3` FOREIGN KEY (`player_id`) REFERENCES `Players` (`id`)
+  CONSTRAINT `seats_ibfk_3` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

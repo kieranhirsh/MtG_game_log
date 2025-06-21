@@ -9,7 +9,7 @@ class Seat_validator():
         Seat_validator.valid_ko_turn(new_seat["ko_turn"])
         common.valid_id("deck", new_seat["deck_id"])
         common.valid_id("Game", new_seat["game_id"])
-        common.valid_id("Player", new_seat["player_id"])
+        common.valid_id("player", new_seat["player_id"])
 
         # if all checks are passed, we're good to go
         return True

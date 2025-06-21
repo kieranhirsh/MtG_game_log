@@ -3,17 +3,17 @@
 from flask import request, abort
 from crud.base_crud import Base_crud
 from data import storage
-from models.player import Player
-from validation.player import Player_validator
+from models.player import player
+from validation.player import player_validator
 
-class Player_crud():
+class player_crud():
     @staticmethod
     def all(return_model_object = False):
         """ Class method that returns all players data """
         output = []
 
         try:
-            result = storage.get(class_name = 'Player')
+            result = storage.get(class_name = 'player')
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to load players\n"
@@ -33,10 +33,10 @@ class Player_crud():
     def specific(key, value, return_model_object = False):
         """ Class method that returns a specific player's data """
         try:
-            result: Player = storage.get(class_name = 'Player', key = key, value = value)
+            result: player = storage.get(class_name = 'player', key = key, value = value)
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to load Player data\n"
+            return "Unable to load player data\n"
 
         if return_model_object or not result:
             return result
@@ -62,9 +62,9 @@ class Player_crud():
         test_player = {
             "player_name": data["player_name"]
         }
-        Player_validator.is_valid(test_player)
+        player_validator.is_valid(test_player)
 
-        new_player = Player(
+        new_player = player(
             player_name=data["player_name"]
         )
 
@@ -72,7 +72,7 @@ class Player_crud():
             storage.add(new_player)
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to add new Player\n"
+            return "Unable to add new player\n"
 
         if return_model_object:
             return new_player
@@ -92,14 +92,14 @@ class Player_crud():
         except:
             data = data.get_json()
 
-        player_to_update = Player_crud.specific("id", player_id)
+        player_to_update = player_crud.specific("id", player_id)
         for key in data:
             player_to_update[key] = data[key]
 
-        Player_validator.is_valid(player_to_update)
+        player_validator.is_valid(player_to_update)
 
         try:
-            result = storage.update('Player', player_id, data, Player.can_update)
+            result = storage.update('player', player_id, data, player.can_update)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to update specified player\n"
@@ -116,37 +116,37 @@ class Player_crud():
 
     @staticmethod
     def delete(player_id):
-        """ Class method that deletes an existing Player """
+        """ Class method that deletes an existing player """
         try:
-            # delete the Player record
-            storage.delete('Player', player_id)
+            # delete the player record
+            storage.delete('player', player_id)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to delete specified player\n"
 
-        return Player_crud.all()
+        return player_crud.all()
 
     @staticmethod
     def get_parent_data(player_id, parent_type, return_model_object = False):
         return Base_crud.get_parent_data(object_id=player_id,
-                                         object_type="Player",
+                                         object_type="player",
                                          parent_type=parent_type,
                                          return_model_object=return_model_object)
 
     @staticmethod
     def get_sibling_data(player_id, parent_type, return_model_object = False):
-        """ Class method get the sibling data for a given Player """
+        """ Class method get the sibling data for a given player """
         output = []
 
         try:
-            player_data = storage.get(class_name="Player", key="id", value=player_id)
+            player_data = storage.get(class_name="player", key="id", value=player_id)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to find specific player\n"
 
         parent_id = getattr(player_data[0], "%s_id" % (parent_type))
         try:
-            sibling_data = storage.get(class_name="Player", key="%s_id" % (parent_type), value=parent_id)
+            sibling_data = storage.get(class_name="player", key="%s_id" % (parent_type), value=parent_id)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to find sibling players\n"

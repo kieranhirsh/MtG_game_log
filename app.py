@@ -7,7 +7,7 @@ from errors import errors
 from crud.colour_identity import colour_identity_crud
 from crud.deck import deck_crud
 from crud.game import game_crud
-from crud.player import Player_crud
+from crud.player import player_crud
 from crud.seat import Seat_crud
 from graphs import pie_charts, xy_graphs
 from utils import utils
@@ -43,10 +43,10 @@ def input():
             missing_entries = []
 
             owner_name = request.form["owner"]
-            owner_data = storage.get(class_name="Player", key="player_name", value=owner_name)
+            owner_data = storage.get(class_name="player", key="player_name", value=owner_name)
             if not owner_data:
                 call_error = True
-                missing_entries.append(["Player", "player_name", owner_name])
+                missing_entries.append(["player", "player_name", owner_name])
 
             colour_identity_data, desired_ci = utils.get_ci_data_from_dropdown_inputs(request.form)
             if not colour_identity_data:
@@ -86,7 +86,7 @@ def input():
             for i in range(len(game_decks)):
                 # find the deck and player id, and ko_turn, for each seat
                 desired_deck = deck_crud.specific(key="deck_name", value=game_decks[i])
-                desired_player = Player_crud.specific(key="player_name", value=game_players[i])
+                desired_player = player_crud.specific(key="player_name", value=game_players[i])
                 if game_ko_turns[i]:
                     ko_turn = int(game_ko_turns[i])
                 else:
@@ -114,12 +114,12 @@ def input():
                 "player_name": request.form["player_name"]
             }
 
-            Player_crud.create(data=jsonify(new_player))
+            player_crud.create(data=jsonify(new_player))
 
     # Then load the data we need
     colour_identities = colour_identity_crud.all(True)
     decks = deck_crud.all(True)
-    players = Player_crud.all(True)
+    players = player_crud.all(True)
 
     # Prepare data to pass to the template
     html_data = {"colour_identities": colour_identities,
@@ -152,7 +152,7 @@ def input_edit():
                 })
             if request.form["owner"]:
                 owner_name = request.form["owner"]
-                owner_data = storage.get(class_name="Player", key="player_name", value=owner_name)
+                owner_data = storage.get(class_name="player", key="player_name", value=owner_name)
 
                 if owner_data:
                     new_deck_data.update({
@@ -160,7 +160,7 @@ def input_edit():
                     })
                 else:
                     call_error = True
-                    missing_entries.append(["Player", "player_name", owner_name])
+                    missing_entries.append(["player", "player_name", owner_name])
             if request.form.getlist("ci_abbr"):
                 colour_identity_data, desired_ci = utils.get_ci_data_from_dropdown_inputs(request.form)
                 if colour_identity_data:
@@ -199,9 +199,9 @@ def input_edit():
             game_crud.update_game_time(game_to_edit["id"])
         elif input_type == "player":
             try:
-                player_to_edit = Player_crud.specific('player_name', request.form['player_name'])
+                player_to_edit = player_crud.specific('player_name', request.form['player_name'])
             except:
-                return errors.entry_not_found('input.html', [['Player', 'player_name', request.form['player_name']]], 'edit')
+                return errors.entry_not_found('input.html', [['player', 'player_name', request.form['player_name']]], 'edit')
 
             new_player_data = {}
             if request.form["new_player_name"]:
@@ -209,7 +209,7 @@ def input_edit():
                     "player_name": request.form["new_player_name"]
                 })
 
-            Player_crud.update(player_to_edit["id"], jsonify(new_player_data))
+            player_crud.update(player_to_edit["id"], jsonify(new_player_data))
 
     # Then load all the database data to pass to the template
     html_data = utils.load_all_db_data()
@@ -224,7 +224,7 @@ def input_delete():
         module_names = {
             "deck": deck_crud,
             "game": game_crud,
-            "player": Player_crud
+            "player": player_crud
         }
 
         # Find the type of data to delete
@@ -243,7 +243,7 @@ def input_delete():
     # Load the data we need
     decks = deck_crud.all(True)
     games = game_crud.all(True)
-    players = Player_crud.all(True)
+    players = player_crud.all(True)
 
     # Prepare data to pass to the template
     html_data = {"decks": decks,
@@ -257,7 +257,7 @@ def data_get():
     """ Spreadsheets are called here """
     # Load the data we need
     colour_identities = colour_identity_crud.all(True)
-    players = Player_crud.all(True)
+    players = player_crud.all(True)
 
     # Prepare data to pass to the template
     html_data = {"colour_identities": colour_identities,
@@ -270,7 +270,7 @@ def data_post():
     """ Spreadsheets are displayed here """
     # Load the data we need
     colour_identities = colour_identity_crud.all(True)
-    players = Player_crud.all(True)
+    players = player_crud.all(True)
 
     # this desperately wants to be a select case, but I'm using Python 3.8 :(
     if request.form["type"] == "colour_identity":
@@ -311,9 +311,9 @@ def data_post():
         if request.form['player_name']:
             # check that player exists in database, return an error if it doesn't
             player_name = request.form["player_name"]
-            player_data = storage.get(class_name="Player", key="player_name", value=player_name)
+            player_data = storage.get(class_name="player", key="player_name", value=player_name)
             if not player_data:
-                return errors.entry_not_found('data.html', [["Player", "player_name", player_name]])
+                return errors.entry_not_found('data.html', [["player", "player_name", player_name]])
 
             # loop over all colour identities
             for colour_identity in colour_identities:
@@ -379,11 +379,11 @@ def data_post():
                 # this wants to be a select case, but I'm using Python 3.8 :(
                 if form_item == "player_name":
                     # check that player exists in database, return an error if it doesn't
-                    player_data = storage.get(class_name="Player", key="player_name", value=restriction_value)
+                    player_data = storage.get(class_name="player", key="player_name", value=restriction_value)
                     if not player_data:
-                        return errors.entry_not_found('data.html', [["Player", "player_name", restriction_value]])
+                        return errors.entry_not_found('data.html', [["player", "player_name", restriction_value]])
 
-                    class_type = "Player"
+                    class_type = "player"
 
                 elif form_item == "ci_abbr":
                     colour_identity_data, desired_ci = utils.get_ci_data_from_dropdown_inputs(request.form)
@@ -435,7 +435,7 @@ def data_post():
         # Load the data we need
         colour_identities = colour_identity_crud.all(True)
         games = game_crud.all(True)
-        players = Player_crud.all(True)
+        players = player_crud.all(True)
         num_seats = 0
 
         for game in games:
@@ -470,7 +470,7 @@ def data_post():
             # loop over all players
             for player in players:
                 # find all decks owned by a given player
-                player_decks = Player_crud.get_child_data(player.id, "deck", True)
+                player_decks = player_crud.get_child_data(player.id, "deck", True)
                 decks_to_remove = []
 
                 # loop over those decks
@@ -495,7 +495,7 @@ def data_post():
         else:
             for player in players:
                 # if we have no restriction the number of decks is just the length of the array
-                num_decks = len(Player_crud.get_child_data(player.id, "deck", True))
+                num_decks = len(player_crud.get_child_data(player.id, "deck", True))
 
                 player_data.append({
                     "id": player.id,
@@ -507,7 +507,7 @@ def data_post():
         # start by looping over all players
         for player in player_data:
             # number of games played is the number of child seats
-            player["games_played"] = len(Player_crud.get_child_data(player["id"], "Seat", True))
+            player["games_played"] = len(player_crud.get_child_data(player["id"], "Seat", True))
 
             # if they've played no games we need to set the win rate manually to avoid divide by zero errors
             if player["games_played"] == 0:
@@ -574,7 +574,7 @@ def graphs():
             "deck": "Number of Decks",
             "number of colours": "Number of Colours",
             "number of decks": "Number of Decks",
-            "owner": "Player",
+            "owner": "player",
             "win rate": "Win Rate"
         }
 
@@ -655,7 +655,7 @@ def graphs():
                     call_error = True
                     missing_entries.append([request.form["bar_y"], 'Y axis'])
             elif request.form["bar_x"] == "owner":
-                players = Player_crud.all(True)
+                players = player_crud.all(True)
 
                 for player in players:
                     player_name = getattr(player, "player_name")
@@ -670,7 +670,7 @@ def graphs():
                     for datum in data:
                         datum_player_model = getattr(datum, "player")
                         datum_owner = getattr(datum_player_model, "player_name")
-                        games_played = len(Player_crud.get_child_data(getattr(datum_player_model, "id"), "Seat", True))
+                        games_played = len(player_crud.get_child_data(getattr(datum_player_model, "id"), "Seat", True))
 
                         if games_played == 0:
                             xy_data[datum_owner] = 0
@@ -775,7 +775,7 @@ def graphs():
                     datum_num_colours = datum.colour_identity.num_colours
                     pie_data["%s colours" % datum_num_colours] += 1
             elif request.form["pie_divisions"] == "owner":
-                players = Player_crud.all(True)
+                players = player_crud.all(True)
 
                 for player in players:
                     player_name = getattr(player, "player_name")

@@ -1,11 +1,11 @@
 #!/usr/bin/python
-""" Player model """
+""" player model """
 import uuid
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from data import Base
 
-class Player(Base):
+class player(Base):
     """ Representation of player """
 
     all_attribs = ["id", "player_name"]
@@ -13,7 +13,7 @@ class Player(Base):
     can_update  = ["player_name"]
 
     # Class attributes defaults
-    __tablename__ = 'Players'
+    __tablename__ = 'players'
     id            = Column(String(64), nullable=False, primary_key=True)
     player_name   = Column("player_name", String(128), nullable=False)
     decks         = relationship("deck", back_populates="player", cascade="delete, delete-orphan")

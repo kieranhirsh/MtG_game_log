@@ -15,7 +15,7 @@ class DBStorage():
         "colour_identity": "colour_identity",
         "deck": "deck",
         "game": "game",
-        "Player": "player",
+        "player": "player",
         "Seat": "seat"
     }
 

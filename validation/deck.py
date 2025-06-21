@@ -7,7 +7,7 @@ class deck_validator():
     def is_valid(new_deck):
         # check all inputs are valid
         deck_validator.valid_deck_name(new_deck["deck_name"])
-        common.valid_id("Player", new_deck["player_id"])
+        common.valid_id("player", new_deck["player_id"])
         common.valid_id("colour_identity", new_deck["colour_identity_id"])
 
         # if all checks are passed, we're good to go
