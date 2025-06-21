@@ -3,17 +3,17 @@
 from flask import request, abort
 from crud.base_crud import Base_crud
 from data import storage
-from models.seat import Seat
-from validation.seat import Seat_validator
+from models.seat import seat
+from validation.seat import seat_validator
 
-class Seat_crud():
+class seat_crud():
     @staticmethod
     def all(return_model_object = False):
         """ Class method that returns all seats data """
         output = []
 
         try:
-            result = storage.get(class_name = 'Seat')
+            result = storage.get(class_name = 'seat')
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to load seats\n"
@@ -37,10 +37,10 @@ class Seat_crud():
     def specific(key, value, return_model_object = False):
         """ Class method that returns a specific seat's data """
         try:
-            result: Seat = storage.get(class_name = 'Seat', key = key, value = value)
+            result: seat = storage.get(class_name = 'seat', key = key, value = value)
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to load Seat data\n"
+            return "Unable to load seat data\n"
 
         if return_model_object or not result:
             return result
@@ -82,9 +82,9 @@ class Seat_crud():
             "game_id": data["game_id"],
             "player_id": data["player_id"]
         }
-        Seat_validator.is_valid(test_seat)
+        seat_validator.is_valid(test_seat)
 
-        new_seat = Seat(
+        new_seat = seat(
             seat_no=data["seat_no"],
             ko_turn=data["ko_turn"],
             deck_id=data["deck_id"],
@@ -96,7 +96,7 @@ class Seat_crud():
             storage.add(new_seat)
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to add new Seat\n"
+            return "Unable to add new seat\n"
 
         if return_model_object:
             return new_seat
@@ -120,14 +120,14 @@ class Seat_crud():
         except:
             data = data.get_json()
 
-        seat_to_update = Seat_crud.specific("id", seat_id)
+        seat_to_update = seat_crud.specific("id", seat_id)
         for key in data:
             seat_to_update[key] = data[key]
 
-        Seat_validator.is_valid(seat_to_update)
+        seat_validator.is_valid(seat_to_update)
 
         try:
-            result = storage.update('Seat', seat_id, data, Seat.can_update)
+            result = storage.update('seat', seat_id, data, seat.can_update)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to update specified seat\n"
@@ -148,36 +148,36 @@ class Seat_crud():
 
     @staticmethod
     def delete(seat_id):
-        """ Class method that deletes an existing Seat """
+        """ Class method that deletes an existing seat """
         try:
-            storage.delete('Seat', seat_id)
+            storage.delete('seat', seat_id)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to delete specified seat\n"
 
-        return Seat_crud.all()
+        return seat_crud.all()
 
     @staticmethod
     def get_parent_data(seat_id, parent_type, return_model_object = False):
         return Base_crud.get_parent_data(object_id=seat_id,
-                                         object_type="Seat",
+                                         object_type="seat",
                                          parent_type=parent_type,
                                          return_model_object=return_model_object)
 
     @staticmethod
     def get_sibling_data(seat_id, parent_type, return_model_object = False):
-        """ Class method get the sibling data for a given Seat """
+        """ Class method get the sibling data for a given seat """
         output = []
 
         try:
-            seat_data = storage.get(class_name="Seat", key="id", value=seat_id)
+            seat_data = storage.get(class_name="seat", key="id", value=seat_id)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to find specific decseatk\n"
 
         parent_id = getattr(seat_data[0], "%s_id" % (parent_type))
         try:
-            sibling_data = storage.get(class_name="Seat", key="%s_id" % (parent_type), value=parent_id)
+            sibling_data = storage.get(class_name="seat", key="%s_id" % (parent_type), value=parent_id)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to find sibling seats\n"

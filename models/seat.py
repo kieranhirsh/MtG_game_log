@@ -1,11 +1,11 @@
 #!/usr/bin/python
-""" Seat model """
+""" seat model """
 import uuid
 from sqlalchemy import Column, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 from data import Base
 
-class Seat(Base):
+class seat(Base):
     """ Representation of seat """
 
     all_attribs = ["id", "seat_no", "ko_turn", "deck_id", "game_id", "player_id"]
@@ -13,7 +13,7 @@ class Seat(Base):
     can_update  = ["seat_no", "ko_turn", "deck_id", "game_id", "player_id"]
 
     # Class attributes defaults
-    __tablename__ = 'Seats'
+    __tablename__ = 'seats'
     id            = Column(String(64), nullable=False, primary_key=True)
     seat_no       = Column("seat_no", Integer, nullable=False)
     ko_turn       = Column("ko_turn", Integer)

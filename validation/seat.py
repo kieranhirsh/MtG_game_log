@@ -1,12 +1,12 @@
 #!/usr/bin/python
-""" Seat validation """
+""" seat validation """
 from validation import common
 
-class Seat_validator():
+class seat_validator():
     def is_valid(new_seat):
         # check all inputs are valid
-        Seat_validator.valid_seat_no(new_seat["seat_no"])
-        Seat_validator.valid_ko_turn(new_seat["ko_turn"])
+        seat_validator.valid_seat_no(new_seat["seat_no"])
+        seat_validator.valid_ko_turn(new_seat["ko_turn"])
         common.valid_id("deck", new_seat["deck_id"])
         common.valid_id("Game", new_seat["game_id"])
         common.valid_id("player", new_seat["player_id"])

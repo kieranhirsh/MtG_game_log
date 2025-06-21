@@ -26,7 +26,7 @@ class game(Base):
     winning_player_id = Column("winning_player_id", String(128), ForeignKey('players.id'), nullable=True)
     winning_deck      = relationship("deck", back_populates="games_won")
     winning_player    = relationship("player", back_populates="games_won")
-    seats             = relationship("Seat", back_populates="game", cascade="delete, delete-orphan")
+    seats             = relationship("seat", back_populates="game", cascade="delete, delete-orphan")
 
     # constructor
     def __init__(self, *args, **kwargs):

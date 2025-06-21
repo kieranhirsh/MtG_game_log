@@ -16,7 +16,7 @@ class DBStorage():
         "deck": "deck",
         "game": "game",
         "player": "player",
-        "Seat": "seat"
+        "seat": "seat"
     }
 
     def __init__(self, Base):

@@ -3,7 +3,7 @@ from crud.colour_identity import colour_identity_crud
 from crud.deck import deck_crud
 from crud.game import game_crud
 from crud.player import player_crud
-from crud.seat import Seat_crud
+from crud.seat import seat_crud
 from data import storage
 
 def get_ci_data_from_dropdown_inputs(request_form):
@@ -48,7 +48,7 @@ def load_all_db_data():
     decks = deck_crud.all(True)
     games = game_crud.all(True)
     players = player_crud.all(True)
-    seats = Seat_crud.all(True)
+    seats = seat_crud.all(True)
 
     return {
             "colour_identities": colour_identities,

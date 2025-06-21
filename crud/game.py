@@ -231,7 +231,7 @@ class game_crud():
         game_object = game_crud.specific("id", game_id, True)
 
         # get the data we need to generate the name
-        seats = game_crud.get_child_data(game_object[0].id, "Seat", True)
+        seats = game_crud.get_child_data(game_object[0].id, "seat", True)
 
         # calculate the game length in turns
         game_turns = 0
@@ -252,7 +252,7 @@ class game_crud():
         # find the game entry to be updated
         game_object = game_crud.specific("id", game_id, True)
 
-        seats = game_crud.get_child_data(game_object[0].id, "Seat", True)
+        seats = game_crud.get_child_data(game_object[0].id, "seat", True)
 
         for seat in seats:
             print(seat.ko_turn)

@@ -8,7 +8,7 @@ from crud.colour_identity import colour_identity_crud
 from crud.deck import deck_crud
 from crud.game import game_crud
 from crud.player import player_crud
-from crud.seat import Seat_crud
+from crud.seat import seat_crud
 from graphs import pie_charts, xy_graphs
 from utils import utils
 
@@ -73,7 +73,7 @@ def input():
             # create the new game
             new_game_object = game_crud.create(data=jsonify(new_game))
 
-            # get the data needed to create new Seats
+            # get the data needed to create new seats
             game_decks = request.form.getlist("game_decks")
             game_players = request.form.getlist("game_players")
             game_ko_turns = request.form.getlist("game_ko_turns")
@@ -101,7 +101,7 @@ def input():
                 }
 
                 # create the new seat
-                Seat_crud.create(data=jsonify(new_seat))
+                seat_crud.create(data=jsonify(new_seat))
 
             # update the game name, game length in time, game length in turns, and game winner
             # these were left empty because they are derived quantities, so it's easiet to wait until all inputs were added to the database
@@ -417,7 +417,7 @@ def data_post():
             deck_data = decks
 
         for deck in deck_data:
-            deck.games_played = len(deck_crud.get_child_data(deck.id, "Seat", True))
+            deck.games_played = len(deck_crud.get_child_data(deck.id, "seat", True))
 
             if deck.games_played == 0:
                 deck.win_rate = 0
@@ -439,7 +439,7 @@ def data_post():
         num_seats = 0
 
         for game in games:
-            seats = game_crud.get_child_data(game.id, "Seat", True)
+            seats = game_crud.get_child_data(game.id, "seat", True)
             game.player = [None] * len(seats)
             game.deck = [None] * len(seats)
 
@@ -507,7 +507,7 @@ def data_post():
         # start by looping over all players
         for player in player_data:
             # number of games played is the number of child seats
-            player["games_played"] = len(player_crud.get_child_data(player["id"], "Seat", True))
+            player["games_played"] = len(player_crud.get_child_data(player["id"], "seat", True))
 
             # if they've played no games we need to set the win rate manually to avoid divide by zero errors
             if player["games_played"] == 0:
@@ -670,7 +670,7 @@ def graphs():
                     for datum in data:
                         datum_player_model = getattr(datum, "player")
                         datum_owner = getattr(datum_player_model, "player_name")
-                        games_played = len(player_crud.get_child_data(getattr(datum_player_model, "id"), "Seat", True))
+                        games_played = len(player_crud.get_child_data(getattr(datum_player_model, "id"), "seat", True))
 
                         if games_played == 0:
                             xy_data[datum_owner] = 0
@@ -690,7 +690,7 @@ def graphs():
                 if request.form["bar_y"] == "win rate":
                     for datum in data:
                         datum_name = getattr(datum, "deck_name")
-                        games_played = len(deck_crud.get_child_data(getattr(datum, "id"), "Seat", True))
+                        games_played = len(deck_crud.get_child_data(getattr(datum, "id"), "seat", True))
 
                         if games_played == 0:
                             xy_data[datum_name] = 0
