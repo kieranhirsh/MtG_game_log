@@ -37,14 +37,18 @@
   <div id="dropdown">
     Graph type:
     <select name="graph_types" id="graph_types" onchange="toggleGraphType()">
-      <option value="" selected disabled hidden>Choose input data type</option>
+      <option value="" selected disabled hidden>Choose input graph type</option>
       <option value="bar">Bar chart</option>
+      <option value="line">Line graph</option>
       <option value="pie">Pie chart</option>
     </select>
   </div>
 
   <div id="menu">
-    <datalist id="data_type">
+    <datalist id="bar_data_type">
+      <option value="deck">
+    </datalist>
+    <datalist id="pie_data_type">
       <option value="deck">
     </datalist>
     <datalist id="deck_bins_and_x_axis">
@@ -58,13 +62,33 @@
       <option value="number of decks">
       <option value="win rate">
     </datalist>
+    <datalist id="line_data_type">
+      <option value="deck">
+      <option value="player">
+    </datalist>
+    <datalist id="line_x_axis">
+      <option value="time">
+    </datalist>
+    <datalist id="line_y_axis">
+      <option value="win rate">
+    </datalist>
+    <datalist id="players">
+      {% for player in data["players"] %}
+      <option value="{{ player.player_name }}">
+        {% endfor %}
+    </datalist>
+    <datalist id="decks">
+      {% for deck in data["decks"] %}
+      <option value="{{ deck.deck_name }}">
+        {% endfor %}
+    </datalist>
 
     <div class="data_input" id="bar">
       <h2>Bar Chart</h2>
       <form action="/graphs" method="POST">
         <input class="type" type="text" id="type" name="type" value="bar">
         <label for="bar_data">Data Type: </label>
-        <input type="search" id="bar_data" name="bar_data" list="data_type" autocomplete="off" onchange="changeBarColumnOptions()"><br>
+        <input type="search" id="bar_data" name="bar_data" list="bar_data_type" autocomplete="off" onchange="changeBarColumnOptions()"><br>
         <label for="bar_y">Y axis: </label>
         <input type="search" id="bar_y" name="bar_y" autocomplete="off"><br>
         <label for="bar_x">X axis: </label>
@@ -77,12 +101,38 @@
       </form>
     </div>
 
+    <div class="data_input" id="line">
+      <h2>Line Graph</h2>
+      <form action="/graphs" method="POST">
+        <input class="type" type="text" id="type" name="type" value="line">
+        Data type:
+        <select name="line_data" id="line_data" onchange="changeLineColumnOptions()">
+          <option value="" selected disabled hidden>Choose input data type</option>
+          <option value="deck">Deck</option>
+          <option value="player">Player</option>
+        </select><br>
+        <div class="line_input" id="deck_input">
+          <label for="line_deck">Deck: </label>
+          <input type="search" id="line_deck" name="line_deck" list="decks" autocomplete="off"><br>
+        </div>
+        <div class="line_input" id="player_input">
+          <label for="line_player">Player: </label>
+          <input type="search" id="line_player" name="line_player" list="players" autocomplete="off"><br>
+        </div>
+        <label for="line_y">Y axis: </label>
+        <input type="search" id="line_y" name="line_y" autocomplete="off"><br>
+        <label for="line_x">X axis: </label>
+        <input type="search" id="line_x" name="line_x" autocomplete="off"><br>
+        <input type="submit" value="Make line">
+      </form>
+    </div>
+
     <div class="data_input" id="pie">
       <h2>Pie Chart</h2>
       <form action="/graphs" method="POST">
         <input class="type" type="text" id="type" name="type" value="pie">
         <label for="pie_data">Data Type: </label>
-        <input type="search" id="pie_data" name="pie_data" list="data_type" autocomplete="off"  onchange="changePieDivisionsOptions()">
+        <input type="search" id="pie_data" name="pie_data" list="pie_data_type" autocomplete="off"  onchange="changePieDivisionsOptions()">
         <label for="pie_divisions">Slices: </label>
         <input type="search" id="pie_divisions" name="pie_divisions" autocomplete="off">
         <input type="submit" value="Make pie">

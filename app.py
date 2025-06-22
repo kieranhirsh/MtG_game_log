@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import importlib
 from flask import Flask, render_template, request, jsonify
+from datetime import datetime
 from api.v1 import api_routes
 from data import storage
 from errors import errors
@@ -574,6 +575,8 @@ def data_post():
 def graphs():
     """ Graphs are displayed here """
     # Load the data we need before passing it to the template
+    html_data = {"decks": deck_crud.all(True),
+                 "players": player_crud.all(True)}
     if request.method == 'GET':
         deck_data = deck_crud.all(True)
 
@@ -594,6 +597,7 @@ def graphs():
 
         return render_template(
             'graphs.html',
+            data=html_data,
             graph_type="example",
             example_bar_chart=example_bar_chart,
             example_pie_chart=example_pie_chart
@@ -607,6 +611,11 @@ def graphs():
                 "file": "deck",
                 "class": "deck_crud",
                 "name_column": "deck_name"
+            },
+            "player": {
+                "file": "player",
+                "class": "player_crud",
+                "name_column": "player_name"
             }
         }
         titles = {
@@ -625,8 +634,6 @@ def graphs():
                 missing_entries.append([request.form["bar_data"], 'Data Type'])
                 return errors.option_not_available('graphs.html', missing_entries)
 
-            xy_data = {}
-
             if "no_zeroes" in request.form:
                 no_zeroes = True
             else:
@@ -635,6 +642,8 @@ def graphs():
             crud_file = importlib.import_module("crud." + model_names[request.form["bar_data"]]["file"])
             crud_class = getattr(crud_file, model_names[request.form["bar_data"]]["class"])
             data = crud_class.all(True)
+
+            xy_data = {}
 
             # this wants to be a select case, but I'm using Python 3.8 :(
             if request.form["bar_x"] == "colour":
@@ -649,8 +658,7 @@ def graphs():
 
                 if request.form["bar_y"] == "number of decks":
                     for datum in data:
-                        datum_ci_model = getattr(datum, "colour_identity")
-                        datum_colours = getattr(datum_ci_model, "colours")
+                        datum_colours = datum.colour_identity.colours
                         if "c" in datum_colours:
                             xy_data["colourless"] += 1
                             continue
@@ -756,6 +764,65 @@ def graphs():
                                                 titles[request.form["bar_y"]] + " per " + titles[request.form["bar_x"]],
                                                 no_zeroes)
 
+        elif request.form['type'] == "line":
+            if request.form["line_data"] not in list(model_names.keys()):
+                call_error = True
+                missing_entries.append([request.form["line_data"], 'Data Type'])
+                return errors.option_not_available('graphs.html', missing_entries)
+
+            crud_file = importlib.import_module("crud." + model_names[request.form["line_data"]]["file"])
+            crud_class = getattr(crud_file, model_names[request.form["line_data"]]["class"])
+            data = crud_class.specific(key=request.form['line_data'] + "_name",
+                                       value=request.form["line_" + request.form['line_data']],
+                                       return_model_object = True)[0]
+
+            xy_data = {}
+
+            # this wants to be a select case, but I'm using Python 3.8 :(
+            if request.form["line_x"] == "time":
+                if request.form["line_y"] == "win rate":
+                    seats = data.seats
+                    games = []
+                    time_axis = []
+                    for seat in seats:
+                        games.append(seat.game)
+
+                        game_year = int(str(seat.game.start_time)[:4])
+                        game_month = int(str(seat.game.start_time)[5:7])
+                        game_day = int(str(seat.game.start_time)[8:10]) + 1
+                        time_axis.append(datetime(game_year, game_month, game_day))
+
+                    time_axis.append(datetime.now())
+                    time_axis = list(set(time_axis))
+                    time_axis.sort()
+
+                    win_rate_over_time = [0] * len(time_axis)
+                    games_played_over_time = [0] * len(time_axis)
+                    games_won_over_time = [0] * len(time_axis)
+                    for i in range(len(time_axis)):
+                        for game in games:
+                            if game.start_time < time_axis[i]:
+                                games_played_over_time[i] += 1
+                                if getattr(game, "winning_%s_id" % request.form['line_data']) == data.id:
+                                    games_won_over_time[i] += 1
+
+                        if games_played_over_time[i] == 0:
+                            win_rate_over_time[i] = 0
+                        else:
+                            win_rate_over_time[i] = games_won_over_time[i] / games_played_over_time[i] * 100
+
+                    plt_graph = xy_graphs.make_xy_graph(display = "line",
+                                                        x_values = time_axis,
+                                                        y_values = win_rate_over_time,
+                                                        x_label = "Time",
+                                                        y_label = "Win Rate",
+                                                        title = "%s's win rate over time" %  getattr(data, "%s_name" % request.form['line_data']),
+                                                        no_zeroes = False)
+                else:
+                    pass
+            else:
+                pass
+
         elif request.form['type'] == "pie":
             if request.form["pie_data"] not in list(model_names.keys()):
                 call_error = True
@@ -840,6 +907,7 @@ def graphs():
 
         return render_template(
             'graphs.html',
+            data=html_data,
             graph_type=request.form['type'],
             plt_graph=plt_graph
         )

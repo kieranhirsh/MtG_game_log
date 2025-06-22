@@ -4,5 +4,8 @@ body .data_input {
 body .data_input .type {
   display: none;
 }
+body .data_input .line_input {
+  display: none;
+}
 
 /*# sourceMappingURL=graphs.css.map */
