@@ -257,10 +257,12 @@ def data_get():
     """ Spreadsheets are called here """
     # Load the data we need
     colour_identities = colour_identity_crud.all(True)
+    decks = deck_crud.all(True)
     players = player_crud.all(True)
 
     # Prepare data to pass to the template
     html_data = {"colour_identities": colour_identities,
+                 "decks": decks,
                  "players": players}
 
     return render_template('data.html', data=html_data)
@@ -270,6 +272,7 @@ def data_post():
     """ Spreadsheets are displayed here """
     # Load the data we need
     colour_identities = colour_identity_crud.all(True)
+    decks = deck_crud.all(True)
     players = player_crud.all(True)
 
     # this desperately wants to be a select case, but I'm using Python 3.8 :(
@@ -364,6 +367,7 @@ def data_post():
 
         # Prepare data to pass to the template
         html_data = {"colour_identities": colour_identity_data,
+                     "decks": decks,
                      "players": players}
 
         return render_template('data.html', data_type="colour_identity", data=html_data)
@@ -433,9 +437,7 @@ def data_post():
         return render_template('data.html', data_type="deck", data=html_data)
     elif request.form["type"] == "game":
         # Load the data we need
-        colour_identities = colour_identity_crud.all(True)
         games = game_crud.all(True)
-        players = player_crud.all(True)
         num_seats = 0
 
         for game in games:
@@ -454,6 +456,7 @@ def data_post():
 
         # Prepare data to pass to the template
         html_data = {"colour_identities": colour_identities,
+                     "decks": decks,
                      "games": games,
                      "players": players,
                      "num_seats": num_seats}
@@ -519,12 +522,14 @@ def data_post():
 
         # Prepare data to pass to the template
         html_data = {"colour_identities": colour_identities,
+                     "decks": decks,
                      "players": player_data}
 
         return render_template('data.html', data_type="player", data=html_data)
 
     # Prepare data to pass to the template
     html_data = {"colour_identities": colour_identities,
+                 "decks": decks,
                  "players": players}
 
     return render_template('data.html', data=html_data)
