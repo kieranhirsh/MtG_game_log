@@ -439,11 +439,25 @@ def data_post():
         # Load the data we need
         games = game_crud.all(True)
         num_seats = 0
+        games_to_remove = []
 
         for game in games:
             seats = game_crud.get_child_data(game.id, "seat", True)
             game.player = [None] * len(seats)
             game.deck = [None] * len(seats)
+
+            if request.form["deck_name"] or request.form["player_name"]:
+                deck_found = False
+                player_found = False
+
+                for seat in seats:
+                    if not request.form["deck_name"] or seat.deck.deck_name == request.form["deck_name"]:
+                        deck_found = True
+                    if not request.form["player_name"] or seat.player.player_name == request.form["player_name"]:
+                        player_found = True
+
+                if not deck_found or not player_found:
+                    games_to_remove.append(game)
 
             game.winner = game.winning_player.player_name + " - " + game.winning_deck.deck_name
 
@@ -453,6 +467,9 @@ def data_post():
 
             if len(seats) > num_seats:
                 num_seats = len(seats)
+
+        for game_to_remove in games_to_remove:
+            games.remove(game_to_remove)
 
         # Prepare data to pass to the template
         html_data = {"colour_identities": colour_identities,
