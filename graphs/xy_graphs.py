@@ -37,16 +37,15 @@ def make_xy_graph(display, x_values, y_values, x_label="", y_label="", title="",
     else:
         raise ValueError("No graph display specified (must be bar or line)")
 
-    if y_label == "Win Rate":
-        ax.set_ylim([0, 100])
-        yticks = np.arange(0, 101, 20)
-        ylabels = [f"{y}%" for y in yticks]
-        ax.set_yticks(yticks, ylabels)
-
     if x_label:
         ax.set_xlabel(x_label)
     if y_label:
         ax.set_ylabel(y_label)
+        if y_label == "Win Rate":
+            ax.set_ylim([0, 100])
+            yticks = np.arange(0, 101, 12.5)
+            ylabels = [f"{y}%" for y in yticks]
+            ax.set_yticks(yticks, ylabels)
     if title:
         ax.set_title(title)
     plt.tight_layout()
