@@ -255,13 +255,11 @@ class game_crud():
         seats = game_crud.get_child_data(game_object[0].id, "seat", True)
 
         for seat in seats:
-            print(seat.ko_turn)
             if seat.ko_turn is None:
                 updated_game = {
                     "winning_deck_id": seat.deck_id,
                     "winning_player_id": seat.player_id
                 }
-                print(updated_game)
 
         # update the game entry
         return game_crud.update(game_id=game_id, data=jsonify(updated_game), return_model_object=return_model_object)
