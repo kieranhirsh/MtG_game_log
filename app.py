@@ -282,32 +282,44 @@ def data_post():
             [{
                 "ci_name": "0 colours",
                 "colours": "skip",
-                "number_of_decks": 0
+                "number_of_decks": 0,
+                "games_played": 0,
+                "win_rate": 0
             }],
             [{
                 "ci_name": "1 colour",
                 "colours": "skip",
-                "number_of_decks": 0
+                "number_of_decks": 0,
+                "games_played": 0,
+                "win_rate": 0
             }],
             [{
                 "ci_name": "2 colours",
                 "colours": "skip",
-                "number_of_decks": 0
+                "number_of_decks": 0,
+                "games_played": 0,
+                "win_rate": 0
             }],
             [{
                 "ci_name": "3 colours",
                 "colours": "skip",
-                "number_of_decks": 0
+                "number_of_decks": 0,
+                "games_played": 0,
+                "win_rate": 0
             }],
             [{
                 "ci_name": "4 colours",
                 "colours": "skip",
-                "number_of_decks": 0
+                "number_of_decks": 0,
+                "games_played": 0,
+                "win_rate": 0
             }],
             [{
                 "ci_name": "5 colours",
                 "colours": "skip",
-                "number_of_decks": 0
+                "number_of_decks": 0,
+                "games_played": 0,
+                "win_rate": 0
             }]
         ]
 
@@ -338,6 +350,21 @@ def data_post():
                 # find the number of decks of the given colour identity
                 num_decks = len(colour_identity_decks)
 
+                games_played = 0
+                games_won = 0
+                # find the number of games played and win rate
+                for deck in colour_identity_decks:
+                    # number of games played is the number of child seats
+                    games_played += len(deck_crud.get_child_data(deck.id, "seat", True))
+                    # number of games won is the number of games with winning_deck_id equal to the colour identity's id
+                    games_won += len(game_crud.specific("winning_deck_id", deck.id, True))
+
+                # if they've played no games we need to set the win rate manually to avoid divide by zero errors
+                if games_played == 0:
+                    win_rate = 0
+                else:
+                    win_rate = games_won / games_played * 100
+
                 # find the number of colours of the given colour identity
                 num_colours = colour_identity.num_colours
 
@@ -347,12 +374,32 @@ def data_post():
                     "ci_name": colour_identity.ci_name,
                     "colours": colour_identity.colours,
                     "number_of_decks": num_decks,
-                    "num_colours": num_colours
+                    "num_colours": num_colours,
+                    "games_played": games_played,
+                    "win_rate": win_rate
                 })
         else:
             for colour_identity in colour_identities:
+                # get all the decks of the desired colour identity
+                colour_identity_decks = colour_identity_crud.get_child_data(colour_identity.id, "deck", True)
+
                 # if we have no restriction the number of decks is just the length of the array
-                num_decks = len(colour_identity_crud.get_child_data(colour_identity.id, "deck", True))
+                num_decks = len(colour_identity_decks)
+
+                games_played = 0
+                games_won = 0
+                # find the number of games played and win rate
+                for deck in colour_identity_decks:
+                    # number of games played is the number of child seats
+                    games_played += len(deck_crud.get_child_data(deck.id, "seat", True))
+                    # number of games won is the number of games with winning_deck_id equal to the colour identity's id
+                    games_won += len(game_crud.specific("winning_deck_id", deck.id, True))
+
+                # if they've played no games we need to set the win rate manually to avoid divide by zero errors
+                if games_played == 0:
+                    win_rate = 0
+                else:
+                    win_rate = games_won / games_played * 100
 
                 # find the number of colours of the given colour identity
                 num_colours = colour_identity.num_colours
@@ -363,7 +410,9 @@ def data_post():
                     "ci_name": colour_identity.ci_name,
                     "colours": colour_identity.colours,
                     "number_of_decks": num_decks,
-                    "num_colours": num_colours
+                    "num_colours": num_colours,
+                    "games_played": games_played,
+                    "win_rate": win_rate
                 })
 
         # Prepare data to pass to the template

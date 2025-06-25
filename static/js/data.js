@@ -170,8 +170,19 @@ function sortColourTables(col) {
     switching = true;
     noswitch = true;
     header = table.rows[0].getElementsByTagName("th")[col].innerHTML;
+    // If the row is "Win Rate", we need to remove the trailing % to be able to convert to a int
+    if (header === "Win Rate") {
+      for (i = 2; i < (table.rows.length); i++) {
+        x = table.rows[i].getElementsByTagName("td")[col];
+        x.innerHTML = x.innerHTML.slice(0, -1);
+      }
+    }
     // Initialise some values:
-    if (header === "# Decks") {
+    if (
+      header === "# Decks" ||
+      header === "Games Played" ||
+      header === "Win Rate"
+    ) {
       dir = "desc";
     } else {
       dir = "asc";
@@ -206,7 +217,11 @@ function sortColourTables(col) {
             continue;
           }
           // Check whether the data is a number or a string
-          if (header === "# Decks") {
+          if (
+            header === "# Decks" ||
+            header === "Games Played" ||
+            header === "Win Rate"
+          ) {
             if (parseInt(x.innerHTML) > parseInt(y.innerHTML) || parseInt(x.innerHTML) == 0) {
               // If we want to switch, mark as a switch and break the loop:
               shouldSwitch = true;
@@ -219,14 +234,13 @@ function sortColourTables(col) {
               break;
             }
           }
-          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase() || x.innerHTML.toLowerCase() == 0) {
-            // If so, mark as a switch and break the loop:
-            shouldSwitch = true;
-            break;
-          }
         } else if (dir == "desc") {
           // Check whether the data is a number or a string
-          if (header === "# Decks") {
+          if (
+            header === "# Decks" ||
+            header === "Games Played" ||
+            header === "Win Rate"
+          ) {
             if (parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
               // If so, mark as a switch and break the loop:
               shouldSwitch = true;
@@ -262,6 +276,13 @@ function sortColourTables(col) {
             noswitch = false;
           }
         }
+      }
+    }
+    // If the row is "Win Rate", we need to add the trailing % back
+    if (header === "Win Rate") {
+      for (i = 2; i < (table.rows.length); i++) {
+        x = table.rows[i].getElementsByTagName("td")[col];
+        x.innerHTML = x.innerHTML + "%";
       }
     }
   }

@@ -93,6 +93,8 @@
       <tr>
         <th onclick="sortColourTables(0)">Colour Identity</th>
         <th onclick="sortColourTables(1)"># Decks</th>
+        <th onclick="sortColourTables(2)">Games Played</th>
+        <th onclick="sortColourTables(3)">Win Rate</th>
       </tr>
       {% for colour_identity in colour_identity_group_by_num_colours %}
       <tr>
@@ -109,6 +111,12 @@
           {{ colour_identity.number_of_decks }}
           {% if colour_identity.colours == "skip" %}</b>{% endif %}
         </td>
+        <td>
+          {% if colour_identity.colours == "skip" %}<b>{% endif %}
+          {{ colour_identity.games_played }}
+          {% if colour_identity.colours == "skip" %}</b>{% endif %}
+        </td>
+        <td>{% if colour_identity.colours == "skip" %}<b>{% endif %}{{ '%0.2f'|format(colour_identity.win_rate) }}%{% if colour_identity.colours == "skip" %}</b>{% endif %}</td>
       </tr>
       {% endfor %}
     </table>
