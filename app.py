@@ -284,6 +284,7 @@ def data_post():
                 "colours": "skip",
                 "number_of_decks": 0,
                 "games_played": 0,
+                "games_won": 0,
                 "win_rate": 0
             }],
             [{
@@ -291,6 +292,7 @@ def data_post():
                 "colours": "skip",
                 "number_of_decks": 0,
                 "games_played": 0,
+                "games_won": 0,
                 "win_rate": 0
             }],
             [{
@@ -298,6 +300,7 @@ def data_post():
                 "colours": "skip",
                 "number_of_decks": 0,
                 "games_played": 0,
+                "games_won": 0,
                 "win_rate": 0
             }],
             [{
@@ -305,6 +308,7 @@ def data_post():
                 "colours": "skip",
                 "number_of_decks": 0,
                 "games_played": 0,
+                "games_won": 0,
                 "win_rate": 0
             }],
             [{
@@ -312,6 +316,7 @@ def data_post():
                 "colours": "skip",
                 "number_of_decks": 0,
                 "games_played": 0,
+                "games_won": 0,
                 "win_rate": 0
             }],
             [{
@@ -319,6 +324,7 @@ def data_post():
                 "colours": "skip",
                 "number_of_decks": 0,
                 "games_played": 0,
+                "games_won": 0,
                 "win_rate": 0
             }]
         ]
@@ -370,6 +376,13 @@ def data_post():
 
                 # add all the relevant data that has been requested
                 colour_identity_data[num_colours][0]["number_of_decks"] += num_decks
+                colour_identity_data[num_colours][0]["games_played"] += games_played
+                colour_identity_data[num_colours][0]["games_won"] += games_won
+                if colour_identity_data[num_colours][0]["games_played"] == 0:
+                    colour_identity_data[num_colours][0]["win_rate"] = 0
+                else:
+                    colour_identity_data[num_colours][0]["win_rate"] = colour_identity_data[num_colours][0]["games_won"] / colour_identity_data[num_colours][0]["games_played"] * 100
+
                 colour_identity_data[num_colours].append({
                     "ci_name": colour_identity.ci_name,
                     "colours": colour_identity.colours,
@@ -406,6 +419,13 @@ def data_post():
 
                 # add all the relevant data that has been requested
                 colour_identity_data[num_colours][0]["number_of_decks"] += num_decks
+                colour_identity_data[num_colours][0]["games_played"] += games_played
+                colour_identity_data[num_colours][0]["games_won"] += games_won
+                if colour_identity_data[num_colours][0]["games_played"] == 0:
+                    colour_identity_data[num_colours][0]["win_rate"] = 0
+                else:
+                    colour_identity_data[num_colours][0]["win_rate"] = colour_identity_data[num_colours][0]["games_won"] / colour_identity_data[num_colours][0]["games_played"] * 100
+
                 colour_identity_data[num_colours].append({
                     "ci_name": colour_identity.ci_name,
                     "colours": colour_identity.colours,
