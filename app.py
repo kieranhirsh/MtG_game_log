@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import importlib
 from flask import Flask, render_template, request, jsonify
-from datetime import datetime
+from datetime import datetime, timedelta
 from api.v1 import api_routes
 from data import storage
 from errors import errors
@@ -858,8 +858,8 @@ def graphs():
 
                         game_year = int(str(seat.game.start_time)[:4])
                         game_month = int(str(seat.game.start_time)[5:7])
-                        game_day = int(str(seat.game.start_time)[8:10]) + 1
-                        time_axis.append(datetime(game_year, game_month, game_day))
+                        game_day = int(str(seat.game.start_time)[8:10])
+                        time_axis.append(datetime(game_year, game_month, game_day) + timedelta(days=1))
 
                     time_axis.append(datetime.now())
                     time_axis = list(set(time_axis))
