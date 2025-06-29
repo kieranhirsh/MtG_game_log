@@ -24,7 +24,7 @@ def make_xy_graph(display, x_values, y_values, x_label="", y_label="", title="",
     plt.setp(ax.get_xticklabels(), rotation=45, horizontalalignment='right')
 
     if display == "line":
-        ax.plot(x_values, y_values)
+        ax.plot(x_values, y_values, marker=".")
     elif display == "bar":
         if x_label == "Colour":
             bar_colours = copy.deepcopy(x_values)
