@@ -24,7 +24,8 @@ def make_xy_graph(display, x_values, y_values, x_label="", y_label="", title="",
     plt.setp(ax.get_xticklabels(), rotation=45, horizontalalignment='right')
 
     if display == "line":
-        ax.plot(x_values, y_values, marker=".")
+        ax.plot(x_values, y_values)
+        ax.scatter(x_values[:-1], y_values[:-1], marker=".")
     elif display == "bar":
         if x_label == "Colour":
             bar_colours = copy.deepcopy(x_values)
@@ -42,7 +43,10 @@ def make_xy_graph(display, x_values, y_values, x_label="", y_label="", title="",
     if y_label:
         ax.set_ylabel(y_label)
         if y_label == "Win Rate":
+            ax.set_xlim([np.min(x_values), np.max(x_values)])
             ax.set_ylim([0, 100])
+            ax.yaxis.set_label_position("right")
+            ax.yaxis.tick_right()
             yticks = np.arange(0, 101, 12.5)
             ylabels = [f"{y}%" for y in yticks]
             ax.set_yticks(yticks, ylabels)
