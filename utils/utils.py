@@ -9,7 +9,6 @@ from data import storage
 def get_ci_data_from_dropdown_inputs(request_form):
     # initialise varaiables
     ci_abbr_string = ""
-    ci_abbr_list = []
 
     # get the list of inputs and all colour identity data
     ci_raw_list = request_form.getlist("ci_abbr")
@@ -23,21 +22,31 @@ def get_ci_data_from_dropdown_inputs(request_form):
     if not ci_abbr_string:
         desired_ci = "{none}"
     else:
-        # loop over all the colour identities and add their colour abbreviations to a list
+        # loop over all the colour identities and compare each string of colours to the input string
         for ci in all_ci:
-            ci_abbr_list.append(ci.colours)
-
-        # loop over this list of colour abbreviations and compare each item to the input string
-        for ci_abbr in ci_abbr_list:
             # the strings are sorted so that anagrams match
-            if sorted(ci_abbr) == sorted(ci_abbr_string):
-                desired_ci = ci_abbr
+            if sorted(ci.colours) == sorted(ci_abbr_string):
+                desired_ci = ci.colours
                 break
 
-    # find the desired colour identity object (will be empty is the desired colour identity doesn't exist)
+    # find the desired colour identity object (will be empty if the desired colour identity doesn't exist)
     colour_identity_data = storage.get(class_name="colour_identity", key="colours", value=desired_ci)
 
+    # return the colour identity object, as well as the colour identity abbreviation
     return colour_identity_data, desired_ci
+
+def get_deck_data_from_form_inputs(request_form):
+    # fom data comes in in the form "deck_name (owner_name)"
+    # so, we split the form data at the open bracket
+    form_data = request_form['requested_deck'].split("(")
+
+    # get the deck name is the first word, minues the space at the end
+    # owner name is the second word, minus the close bracket at the end
+    deck_name = form_data[0][:-1]
+    owner_name = form_data[1][:-1]
+
+    # retun the deck name and owner name
+    return deck_name, owner_name
 
 def load_all_db_data():
     '''
