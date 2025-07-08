@@ -31,7 +31,7 @@
     </datalist>
     <datalist id="decks">
       {% for deck in data["decks"] %}
-      <option value="{{ deck.deck_name }}">
+      <option value="{{ deck.deck_name }} ({{ deck.player.player_name }})">
       {% endfor %}
     </datalist>
     <datalist id="games">
@@ -120,12 +120,12 @@
       <h2>Update deck</h2>
       <form action="/input/edit" method="POST">
         <input class="type" type="text" id="type" name="type" value="deck">
-        <label for="deck_name">Deck to update: </label>
-        <input type="search" id="deck_name" name="deck_name" list="decks" autocomplete="off" required><br>
+        <label for="requested_deck">Deck to update: </label>
+        <input type="search" id="requested_deck" name="requested_deck" list="decks" autocomplete="off" required><br>
         <label for="new_deck_name">Updated Deck Name: </label>
         <input type="text" id="new_deck_name" name="new_deck_name" autocomplete="off">
-        <label for="owner">Updated Owner Name: </label>
-        <input type="search" id="owner" name="owner" list="players" autocomplete="off">
+        <label for="new_owner">Updated Owner Name: </label>
+        <input type="search" id="new_owner" name="new_owner" list="players" autocomplete="off">
         <div>
           Updated Colour Identity:
           <div>
@@ -168,8 +168,8 @@
       <h2>Delete deck</h2>
       <form action="/input/delete" method="POST">
         <input class="type" type="text" id="type" name="type" value="deck">
-        <label for="deck_name">Deck Name: </label>
-        <input type="search" id="deck_name" name="deck_name" list="decks" autocomplete="off" required>
+        <label for="requested_deck">Deck Name: </label>
+        <input type="search" id="requested_deck" name="requested_deck" list="decks" autocomplete="off" required>
         <input type="submit" value="Delete deck">
       </form>
     </div>

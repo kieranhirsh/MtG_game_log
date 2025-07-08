@@ -138,10 +138,11 @@ def input_edit():
 
         # this desperately wants to be a select case, but I'm using Python 3.8 :(
         if input_type == "deck":
+            deck_name, deck_owner_name = utils.get_deck_data_from_form_inputs(request.form['requested_deck'])
             try:
-                deck_to_edit = deck_crud.specific('deck_name', request.form['deck_name'])
+                deck_to_edit = deck_crud.specific('deck_name', deck_name)
             except:
-                return errors.entry_not_found('input.html', [['deck', 'deck_name', request.form['deck_name']]], 'edit')
+                return errors.entry_not_found('input.html', [['deck', 'deck_name', deck_name]], 'edit')
 
             new_deck_data = {}
             call_error = False
@@ -151,8 +152,8 @@ def input_edit():
                 new_deck_data.update({
                     "deck_name": request.form["new_deck_name"]
                 })
-            if request.form["owner"]:
-                owner_name = request.form["owner"]
+            if request.form["new_owner"]:
+                owner_name = request.form["new_owner"]
                 owner_data = storage.get(class_name="player", key="player_name", value=owner_name)
 
                 if owner_data:
@@ -231,15 +232,24 @@ def input_delete():
         # Find the type of data to delete
         input_type = request.form["type"]
 
-        # Find the specific entry to delete, and either delete it or return an error
-        try:
-            entry_to_delete = module_names[input_type].specific("%s_name" % input_type,
-                                                                request.form["%s_name" % input_type])
-        except:
-            return errors.entry_not_found('input.html',
-                                          [[input_type, "%s_name" % input_type, request.form["%s_name" % input_type]]],
-                                          'delete')
-        module_names[input_type].delete(entry_to_delete['id'])
+        if input_type == "deck":
+            deck_name, deck_owner_name = utils.get_deck_data_from_form_inputs(request.form['requested_deck'])
+            try:
+                deck_to_delete = deck_crud.specific('deck_name', deck_name)
+            except:
+                return errors.entry_not_found('input.html', [['deck', 'deck_name', deck_name]], 'delete')
+
+            deck_crud.delete(deck_to_delete['id'])
+        else:
+            # Find the specific entry to delete, and either delete it or return an error
+            try:
+                entry_to_delete = module_names[input_type].specific("%s_name" % input_type,
+                                                                    request.form["%s_name" % input_type])
+            except:
+                return errors.entry_not_found('input.html',
+                                              [[input_type, "%s_name" % input_type, request.form["%s_name" % input_type]]],
+                                              'delete')
+            module_names[input_type].delete(entry_to_delete['id'])
 
     # Load the data we need
     decks = deck_crud.all(True)
@@ -516,12 +526,20 @@ def data_post():
             game.player = [None] * len(seats)
             game.deck = [None] * len(seats)
 
-            if request.form["deck_name"] or request.form["player_name"]:
+            if request.form["requested_deck"] or request.form["player_name"]:
                 deck_found = False
                 player_found = False
 
+                if request.form["requested_deck"]:
+                    deck_name, deck_owner_name = utils.get_deck_data_from_form_inputs(request.form['requested_deck'])
+
+                    try:
+                        requested_deck = deck_crud.specific('deck_name', deck_name)
+                    except:
+                        return errors.entry_not_found('data.html', [['deck', 'deck_name', deck_name]])
+
                 for seat in seats:
-                    if not request.form["deck_name"] or seat.deck.deck_name == request.form["deck_name"]:
+                    if not request.form["requested_deck"] or seat.deck.deck_name == deck_name:
                         deck_found = True
                     if not request.form["player_name"] or seat.player.player_name == request.form["player_name"]:
                         player_found = True
@@ -841,9 +859,20 @@ def graphs():
 
             crud_file = importlib.import_module("crud." + model_names[request.form["line_data"]]["file"])
             crud_class = getattr(crud_file, model_names[request.form["line_data"]]["class"])
-            data = crud_class.specific(key=request.form['line_data'] + "_name",
-                                       value=request.form["line_" + request.form['line_data']],
-                                       return_model_object = True)[0]
+
+            if request.form["line_data"] == "deck":
+                deck_name, deck_owner_name = utils.get_deck_data_from_form_inputs(request.form['line_deck'])
+
+                try:
+                    requested_deck = deck_crud.specific('deck_name', deck_name)
+                except:
+                    return errors.entry_not_found('data.html', [['deck', 'deck_name', deck_name]])
+
+                data = crud_class.specific(key="deck_name", value=deck_name, return_model_object = True)[0]
+            else:
+                data = crud_class.specific(key=request.form['line_data'] + "_name",
+                                           value=request.form["line_" + request.form['line_data']],
+                                           return_model_object = True)[0]
 
             xy_data = {}
 

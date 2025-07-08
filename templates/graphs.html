@@ -79,7 +79,7 @@
     </datalist>
     <datalist id="decks">
       {% for deck in data["decks"] %}
-      <option value="{{ deck.deck_name }}">
+      <option value="{{ deck.deck_name }} ({{ deck.player.player_name }})">
         {% endfor %}
     </datalist>
 

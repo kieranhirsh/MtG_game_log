@@ -35,15 +35,15 @@ def get_ci_data_from_dropdown_inputs(request_form):
     # return the colour identity object, as well as the colour identity abbreviation
     return colour_identity_data, desired_ci
 
-def get_deck_data_from_form_inputs(request_form):
+def get_deck_data_from_form_inputs(deck_from_form):
     # fom data comes in in the form "deck_name (owner_name)"
     # so, we split the form data at the open bracket
-    form_data = request_form['requested_deck'].split("(")
+    split_deck = deck_from_form.split("(")
 
     # get the deck name is the first word, minues the space at the end
     # owner name is the second word, minus the close bracket at the end
-    deck_name = form_data[0][:-1]
-    owner_name = form_data[1][:-1]
+    deck_name = split_deck[0][:-1]
+    owner_name = split_deck[1][:-1]
 
     # retun the deck name and owner name
     return deck_name, owner_name

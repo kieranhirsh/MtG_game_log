@@ -33,7 +33,7 @@
     </datalist>
     <datalist id="decks">
       {% for deck in data["decks"] %}
-      <option value="{{ deck.deck_name }}">
+      <option value="{{ deck.deck_name }} ({{ deck.player.player_name }})">
         {% endfor %}
     </datalist>
 
@@ -66,8 +66,8 @@
         <input class="type" type="text" id="type" name="type" value="game">
         <label for="player_name">&emsp;Player Name = </label>
         <input type="text" id="player_name" name="player_name" list="players" autocomplete="off"><br>
-        <label for="deck_name">&emsp;Deck Name = </label>
-        <input type="text" id="deck_name" name="deck_name" list="decks" autocomplete="off">
+        <label for="requested_deck">&emsp;Deck Name = </label>
+        <input type="text" id="requested_deck" name="requested_deck" list="decks" autocomplete="off">
         <br><input type="submit" value="Submit">
       </form>
     </div>
