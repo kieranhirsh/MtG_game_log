@@ -548,6 +548,8 @@ def data_post():
                     games_to_remove.append(game)
 
             game.winner = game.winning_player.player_name + " - " + game.winning_deck.deck_name
+            if game.winning_player.player_name != game.winning_deck.player.player_name:
+                game.winner += " (%s's deck)" % game.winning_deck.player.player_name
 
             for seat in seats:
                 game.player[seat.seat_no - 1] = seat.player

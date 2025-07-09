@@ -169,7 +169,7 @@
         <td>{{ game.game_turns }}</td>
         <td>{{ game.winner }}</td>
         {% for j in range(game.player|length) %}
-        <td>{{ game.player[j].player_name }} - {{ game.deck[j].deck_name }}</td>
+        <td>{{ game.player[j].player_name }} - {{ game.deck[j].deck_name }}{% if game.player[j].player_name != game.deck[j].player.player_name  %} ({{ game.deck[j].player.player_name }}'s deck){% endif %}</td>
         {% endfor %}
       </tr>
       {% endfor %}
