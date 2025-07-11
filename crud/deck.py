@@ -32,13 +32,20 @@ class deck_crud():
         return output
 
     @staticmethod
-    def specific(key, value, return_model_object = False):
+    def specific(query_tree={}, join_classes=[], key="", value="", return_model_object=False):
         """ Class method that returns a specific deck's data """
-        try:
-            result = storage.get(class_name = 'deck', key = key, value = value)
-        except IndexError as exc:
-            print("Error: ", exc)
-            return "Unable to load deck data\n"
+        if query_tree:
+            try:
+                result = storage.get(class_name = 'deck', join_classes = join_classes, query_tree = query_tree)
+            except IndexError as exc:
+                print("Error: ", exc)
+                return "Unable to load deck data\n"
+        else:
+            try:
+                result = storage.get(class_name = 'deck', key = key, value = value)
+            except IndexError as exc:
+                print("Error: ", exc)
+                return "Unable to load deck data\n"
 
         if return_model_object or not result:
             return result
@@ -106,7 +113,7 @@ class deck_crud():
         except:
             data = data.get_json()
 
-        deck_to_update = deck_crud.specific("id", deck_id)
+        deck_to_update = deck_crud.specific(key="id", value=deck_id)
         for key in data:
             deck_to_update[key] = data[key]
 

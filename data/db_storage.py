@@ -4,8 +4,30 @@
 import importlib
 from os import getenv
 from copy import deepcopy
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, and_, or_
 from sqlalchemy.orm import scoped_session, sessionmaker
+
+def build_query(node, classes):
+    if "model" in node and "key" in node and "op" in node and "value" in node:
+        model = node["model"]
+        key = node["key"]
+        op = node["op"]
+        value = node["value"]
+        if op == "==":
+            class_ = classes[model]
+            return getattr(class_, key) == value
+        else:
+            raise ValueError("Invalid operation: %s" % op)
+    elif "clauses" in node and "op" in node:
+        sub_clauses = [build_query(clause, classes) for clause in node["clauses"]]
+        if node["op"] == "and":
+            return(and_(*sub_clauses))
+        elif node["op"] == "or":
+            return(or_(*sub_clauses))
+        else:
+            raise ValueError("Invalid logical operation: %s" % op)
+    else:
+        raise ValueError("This node is lacking")
 
 class DBStorage():
     """ Class for reading data from the database """
@@ -40,26 +62,41 @@ class DBStorage():
         Session = scoped_session(session_factory)
         self.__session = Session()
 
-    def get(self, class_name = "", key = "", value = ""):
+    def get(self, class_name, join_classes=[], query_tree = {}, key = "", value = ""):
         """ Returns data for specified class name with or without record id"""
-
         if class_name.strip() == "":
             raise IndexError("Unable to load Model data. No class name specified")
 
         module = importlib.import_module("models." + class_name)
         class_ = getattr(module, class_name)
 
-        if key != "" and value != "":
-            try:
-                rows = self.__session.query(class_).where(getattr(class_, key) == value).all()
-            except:
-                raise IndexError("Unable to load Model data. Attribute " + key + " not found")
-        elif key != "" and value == "":
-            rows = []
-        elif key == "" and value != "":
-            raise ValueError("You have specified a value without a key, that makes no sense")
+        if query_tree:
+            classes = {class_name: class_}
+            if join_classes:
+                for join_name in join_classes:
+                    join_module = importlib.import_module("models." + join_name)
+                    join_class = getattr(join_module, join_name)
+                    classes[join_name] = join_class
+            where_clause = build_query(query_tree, classes)
+            base_session = self.__session.query(class_)
+            if join_classes:
+                for join_name in join_classes:
+                    join_module = importlib.import_module("models." + join_name)
+                    join_class = getattr(join_module, join_name)
+                    base_session = base_session.join(join_class)
+            rows = base_session.where(where_clause).all()
         else:
-            rows = self.__session.query(class_).all()
+            if key != "" and value != "":
+                try:
+                    rows = self.__session.query(class_).where(getattr(class_, key) == value).all()
+                except:
+                    raise IndexError("Unable to load Model data. Attribute " + key + " not found")
+            elif key != "" and value == "":
+                rows = []
+            elif key == "" and value != "":
+                raise ValueError("You have specified a value without a key, that makes no sense")
+            else:
+                rows = self.__session.query(class_).all()
 
         return rows
 
