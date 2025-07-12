@@ -36,10 +36,12 @@ class colour_identity_crud():
         try:
             result = storage.get(class_name = 'colour_identity', key = key, value = value)
         except IndexError as exc:
-            print("Error: ", exc)
-            return "Unable to load colour identity data\n"
+            raise IndexError("Unable to load colour identity data")
 
-        if return_model_object or not result:
+        if not result:
+            raise IndexError("No colour identity found")
+
+        if return_model_object:
             return result
 
         output = {

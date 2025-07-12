@@ -39,10 +39,12 @@ class seat_crud():
         try:
             result: seat = storage.get(class_name = 'seat', key = key, value = value)
         except IndexError as exc:
-            print("Error: ", exc)
-            return "Unable to load seat data\n"
+            raise IndexError("Unable to load seat data")
 
-        if return_model_object or not result:
+        if not result:
+            raise IndexError("No plaseatyer found")
+
+        if return_model_object:
             return result
 
         output = {

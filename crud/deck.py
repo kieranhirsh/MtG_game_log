@@ -38,16 +38,17 @@ class deck_crud():
             try:
                 result = storage.get(class_name = 'deck', join_classes = join_classes, query_tree = query_tree)
             except IndexError as exc:
-                print("Error: ", exc)
-                return "Unable to load deck data\n"
+                raise IndexError("Unable to load deck data")
         else:
             try:
                 result = storage.get(class_name = 'deck', key = key, value = value)
             except IndexError as exc:
-                print("Error: ", exc)
-                return "Unable to load deck data\n"
+                raise IndexError("Unable to load deck data")
 
-        if return_model_object or not result:
+        if not result:
+            raise IndexError("No deck found")
+
+        if return_model_object:
             return result
 
         output = {
