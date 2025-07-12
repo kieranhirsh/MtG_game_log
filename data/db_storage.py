@@ -84,19 +84,25 @@ class DBStorage():
                     join_module = importlib.import_module("models." + join_name)
                     join_class = getattr(join_module, join_name)
                     base_session = base_session.join(join_class)
-            rows = base_session.where(where_clause).all()
+            try:
+                rows = base_session.where(where_clause).all()
+            except:
+                raise ValueError("Unable to load data from database.")
         else:
             if key != "" and value != "":
                 try:
                     rows = self.__session.query(class_).where(getattr(class_, key) == value).all()
                 except:
-                    raise IndexError("Unable to load Model data. Attribute " + key + " not found")
+                    raise ValueError("Unable to load data from database.")
             elif key != "" and value == "":
                 rows = []
             elif key == "" and value != "":
                 raise ValueError("You have specified a value without a key, that makes no sense")
             else:
                 rows = self.__session.query(class_).all()
+
+        if not rows:
+            raise IndexError("db_storage.get: no entry was found matching the given query.")
 
         return rows
 
