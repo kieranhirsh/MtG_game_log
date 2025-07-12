@@ -138,25 +138,8 @@ def input_edit():
 
         # this desperately wants to be a select case, but I'm using Python 3.8 :(
         if input_type == "deck":
-            deck_name, deck_owner_name = utils.get_deck_data_from_form_inputs(request.form['requested_deck'])
+            deck_name, deck_owner_name, query_tree = utils.get_deck_data_from_form_inputs(request.form['requested_deck'])
             try:
-                query_tree = {
-                    "op": "and",
-                    "clauses": [
-                        {
-                            "model": "deck",
-                            "key": "deck_name",
-                            "op": "==",
-                            "value": deck_name
-                        },
-                        {
-                            "model": "player",
-                            "key": "player_name",
-                            "op": "==",
-                            "value": deck_owner_name
-                        }
-                    ]
-                }
                 deck_to_edit = deck_crud.specific(query_tree=query_tree, join_classes=["player"])
             except:
                 return errors.entry_not_found('input.html', [['deck', 'deck_name', deck_name]], 'edit')
@@ -250,25 +233,8 @@ def input_delete():
         input_type = request.form["type"]
 
         if input_type == "deck":
-            deck_name, deck_owner_name = utils.get_deck_data_from_form_inputs(request.form['requested_deck'])
+            deck_name, deck_owner_name, query_tree = utils.get_deck_data_from_form_inputs(request.form['requested_deck'])
             try:
-                query_tree = {
-                    "op": "and",
-                    "clauses": [
-                        {
-                            "model": "deck",
-                            "key": "deck_name",
-                            "op": "==",
-                            "value": deck_name
-                        },
-                        {
-                            "model": "player",
-                            "key": "player_name",
-                            "op": "==",
-                            "value": deck_owner_name
-                        }
-                    ]
-                }
                 deck_to_delete = deck_crud.specific(query_tree=query_tree, join_classes=["player"])
             except:
                 return errors.entry_not_found('input.html', [['deck', 'deck_name', deck_name]], 'delete')
@@ -565,25 +531,8 @@ def data_post():
                 player_found = False
 
                 if request.form["requested_deck"]:
-                    deck_name, deck_owner_name = utils.get_deck_data_from_form_inputs(request.form['requested_deck'])
+                    deck_name, deck_owner_name, query_tree = utils.get_deck_data_from_form_inputs(request.form['requested_deck'])
                     try:
-                        query_tree = {
-                            "op": "and",
-                            "clauses": [
-                                {
-                                    "model": "deck",
-                                    "key": "deck_name",
-                                    "op": "==",
-                                    "value": deck_name
-                                },
-                                {
-                                    "model": "player",
-                                    "key": "player_name",
-                                    "op": "==",
-                                    "value": deck_owner_name
-                                }
-                            ]
-                        }
                         requested_deck = deck_crud.specific(query_tree=query_tree, join_classes=["player"], return_model_object=True)[0]
                     except:
                         return errors.entry_not_found('data.html', [['deck', 'deck_name', deck_name]])
@@ -913,25 +862,8 @@ def graphs():
             crud_class = getattr(crud_file, model_names[request.form["line_data"]]["class"])
 
             if request.form["line_data"] == "deck":
-                deck_name, deck_owner_name = utils.get_deck_data_from_form_inputs(request.form['line_deck'])
+                deck_name, deck_owner_name, query_tree = utils.get_deck_data_from_form_inputs(request.form['line_deck'])
                 try:
-                    query_tree = {
-                        "op": "and",
-                        "clauses": [
-                            {
-                                "model": "deck",
-                                "key": "deck_name",
-                                "op": "==",
-                                "value": deck_name
-                            },
-                            {
-                                "model": "player",
-                                "key": "player_name",
-                                "op": "==",
-                                "value": deck_owner_name
-                            }
-                        ]
-                    }
                     data = crud_class.specific(query_tree=query_tree, join_classes=["player"], return_model_object = True)[0]
                 except:
                     return errors.entry_not_found('data.html', [['deck', 'deck_name', deck_name]])

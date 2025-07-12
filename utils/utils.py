@@ -45,8 +45,27 @@ def get_deck_data_from_form_inputs(deck_from_form):
     deck_name = split_deck[0][:-1]
     owner_name = split_deck[1][:-1]
 
+    # also build the query tree here
+    query_tree = {
+        "op": "and",
+        "clauses": [
+            {
+                "model": "deck",
+                "key": "deck_name",
+                "op": "==",
+                "value": deck_name
+            },
+            {
+                "model": "player",
+                "key": "player_name",
+                "op": "==",
+                "value": owner_name
+            }
+        ]
+    }
+
     # retun the deck name and owner name
-    return deck_name, owner_name
+    return deck_name, owner_name, query_tree
 
 def load_all_db_data():
     '''
