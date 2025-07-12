@@ -86,7 +86,11 @@ def input():
             # loop over number of seats
             for i in range(len(game_decks)):
                 # find the deck and player id, and ko_turn, for each seat
-                desired_deck = deck_crud.specific(key="deck_name", value=game_decks[i])
+                deck_name, deck_owner_name, query_tree = utils.get_deck_data_from_form_inputs(game_decks[i])
+                try:
+                    desired_deck = deck_crud.specific(query_tree=query_tree, join_classes=["player"])
+                except:
+                    return errors.entry_not_found('input.html', [['deck', 'deck_name', deck_name]], 'edit')
                 desired_player = player_crud.specific(key="player_name", value=game_players[i])
                 if game_ko_turns[i]:
                     ko_turn = int(game_ko_turns[i])
