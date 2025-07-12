@@ -38,10 +38,7 @@ class colour_identity_crud():
         except IndexError as exc:
             raise IndexError("Unable to load colour identity data")
 
-        if not result:
-            raise IndexError("No colour identity found")
-
-        if return_model_object:
+        if return_model_object or not result:
             return result
 
         output = {

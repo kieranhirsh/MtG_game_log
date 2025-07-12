@@ -45,10 +45,7 @@ class deck_crud():
             except IndexError as exc:
                 raise IndexError("Unable to load deck data")
 
-        if not result:
-            raise IndexError("No deck found")
-
-        if return_model_object:
+        if return_model_object or not result:
             return result
 
         output = {

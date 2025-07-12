@@ -41,10 +41,7 @@ class seat_crud():
         except IndexError as exc:
             raise IndexError("Unable to load seat data")
 
-        if not result:
-            raise IndexError("No plaseatyer found")
-
-        if return_model_object:
+        if return_model_object or not result:
             return result
 
         output = {

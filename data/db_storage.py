@@ -101,9 +101,6 @@ class DBStorage():
             else:
                 rows = self.__session.query(class_).all()
 
-        if not rows:
-            raise IndexError("db_storage.get: no entry was found matching the given query.")
-
         return rows
 
     def add(self, new_record, do_commit = True):

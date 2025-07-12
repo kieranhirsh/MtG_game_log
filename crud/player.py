@@ -37,10 +37,7 @@ class player_crud():
         except IndexError as exc:
             raise IndexError("Unable to load player data")
 
-        if not result:
-            raise IndexError("No player found")
-
-        if return_model_object:
+        if return_model_object or not result:
             return result
 
         output = {
