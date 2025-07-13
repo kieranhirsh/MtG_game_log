@@ -644,13 +644,14 @@ def data_post():
                 num_decks = len(player_decks)
 
                 # and finally, append all the relevant data that has been requested
-                player_data.append({
-                    "id": player.id,
-                    "player_name": player.player_name,
-                    "number_of_decks": num_decks,
-                    "games_played": games_played,
-                    "win_rate": win_rate
-                })
+                if num_decks != 0:
+                    player_data.append({
+                        "id": player.id,
+                        "player_name": player.player_name,
+                        "number_of_decks": num_decks,
+                        "games_played": games_played,
+                        "win_rate": win_rate
+                    })
         else:
             for player in players:
                 # if we have no restriction the number of decks is just the length of the array
@@ -668,13 +669,14 @@ def data_post():
                     games_won = len(game_crud.specific("winning_player_id", player.id, True))
                     win_rate = games_won / games_played * 100
 
-                player_data.append({
-                    "id": player.id,
-                    "player_name": player.player_name,
-                    "number_of_decks": num_decks,
-                    "games_played": games_played,
-                    "win_rate": win_rate
-                })
+                if num_decks != 0:
+                    player_data.append({
+                        "id": player.id,
+                        "player_name": player.player_name,
+                        "number_of_decks": num_decks,
+                        "games_played": games_played,
+                        "win_rate": win_rate
+                    })
 
         # Prepare data to pass to the template
         html_data = {"colour_identities": colour_identities,
