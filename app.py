@@ -182,6 +182,10 @@ def input_edit():
 
             deck_crud.update(deck_to_edit["id"], jsonify(new_deck_data))
         elif input_type == "game":
+            game_decks = request.form.getlist("game_decks")
+            game_players = request.form.getlist("game_players")
+            game_ko_turns = request.form.getlist("game_ko_turns")
+
             try:
                 game_to_edit = game_crud.specific('game_name', request.form['game_name'])
             except:
@@ -199,10 +203,33 @@ def input_edit():
 
             game_crud.update(game_to_edit["id"], jsonify(new_game_data))
 
-            # logic on updating seats goes here
+            seats = seat_crud.specific(key="game_id", value=game_to_edit["id"])
+            for seat_to_edit in seats:
+                seat_no = seat_to_edit["seat_no"] - 1
+
+                if game_decks[seat_no] or game_players[seat_no] or game_ko_turns[seat_no]:
+                    deck_name, deck_owner_name, query_tree = utils.get_deck_data_from_form_inputs(game_decks[seat_no])
+                    deck_id = deck_crud.specific(query_tree=query_tree, join_classes=['player'])['id']
+
+                    player_id = player_crud.specific(key='player_name', value=game_players[seat_no])['id']
+
+                    if game_ko_turns[seat_no]:
+                        ko_turn = int(game_ko_turns[seat_no])
+                    else:
+                        ko_turn = None
+
+                    new_seat_data = {
+                        "deck_id": deck_id,
+                        "player_id": player_id,
+                        "ko_turn": ko_turn
+                    }
+
+                    seat_crud.update(seat_to_edit["id"], jsonify(new_seat_data))
 
             game_crud.update_game_name(game_to_edit["id"])
             game_crud.update_game_time(game_to_edit["id"])
+            game_crud.update_game_turns(game_to_edit["id"])
+            game_crud.update_game_winner(game_to_edit["id"])
         elif input_type == "player":
             try:
                 player_to_edit = player_crud.specific('player_name', request.form['player_name'])

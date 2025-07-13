@@ -37,21 +37,25 @@ class seat_crud():
     def specific(key, value, return_model_object = False):
         """ Class method that returns a specific seat's data """
         try:
-            result: seat = storage.get(class_name = 'seat', key = key, value = value)
+            results: seat = storage.get(class_name = 'seat', key = key, value = value)
         except IndexError as exc:
             raise IndexError("Unable to load seat data")
 
-        if return_model_object or not result:
-            return result
+        if return_model_object or not results:
+            return results
 
-        output = {
-            "id": result[0].id,
-            "seat_no": result[0].seat_no,
-            "ko_turn": result[0].ko_turn,
-            "deck_id": result[0].deck_id,
-            "game_id": result[0].game_id,
-            "player_id": result[0].player_id
-        }
+        output = []
+        for result in results:
+            output.append(
+                {
+                    "id": result.id,
+                    "seat_no": result.seat_no,
+                    "ko_turn": result.ko_turn,
+                    "deck_id": result.deck_id,
+                    "game_id": result.game_id,
+                    "player_id": result.player_id
+                }
+            )
 
         return output
 
@@ -119,7 +123,7 @@ class seat_crud():
         except:
             data = data.get_json()
 
-        seat_to_update = seat_crud.specific("id", seat_id)
+        seat_to_update = seat_crud.specific("id", seat_id)[0]
         for key in data:
             seat_to_update[key] = data[key]
 
