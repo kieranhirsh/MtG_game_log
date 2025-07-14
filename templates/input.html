@@ -73,35 +73,48 @@
         <input type="text" id="start_time" name="start_time" autocomplete="off">
         <label for="end_time">End Time: </label>
         <input type="text" id="end_time" name="end_time" autocomplete="off">
-        <br>Player 1: 
-        <label for="game_decks">Deck: </label>
-        <input type="search" id="game_decks" name="game_decks" list="decks" autocomplete="off" required>
-        <label for="game_players">Player: </label>
-        <input type="search" id="game_players" name="game_players" list="players" autocomplete="off" required>
-        <label for="game_ko_turns">KO Turn (leave blank for winner): </label>
-        <input type="text" id="game_ko_turns" name="game_ko_turns" autocomplete="off">
-        <br>Player 2: 
-        <label for="game_decks">Deck: </label>
-        <input type="search" id="game_decks" name="game_decks" list="decks" autocomplete="off" required>
-        <label for="game_players">Player: </label>
-        <input type="search" id="game_players" name="game_players" list="players" autocomplete="off" required>
-        <label for="game_ko_turns">KO Turn (leave blank for winner): </label>
-        <input type="text" id="game_ko_turns" name="game_ko_turns" autocomplete="off">
-        <br>Player 3: 
-        <label for="game_decks">Deck: </label>
-        <input type="search" id="game_decks" name="game_decks" list="decks" autocomplete="off" required>
-        <label for="game_players">Player: </label>
-        <input type="search" id="game_players" name="game_players" list="players" autocomplete="off" required>
-        <label for="game_ko_turns">KO Turn (leave blank for winner): </label>
-        <input type="text" id="game_ko_turns" name="game_ko_turns" autocomplete="off">
-        <br>Player 4: 
-        <label for="game_decks">Deck: </label>
-        <input type="search" id="game_decks" name="game_decks" list="decks" autocomplete="off" required>
-        <label for="game_players">Player: </label>
-        <input type="search" id="game_players" name="game_players" list="players" autocomplete="off" required>
-        <label for="game_ko_turns">KO Turn (leave blank for winner): </label>
-        <input type="text" id="game_ko_turns" name="game_ko_turns" autocomplete="off">
-        <br><input type="submit" value="Create game">
+        <div id="seats">
+          <div id="player_1">
+            <br>Player 1: 
+            <label for="game_decks">Deck: </label>
+            <input type="search" id="game_decks" name="game_decks" list="decks" autocomplete="off" required>
+            <label for="game_players">Player: </label>
+            <input type="search" id="game_players" name="game_players" list="players" autocomplete="off" required>
+            <label for="game_ko_turns">KO Turn (leave blank for winner): </label>
+            <input type="text" id="game_ko_turns" name="game_ko_turns" autocomplete="off">
+          </div>
+          <div id="player_2">
+            <br>Player 2: 
+            <label for="game_decks">Deck: </label>
+            <input type="search" id="game_decks" name="game_decks" list="decks" autocomplete="off" required>
+            <label for="game_players">Player: </label>
+            <input type="search" id="game_players" name="game_players" list="players" autocomplete="off" required>
+            <label for="game_ko_turns">KO Turn (leave blank for winner): </label>
+            <input type="text" id="game_ko_turns" name="game_ko_turns" autocomplete="off">
+          </div>
+          <div id="player_3">
+            <br>Player 3: 
+            <label for="game_decks">Deck: </label>
+            <input type="search" id="game_decks" name="game_decks" list="decks" autocomplete="off" required>
+            <label for="game_players">Player: </label>
+            <input type="search" id="game_players" name="game_players" list="players" autocomplete="off" required>
+            <label for="game_ko_turns">KO Turn (leave blank for winner): </label>
+            <input type="text" id="game_ko_turns" name="game_ko_turns" autocomplete="off">
+          </div>
+          <div id="player_4">
+            <br>Player 4: 
+            <label for="game_decks">Deck: </label>
+            <input type="search" id="game_decks" name="game_decks" list="decks" autocomplete="off" required>
+            <label for="game_players">Player: </label>
+            <input type="search" id="game_players" name="game_players" list="players" autocomplete="off" required>
+            <label for="game_ko_turns">KO Turn (leave blank for winner): </label>
+            <input type="text" id="game_ko_turns" name="game_ko_turns" autocomplete="off">
+          </div>
+          <button type="button" id="remove_player" onclick="removePlayer(4)">Remove Player 4</button>
+          <br><button type="button" id="add_player" onclick="addPlayer(5)">Add Player 5</button>
+          <br><br>
+          <br><input type="submit" value="Create game">
+        </div>
       </form>
     </div>
 
@@ -147,34 +160,42 @@
         <input type="text" id="new_start_time" name="new_start_time" autocomplete="off">
         <label for="new_end_time">Updated End Time: </label>
         <input type="text" id="new_end_time" name="new_end_time" autocomplete="off">
-        <br>Player 1: 
-        <label for="game_decks">Deck: </label>
-        <input type="search" id="game_decks" name="game_decks" list="decks" autocomplete="off">
-        <label for="game_players">Player: </label>
-        <input type="search" id="game_players" name="game_players" list="players" autocomplete="off">
-        <label for="game_ko_turns">KO Turn (leave blank for winner): </label>
-        <input type="text" id="game_ko_turns" name="game_ko_turns" autocomplete="off">
-        <br>Player 2: 
-        <label for="game_decks">Deck: </label>
-        <input type="search" id="game_decks" name="game_decks" list="decks" autocomplete="off">
-        <label for="game_players">Player: </label>
-        <input type="search" id="game_players" name="game_players" list="players" autocomplete="off">
-        <label for="game_ko_turns">KO Turn (leave blank for winner): </label>
-        <input type="text" id="game_ko_turns" name="game_ko_turns" autocomplete="off">
-        <br>Player 3: 
-        <label for="game_decks">Deck: </label>
-        <input type="search" id="game_decks" name="game_decks" list="decks" autocomplete="off">
-        <label for="game_players">Player: </label>
-        <input type="search" id="game_players" name="game_players" list="players" autocomplete="off">
-        <label for="game_ko_turns">KO Turn (leave blank for winner): </label>
-        <input type="text" id="game_ko_turns" name="game_ko_turns" autocomplete="off">
-        <br>Player 4: 
-        <label for="game_decks">Deck: </label>
-        <input type="search" id="game_decks" name="game_decks" list="decks" autocomplete="off">
-        <label for="game_players">Player: </label>
-        <input type="search" id="game_players" name="game_players" list="players" autocomplete="off">
-        <label for="game_ko_turns">KO Turn (leave blank for winner): </label>
-        <input type="text" id="game_ko_turns" name="game_ko_turns" autocomplete="off">
+        <div id="player_1">
+          <br>Player 1: 
+          <label for="game_decks">Deck: </label>
+          <input type="search" id="game_decks" name="game_decks" list="decks" autocomplete="off">
+          <label for="game_players">Player: </label>
+          <input type="search" id="game_players" name="game_players" list="players" autocomplete="off">
+          <label for="game_ko_turns">KO Turn (leave blank for winner): </label>
+          <input type="text" id="game_ko_turns" name="game_ko_turns" autocomplete="off">
+        </div>
+        <div id="player_2">
+          <br>Player 2: 
+          <label for="game_decks">Deck: </label>
+          <input type="search" id="game_decks" name="game_decks" list="decks" autocomplete="off">
+          <label for="game_players">Player: </label>
+          <input type="search" id="game_players" name="game_players" list="players" autocomplete="off">
+          <label for="game_ko_turns">KO Turn (leave blank for winner): </label>
+          <input type="text" id="game_ko_turns" name="game_ko_turns" autocomplete="off">
+        </div>
+        <div id="player_3">
+          <br>Player 3: 
+          <label for="game_decks">Deck: </label>
+          <input type="search" id="game_decks" name="game_decks" list="decks" autocomplete="off">
+          <label for="game_players">Player: </label>
+          <input type="search" id="game_players" name="game_players" list="players" autocomplete="off">
+          <label for="game_ko_turns">KO Turn (leave blank for winner): </label>
+          <input type="text" id="game_ko_turns" name="game_ko_turns" autocomplete="off">
+        </div>
+        <div id="player_4">
+          <br>Player 4: 
+          <label for="game_decks">Deck: </label>
+          <input type="search" id="game_decks" name="game_decks" list="decks" autocomplete="off">
+          <label for="game_players">Player: </label>
+          <input type="search" id="game_players" name="game_players" list="players" autocomplete="off">
+          <label for="game_ko_turns">KO Turn (leave blank for winner): </label>
+          <input type="text" id="game_ko_turns" name="game_ko_turns" autocomplete="off">
+        </div>
         <br><input type="submit" value="Edit game">
       </form>
     </div>

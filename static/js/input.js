@@ -22,3 +22,39 @@ function toggleDataType() {
       break;
   }
 }
+
+function addPlayer(n) {
+  let DivSeats = document.getElementById("seats");
+  let DivPlayer = document.getElementById("player_" + String(n - 1));
+  let RemoveButton = document.getElementById("remove_player");
+  let RemoveOnClick = RemoveButton.getAttribute("onclick");
+  let AddButton = document.getElementById("add_player");
+  let AddOnClick = AddButton.getAttribute("onclick");
+
+  const newDiv = document.createElement("div");
+  newDiv.id = "player_" + n;
+  newDiv.innerHTML = DivPlayer.innerHTML.replace(n - 1, n);
+  DivSeats.insertBefore(newDiv, RemoveButton);
+
+  RemoveButton.textContent = RemoveButton.textContent.replace(n - 1, n);
+  RemoveButton.setAttribute("onclick", RemoveOnClick.replace(n - 1, n));
+
+  AddButton.textContent = AddButton.textContent.replace(n, n + 1);
+  AddButton.setAttribute("onclick", AddOnClick.replace(n, n + 1));
+}
+
+function removePlayer(n) {
+  let DivPlayer = document.getElementById("player_" + String(n));
+  let RemoveButton = document.getElementById("remove_player");
+  let RemoveOnClick = RemoveButton.getAttribute("onclick");
+  let AddButton = document.getElementById("add_player");
+  let AddOnClick = AddButton.getAttribute("onclick");
+
+  DivPlayer.remove();
+
+  RemoveButton.textContent = RemoveButton.textContent.replace(n, n - 1);
+  RemoveButton.setAttribute("onclick", RemoveOnClick.replace(n, n - 1));
+
+  AddButton.textContent = AddButton.textContent.replace(n + 1, n);
+  AddButton.setAttribute("onclick", AddOnClick.replace(n + 1, n));
+}
