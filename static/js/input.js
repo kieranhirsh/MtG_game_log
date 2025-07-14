@@ -25,45 +25,58 @@ function toggleDataType() {
 
 function addPlayer(n) {
   let DivSeats = document.getElementById("seats");
-  let RemoveButton = document.getElementById("remove_player");
-  let RemoveOnClick = RemoveButton.getAttribute("onclick");
+  let DivPlayer = document.getElementById("player_" + String(n - 1));
   let AddButton = document.getElementById("add_player");
   let AddOnClick = AddButton.getAttribute("onclick");
 
   const newDiv = document.createElement("div");
   newDiv.id = "player_" + n;
-  newDiv.innerHTML = `
-    <br>Player ${n}: 
-    <label for="game_decks">Deck: </label>
-    <input type="search" id="game_decks" name="game_decks" list="decks" autocomplete="off" required>
-    <label for="game_players">Player: </label>
-    <input type="search" id="game_players" name="game_players" list="players" autocomplete="off" required>
-    <label for="game_ko_turns">KO Turn (leave blank for winner): </label>
-    <input type="text" id="game_ko_turns" name="game_ko_turns" autocomplete="off">
-  `;
-  DivSeats.insertBefore(newDiv, RemoveButton);
+  newDiv.innerHTML = DivPlayer.innerHTML.replace(n - 1, n);
 
-  RemoveButton.textContent = RemoveButton.textContent.replace(n - 1, n);
-  RemoveButton.setAttribute("onclick", RemoveOnClick.replace(n - 1, n));
+  if (n === 2) {
+    DivSeats.insertBefore(newDiv, AddButton);
+
+    const newButton = document.createElement("button");
+    newButton.setAttribute("type", "button");
+    newButton.setAttribute("id", "remove_player");
+    newButton.setAttribute("onclick", `removePlayer(${n})`);
+    newButton.innerHTML = `Remove Player ${n}`;
+
+    DivSeats.insertBefore(newButton, AddButton);
+    DivSeats.insertBefore(document.createElement("br"), AddButton);
+  } else {
+    let RemoveButton = document.getElementById("remove_player");
+    let RemoveOnClick = RemoveButton.getAttribute("onclick");
+
+    DivSeats.insertBefore(newDiv, RemoveButton);
+
+    RemoveButton.textContent = RemoveButton.textContent.replace(n - 1, n);
+    RemoveButton.setAttribute("onclick", RemoveOnClick.replace(n - 1, n));
+  }
 
   AddButton.textContent = AddButton.textContent.replace(n, n + 1);
   AddButton.setAttribute("onclick", AddOnClick.replace(n, n + 1));
 }
 
 function removePlayer(n) {
-  if (n > 0) {
-    let DivPlayer = document.getElementById("player_" + String(n));
-    let RemoveButton = document.getElementById("remove_player");
-    let RemoveOnClick = RemoveButton.getAttribute("onclick");
-    let AddButton = document.getElementById("add_player");
-    let AddOnClick = AddButton.getAttribute("onclick");
+  let DivPlayer = document.getElementById("player_" + String(n));
+  let RemoveButton = document.getElementById("remove_player");
+  let RemoveOnClick = RemoveButton.getAttribute("onclick");
+  let AddButton = document.getElementById("add_player");
+  let AddOnClick = AddButton.getAttribute("onclick");
 
-    DivPlayer.remove();
+  DivPlayer.remove();
 
+  if (n === 2) {
+    if (AddButton.previousSibling.nodeName === "BR") {
+      AddButton.previousSibling.remove();
+    }
+    RemoveButton.remove();
+  } else {
     RemoveButton.textContent = RemoveButton.textContent.replace(n, n - 1);
     RemoveButton.setAttribute("onclick", RemoveOnClick.replace(n, n - 1));
-
-    AddButton.textContent = AddButton.textContent.replace(n + 1, n);
-    AddButton.setAttribute("onclick", AddOnClick.replace(n + 1, n));
   }
+
+  AddButton.textContent = AddButton.textContent.replace(n + 1, n);
+  AddButton.setAttribute("onclick", AddOnClick.replace(n + 1, n));
 }
