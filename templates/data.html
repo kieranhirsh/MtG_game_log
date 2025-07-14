@@ -88,17 +88,33 @@
 
   <div id="data_tables">
     {% if data_type == "colour_identity" %}
+    <!-- toggle columns on/off-->
+    <div class="toggle" id="deck_toggle">
+      <label>
+        <input type="checkbox" id="ci_name" checked onclick="toggleColumn('ci_name')">Colour Identity
+      </label>
+      <label>
+        <input type="checkbox" id="ci_num_decks" checked onclick="toggleColumn('ci_num_decks')"># Decks
+      </label>
+      <label>
+        <input type="checkbox" id="ci_games_played" checked onclick="toggleColumn('ci_games_played')">Games Played
+      </label>
+      <label>
+        <input type="checkbox" id="ci_win_rate" checked onclick="toggleColumn('ci_win_rate')">Win Rate
+      </label>
+    </div>
+    <!-- data table-->
     {% for colour_identity_group_by_num_colours in data["colour_identities"] %}
     <table class="colour_data_table" id="{{ colour_identity_group_by_num_colours[1].num_colours }}_colours_table">
       <tr>
-        <th onclick="sortColourTables(0)">Colour Identity</th>
-        <th onclick="sortColourTables(1)"># Decks</th>
-        <th onclick="sortColourTables(2)">Games Played</th>
-        <th onclick="sortColourTables(3)">Win Rate</th>
+        <th onclick="sortColourTables(0)" class="ci_name">Colour Identity</th>
+        <th onclick="sortColourTables(1)" class="ci_num_decks"># Decks</th>
+        <th onclick="sortColourTables(2)" class="ci_games_played">Games Played</th>
+        <th onclick="sortColourTables(3)" class="ci_win_rate">Win Rate</th>
       </tr>
       {% for colour_identity in colour_identity_group_by_num_colours %}
       <tr>
-        <td>
+        <td class="ci_name">
           {% if colour_identity.colours == "skip" %}<b>{% endif %}
           {{ colour_identity.ci_name }}{% if colour_identity.colours != "skip" %} (
             {% for colour in colour_identity.colours %}
@@ -106,17 +122,17 @@
             {% endfor %}){% endif %}
           {% if colour_identity.colours == "skip" %}</b>{% endif %}
         </td>
-        <td>
+        <td class="ci_num_decks">
           {% if colour_identity.colours == "skip" %}<b>{% endif %}
           {{ colour_identity.number_of_decks }}
           {% if colour_identity.colours == "skip" %}</b>{% endif %}
         </td>
-        <td>
+        <td class="ci_games_played">
           {% if colour_identity.colours == "skip" %}<b>{% endif %}
           {{ colour_identity.games_played }}
           {% if colour_identity.colours == "skip" %}</b>{% endif %}
         </td>
-        <td>{% if colour_identity.colours == "skip" %}<b>{% endif %}{{ '%0.2f'|format(colour_identity.win_rate) }}%{% if colour_identity.colours == "skip" %}</b>{% endif %}</td>
+        <td class="ci_win_rate">{% if colour_identity.colours == "skip" %}<b>{% endif %}{{ '%0.2f'|format(colour_identity.win_rate) }}%{% if colour_identity.colours == "skip" %}</b>{% endif %}</td>
       </tr>
       {% endfor %}
     </table>
@@ -124,52 +140,93 @@
     {% endif %}
 
     {% if data_type == "deck" %}
+    <!-- toggle columns on/off-->
+    <div class="toggle" id="deck_toggle">
+      <label>
+        <input type="checkbox" id="deck_name" checked onclick="toggleColumn('deck_name')">Deck Name
+      </label>
+      <label>
+        <input type="checkbox" id="deck_owner" checked onclick="toggleColumn('deck_owner')">Owner Name
+      </label>
+      <label>
+        <input type="checkbox" id="deck_ci" checked onclick="toggleColumn('deck_ci')">Colour Identity
+      </label>
+      <label>
+        <input type="checkbox" id="deck_games_played" checked onclick="toggleColumn('deck_games_played')">Games Played
+      </label>
+      <label>
+        <input type="checkbox" id="deck_win_rate" checked onclick="toggleColumn('deck_win_rate')">Win Rate
+      </label>
+    </div>
+    <!-- data table-->
     <table class="data_table" id="deck_table">
       <tr>
-        <th onclick="sortTable(0)">Deck Name</th>
-        <th onclick="sortTable(1)">Owner Name</th>
-        <th onclick="sortTable(2)">Colour Identity</th>
-        <th onclick="sortTable(3)">Games Played</th>
-        <th onclick="sortTable(4)">Win Rate</th>
+        <th onclick="sortTable(0)" class="deck_name">Deck Name</th>
+        <th onclick="sortTable(1)" class="deck_owner">Owner Name</th>
+        <th onclick="sortTable(2)" class="deck_ci">Colour Identity</th>
+        <th onclick="sortTable(3)" class="deck_games_played">Games Played</th>
+        <th onclick="sortTable(4)" class="deck_win_rate">Win Rate</th>
       </tr>
       {% for deck in data["decks"] %}
       <tr>
-        <td>{{ deck.deck_name }}</td>
-        <td>{{ deck.player.player_name }}</td>
-        <td>
+        <td class="deck_name">{{ deck.deck_name }}</td>
+        <td class="deck_owner">{{ deck.player.player_name }}</td>
+        <td class="deck_ci">
           {{ deck.colour_identity.ci_name }} (
             {% for colour in deck.colour_identity.colours %}
             <img class="mana_symbol" src="../static/img/mana_{{ colour }}.svg">
             {% endfor %})
         </td>
-        <td>{{ deck.games_played }}</td>
-        <td>{{ '%0.2f'|format(deck.win_rate) }}%</td>
+        <td class="deck_games_played">{{ deck.games_played }}</td>
+        <td class="deck_win_rate">{{ '%0.2f'|format(deck.win_rate) }}%</td>
       </tr>
       {% endfor %}
     </table>
     {% endif %}
 
     {% if data_type == "game" %}
+    <!-- toggle columns on/off-->
+    <div class="toggle" id="game_toggle">
+      <label>
+        <input type="checkbox" id="game_date" checked onclick="toggleColumn('game_date')">Date
+      </label>
+      <label>
+        <input type="checkbox" id="game_start" checked onclick="toggleColumn('game_start')">Start Time
+      </label>
+      <label>
+        <input type="checkbox" id="game_time" checked onclick="toggleColumn('game_time')">Game Length (Time)
+      </label>
+      <label>
+        <input type="checkbox" id="game_turns" checked onclick="toggleColumn('game_turns')">Game Length (Turns)
+      </label>
+      <label>
+        <input type="checkbox" id="game_winner" checked onclick="toggleColumn('game_winner')">Winner
+      </label>
+      <label>
+        <input type="checkbox" id="game_players" checked onclick="toggleColumn('game_players')">Players
+      </label>
+    </div>
+    <!-- data table-->
     <table class="data_table" id="game_table">
       <tr>
-        <th onclick="sortTable(0)">Date</th>
-        <th onclick="sortTable(1)">Start Time</th>
-        <th onclick="sortTable(2)">Game Length (Time)</th>
-        <th onclick="sortTable(3)">Game Length (Turns)</th>
-        <th onclick="sortTable(4)">Winner</th>
+        <th onclick="sortTable(0)" class="game_date">Date</th>
+        <th onclick="sortTable(1)" class="game_start">Start Time</th>
+        <th onclick="sortTable(2)" class="game_time">Game Length (Time)</th>
+        <th onclick="sortTable(3)" class="game_turns">Game Length (Turns)</th>
+        <th onclick="sortTable(4)" class="game_winner">Winner</th>
         {% for i in range(data["num_seats"]) %}
-        <th onclick="sortTable({{ i + 5 }})">Player {{ i + 1 }}</th>
+        <th onclick="sortTable({{ i + 5 }})" class="game_players">Player {{ i + 1 }}</th>
         {% endfor %}
       </tr>
       {% for game in data["games"] %}
       <tr>
-        <td>{{ (game.start_time|string)[0:10] }}</td>
-        <td>{{ (game.start_time|string)[11:16] }}</td>
-        <td>{{ game.game_time[:-3] }}</td>
-        <td>{{ game.game_turns }}</td>
-        <td>{{ game.winner }}</td>
+        <td class="game_date">{{ (game.start_time|string)[0:10] }}</td>
+        <td class="game_start">{{ (game.start_time|string)[11:16] }}</td>
+        <td class="game_time">{{ game.game_time[:-3] }}</td>
+        <td class="game_turns">{{ game.game_turns }}</td>
+        <td class="game_winner">{{ game.winner }}</td>
         {% for j in range(game.player|length) %}
-        <td>{{ game.player[j].player_name }} - {{ game.deck[j].deck_name }}{% if game.player[j].player_name != game.deck[j].player.player_name  %} ({{ game.deck[j].player.player_name }}'s deck){% endif %}</td>
+        <td class="game_players">{{ game.player[j].player_name }} - {{ game.deck[j].deck_name }}{% if game.player[j].player_name != game.deck[j].player.player_name  %} ({{ game.deck[j].player.player_name }}'s deck){% endif %}</td>
         {% endfor %}
       </tr>
       {% endfor %}
@@ -177,19 +234,35 @@
     {% endif %}
 
     {% if data_type == "player" %}
+    <!-- toggle columns on/off-->
+    <div class="toggle" id="player_toggle">
+      <label>
+        <input type="checkbox" id="player_name" checked onclick="toggleColumn('player_name')">Player Name
+      </label>
+      <label>
+        <input type="checkbox" id="player_decks" checked onclick="toggleColumn('player_decks')">Number of Decks
+      </label>
+      <label>
+        <input type="checkbox" id="player_games_played" checked onclick="toggleColumn('player_games_played')">Games Played
+      </label>
+      <label>
+        <input type="checkbox" id="player_win_rate" checked onclick="toggleColumn('player_win_rate')">Win Rate
+      </label>
+    </div>
+    <!-- data table-->
     <table class="data_table" id="player_table">
       <tr>
-        <th onclick="sortTable(0)">Player Name</th>
-        <th onclick="sortTable(1)">Number of Decks</th>
-        <th onclick="sortTable(2)">Games Played</th>
-        <th onclick="sortTable(3)">Win Rate</th>
+        <th onclick="sortTable(0)" class="player_name">Player Name</th>
+        <th onclick="sortTable(1)" class="player_decks">Number of Decks</th>
+        <th onclick="sortTable(2)" class="player_games_played">Games Played</th>
+        <th onclick="sortTable(3)" class="player_win_rate">Win Rate</th>
       </tr>
       {% for player in data["players"] %}
       <tr>
-        <td>{{ player.player_name }}</td>
-        <td>{{ player.number_of_decks }}</td>
-        <td>{{ player.games_played }}</td>
-        <td>{{ '%0.2f'|format(player.win_rate) }}%</td>
+        <td class="player_name">{{ player.player_name }}</td>
+        <td class="player_decks">{{ player.number_of_decks }}</td>
+        <td class="player_games_played">{{ player.games_played }}</td>
+        <td class="player_win_rate">{{ '%0.2f'|format(player.win_rate) }}%</td>
       </tr>
       {% endfor %}
     </table>

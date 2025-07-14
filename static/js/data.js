@@ -287,3 +287,16 @@ function sortColourTables(col) {
     }
   }
 }
+
+function toggleColumn(col) {
+  let rows = document.getElementsByClassName(col);
+
+  for (let row of rows) {
+    if (row.style.display === "none") {
+      row.style.removeProperty('display');
+    }
+    else {
+      row.style.display = "none";
+    }
+  }
+}
