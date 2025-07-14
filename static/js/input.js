@@ -25,7 +25,6 @@ function toggleDataType() {
 
 function addPlayer(n) {
   let DivSeats = document.getElementById("seats");
-  let DivPlayer = document.getElementById("player_" + String(n - 1));
   let RemoveButton = document.getElementById("remove_player");
   let RemoveOnClick = RemoveButton.getAttribute("onclick");
   let AddButton = document.getElementById("add_player");
@@ -33,7 +32,15 @@ function addPlayer(n) {
 
   const newDiv = document.createElement("div");
   newDiv.id = "player_" + n;
-  newDiv.innerHTML = DivPlayer.innerHTML.replace(n - 1, n);
+  newDiv.innerHTML = `
+    <br>Player ${n}: 
+    <label for="game_decks">Deck: </label>
+    <input type="search" id="game_decks" name="game_decks" list="decks" autocomplete="off" required>
+    <label for="game_players">Player: </label>
+    <input type="search" id="game_players" name="game_players" list="players" autocomplete="off" required>
+    <label for="game_ko_turns">KO Turn (leave blank for winner): </label>
+    <input type="text" id="game_ko_turns" name="game_ko_turns" autocomplete="off">
+  `;
   DivSeats.insertBefore(newDiv, RemoveButton);
 
   RemoveButton.textContent = RemoveButton.textContent.replace(n - 1, n);
@@ -44,17 +51,19 @@ function addPlayer(n) {
 }
 
 function removePlayer(n) {
-  let DivPlayer = document.getElementById("player_" + String(n));
-  let RemoveButton = document.getElementById("remove_player");
-  let RemoveOnClick = RemoveButton.getAttribute("onclick");
-  let AddButton = document.getElementById("add_player");
-  let AddOnClick = AddButton.getAttribute("onclick");
+  if (n > 0) {
+    let DivPlayer = document.getElementById("player_" + String(n));
+    let RemoveButton = document.getElementById("remove_player");
+    let RemoveOnClick = RemoveButton.getAttribute("onclick");
+    let AddButton = document.getElementById("add_player");
+    let AddOnClick = AddButton.getAttribute("onclick");
 
-  DivPlayer.remove();
+    DivPlayer.remove();
 
-  RemoveButton.textContent = RemoveButton.textContent.replace(n, n - 1);
-  RemoveButton.setAttribute("onclick", RemoveOnClick.replace(n, n - 1));
+    RemoveButton.textContent = RemoveButton.textContent.replace(n, n - 1);
+    RemoveButton.setAttribute("onclick", RemoveOnClick.replace(n, n - 1));
 
-  AddButton.textContent = AddButton.textContent.replace(n + 1, n);
-  AddButton.setAttribute("onclick", AddOnClick.replace(n + 1, n));
+    AddButton.textContent = AddButton.textContent.replace(n + 1, n);
+    AddButton.setAttribute("onclick", AddOnClick.replace(n + 1, n));
+  }
 }
