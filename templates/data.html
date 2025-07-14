@@ -85,25 +85,24 @@
       </form>
     </div>
   </div>
-
+  {% if data_type == "colour_identity" %}
+  <!-- toggle columns on/off-->
+  <div class="toggle" id="ci_toggle">
+    <label>
+      <input type="checkbox" id="ci_name" checked onclick="toggleColumn('ci_name')">Colour Identity
+    </label>
+    <label>
+      <input type="checkbox" id="ci_num_decks" checked onclick="toggleColumn('ci_num_decks')"># Decks
+    </label>
+    <label>
+      <input type="checkbox" id="ci_games_played" checked onclick="toggleColumn('ci_games_played')">Games Played
+    </label>
+    <label>
+      <input type="checkbox" id="ci_win_rate" checked onclick="toggleColumn('ci_win_rate')">Win Rate
+    </label>
+  </div>
+  <!-- data table-->
   <div id="data_tables">
-    {% if data_type == "colour_identity" %}
-    <!-- toggle columns on/off-->
-    <div class="toggle" id="deck_toggle">
-      <label>
-        <input type="checkbox" id="ci_name" checked onclick="toggleColumn('ci_name')">Colour Identity
-      </label>
-      <label>
-        <input type="checkbox" id="ci_num_decks" checked onclick="toggleColumn('ci_num_decks')"># Decks
-      </label>
-      <label>
-        <input type="checkbox" id="ci_games_played" checked onclick="toggleColumn('ci_games_played')">Games Played
-      </label>
-      <label>
-        <input type="checkbox" id="ci_win_rate" checked onclick="toggleColumn('ci_win_rate')">Win Rate
-      </label>
-    </div>
-    <!-- data table-->
     {% for colour_identity_group_by_num_colours in data["colour_identities"] %}
     <table class="colour_data_table" id="{{ colour_identity_group_by_num_colours[1].num_colours }}_colours_table">
       <tr>
@@ -137,28 +136,30 @@
       {% endfor %}
     </table>
     {% endfor %}
-    {% endif %}
+  </div>
+  {% endif %}
 
-    {% if data_type == "deck" %}
-    <!-- toggle columns on/off-->
-    <div class="toggle" id="deck_toggle">
-      <label>
-        <input type="checkbox" id="deck_name" checked onclick="toggleColumn('deck_name')">Deck Name
-      </label>
-      <label>
-        <input type="checkbox" id="deck_owner" checked onclick="toggleColumn('deck_owner')">Owner Name
-      </label>
-      <label>
-        <input type="checkbox" id="deck_ci" checked onclick="toggleColumn('deck_ci')">Colour Identity
-      </label>
-      <label>
-        <input type="checkbox" id="deck_games_played" checked onclick="toggleColumn('deck_games_played')">Games Played
-      </label>
-      <label>
-        <input type="checkbox" id="deck_win_rate" checked onclick="toggleColumn('deck_win_rate')">Win Rate
-      </label>
-    </div>
-    <!-- data table-->
+  {% if data_type == "deck" %}
+  <!-- toggle columns on/off-->
+  <div class="toggle" id="deck_toggle">
+    <label>
+      <input type="checkbox" id="deck_name" checked onclick="toggleColumn('deck_name')">Deck Name
+    </label>
+    <label>
+      <input type="checkbox" id="deck_owner" checked onclick="toggleColumn('deck_owner')">Owner Name
+    </label>
+    <label>
+      <input type="checkbox" id="deck_ci" checked onclick="toggleColumn('deck_ci')">Colour Identity
+    </label>
+    <label>
+      <input type="checkbox" id="deck_games_played" checked onclick="toggleColumn('deck_games_played')">Games Played
+    </label>
+    <label>
+      <input type="checkbox" id="deck_win_rate" checked onclick="toggleColumn('deck_win_rate')">Win Rate
+    </label>
+  </div>
+  <!-- data table-->
+  <div id="data_tables">
     <table class="data_table" id="deck_table">
       <tr>
         <th onclick="sortTable(0)" class="deck_name">Deck Name</th>
@@ -182,31 +183,33 @@
       </tr>
       {% endfor %}
     </table>
-    {% endif %}
+  </div>
+  {% endif %}
 
-    {% if data_type == "game" %}
-    <!-- toggle columns on/off-->
-    <div class="toggle" id="game_toggle">
-      <label>
-        <input type="checkbox" id="game_date" checked onclick="toggleColumn('game_date')">Date
-      </label>
-      <label>
-        <input type="checkbox" id="game_start" checked onclick="toggleColumn('game_start')">Start Time
-      </label>
-      <label>
-        <input type="checkbox" id="game_time" checked onclick="toggleColumn('game_time')">Game Length (Time)
-      </label>
-      <label>
-        <input type="checkbox" id="game_turns" checked onclick="toggleColumn('game_turns')">Game Length (Turns)
-      </label>
-      <label>
-        <input type="checkbox" id="game_winner" checked onclick="toggleColumn('game_winner')">Winner
-      </label>
-      <label>
-        <input type="checkbox" id="game_players" checked onclick="toggleColumn('game_players')">Players
-      </label>
-    </div>
-    <!-- data table-->
+  {% if data_type == "game" %}
+  <!-- toggle columns on/off-->
+  <div class="toggle" id="game_toggle">
+    <label>
+      <input type="checkbox" id="game_date" checked onclick="toggleColumn('game_date')">Date
+    </label>
+    <label>
+      <input type="checkbox" id="game_start" checked onclick="toggleColumn('game_start')">Start Time
+    </label>
+    <label>
+      <input type="checkbox" id="game_time" checked onclick="toggleColumn('game_time')">Game Length (Time)
+    </label>
+    <label>
+      <input type="checkbox" id="game_turns" checked onclick="toggleColumn('game_turns')">Game Length (Turns)
+    </label>
+    <label>
+      <input type="checkbox" id="game_winner" checked onclick="toggleColumn('game_winner')">Winner
+    </label>
+    <label>
+      <input type="checkbox" id="game_players" checked onclick="toggleColumn('game_players')">Players
+    </label>
+  </div>
+  <!-- data table-->
+  <div id="data_tables">
     <table class="data_table" id="game_table">
       <tr>
         <th onclick="sortTable(0)" class="game_date">Date</th>
@@ -231,25 +234,27 @@
       </tr>
       {% endfor %}
     </table>
-    {% endif %}
+  </div>
+  {% endif %}
 
-    {% if data_type == "player" %}
-    <!-- toggle columns on/off-->
-    <div class="toggle" id="player_toggle">
-      <label>
-        <input type="checkbox" id="player_name" checked onclick="toggleColumn('player_name')">Player Name
-      </label>
-      <label>
-        <input type="checkbox" id="player_decks" checked onclick="toggleColumn('player_decks')">Number of Decks
-      </label>
-      <label>
-        <input type="checkbox" id="player_games_played" checked onclick="toggleColumn('player_games_played')">Games Played
-      </label>
-      <label>
-        <input type="checkbox" id="player_win_rate" checked onclick="toggleColumn('player_win_rate')">Win Rate
-      </label>
-    </div>
-    <!-- data table-->
+  {% if data_type == "player" %}
+  <!-- toggle columns on/off-->
+  <div class="toggle" id="player_toggle">
+    <label>
+      <input type="checkbox" id="player_name" checked onclick="toggleColumn('player_name')">Player Name
+    </label>
+    <label>
+      <input type="checkbox" id="player_decks" checked onclick="toggleColumn('player_decks')">Number of Decks
+    </label>
+    <label>
+      <input type="checkbox" id="player_games_played" checked onclick="toggleColumn('player_games_played')">Games Played
+    </label>
+    <label>
+      <input type="checkbox" id="player_win_rate" checked onclick="toggleColumn('player_win_rate')">Win Rate
+    </label>
+  </div>
+  <!-- data table-->
+  <div id="data_tables">
     <table class="data_table" id="player_table">
       <tr>
         <th onclick="sortTable(0)" class="player_name">Player Name</th>
@@ -266,7 +271,7 @@
       </tr>
       {% endfor %}
     </table>
-    {% endif %}
   </div>
+  {% endif %}
 </body>
 {% endblock body %}
