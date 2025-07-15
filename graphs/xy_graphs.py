@@ -3,22 +3,12 @@ import base64
 import copy
 import matplotlib.pyplot as plt
 import numpy as np
+import graphs.utils
 from io import BytesIO
-
-def remove_zeroes(x_values, y_values):
-    if len(x_values) != len(y_values):
-        raise ValueError("Cannot make xy graph. Length of arrays not equal")
-
-    for i in range(len(x_values) - 1, -1, -1):
-        if y_values[i] == 0:
-            del x_values[i]
-            del y_values[i]
-
-    return x_values, y_values
 
 def make_xy_graph(display, x_values, y_values, x_label="", y_label="", title="", no_zeroes=False):
     if no_zeroes:
-        remove_zeroes(x_values, y_values)
+        x_values, y_values = graphs.utils.remove_zeroes(x_values, y_values)
 
     fig, ax = plt.subplots()
     plt.setp(ax.get_xticklabels(), rotation=45, horizontalalignment='right')
