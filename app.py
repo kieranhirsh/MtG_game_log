@@ -895,8 +895,8 @@ def graphs():
 
             if request.form["line_data"] == "deck":
                 data = []
-                deck_inputs = request.form.getlist("line_" + request.form['line_data'])
-                for deck_input in deck_inputs:
+                data_names = request.form.getlist("line_" + request.form['line_data'])
+                for deck_input in data_names:
                     if deck_input:
                         deck_name, deck_owner_name, query_tree = utils.get_deck_data_from_form_inputs(deck_input)
                         try:
@@ -960,7 +960,8 @@ def graphs():
                                                             y_values = win_rates,
                                                             x_label = "Time",
                                                             y_label = "Win Rate",
-                                                            title = "win rate over time")
+                                                            title = "win rate over time",
+                                                            legend = data_names)
                 else:
                     call_error = True
                     missing_entries.append([request.form["line_y"], 'Y Axis'])

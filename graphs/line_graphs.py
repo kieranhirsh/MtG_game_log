@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from io import BytesIO
 
-def make_line_graph(x_values, y_values, x_label="", y_label="", title=""):
+def make_line_graph(x_values, y_values, x_label="", y_label="", title="", legend=[]):
     fig, ax = plt.subplots()
     plt.setp(ax.get_xticklabels(), rotation=45, horizontalalignment='right')
 
@@ -15,10 +15,13 @@ def make_line_graph(x_values, y_values, x_label="", y_label="", title=""):
     xmax = []
 
     for i in range(len(x_values)):
-        ax.plot(x_values[i], y_values[i])
+        ax.plot(x_values[i], y_values[i], label=legend[i] if legend else None)
         ax.scatter(x_values[i][:-1], y_values[i][:-1], marker=".")
         xmin.append(np.min(x_values[i]))
         xmax.append(np.max(x_values[i]))
+
+    if legend:
+        ax.legend()
 
     if x_label:
         ax.set_xlabel(x_label)
