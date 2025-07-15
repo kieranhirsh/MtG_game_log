@@ -900,48 +900,61 @@ def graphs():
                 except:
                     return errors.entry_not_found('data.html', [['deck', 'deck_name', deck_name]])
             else:
-                data = crud_class.specific(key=request.form['line_data'] + "_name",
-                                           value=request.form["line_" + request.form['line_data']],
-                                           return_model_object = True)[0]
+                data = []
+                data_names = request.form.getlist("line_" + request.form['line_data'])
+                for datum_name in data_names:
+                    if datum_name:
+                        data.append(crud_class.specific(key=request.form['line_data'] + "_name",
+                                                        value=datum_name,
+                                                        return_model_object = True)[0])
 
             # this wants to be a select case, but I'm using Python 3.8 :(
             if request.form["line_x"] == "time":
                 if request.form["line_y"] == "win rate":
-                    seats = data.seats
-                    games = []
                     time_axis = []
-                    for seat in seats:
-                        games.append(seat.game)
+                    win_rates = []
+                    for datum in data:
+                        if not datum:
+                            continue
 
-                        game_year = int(str(seat.game.start_time)[:4])
-                        game_month = int(str(seat.game.start_time)[5:7])
-                        game_day = int(str(seat.game.start_time)[8:10])
-                        time_axis.append(datetime(game_year, game_month, game_day) + timedelta(days=1))
+                        seats = datum.seats
+                        games = []
+                        time_data = []
+                        for seat in seats:
+                            games.append(seat.game)
 
-                    time_axis.append(datetime.now())
-                    time_axis = list(set(time_axis))    # set removes duplicated values
-                    time_axis.sort()
+                            game_year = int(str(seat.game.start_time)[:4])
+                            game_month = int(str(seat.game.start_time)[5:7])
+                            game_day = int(str(seat.game.start_time)[8:10])
+                            time_data.append(datetime(game_year, game_month, game_day) + timedelta(days=1))
 
-                    win_rate_over_time = [0] * len(time_axis)
-                    games_played_over_time = [0] * len(time_axis)
-                    games_won_over_time = [0] * len(time_axis)
-                    for i in range(len(time_axis)):
-                        for game in games:
-                            if game.start_time < time_axis[i]:
-                                games_played_over_time[i] += 1
-                                if getattr(game, "winning_%s_id" % request.form['line_data']) == data.id:
-                                    games_won_over_time[i] += 1
+                            time_data.append(datetime.now())
+                            time_data = list(set(time_data))    # set removes duplicated values
+                            time_data.sort()
 
-                        if games_played_over_time[i] == 0:
-                            win_rate_over_time[i] = 0
-                        else:
-                            win_rate_over_time[i] = games_won_over_time[i] / games_played_over_time[i] * 100
+                            win_rate_over_time = [0] * len(time_data)
+                            games_played_over_time = [0] * len(time_data)
+                            games_won_over_time = [0] * len(time_data)
+                            for i in range(len(time_data)):
+                                for game in games:
+                                    if game.start_time < time_data[i]:
+                                        games_played_over_time[i] += 1
+                                        if getattr(game, "winning_%s_id" % request.form['line_data']) == datum.id:
+                                            games_won_over_time[i] += 1
+
+                                if games_played_over_time[i] == 0:
+                                    win_rate_over_time[i] = 0
+                                else:
+                                    win_rate_over_time[i] = games_won_over_time[i] / games_played_over_time[i] * 100
+
+                        time_axis.append(time_data)
+                        win_rates.append(win_rate_over_time)
 
                     plt_graph = line_graphs.make_line_graph(x_values = time_axis,
-                                                            y_values = win_rate_over_time,
+                                                            y_values = win_rates,
                                                             x_label = "Time",
                                                             y_label = "Win Rate",
-                                                            title = "%s's win rate over time" %  getattr(data, "%s_name" % request.form['line_data']))
+                                                            title = "win rate over time")
                 else:
                     call_error = True
                     missing_entries.append([request.form["line_y"], 'Y Axis'])
