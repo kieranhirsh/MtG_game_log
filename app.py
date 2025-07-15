@@ -904,8 +904,6 @@ def graphs():
                                            value=request.form["line_" + request.form['line_data']],
                                            return_model_object = True)[0]
 
-            xy_data = {}
-
             # this wants to be a select case, but I'm using Python 3.8 :(
             if request.form["line_x"] == "time":
                 if request.form["line_y"] == "win rate":
@@ -943,8 +941,7 @@ def graphs():
                                                             y_values = win_rate_over_time,
                                                             x_label = "Time",
                                                             y_label = "Win Rate",
-                                                            title = "%s's win rate over time" %  getattr(data, "%s_name" % request.form['line_data']),
-                                                            no_zeroes = False)
+                                                            title = "%s's win rate over time" %  getattr(data, "%s_name" % request.form['line_data']))
                 else:
                     call_error = True
                     missing_entries.append([request.form["line_y"], 'Y Axis'])
