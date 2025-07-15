@@ -26,14 +26,6 @@ def make_bar_chart(x_values, y_values, x_label="", y_label="", title="", no_zero
         ax.set_xlabel(x_label)
     if y_label:
         ax.set_ylabel(y_label)
-        if y_label == "Win Rate":
-            ax.set_xlim([np.min(x_values), np.max(x_values)])
-            ax.set_ylim([0, 100])
-            ax.yaxis.set_label_position("right")
-            ax.yaxis.tick_right()
-            yticks = np.arange(0, 101, 12.5)
-            ylabels = [f"{y}%" for y in yticks]
-            ax.set_yticks(yticks, ylabels)
     if title:
         ax.set_title(title)
     plt.tight_layout()
