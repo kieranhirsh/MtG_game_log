@@ -6,27 +6,21 @@ import numpy as np
 import graphs.utils
 from io import BytesIO
 
-def make_xy_graph(display, x_values, y_values, x_label="", y_label="", title="", no_zeroes=False):
+def make_bar_chart(x_values, y_values, x_label="", y_label="", title="", no_zeroes=False):
     if no_zeroes:
         x_values, y_values = graphs.utils.remove_zeroes(x_values, y_values)
 
     fig, ax = plt.subplots()
     plt.setp(ax.get_xticklabels(), rotation=45, horizontalalignment='right')
 
-    if display == "line":
-        ax.plot(x_values, y_values)
-        ax.scatter(x_values[:-1], y_values[:-1], marker=".")
-    elif display == "bar":
-        if x_label == "Colour":
-            bar_colours = copy.deepcopy(x_values)
-            if bar_colours[0] == "colourless":
-                bar_colours[0] = "sienna"
-            ax.set_facecolor("lightgrey")
-        else:
-            bar_colours = None
-        ax.bar(x_values, y_values, color=bar_colours)
+    if x_label == "Colour":
+        bar_colours = copy.deepcopy(x_values)
+        if bar_colours[0] == "colourless":
+            bar_colours[0] = "sienna"
+        ax.set_facecolor("lightgrey")
     else:
-        raise ValueError("No graph display specified (must be bar or line)")
+        bar_colours = None
+    ax.bar(x_values, y_values, color=bar_colours)
 
     if x_label:
         ax.set_xlabel(x_label)

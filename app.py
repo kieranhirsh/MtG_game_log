@@ -10,7 +10,7 @@ from crud.deck import deck_crud
 from crud.game import game_crud
 from crud.player import player_crud
 from crud.seat import seat_crud
-from graphs import pie_charts, xy_graphs
+from graphs import bar_charts, line_graphs, pie_charts
 from utils import utils
 
 app = Flask(__name__)
@@ -713,7 +713,7 @@ def graphs():
         number_of_colours = list(plt_data.keys())
         number_of_decks = list(plt_data.values())
 
-        example_bar_chart = xy_graphs.make_xy_graph("bar", number_of_colours, number_of_decks, "Number of Colours", "Number of Decks", "Number of Decks per Number of Colours")
+        example_bar_chart = bar_charts.make_bar_chart(number_of_colours, number_of_decks, "Number of Colours", "Number of Decks", "Number of Decks per Number of Colours")
         example_pie_chart = pie_charts.make_pie_chart(number_of_colours, number_of_decks, "Number of Decks per Number of Colours")
 
         return render_template(
@@ -877,13 +877,12 @@ def graphs():
             x_values = list(xy_data.keys())
             y_values = list(xy_data.values())
 
-            plt_graph = xy_graphs.make_xy_graph("bar",
-                                                x_values,
-                                                y_values,
-                                                titles[request.form["bar_x"]],
-                                                titles[request.form["bar_y"]],
-                                                titles[request.form["bar_y"]] + " per " + titles[request.form["bar_x"]],
-                                                no_zeroes)
+            plt_graph = bar_charts.make_bar_chart(x_values,
+                                                  y_values,
+                                                  titles[request.form["bar_x"]],
+                                                  titles[request.form["bar_y"]],
+                                                  titles[request.form["bar_y"]] + " per " + titles[request.form["bar_x"]],
+                                                  no_zeroes)
 
         elif request.form['type'] == "line":
             if request.form["line_data"] not in list(model_names.keys()):
@@ -922,7 +921,7 @@ def graphs():
                         time_axis.append(datetime(game_year, game_month, game_day) + timedelta(days=1))
 
                     time_axis.append(datetime.now())
-                    time_axis = list(set(time_axis))
+                    time_axis = list(set(time_axis))    # set removes duplicated values
                     time_axis.sort()
 
                     win_rate_over_time = [0] * len(time_axis)
@@ -940,13 +939,12 @@ def graphs():
                         else:
                             win_rate_over_time[i] = games_won_over_time[i] / games_played_over_time[i] * 100
 
-                    plt_graph = xy_graphs.make_xy_graph(display = "line",
-                                                        x_values = time_axis,
-                                                        y_values = win_rate_over_time,
-                                                        x_label = "Time",
-                                                        y_label = "Win Rate",
-                                                        title = "%s's win rate over time" %  getattr(data, "%s_name" % request.form['line_data']),
-                                                        no_zeroes = False)
+                    plt_graph = line_graphs.make_line_graph(x_values = time_axis,
+                                                            y_values = win_rate_over_time,
+                                                            x_label = "Time",
+                                                            y_label = "Win Rate",
+                                                            title = "%s's win rate over time" %  getattr(data, "%s_name" % request.form['line_data']),
+                                                            no_zeroes = False)
                 else:
                     call_error = True
                     missing_entries.append([request.form["line_y"], 'Y Axis'])
