@@ -948,9 +948,15 @@ def graphs():
                                                         title = "%s's win rate over time" %  getattr(data, "%s_name" % request.form['line_data']),
                                                         no_zeroes = False)
                 else:
-                    pass
+                    call_error = True
+                    missing_entries.append([request.form["line_y"], 'Y Axis'])
+
             else:
-                pass
+                call_error = True
+                missing_entries.append([request.form["line_x"], 'X Axis'])
+
+            if call_error:
+                return errors.option_not_available('graphs.html', missing_entries)
 
         elif request.form['type'] == "pie":
             if request.form["pie_data"] not in list(model_names.keys()):
