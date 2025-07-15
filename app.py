@@ -894,11 +894,17 @@ def graphs():
             crud_class = getattr(crud_file, model_names[request.form["line_data"]]["class"])
 
             if request.form["line_data"] == "deck":
-                deck_name, deck_owner_name, query_tree = utils.get_deck_data_from_form_inputs(request.form['line_deck'])
-                try:
-                    data = crud_class.specific(query_tree=query_tree, join_classes=["player"], return_model_object = True)[0]
-                except:
-                    return errors.entry_not_found('data.html', [['deck', 'deck_name', deck_name]])
+                data = []
+                deck_inputs = request.form.getlist("line_" + request.form['line_data'])
+                for deck_input in deck_inputs:
+                    if deck_input:
+                        deck_name, deck_owner_name, query_tree = utils.get_deck_data_from_form_inputs(deck_input)
+                        try:
+                            data.append(crud_class.specific(query_tree=query_tree,
+                                                            join_classes=["player"],
+                                                            return_model_object = True)[0])
+                        except:
+                            return errors.entry_not_found('data.html', [['deck', 'deck_name', deck_name]])
             else:
                 data = []
                 data_names = request.form.getlist("line_" + request.form['line_data'])
