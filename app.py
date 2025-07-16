@@ -612,16 +612,16 @@ def data_post():
     elif request.form["type"] == "player":
         player_data = []
 
-        # if we have a restriction on the colour identity name
-        if request.form.getlist("ci_abbr"):
-            colour_identity_data, desired_ci = utils.get_ci_data_from_dropdown_inputs(request.form)
-            ci_name = colour_identity_data[0].ci_name
+        # loop over all players
+        for player in players:
+            # find all decks owned by a given player
+            player_decks = player_crud.get_child_data(player.id, "deck", True)
+            decks_to_remove = []
 
-            # loop over all players
-            for player in players:
-                # find all decks owned by a given player
-                player_decks = player_crud.get_child_data(player.id, "deck", True)
-                decks_to_remove = []
+            # if we have a restriction on the colour identity name
+            if request.form.getlist("ci_abbr"):
+                colour_identity_data, desired_ci = utils.get_ci_data_from_dropdown_inputs(request.form)
+                ci_name = colour_identity_data[0].ci_name
 
                 # loop over those decks
                 for deck in player_decks:
@@ -633,60 +633,35 @@ def data_post():
                 for deck_to_remove in decks_to_remove:
                     player_decks.remove(deck_to_remove)
 
-                # find number of games played and win rate
-                # initialise values
-                games_played = 0
-                games_won = 0
+            # find number of games played and win rate
+            # initialise values
+            games_played = 0
+            games_won = 0
 
-                for player_deck in player_decks:
-                    # number of games played is the number of child seats
-                    games_played += len(deck_crud.get_child_data(player_deck.id, "seat", True))
-                    # number of games won is the number of games with winning_deck_id equal to the player's id
-                    games_won += len(game_crud.specific("winning_deck_id", player_deck.id, True))
-
-                # if they've played no games we need to set the win rate manually to avoid divide by zero errors
-                if games_played == 0:
-                    win_rate = 0
-                else:
-                    win_rate = games_won / games_played * 100
-
-                # find the number of decks the given player owns
-                num_decks = len(player_decks)
-
-                # and finally, append all the relevant data that has been requested
-                if num_decks != 0:
-                    player_data.append({
-                        "id": player.id,
-                        "player_name": player.player_name,
-                        "number_of_decks": num_decks,
-                        "games_played": games_played,
-                        "win_rate": win_rate
-                    })
-        else:
-            for player in players:
-                # if we have no restriction the number of decks is just the length of the array
-                num_decks = len(player_crud.get_child_data(player.id, "deck", True))
-
-                # find number of games played and win rate
+            for player_deck in player_decks:
                 # number of games played is the number of child seats
-                games_played = len(player_crud.get_child_data(player.id, "seat", True))
+                games_played += len(deck_crud.get_child_data(player_deck.id, "seat", True))
+                # number of games won is the number of games with winning_deck_id equal to the player's id
+                games_won += len(game_crud.specific("winning_deck_id", player_deck.id, True))
 
-                # if they've played no games we need to set the win rate manually to avoid divide by zero errors
-                if games_played == 0:
-                    win_rate = 0
-                else:
-                    # number of games won is the number of games with winning_player_id equal to the player's id
-                    games_won = len(game_crud.specific("winning_player_id", player.id, True))
-                    win_rate = games_won / games_played * 100
+            # if they've played no games we need to set the win rate manually to avoid divide by zero errors
+            if games_played == 0:
+                win_rate = 0
+            else:
+                win_rate = games_won / games_played * 100
 
-                if num_decks != 0:
-                    player_data.append({
-                        "id": player.id,
-                        "player_name": player.player_name,
-                        "number_of_decks": num_decks,
-                        "games_played": games_played,
-                        "win_rate": win_rate
-                    })
+            # find the number of decks the given player owns
+            num_decks = len(player_decks)
+
+            # and finally, append all the relevant data that has been requested
+            if num_decks != 0:
+                player_data.append({
+                    "id": player.id,
+                    "player_name": player.player_name,
+                    "number_of_decks": num_decks,
+                    "games_played": games_played,
+                    "win_rate": win_rate
+                })
 
         # Prepare data to pass to the template
         html_data = {"colour_identities": colour_identities,
