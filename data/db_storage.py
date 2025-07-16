@@ -4,7 +4,7 @@
 import importlib
 from os import getenv
 from copy import deepcopy
-from sqlalchemy import create_engine, text, and_, or_
+from sqlalchemy import create_engine, and_, or_
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 def build_query(node, classes):
@@ -72,18 +72,14 @@ class DBStorage():
 
         if query_tree:
             classes = {class_name: class_}
-            if join_classes:
-                for join_name in join_classes:
-                    join_module = importlib.import_module("models." + join_name)
-                    join_class = getattr(join_module, join_name)
-                    classes[join_name] = join_class
-            where_clause = build_query(query_tree, classes)
             base_session = self.__session.query(class_)
             if join_classes:
                 for join_name in join_classes:
                     join_module = importlib.import_module("models." + join_name)
                     join_class = getattr(join_module, join_name)
+                    classes[join_name] = join_class
                     base_session = base_session.join(join_class)
+            where_clause = build_query(query_tree, classes)
             try:
                 rows = base_session.where(where_clause).all()
             except:
