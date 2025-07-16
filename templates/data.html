@@ -157,6 +157,9 @@
     <label>
       <input type="checkbox" id="deck_win_rate" checked onclick="toggleColumn('deck_win_rate')">Win Rate
     </label>
+    <label>
+      <input type="checkbox" id="deck_ave_game_time" checked onclick="toggleColumn('deck_ave_game_time')">Ave Game Time
+    </label>
   </div>
   <!-- data table-->
   <div id="data_tables">
@@ -167,6 +170,7 @@
         <th onclick="sortTable(2)" class="deck_ci">Colour Identity</th>
         <th onclick="sortTable(3)" class="deck_games_played">Games Played</th>
         <th onclick="sortTable(4)" class="deck_win_rate">Win Rate</th>
+        <th onclick="sortTable(5)" class="deck_ave_game_time">Ave Game Time</th>
       </tr>
       {% for deck in data["decks"] %}
       <tr>
@@ -180,6 +184,7 @@
         </td>
         <td class="deck_games_played">{{ deck.games_played }}</td>
         <td class="deck_win_rate">{{ '%0.2f'|format(deck.win_rate) }}%</td>
+        <td class="deck_ave_game_time">{{ deck.ave_game_time[:-3] }}</td>
       </tr>
       {% endfor %}
     </table>

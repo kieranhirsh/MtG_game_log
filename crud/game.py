@@ -209,11 +209,11 @@ class game_crud():
         # find the game entry to be updated
         game_object = game_crud.specific("id", game_id, True)
 
-        # get the data we need to generate the name
+        # get the data we need to generate the time
         start_time = game_object[0].start_time
         end_time = game_object[0].end_time
 
-        # generate the name
+        # generate the time
         game_time = str(end_time - start_time)
 
         # create an updated game dict

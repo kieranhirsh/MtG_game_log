@@ -11,7 +11,7 @@ from crud.game import game_crud
 from crud.player import player_crud
 from crud.seat import seat_crud
 from graphs import bar_charts, line_graphs, pie_charts
-from utils import utils
+from utils import derived_quantities, utils
 
 app = Flask(__name__)
 app.register_blueprint(api_routes)
@@ -533,12 +533,21 @@ def data_post():
 
         for deck in deck_data:
             deck.games_played = len(deck_crud.get_child_data(deck.id, "seat", True))
+            game_times = []
 
             if deck.games_played == 0:
                 deck.win_rate = 0
+                deck.ave_game_time = "0:00:00"
             else:
                 games_won = len(game_crud.specific("winning_deck_id", deck.id, True))
                 deck.win_rate = games_won / deck.games_played * 100
+
+                for seat in deck_crud.get_child_data(deck.id, "seat", True):
+                    game_length, game_seconds = derived_quantities.game_length_in_time(seat.game)
+                    game_times.append(game_seconds)
+
+                ave_time = sum(game_times) / len(game_times)
+                deck.ave_game_time = str(timedelta(seconds=(ave_time - (ave_time % 60))))
 
         # Prepare data to pass to the template
         html_data = {"colour_identities": colour_identities,
@@ -553,6 +562,7 @@ def data_post():
         games_to_remove = []
 
         for game in games:
+            game.game_time, game.seconds = derived_quantities.game_length_in_time(game)
             seats = game_crud.get_child_data(game.id, "seat", True)
             game.player = [None] * len(seats)
             game.deck = [None] * len(seats)
