@@ -100,6 +100,9 @@
     <label>
       <input type="checkbox" id="ci_win_rate" checked onclick="toggleColumn('ci_win_rate')">Win Rate
     </label>
+    <label>
+      <input type="checkbox" id="ci_ave_game_time" checked onclick="toggleColumn('ci_ave_game_time')">Ave Game Time
+    </label>
   </div>
   <!-- data table-->
   <div id="data_tables">
@@ -110,6 +113,7 @@
         <th onclick="sortColourTables(1)" class="ci_num_decks"># Decks</th>
         <th onclick="sortColourTables(2)" class="ci_games_played">Games Played</th>
         <th onclick="sortColourTables(3)" class="ci_win_rate">Win Rate</th>
+        <th onclick="sortColourTables(4)" class="ci_ave_game_time">Ave Game Time</th>
       </tr>
       {% for colour_identity in colour_identity_group_by_num_colours %}
       <tr>
@@ -132,6 +136,11 @@
           {% if colour_identity.colours == "skip" %}</b>{% endif %}
         </td>
         <td class="ci_win_rate">{% if colour_identity.colours == "skip" %}<b>{% endif %}{{ '%0.2f'|format(colour_identity.win_rate) }}%{% if colour_identity.colours == "skip" %}</b>{% endif %}</td>
+        <td class="ci_ave_game_time">
+          {% if colour_identity.colours == "skip" %}<b>{% endif %}
+          {{ colour_identity.ave_game_time[:-3] }}
+          {% if colour_identity.colours == "skip" %}</b>{% endif %}
+        </td>
       </tr>
       {% endfor %}
     </table>
@@ -274,7 +283,7 @@
       {% for player in data["players"] %}
       <tr>
         <td class="player_name">{{ player.player_name }}</td>
-        <td class="player_decks">{{ player.number_of_decks }}</td>
+        <td class="player_decks">{{ player.num_decks }}</td>
         <td class="player_games_played">{{ player.games_played }}</td>
         <td class="player_win_rate">{{ '%0.2f'|format(player.win_rate) }}%</td>
         <td class="player_ave_game_time">{{ player.ave_game_time[:-3] }}</td>
