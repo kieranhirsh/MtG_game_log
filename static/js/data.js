@@ -56,7 +56,8 @@ function sortTable(n) {
     header === "Start Time" ||
     header === "Game Length (Time)" ||
     header === "Game Length (Turns)" ||
-    header === "Number of Decks"
+    header === "Number of Decks" ||
+    header === "Ave Game Time"
   ) {
     dir = "desc";
   } else {
@@ -95,7 +96,8 @@ function sortTable(n) {
           header === "Games Played" ||
           header === "Win Rate" ||
           header === "Game Length (Turns)" ||
-          header === "Number of Decks"
+          header === "Number of Decks" ||
+          header === "Ave Game Time"
         ) {
           if (parseInt(x.innerHTML) > parseInt(y.innerHTML) || parseInt(x.innerHTML) == 0) {
             // If we want to switch, mark as a switch and break the loop:
@@ -115,7 +117,8 @@ function sortTable(n) {
           header === "Games Played" ||
           header === "Win Rate" ||
           header === "Game Length (Turns)" ||
-          header === "Number of Decks"
+          header === "Number of Decks" ||
+          header === "Ave Game Time"
         ) {
           if (parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
             // If so, mark as a switch and break the loop:
@@ -181,7 +184,8 @@ function sortColourTables(col) {
     if (
       header === "# Decks" ||
       header === "Games Played" ||
-      header === "Win Rate"
+      header === "Win Rate" ||
+      header === "Ave Game Time"
     ) {
       dir = "desc";
     } else {
@@ -220,7 +224,8 @@ function sortColourTables(col) {
           if (
             header === "# Decks" ||
             header === "Games Played" ||
-            header === "Win Rate"
+            header === "Win Rate" ||
+            header === "Ave Game Time"
           ) {
             if (parseInt(x.innerHTML) > parseInt(y.innerHTML) || parseInt(x.innerHTML) == 0) {
               // If we want to switch, mark as a switch and break the loop:
@@ -239,7 +244,8 @@ function sortColourTables(col) {
           if (
             header === "# Decks" ||
             header === "Games Played" ||
-            header === "Win Rate"
+            header === "Win Rate" ||
+            header === "Ave Game Time"
           ) {
             if (parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
               // If so, mark as a switch and break the loop:
