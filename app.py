@@ -370,19 +370,19 @@ def data_post():
             }]
         ]
 
-        # if we have a restriction on the player name
-        if request.form['player_name']:
-            # check that player exists in database, return an error if it doesn't
-            player_name = request.form["player_name"]
-            player_data = storage.get(class_name="player", key="player_name", value=player_name)
-            if not player_data:
-                return errors.entry_not_found('data.html', [["player", "player_name", player_name]])
+        # loop over all colour identities
+        for colour_identity in colour_identities:
+            # find all decks of with the given colour identity
+            colour_identity_decks = colour_identity_crud.get_child_data(colour_identity.id, "deck", True)
+            decks_to_remove = []
 
-            # loop over all colour identities
-            for colour_identity in colour_identities:
-                # find all decks of with the given colour identity
-                colour_identity_decks = colour_identity_crud.get_child_data(colour_identity.id, "deck", True)
-                decks_to_remove = []
+            # if we have a restriction on the player name
+            if request.form['player_name']:
+                # check that player exists in database, return an error if it doesn't
+                player_name = request.form["player_name"]
+                player_data = storage.get(class_name="player", key="player_name", value=player_name)
+                if not player_data:
+                    return errors.entry_not_found('data.html', [["player", "player_name", player_name]])
 
                 # loop over those decks
                 for deck in colour_identity_decks:
@@ -394,87 +394,44 @@ def data_post():
                 for deck_to_remove in decks_to_remove:
                     colour_identity_decks.remove(deck_to_remove)
 
-                # find the number of decks of the given colour identity
-                num_decks = len(colour_identity_decks)
+            # find the number of decks of the given colour identity
+            num_decks = len(colour_identity_decks)
 
-                games_played = 0
-                games_won = 0
-                # find the number of games played and win rate
-                for deck in colour_identity_decks:
-                    # number of games played is the number of child seats
-                    games_played += len(deck_crud.get_child_data(deck.id, "seat", True))
-                    # number of games won is the number of games with winning_deck_id equal to the colour identity's id
-                    games_won += len(game_crud.specific("winning_deck_id", deck.id, True))
+            games_played = 0
+            games_won = 0
+            # find the number of games played and win rate
+            for deck in colour_identity_decks:
+                # number of games played is the number of child seats
+                games_played += len(deck_crud.get_child_data(deck.id, "seat", True))
+                # number of games won is the number of games with winning_deck_id equal to the colour identity's id
+                games_won += len(game_crud.specific("winning_deck_id", deck.id, True))
 
-                # if they've played no games we need to set the win rate manually to avoid divide by zero errors
-                if games_played == 0:
-                    win_rate = 0
-                else:
-                    win_rate = games_won / games_played * 100
+            # if they've played no games we need to set the win rate manually to avoid divide by zero errors
+            if games_played == 0:
+                win_rate = 0
+            else:
+                win_rate = games_won / games_played * 100
 
-                # find the number of colours of the given colour identity
-                num_colours = colour_identity.num_colours
+            # find the number of colours of the given colour identity
+            num_colours = colour_identity.num_colours
 
-                # add all the relevant data that has been requested
-                colour_identity_data[num_colours][0]["number_of_decks"] += num_decks
-                colour_identity_data[num_colours][0]["games_played"] += games_played
-                colour_identity_data[num_colours][0]["games_won"] += games_won
-                if colour_identity_data[num_colours][0]["games_played"] == 0:
-                    colour_identity_data[num_colours][0]["win_rate"] = 0
-                else:
-                    colour_identity_data[num_colours][0]["win_rate"] = colour_identity_data[num_colours][0]["games_won"] / colour_identity_data[num_colours][0]["games_played"] * 100
+            # add all the relevant data that has been requested
+            colour_identity_data[num_colours][0]["number_of_decks"] += num_decks
+            colour_identity_data[num_colours][0]["games_played"] += games_played
+            colour_identity_data[num_colours][0]["games_won"] += games_won
+            if colour_identity_data[num_colours][0]["games_played"] == 0:
+                colour_identity_data[num_colours][0]["win_rate"] = 0
+            else:
+                colour_identity_data[num_colours][0]["win_rate"] = colour_identity_data[num_colours][0]["games_won"] / colour_identity_data[num_colours][0]["games_played"] * 100
 
-                colour_identity_data[num_colours].append({
-                    "ci_name": colour_identity.ci_name,
-                    "colours": colour_identity.colours,
-                    "number_of_decks": num_decks,
-                    "num_colours": num_colours,
-                    "games_played": games_played,
-                    "win_rate": win_rate
-                })
-        else:
-            for colour_identity in colour_identities:
-                # get all the decks of the desired colour identity
-                colour_identity_decks = colour_identity_crud.get_child_data(colour_identity.id, "deck", True)
-
-                # if we have no restriction the number of decks is just the length of the array
-                num_decks = len(colour_identity_decks)
-
-                games_played = 0
-                games_won = 0
-                # find the number of games played and win rate
-                for deck in colour_identity_decks:
-                    # number of games played is the number of child seats
-                    games_played += len(deck_crud.get_child_data(deck.id, "seat", True))
-                    # number of games won is the number of games with winning_deck_id equal to the colour identity's id
-                    games_won += len(game_crud.specific("winning_deck_id", deck.id, True))
-
-                # if they've played no games we need to set the win rate manually to avoid divide by zero errors
-                if games_played == 0:
-                    win_rate = 0
-                else:
-                    win_rate = games_won / games_played * 100
-
-                # find the number of colours of the given colour identity
-                num_colours = colour_identity.num_colours
-
-                # add all the relevant data that has been requested
-                colour_identity_data[num_colours][0]["number_of_decks"] += num_decks
-                colour_identity_data[num_colours][0]["games_played"] += games_played
-                colour_identity_data[num_colours][0]["games_won"] += games_won
-                if colour_identity_data[num_colours][0]["games_played"] == 0:
-                    colour_identity_data[num_colours][0]["win_rate"] = 0
-                else:
-                    colour_identity_data[num_colours][0]["win_rate"] = colour_identity_data[num_colours][0]["games_won"] / colour_identity_data[num_colours][0]["games_played"] * 100
-
-                colour_identity_data[num_colours].append({
-                    "ci_name": colour_identity.ci_name,
-                    "colours": colour_identity.colours,
-                    "number_of_decks": num_decks,
-                    "num_colours": num_colours,
-                    "games_played": games_played,
-                    "win_rate": win_rate
-                })
+            colour_identity_data[num_colours].append({
+                "ci_name": colour_identity.ci_name,
+                "colours": colour_identity.colours,
+                "number_of_decks": num_decks,
+                "num_colours": num_colours,
+                "games_played": games_played,
+                "win_rate": win_rate
+            })
 
         # Prepare data to pass to the template
         html_data = {"colour_identities": colour_identity_data,
