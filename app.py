@@ -483,7 +483,6 @@ def data_post():
 
         return render_template('data.html', data_type="colour_identity", data=html_data)
     elif request.form["type"] == "deck":
-        decks = deck_crud.all(True)
         restrictions = []
 
         for form_item in request.form:
@@ -617,6 +616,14 @@ def data_post():
             # find all decks owned by a given player
             player_decks = player_crud.get_child_data(player.id, "deck", True)
             decks_to_remove = []
+            game_times = []
+
+            for seat in player_crud.get_child_data(player.id, "seat", True):
+                game_length, game_seconds = derived_quantities.game_length_in_time(seat.game)
+                game_times.append(game_seconds)
+
+            ave_time = sum(game_times) / len(game_times)
+            ave_game_time = str(timedelta(seconds=(ave_time - (ave_time % 60))))
 
             # if we have a restriction on the colour identity name
             if request.form.getlist("ci_abbr"):
@@ -660,7 +667,8 @@ def data_post():
                     "player_name": player.player_name,
                     "number_of_decks": num_decks,
                     "games_played": games_played,
-                    "win_rate": win_rate
+                    "win_rate": win_rate,
+                    "ave_game_time": ave_game_time
                 })
 
         # Prepare data to pass to the template
