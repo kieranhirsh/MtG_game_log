@@ -623,7 +623,7 @@ def data_post():
                 game_times.append(game_seconds)
 
             ave_time = sum(game_times) / len(game_times)
-            ave_game_time = str(timedelta(seconds=(ave_time - (ave_time % 60))))
+            player.ave_game_time = str(timedelta(seconds=(ave_time - (ave_time % 60))))
 
             # if we have a restriction on the colour identity name
             if request.form.getlist("ci_abbr"):
@@ -642,34 +642,26 @@ def data_post():
 
             # find number of games played and win rate
             # initialise values
-            games_played = 0
-            games_won = 0
+            player.games_played = 0
+            # number of games won is the length of the list of games that player has won
+            player.num_games_won = len(player.games_won)
 
             for player_deck in player_decks:
                 # number of games played is the number of child seats
-                games_played += len(deck_crud.get_child_data(player_deck.id, "seat", True))
-                # number of games won is the number of games with winning_deck_id equal to the player's id
-                games_won += len(game_crud.specific("winning_deck_id", player_deck.id, True))
+                player.games_played += len(deck_crud.get_child_data(player_deck.id, "seat", True))
 
             # if they've played no games we need to set the win rate manually to avoid divide by zero errors
-            if games_played == 0:
-                win_rate = 0
+            if player.games_played == 0:
+                player.win_rate = 0
             else:
-                win_rate = games_won / games_played * 100
+                player.win_rate = player.num_games_won / player.games_played * 100
 
             # find the number of decks the given player owns
-            num_decks = len(player_decks)
+            player.num_decks = len(player_decks)
 
             # and finally, append all the relevant data that has been requested
-            if num_decks != 0:
-                player_data.append({
-                    "id": player.id,
-                    "player_name": player.player_name,
-                    "number_of_decks": num_decks,
-                    "games_played": games_played,
-                    "win_rate": win_rate,
-                    "ave_game_time": ave_game_time
-                })
+            if player.num_decks != 0:
+                player_data.append(player)
 
         # Prepare data to pass to the template
         html_data = {"colour_identities": colour_identities,
