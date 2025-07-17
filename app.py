@@ -633,15 +633,20 @@ def data_post():
                 for deck_to_remove in decks_to_remove:
                     player_decks.remove(deck_to_remove)
 
-            # find number of games played and win rate
-            # initialise values
-            player.games_played = 0
-            # number of games won is the length of the list of games that player has won
-            player.num_games_won = len(player.games_won)
+                # find number of games played and win rate
+                # initialise values
+                player.games_played = 0
+                player.num_games_won = 0
 
-            for player_deck in player_decks:
-                # number of games played is the number of child seats
-                player.games_played += len(deck_crud.get_child_data(player_deck.id, "seat", True))
+                # loop over all of that player's decks
+                for player_deck in player_decks:
+                    # find number of games played and number of games won
+                    player.games_played += len(deck_crud.get_child_data(player_deck.id, "seat", True))
+                    player.num_games_won += len(player_deck.games_won)
+            else:
+                # find number of games played and number of games won
+                player.games_played = len(player_crud.get_child_data(player.id, "seat", True))
+                player.num_games_won = len(player.games_won)
 
             # if they've played no games we need to set the win rate manually to avoid divide by zero errors
             if player.games_played == 0:
