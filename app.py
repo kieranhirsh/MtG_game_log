@@ -533,10 +533,14 @@ def data_post():
 
                 for seat in deck_crud.get_child_data(deck.id, "seat", True):
                     game_length, game_seconds = derived_quantities.game_length_in_time(seat.game)
-                    game_times.append(game_seconds)
+                    if game_seconds:
+                        game_times.append(game_seconds)
 
-                ave_time = sum(game_times) / len(game_times)
-                deck.ave_game_time = str(timedelta(seconds=(ave_time - (ave_time % 60))))
+                if len(game_times) > 0:
+                    ave_time = sum(game_times) / len(game_times)
+                    deck.ave_game_time = str(timedelta(seconds=(ave_time - (ave_time % 60))))[0:-3]
+                else:
+                    deck.ave_game_time = ""
 
         # Prepare data to pass to the template
         html_data = {"colour_identities": colour_identities,
@@ -612,11 +616,15 @@ def data_post():
             for seat in player_crud.get_child_data(player.id, "seat", True):
                 # get the time taken for each of those games
                 game_length, game_seconds = derived_quantities.game_length_in_time(seat.game)
-                game_times.append(game_seconds)
+                if game_seconds:
+                    game_times.append(game_seconds)
 
             # and calculate the average time of all of those games
-            ave_time = sum(game_times) / len(game_times)
-            player.ave_game_time = str(timedelta(seconds=(ave_time - (ave_time % 60))))
+            if len(game_times) > 0:
+                ave_time = sum(game_times) / len(game_times)
+                player.ave_game_time = str(timedelta(seconds=(ave_time - (ave_time % 60))))[0:-3]
+            else:
+                player.ave_game_time = ""
 
             # if we have a restriction on the colour identity name
             if request.form.getlist("ci_abbr"):

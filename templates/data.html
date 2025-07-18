@@ -138,7 +138,7 @@
         <td class="ci_win_rate">{% if colour_identity.colours == "skip" %}<b>{% endif %}{{ '%0.2f'|format(colour_identity.win_rate) }}%{% if colour_identity.colours == "skip" %}</b>{% endif %}</td>
         <td class="ci_ave_game_time">
           {% if colour_identity.colours == "skip" %}<b>{% endif %}
-          {{ colour_identity.ave_game_time[:-3] }}
+          {{ colour_identity.ave_game_time }}
           {% if colour_identity.colours == "skip" %}</b>{% endif %}
         </td>
       </tr>
@@ -193,7 +193,7 @@
         </td>
         <td class="deck_games_played">{{ deck.games_played }}</td>
         <td class="deck_win_rate">{{ '%0.2f'|format(deck.win_rate) }}%</td>
-        <td class="deck_ave_game_time">{{ deck.ave_game_time[:-3] }}</td>
+        <td class="deck_ave_game_time">{{ deck.ave_game_time }}</td>
       </tr>
       {% endfor %}
     </table>
@@ -286,7 +286,7 @@
         <td class="player_decks">{{ player.num_decks }}</td>
         <td class="player_games_played">{{ player.games_played }}</td>
         <td class="player_win_rate">{{ '%0.2f'|format(player.win_rate) }}%</td>
-        <td class="player_ave_game_time">{{ player.ave_game_time[:-3] }}</td>
+        <td class="player_ave_game_time">{{ player.ave_game_time }}</td>
       </tr>
       {% endfor %}
     </table>
