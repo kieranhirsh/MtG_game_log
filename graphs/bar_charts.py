@@ -20,6 +20,11 @@ def make_bar_chart(x_values, y_values, x_label="", y_label="", title="", no_zero
         ax.set_facecolor("lightgrey")
     else:
         bar_colours = None
+
+    if x_label == "player":
+        y_values = [y_value for _, y_value in sorted(zip(x_values, y_values))]
+        x_values = sorted(x_values)
+
     ax.bar(x_values, y_values, color=bar_colours)
 
     if x_label:
