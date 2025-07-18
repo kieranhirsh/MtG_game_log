@@ -328,6 +328,7 @@ def data_post():
                 "games_won": 0,
                 "win_rate": 0,
                 "time_played": 0,
+                "timed_games": 0,
                 "ave_game_time": 0
             }],
             [{
@@ -338,6 +339,7 @@ def data_post():
                 "games_won": 0,
                 "win_rate": 0,
                 "time_played": 0,
+                "timed_games": 0,
                 "ave_game_time": 0
             }],
             [{
@@ -348,6 +350,7 @@ def data_post():
                 "games_won": 0,
                 "win_rate": 0,
                 "time_played": 0,
+                "timed_games": 0,
                 "ave_game_time": 0
             }],
             [{
@@ -358,6 +361,7 @@ def data_post():
                 "games_won": 0,
                 "win_rate": 0,
                 "time_played": 0,
+                "timed_games": 0,
                 "ave_game_time": 0
             }],
             [{
@@ -368,6 +372,7 @@ def data_post():
                 "games_won": 0,
                 "win_rate": 0,
                 "time_played": 0,
+                "timed_games": 0,
                 "ave_game_time": 0
             }],
             [{
@@ -378,6 +383,7 @@ def data_post():
                 "games_won": 0,
                 "win_rate": 0,
                 "time_played": 0,
+                "timed_games": 0,
                 "ave_game_time": 0
             }]
         ]
@@ -409,9 +415,11 @@ def data_post():
             # find the number of decks of the given colour identity
             num_decks = len(colour_identity_decks)
 
+            # initialise some values
             games_played = 0
             games_won = 0
             time_played = 0
+            timed_games = 0
             # find the number of games played and win rate
             for deck in colour_identity_decks:
                 # initialise some values
@@ -423,8 +431,9 @@ def data_post():
                     game_length, game_seconds = derived_quantities.game_length_in_time(seat.game)
                     game_times.append(game_seconds)
 
-                # and calculate the average time of all of those games
+                # add the total time and number of timed games to the running tally
                 time_played += sum(game_times)
+                timed_games += len(game_times)
 
                 # number of games played is the number of child seats
                 games_played += len(deck_crud.get_child_data(deck.id, "seat", True))
@@ -434,11 +443,15 @@ def data_post():
             # if they've played no games we need to set the win rate manually to avoid divide by zero errors
             if games_played == 0:
                 win_rate = 0
-                ave_game_time = "0:00:00"
             else:
                 win_rate = games_won / games_played * 100
-                ave_time = time_played / games_played
-                ave_game_time = str(timedelta(seconds=(ave_time - (ave_time % 60))))
+
+            # same goes for timed games and average game length
+            if timed_games == 0:
+                ave_game_time = ""
+            else:
+                ave_time = time_played / timed_games
+                ave_game_time = str(timedelta(seconds=(ave_time - (ave_time % 60))))[:-3]
 
             # find the number of colours of the given colour identity
             num_colours = colour_identity.num_colours
@@ -448,13 +461,16 @@ def data_post():
             colour_identity_data[num_colours][0]["games_played"] += games_played
             colour_identity_data[num_colours][0]["games_won"] += games_won
             colour_identity_data[num_colours][0]["time_played"] += time_played
+            colour_identity_data[num_colours][0]["timed_games"] += timed_games
             if colour_identity_data[num_colours][0]["games_played"] == 0:
                 colour_identity_data[num_colours][0]["win_rate"] = 0
-                colour_identity_data[num_colours][0]["ave_game_time"] = 0
             else:
                 colour_identity_data[num_colours][0]["win_rate"] = colour_identity_data[num_colours][0]["games_won"] / colour_identity_data[num_colours][0]["games_played"] * 100
-                running_ave_game_time = colour_identity_data[num_colours][0]["time_played"] / colour_identity_data[num_colours][0]["games_played"]
-                colour_identity_data[num_colours][0]["ave_game_time"] = str(timedelta(seconds=(running_ave_game_time - (running_ave_game_time % 60))))
+            if colour_identity_data[num_colours][0]["timed_games"] == 0:
+                colour_identity_data[num_colours][0]["ave_game_time"] = ""
+            else:
+                running_ave_game_time = colour_identity_data[num_colours][0]["time_played"] / colour_identity_data[num_colours][0]["timed_games"]
+                colour_identity_data[num_colours][0]["ave_game_time"] = str(timedelta(seconds=(running_ave_game_time - (running_ave_game_time % 60))))[:-3]
 
             colour_identity_data[num_colours].append({
                 "ci_name": colour_identity.ci_name,
@@ -526,7 +542,7 @@ def data_post():
 
             if deck.games_played == 0:
                 deck.win_rate = 0
-                deck.ave_game_time = "0:00:00"
+                deck.ave_game_time = ""
             else:
                 games_won = len(game_crud.specific("winning_deck_id", deck.id, True))
                 deck.win_rate = games_won / deck.games_played * 100
