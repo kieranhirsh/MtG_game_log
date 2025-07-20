@@ -189,10 +189,46 @@ def input_edit():
             call_error = False
             missing_entries = []
 
+            # get deck name
             if request.form["new_deck_name"]:
                 new_deck_data.update({
                     "deck_name": request.form["new_deck_name"]
                 })
+
+            # get commander id
+            if request.form["new_deck_commander_1"]:
+                commander_name = request.form["new_deck_commander_1"]
+                response = requests.get(f"https://api.scryfall.com/cards/named?fuzzy={commander_name}").json()
+                if "status" in response:
+                    return errors.card_not_found('input.html', [response["details"]], 'create')
+                commander_id = response["id"]
+                new_deck_data.update({
+                    "commander_id": commander_id
+                })
+
+            # get partner/background id
+            if request.form["new_deck_commander_2"]:
+                partner_name = request.form["new_deck_commander_2"]
+                response = requests.get(f"https://api.scryfall.com/cards/named?fuzzy={partner_name}").json()
+                if "status" in response:
+                    return errors.card_not_found('input.html', [response["details"]], 'create')
+                partner_id = response["id"]
+                new_deck_data.update({
+                    "partner_id": partner_id
+                })
+
+            # get companion id
+            if request.form["new_deck_companion"]:
+                companion_name = request.form["new_deck_companion"]
+                response = requests.get(f"https://api.scryfall.com/cards/named?fuzzy={companion_name}").json()
+                if "status" in response:
+                    return errors.card_not_found('input.html', [response["details"]], 'create')
+                companion_id = response["id"]
+                new_deck_data.update({
+                    "companion_id": companion_id
+                })
+
+            # get owner id
             if request.form["new_owner"]:
                 owner_name = request.form["new_owner"]
                 owner_data = storage.get(class_name="player", key="player_name", value=owner_name)
@@ -204,6 +240,8 @@ def input_edit():
                 else:
                     call_error = True
                     missing_entries.append(["player", "player_name", owner_name])
+
+            # get colour identity id
             if request.form.getlist("ci_abbr"):
                 colour_identity_data, desired_ci = utils.get_ci_data_from_dropdown_inputs(request.form)
                 if colour_identity_data:
