@@ -158,6 +158,9 @@
       <input type="checkbox" id="deck_owner" checked onclick="toggleColumn('deck_owner')">Owner Name
     </label>
     <label>
+      <input type="checkbox" id="deck_commander" checked onclick="toggleColumn('deck_commander')">Commander
+    </label>
+    <label>
       <input type="checkbox" id="deck_ci" checked onclick="toggleColumn('deck_ci')">Colour Identity
     </label>
     <label>
@@ -169,6 +172,12 @@
     <label>
       <input type="checkbox" id="deck_ave_game_time" checked onclick="toggleColumn('deck_ave_game_time')">Ave Game Time
     </label>
+    <label>
+      <input type="checkbox" id="deck_edhrec_decks" checked onclick="toggleColumn('deck_edhrec_decks')"># EDHrec Decks
+    </label>
+    <label>
+      <input type="checkbox" id="deck_popularity" checked onclick="toggleColumn('deck_popularity')">Popularity
+    </label>
   </div>
   <!-- data table-->
   <div id="data_tables">
@@ -176,15 +185,19 @@
       <tr>
         <th onclick="sortTable(0)" class="deck_name">Deck Name</th>
         <th onclick="sortTable(1)" class="deck_owner">Owner Name</th>
-        <th onclick="sortTable(2)" class="deck_ci">Colour Identity</th>
-        <th onclick="sortTable(3)" class="deck_games_played">Games Played</th>
-        <th onclick="sortTable(4)" class="deck_win_rate">Win Rate</th>
-        <th onclick="sortTable(5)" class="deck_ave_game_time">Ave Game Time</th>
+        <th onclick="sortTable(2)" class="deck_commander">Commander</th>
+        <th onclick="sortTable(3)" class="deck_ci">Colour Identity</th>
+        <th onclick="sortTable(4)" class="deck_games_played">Games Played</th>
+        <th onclick="sortTable(5)" class="deck_win_rate">Win Rate</th>
+        <th onclick="sortTable(6)" class="deck_ave_game_time">Ave Game Time</th>
+        <th onclick="sortTable(7)" class="deck_edhrec_decks"># EDHrec Decks</th>
+        <th onclick="sortTable(8)" class="deck_popularity">Popularity</th>
       </tr>
       {% for deck in data["decks"] %}
       <tr>
         <td class="deck_name">{{ deck.deck_name }}</td>
         <td class="deck_owner">{{ deck.player.player_name }}</td>
+        <td class="deck_commander">{{ deck.commander_name }}</td>
         <td class="deck_ci">
           {{ deck.colour_identity.ci_name }} (
             {% for colour in deck.colour_identity.colours %}
@@ -194,6 +207,8 @@
         <td class="deck_games_played">{{ deck.games_played }}</td>
         <td class="deck_win_rate">{{ '%0.2f'|format(deck.win_rate) }}%</td>
         <td class="deck_ave_game_time">{{ deck.ave_game_time }}</td>
+        <td class="deck_edhrec_decks">{{ deck.edhrec_decks }}</td>
+        <td class="deck_popularity">{{ deck.popularity }}</td>
       </tr>
       {% endfor %}
     </table>

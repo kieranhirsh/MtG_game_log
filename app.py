@@ -1,5 +1,6 @@
 import importlib
 import requests
+import time
 from flask import Flask, render_template, request, jsonify
 from datetime import datetime, timedelta
 from api.v1 import api_routes
@@ -11,7 +12,7 @@ from crud.game import game_crud
 from crud.player import player_crud
 from crud.seat import seat_crud
 from graphs import bar_charts, line_graphs, pie_charts
-from utils import derived_quantities, utils
+from utils import curl_utils, derived_quantities, utils
 
 app = Flask(__name__)
 app.register_blueprint(api_routes)
@@ -57,9 +58,6 @@ def input():
             if "status" in response:
                 return errors.card_not_found('input.html', [response["details"]], 'create')
             commander_id = response["id"]
-#            commander_name = response["scryfall_uri"].split('/')[-1].split('?')[0]
-#            blah = requests.get(f"https://json.edhrec.com/pages/commanders/{commander_name}.json").json()
-#            print(blah["container"]["json_dict"]["card"]["label"])
 
             # get partner/background id
             if request.form["deck_commander_2"]:
@@ -611,6 +609,18 @@ def data_post():
             deck_data = decks
 
         for deck in deck_data:
+            if deck.commander_id:
+                try:
+                    deck.commander_name, edhrec_uri = curl_utils.get_commander_name_from_commander_id(deck.commander_id)
+                    time.sleep(0.1)
+                except:
+                    deck.commander_name = ""
+                try:
+                    deck.edhrec_decks, deck.popularity = curl_utils.get_popularity_from_commander_id(deck.commander_id)
+                    time.sleep(0.1)
+                except:
+                    deck.edhrec_decks = ""
+                    deck.popularity = ""
             deck.games_played = len(deck_crud.get_child_data(deck.id, "seat", True))
             game_times = []
 
