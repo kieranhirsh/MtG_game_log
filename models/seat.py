@@ -1,4 +1,3 @@
-#!/usr/bin/python
 """ seat model """
 import uuid
 from sqlalchemy import Column, String, Integer, ForeignKey

@@ -1,4 +1,3 @@
-#!/usr/bin/python
 """ player validation """
 import re
 

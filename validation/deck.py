@@ -1,4 +1,3 @@
-#!/usr/bin/python
 """ deck validation """
 import re
 from validation import common

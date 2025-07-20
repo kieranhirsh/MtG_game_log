@@ -1,4 +1,3 @@
-#!/usr/bin/python
 """ game validation """
 import datetime
 import re

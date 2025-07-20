@@ -1,4 +1,3 @@
-#!/usr/bin/python
 """ validation functions that are common to multiple models """
 from data import storage
 

@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+''' utils that derive quantities from db data '''
 
 def game_length_in_time(game):
     if game.start_time and game.end_time:

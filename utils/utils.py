@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 from crud.colour_identity import colour_identity_crud
 from crud.deck import deck_crud
 from crud.game import game_crud

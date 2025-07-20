@@ -1,4 +1,3 @@
-#!/usr/bin/python
 """ CRUD layer """
 from data import storage
 

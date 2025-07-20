@@ -1,4 +1,3 @@
-#!/usr/bin/python
 """ Colour Identity validation """
 import re
 

@@ -1,4 +1,3 @@
-#!/usr/bin/python
 """ Colour Identity model """
 import uuid
 from sqlalchemy import Column, String, Integer

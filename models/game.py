@@ -1,4 +1,3 @@
-#!/usr/bin/python
 """ game model """
 import uuid
 from sqlalchemy import Column, String, Integer, DateTime, ForeignKey

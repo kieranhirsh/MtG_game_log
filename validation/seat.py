@@ -1,4 +1,3 @@
-#!/usr/bin/python
 """ seat validation """
 from validation import common
 

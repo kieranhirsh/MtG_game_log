@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 import base64
 import copy
 import matplotlib.pyplot as plt

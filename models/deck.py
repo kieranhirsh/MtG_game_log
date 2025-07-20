@@ -1,4 +1,3 @@
-#!/usr/bin/python
 """ deck model """
 import uuid
 from sqlalchemy import Column, String, ForeignKey

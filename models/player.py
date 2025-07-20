@@ -1,4 +1,3 @@
-#!/usr/bin/python
 """ player model """
 import uuid
 from sqlalchemy import Column, String

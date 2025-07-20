@@ -1,4 +1,3 @@
-#!/usr/bin/python
 """ CRUD layer """
 from flask import request, jsonify
 from crud.base_crud import Base_crud

@@ -1,6 +1,4 @@
-#!/usr/bin/python3
 """ This module defines a class to manage database storage """
-
 import importlib
 from os import getenv
 from copy import deepcopy
