@@ -51,9 +51,15 @@
       <form action="/input" method="POST">
         <input class="type" type="text" id="type" name="type" value="deck">
         <label for="deck_name">Deck Name: </label>
-        <input type="text" id="deck_name" name="deck_name" autocomplete="off" required>
+        <input type="text" id="deck_name" name="deck_name" autocomplete="off" required><br>
+        <label for="deck_commander_1">Commander: </label>
+        <input type="text" id="deck_commander_1" name="deck_commander_1" autocomplete="off" required><br>
+        <label for="deck_commander_2">Partner Commander: </label>
+        <input type="text" id="deck_commander_2" name="deck_commander_2" autocomplete="off"><br>
+        <label for="deck_companion">Companion: </label>
+        <input type="text" id="deck_companion" name="deck_companion" autocomplete="off"><br>
         <label for="owner">Owner Name: </label>
-        <input type="search" id="owner" name="owner" list="players" autocomplete="off">
+        <input type="search" id="owner" name="owner" list="players" autocomplete="off"><br>
         <div>
           Colour Identity:
           <div>

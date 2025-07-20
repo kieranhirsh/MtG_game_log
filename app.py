@@ -1,4 +1,5 @@
 import importlib
+import requests
 from flask import Flask, render_template, request, jsonify
 from datetime import datetime, timedelta
 from api.v1 import api_routes
@@ -39,15 +40,48 @@ def input():
 
         # this desperately wants to be a select case, but I'm using Python 3.8 :(
         if input_type == "deck":
+            # initialise some values
             call_error = False
             missing_entries = []
 
+            # get the owner id
             owner_name = request.form["owner"]
             owner_data = storage.get(class_name="player", key="player_name", value=owner_name)
             if not owner_data:
                 call_error = True
                 missing_entries.append(["player", "player_name", owner_name])
 
+            # get commander id
+            commander_name = request.form["deck_commander_1"]
+            response = requests.get(f"https://api.scryfall.com/cards/named?fuzzy={commander_name}").json()
+            if "status" in response:
+                return errors.card_not_found('input.html', [response["details"]], 'create')
+            commander_id = response["id"]
+#            commander_name = response["scryfall_uri"].split('/')[-1].split('?')[0]
+#            blah = requests.get(f"https://json.edhrec.com/pages/commanders/{commander_name}.json").json()
+#            print(blah["container"]["json_dict"]["card"]["label"])
+
+            # get partner/background id
+            if request.form["deck_commander_2"]:
+                partner_name = request.form["deck_commander_2"]
+                response = requests.get(f"https://api.scryfall.com/cards/named?fuzzy={partner_name}").json()
+                if "status" in response:
+                    return errors.card_not_found('input.html', [response["details"]], 'create')
+                partner_id = response["id"]
+            else:
+                partner_id = ""
+
+            # get companion id
+            if request.form["deck_companion"]:
+                companion_name = request.form["deck_companion"]
+                response = requests.get(f"https://api.scryfall.com/cards/named?fuzzy={companion_name}").json()
+                if "status" in response:
+                    return errors.card_not_found('input.html', [response["details"]], 'create')
+                companion_id = response["id"]
+            else:
+                companion_id = ""
+
+            # get the colour identity id
             colour_identity_data, desired_ci = utils.get_ci_data_from_dropdown_inputs(request.form)
             if not colour_identity_data:
                 call_error = True
@@ -58,6 +92,9 @@ def input():
 
             new_deck = {
                 "deck_name": request.form["deck_name"],
+                "commander_id": commander_id,
+                "partner_id": partner_id,
+                "companion_id": companion_id,
                 "player_id": owner_data[0].id,
                 "colour_identity_id": colour_identity_data[0].id
                 }
