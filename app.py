@@ -108,10 +108,11 @@ def input():
                 # create the new seat
                 seat_crud.create(data=jsonify(new_seat))
 
-            # update the game name, game length in time, game length in turns, and game winner
-            # these were left empty because they are derived quantities, so it's easiet to wait until all inputs were added to the database
+            # update the game name, game length in turns, and game winner
+            # these were left empty because they are derived quantities
+            # so it's easiet to wait until all inputs were added to the database
+            # but really they want to be removed from the db completely
             game_crud.update_game_name(new_game_object["id"])
-            game_crud.update_game_time(new_game_object["id"])
             game_crud.update_game_turns(new_game_object["id"])
             game_crud.update_game_winner(new_game_object["id"])
         elif input_type == "player":
@@ -227,7 +228,6 @@ def input_edit():
                     seat_crud.update(seat_to_edit["id"], jsonify(new_seat_data))
 
             game_crud.update_game_name(game_to_edit["id"])
-            game_crud.update_game_time(game_to_edit["id"])
             game_crud.update_game_turns(game_to_edit["id"])
             game_crud.update_game_winner(game_to_edit["id"])
         elif input_type == "player":
