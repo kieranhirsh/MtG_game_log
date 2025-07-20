@@ -7,16 +7,19 @@ from data import Base
 class deck(Base):
     """ Representation of deck """
 
-    all_attribs = ["id", "deck_name", "player_id", "colour_identity_id"]
-    can_init    = ["deck_name", "player_id", "colour_identity_id"]
-    can_update  = ["deck_name", "player_id", "colour_identity_id"]
+    all_attribs = ["id", "deck_name", "commander_id", "partner_id", "companion_id", "player_id", "colour_identity_id"]
+    can_init    = ["deck_name", "commander_id", "partner_id", "companion_id", "player_id", "colour_identity_id"]
+    can_update  = ["deck_name", "commander_id", "partner_id", "companion_id", "player_id", "colour_identity_id"]
 
     # Class attributes defaults
     __tablename__      = 'decks'
     id                 = Column(String(64), nullable=False, primary_key=True)
     deck_name          = Column("deck_name", String(128), nullable=False)
-    player_id          = Column("player_id", String(128), ForeignKey('players.id'), nullable=False)
-    colour_identity_id = Column("colour_identity_id", String(128), ForeignKey('colour_identities.id'), nullable=False)
+    commander_id       = Column(String(64), nullable=True)
+    partner_id         = Column(String(64), nullable=True)
+    companion_id       = Column(String(64), nullable=True)
+    player_id          = Column("player_id", String(64), ForeignKey('players.id'), nullable=False)
+    colour_identity_id = Column("colour_identity_id", String(64), ForeignKey('colour_identities.id'), nullable=False)
     player             = relationship("player", back_populates="decks")
     colour_identity    = relationship("colour_identity", back_populates="decks")
     seats              = relationship("seat", back_populates="deck", cascade="delete, delete-orphan")

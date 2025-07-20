@@ -24,6 +24,9 @@ class deck_crud():
             output.append({
                 "id": row.id,
                 "deck_name": row.deck_name,
+                "commander_id": row.commander_id,
+                "partner_id": row.partner_id,
+                "companion_id": row.companion_id,
                 "player_id": row.player_id,
                 "colour_identity_id": row.colour_identity_id
             })
@@ -50,6 +53,9 @@ class deck_crud():
         output = {
             "id": result[0].id,
             "deck_name": result[0].deck_name,
+            "commander_id": result[0].commander_id,
+            "partner_id": result[0].partner_id,
+            "companion_id": result[0].companion_id,
             "player_id": result[0].player_id,
             "colour_identity_id": result[0].colour_identity_id
         }
@@ -80,6 +86,9 @@ class deck_crud():
 
         new_deck = deck(
             deck_name=data["deck_name"],
+            commander_id=data["commander_id"],
+            partner_id=data["partner_id"],
+            companion_id=data["companion_id"],
             player_id=data["player_id"],
             colour_identity_id=data["colour_identity_id"]
         )
@@ -96,6 +105,9 @@ class deck_crud():
         output = {
             "id": new_deck.id,
             "deck_name": new_deck.deck_name,
+            "commander_id": new_deck.commander_id,
+            "partner_id": new_deck.partner_id,
+            "companion_id": new_deck.companion_id,
             "player_id": new_deck.player_id,
             "colour_identity_id": new_deck.colour_identity_id
         }
@@ -128,6 +140,9 @@ class deck_crud():
         output = {
             "id": result.id,
             "deck_name": result.deck_name,
+            "commander_id": result.commander_id,
+            "partner_id": result.partner_id,
+            "companion_id": result.companion_id,
             "player_id": result.player_id,
             "colour_identity_id": result.colour_identity_id
         }
@@ -177,6 +192,9 @@ class deck_crud():
             output.append({
                 "id": sibling.id,
                 "deck_name": sibling.deck_name,
+                "commander_id": sibling.commander_id,
+                "partner_id": sibling.partner_id,
+                "companion_id": sibling.companion_id,
                 "player_id": sibling.player_id,
                 "colour_identity_id": sibling.colour_identity_id
             })
