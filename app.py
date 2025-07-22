@@ -58,6 +58,7 @@ def input():
             if "status" in response:
                 return errors.card_not_found('input.html', [response["details"]], 'create')
             commander_id = response["id"]
+            commander_name = response["name"]
 
             # get partner/background id
             if request.form["deck_commander_2"]:
@@ -66,6 +67,7 @@ def input():
                 if "status" in response:
                     return errors.card_not_found('input.html', [response["details"]], 'create')
                 partner_id = response["id"]
+                partner_name = response["name"]
             else:
                 partner_id = ""
 
@@ -76,8 +78,19 @@ def input():
                 if "status" in response:
                     return errors.card_not_found('input.html', [response["details"]], 'create')
                 companion_id = response["id"]
+                companion_name = response["name"]
             else:
                 companion_id = ""
+
+            # get the deck name
+            if request.form["deck_name"]:
+                deck_name = request.form['deck_name']
+            else:
+                deck_name = commander_name
+                if partner_name:
+                    deck_name += f" / {partner_name}"
+                if companion_name:
+                    deck_name += f" + {companion_name}"
 
             # get the colour identity id
             colour_identity_data, desired_ci = utils.get_ci_data_from_dropdown_inputs(request.form)
@@ -89,7 +102,7 @@ def input():
                 return errors.entry_not_found('input.html', missing_entries, 'create')
 
             new_deck = {
-                "deck_name": request.form["deck_name"],
+                "deck_name": deck_name,
                 "commander_id": commander_id,
                 "partner_id": partner_id,
                 "companion_id": companion_id,
@@ -613,33 +626,33 @@ def data_post():
             game_times = []
 
             if deck.commander_id:
+                try:
+                    deck.commander_name, edhrec_uri = curl_utils.get_commander_name_from_commander_id(deck.commander_id)
+                    time.sleep(0.01)
+                except:
+                    deck.commander_name = ""
+
                 if deck.partner_id:
                     try:
-                        deck.commander_name = curl_utils.get_commander_name_from_commander_id(deck.commander_id)[0]
                         deck.partner_name = curl_utils.get_commander_name_from_commander_id(deck.partner_id)[0]
                         time.sleep(0.01)
                     except:
-                        deck.commander_name = ""
                         deck.partner_name = ""
                     edhrec_uri = curl_utils.get_edhrec_uri_from_commander_names([deck.commander_name, deck.partner_name])
-                    try:
-                        deck.edhrec_decks, deck.popularity = curl_utils.get_popularity_from_edhrec_uri(edhrec_uri)
-                        time.sleep(0.01)
-                    except:
-                        deck.edhrec_decks = ""
-                        deck.popularity = ""
-                else:
-                    try:
-                        deck.commander_name, edhrec_uri = curl_utils.get_commander_name_from_commander_id(deck.commander_id)
-                        time.sleep(0.01)
-                    except:
-                        deck.commander_name = ""
-                    try:
-                        deck.edhrec_decks, deck.popularity = curl_utils.get_popularity_from_edhrec_uri(edhrec_uri)
-                        time.sleep(0.01)
-                    except:
-                        deck.edhrec_decks = ""
-                        deck.popularity = ""
+
+                try:
+                    deck.edhrec_decks, deck.popularity = curl_utils.get_popularity_from_edhrec_uri(edhrec_uri)
+                    time.sleep(0.01)
+                except:
+                    deck.edhrec_decks = ""
+                    deck.popularity = ""
+
+            if deck.companion_id:
+                try:
+                    deck.companion_name = curl_utils.get_commander_name_from_commander_id(deck.companion_id)[0]
+                    time.sleep(0.01)
+                except:
+                    deck.companion_name = ""
 
             if deck.games_played == 0:
                 deck.win_rate = 0
