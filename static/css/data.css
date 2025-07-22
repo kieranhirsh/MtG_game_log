@@ -27,6 +27,15 @@ body #data_tables .data_table tr:nth-child(even), body #data_tables .colour_data
 body #data_tables .data_table tr:nth-child(odd), body #data_tables .colour_data_table tr:nth-child(odd) {
   background-color: #E7E9EB;
 }
+body #data_tables .data_table .deck_commander, body #data_tables .colour_data_table .deck_commander {
+  display: none;
+}
+body #data_tables .data_table .deck_partner, body #data_tables .colour_data_table .deck_partner {
+  display: none;
+}
+body #data_tables .data_table .deck_companion, body #data_tables .colour_data_table .deck_companion {
+  display: none;
+}
 body .mana_symbol {
   height: 14px;
   width: 14px;

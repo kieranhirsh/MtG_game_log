@@ -36,6 +36,18 @@ body {
       tr:nth-child(odd) {
         background-color: #E7E9EB;
       }
+
+      .deck_commander {
+        display: none;
+      }
+
+      .deck_partner {
+        display: none;
+      }
+
+      .deck_companion {
+        display: none;
+      }
     }
   }
 

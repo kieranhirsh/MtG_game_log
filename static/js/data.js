@@ -316,11 +316,12 @@ function sortColourTables(col) {
 }
 
 function toggleColumn(col) {
+  let checkbox = document.getElementById(col);
   let rows = document.getElementsByClassName(col);
 
   for (let row of rows) {
-    if (row.style.display === "none") {
-      row.style.removeProperty('display');
+    if (checkbox.checked) {
+      row.style.display = "table-cell";
     }
     else {
       row.style.display = "none";
