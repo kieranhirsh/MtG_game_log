@@ -40,3 +40,23 @@ def option_not_available(page, missing_entries, method=""):
                            method=method,
                            error_messages=error_messages,
                            data=all_db_data), 400
+
+def card_not_found(page, details, method=""):
+    '''
+        This function is for when a user requests a card that we can't find with scryfall
+    '''
+    # Initialise variables
+    error_messages = []
+
+    # Load all the data, because we don't know what we will need
+    all_db_data = utils.load_all_db_data()
+
+    for detail in details:
+        error_messages.append(detail)
+
+    # Return the page
+    return render_template('error.html',
+                           page=page,
+                           method=method,
+                           error_messages=error_messages,
+                           data=all_db_data), 400

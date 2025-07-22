@@ -48,6 +48,13 @@ function sortTable(n) {
       x.innerHTML = x.innerHTML.slice(0, -1);
     }
   }
+  // If the row is "Popularity", we need to remove the trailing % to be able to convert to a int
+  if (header === "Popularity") {
+    for (i = 1; i < (table[0].rows.length); i++) {
+      x = table[0].rows[i].getElementsByTagName("td")[n];
+      x.innerHTML = x.innerHTML.slice(1);
+    }
+  }
   // Set the sorting direction:
   if (
     header === "Games Played" ||
@@ -57,7 +64,8 @@ function sortTable(n) {
     header === "Game Length (Time)" ||
     header === "Game Length (Turns)" ||
     header === "Number of Decks" ||
-    header === "Ave Game Time"
+    header === "Ave Game Time" ||
+    header === "# EDHrec Decks"
   ) {
     dir = "desc";
   } else {
@@ -96,9 +104,11 @@ function sortTable(n) {
           header === "Games Played" ||
           header === "Win Rate" ||
           header === "Game Length (Turns)" ||
-          header === "Number of Decks"
+          header === "Number of Decks" ||
+          header === "# EDHrec Decks" ||
+          header === "Popularity"
         ) {
-          if (parseInt(x.innerHTML) > parseInt(y.innerHTML) || parseInt(x.innerHTML) == 0) {
+          if (parseInt(x.innerHTML) > parseInt(y.innerHTML) || parseInt(x.innerHTML) == 0 || isNaN(parseInt(x.innerHTML))) {
             // If we want to switch, mark as a switch and break the loop:
             shouldSwitch = true;
             break;
@@ -116,9 +126,15 @@ function sortTable(n) {
           header === "Games Played" ||
           header === "Win Rate" ||
           header === "Game Length (Turns)" ||
-          header === "Number of Decks"
+          header === "Number of Decks" ||
+          header === "# EDHrec Decks" ||
+          header === "Popularity"
         ) {
-          if (parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
+          if (isNaN(parseInt(y.innerHTML))) {
+            // skip this case
+            continue;
+          }
+          if (parseInt(x.innerHTML) < parseInt(y.innerHTML) || isNaN(parseInt(x.innerHTML))) {
             // If so, mark as a switch and break the loop:
             shouldSwitch = true;
             break;
@@ -160,6 +176,15 @@ function sortTable(n) {
     for (i = 1; i < (table[0].rows.length); i++) {
       x = table[0].rows[i].getElementsByTagName("td")[n];
       x.innerHTML = x.innerHTML + "%";
+    }
+  }
+  // If the row is "Popularity", we need to add the leading # back
+  if (header === "Popularity") {
+    for (i = 1; i < (table[0].rows.length); i++) {
+      x = table[0].rows[i].getElementsByTagName("td")[n];
+      if (x.innerHTML) {
+        x.innerHTML = "#" + x.innerHTML;
+      }
     }
   }
 }
