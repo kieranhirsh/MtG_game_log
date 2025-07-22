@@ -14,7 +14,7 @@ def get_edhrec_uri_from_commander_names(cmdr_names=[]):
         else:
             names += cmdr.lower() + "-"
 
-    return f"https://json.edhrec.com/pages/commanders/{names[:-1]}.json"
+    return f"/commanders/{names[:-1]}"
 
 def get_commander_name_from_commander_id(commander_id):
     response = requests.get(f"https://api.scryfall.com/cards/{commander_id}").json()
@@ -24,9 +24,16 @@ def get_commander_name_from_commander_id(commander_id):
     return response["name"], get_edhrec_uri_from_commander_names([response["name"]])
 
 def get_popularity_from_edhrec_uri(edhrec_uri):
+    uri = f"https://json.edhrec.com/pages{edhrec_uri}.json"
     try:
-        edhrec_response = requests.get(edhrec_uri).json()
+        edhrec_response = requests.get(uri).json()
     except:
         raise ValueError("unable to get data from edhrec")
+    if "redirect" in edhrec_response:
+        uri = f"https://json.edhrec.com/pages{edhrec_response['redirect']}.json"
+        try:
+            edhrec_response = requests.get(uri).json()
+        except:
+            raise ValueError("unable to get data from edhrec")
     label = edhrec_response["container"]["json_dict"]["card"]["label"].split()
     return label[0], label[-1]

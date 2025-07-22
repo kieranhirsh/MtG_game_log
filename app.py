@@ -614,7 +614,20 @@ def data_post():
 
             if deck.commander_id:
                 if deck.partner_id:
-                    pass
+                    try:
+                        deck.commander_name = curl_utils.get_commander_name_from_commander_id(deck.commander_id)[0]
+                        deck.partner_name = curl_utils.get_commander_name_from_commander_id(deck.partner_id)[0]
+                        time.sleep(0.01)
+                    except:
+                        deck.commander_name = ""
+                        deck.partner_name = ""
+                    edhrec_uri = curl_utils.get_edhrec_uri_from_commander_names([deck.commander_name, deck.partner_name])
+                    try:
+                        deck.edhrec_decks, deck.popularity = curl_utils.get_popularity_from_edhrec_uri(edhrec_uri)
+                        time.sleep(0.01)
+                    except:
+                        deck.edhrec_decks = ""
+                        deck.popularity = ""
                 else:
                     try:
                         deck.commander_name, edhrec_uri = curl_utils.get_commander_name_from_commander_id(deck.commander_id)
