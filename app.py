@@ -609,20 +609,24 @@ def data_post():
             deck_data = decks
 
         for deck in deck_data:
-            if deck.commander_id:
-                try:
-                    deck.commander_name, edhrec_uri = curl_utils.get_commander_name_from_commander_id(deck.commander_id)
-                    time.sleep(0.1)
-                except:
-                    deck.commander_name = ""
-                try:
-                    deck.edhrec_decks, deck.popularity = curl_utils.get_popularity_from_commander_id(deck.commander_id)
-                    time.sleep(0.1)
-                except:
-                    deck.edhrec_decks = ""
-                    deck.popularity = ""
             deck.games_played = len(deck_crud.get_child_data(deck.id, "seat", True))
             game_times = []
+
+            if deck.commander_id:
+                if deck.partner_id:
+                    pass
+                else:
+                    try:
+                        deck.commander_name, edhrec_uri = curl_utils.get_commander_name_from_commander_id(deck.commander_id)
+                        time.sleep(0.01)
+                    except:
+                        deck.commander_name = ""
+                    try:
+                        deck.edhrec_decks, deck.popularity = curl_utils.get_popularity_from_edhrec_uri(edhrec_uri)
+                        time.sleep(0.01)
+                    except:
+                        deck.edhrec_decks = ""
+                        deck.popularity = ""
 
             if deck.games_played == 0:
                 deck.win_rate = 0
