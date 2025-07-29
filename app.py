@@ -563,6 +563,7 @@ def data_post():
                 "number_of_decks": num_decks,
                 "num_colours": num_colours,
                 "games_played": games_played,
+                "games_won": games_won,
                 "win_rate": win_rate,
                 "ave_game_time": ave_game_time
             })
