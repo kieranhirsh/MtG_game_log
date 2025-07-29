@@ -575,9 +575,13 @@ def data_post():
         return render_template('data.html', data_type="colour_identity", data=html_data)
     elif request.form["type"] == "deck":
         restrictions = []
+        if "edhrec_data" in request.form:
+            edhrec_data = request.form["edhrec_data"]
+        else:
+            edhrec_data = False
 
         for form_item in request.form:
-            if form_item != "type" and request.form[form_item]:
+            if form_item != "type" and form_item != "edhrec_data" and request.form[form_item]:
                 restriction_key = form_item
                 restriction_value = request.form[form_item]
 
@@ -640,12 +644,13 @@ def data_post():
                         deck.partner_name = ""
                     edhrec_uri = curl_utils.get_edhrec_uri_from_commander_names([deck.commander_name, deck.partner_name])
 
-                try:
-                    deck.edhrec_decks, deck.popularity = curl_utils.get_popularity_from_edhrec_uri(edhrec_uri)
-                    time.sleep(0.01)
-                except:
-                    deck.edhrec_decks = ""
-                    deck.popularity = ""
+                if edhrec_data:
+                    try:
+                        deck.edhrec_decks, deck.popularity = curl_utils.get_popularity_from_edhrec_uri(edhrec_uri)
+                        time.sleep(0.01)
+                    except:
+                        deck.edhrec_decks = ""
+                        deck.popularity = ""
 
             if deck.companion_id:
                 try:
@@ -656,10 +661,11 @@ def data_post():
 
             if deck.games_played == 0:
                 deck.win_rate = 0
+                deck.num_games_won = 0
                 deck.ave_game_time = ""
             else:
-                games_won = len(game_crud.specific("winning_deck_id", deck.id, True))
-                deck.win_rate = games_won / deck.games_played * 100
+                deck.num_games_won = len(game_crud.specific("winning_deck_id", deck.id, True))
+                deck.win_rate = deck.num_games_won / deck.games_played * 100
 
                 for seat in deck_crud.get_child_data(deck.id, "seat", True):
                     game_length, game_seconds = derived_quantities.game_length_in_time(seat.game)
@@ -677,7 +683,7 @@ def data_post():
                      "decks": deck_data,
                      "players": players}
 
-        return render_template('data.html', data_type="deck", data=html_data)
+        return render_template('data.html', data_type="deck", data=html_data, edhrec_data=edhrec_data)
     elif request.form["type"] == "game":
         # Load the data we need
         games = game_crud.all(True)
@@ -1004,7 +1010,6 @@ def graphs():
                                                   titles[request.form["bar_y"]],
                                                   titles[request.form["bar_y"]] + " per " + titles[request.form["bar_x"]],
                                                   no_zeroes)
-
         elif request.form['type'] == "line":
             if request.form["line_data"] not in list(model_names.keys()):
                 call_error = True
@@ -1093,7 +1098,6 @@ def graphs():
 
             if call_error:
                 return errors.option_not_available('graphs.html', missing_entries)
-
         elif request.form['type'] == "pie":
             if request.form["pie_data"] not in list(model_names.keys()):
                 call_error = True
