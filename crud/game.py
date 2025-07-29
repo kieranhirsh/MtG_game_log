@@ -56,6 +56,8 @@ class game_crud():
         try:
             result = storage.get(class_name = 'game', key = key, value = value)
         except IndexError as exc:
+            if result == []:
+                return result
             raise IndexError("Unable to load game data")
 
         if return_model_object or not result:
