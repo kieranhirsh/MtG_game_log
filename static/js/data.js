@@ -57,13 +57,14 @@ function sortTable(n) {
   }
   // Set the sorting direction:
   if (
+    header === "# Decks" ||
     header === "Games Played" ||
+    header === "Games Won" ||
     header === "Win Rate" ||
     header === "Date" ||
     header === "Start Time" ||
     header === "Game Length (Time)" ||
     header === "Game Length (Turns)" ||
-    header === "Number of Decks" ||
     header === "Ave Game Time" ||
     header === "# EDHrec Decks"
   ) {
@@ -101,10 +102,11 @@ function sortTable(n) {
         }
         // Check whether the data is a number or a string
         if (
+          header === "# Decks" ||
           header === "Games Played" ||
+          header === "Games Won" ||
           header === "Win Rate" ||
           header === "Game Length (Turns)" ||
-          header === "Number of Decks" ||
           header === "# EDHrec Decks" ||
           header === "Popularity"
         ) {
@@ -123,10 +125,11 @@ function sortTable(n) {
       } else if (dir == "desc") {
         // Check whether the data is a number or a string
         if (
+          header === "# Decks" ||
           header === "Games Played" ||
+          header === "Games Won" ||
           header === "Win Rate" ||
           header === "Game Length (Turns)" ||
-          header === "Number of Decks" ||
           header === "# EDHrec Decks" ||
           header === "Popularity"
         ) {
@@ -207,6 +210,7 @@ function sortColourTables(col) {
     if (
       header === "# Decks" ||
       header === "Games Played" ||
+      header === "Games Won" ||
       header === "Win Rate" ||
       header === "Ave Game Time"
     ) {
@@ -247,6 +251,7 @@ function sortColourTables(col) {
           if (
             header === "# Decks" ||
             header === "Games Played" ||
+            header === "Games Won" ||
             header === "Win Rate"
           ) {
             if (parseInt(x.innerHTML) > parseInt(y.innerHTML) || parseInt(x.innerHTML) == 0) {
@@ -266,6 +271,7 @@ function sortColourTables(col) {
           if (
             header === "# Decks" ||
             header === "Games Played" ||
+            header === "Games Won" ||
             header === "Win Rate"
           ) {
             if (parseInt(x.innerHTML) < parseInt(y.innerHTML)) {

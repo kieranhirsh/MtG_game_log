@@ -1,6 +1,5 @@
 ''' utils that involve curl commands '''
 import requests
-from errors import errors
 
 def get_edhrec_uri_from_commander_names(cmdr_names=[]):
     names = ""

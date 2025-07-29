@@ -794,11 +794,11 @@ def data_post():
                 for player_deck in player_decks:
                     # find number of games played and number of games won
                     player.games_played += len(deck_crud.get_child_data(player_deck.id, "seat", True))
-                    player.num_games_won += len(player_deck.games_won)
+                    player.num_games_won += len(game_crud.specific("winning_player_id", player_deck.id, True))
             else:
                 # find number of games played and number of games won
                 player.games_played = len(player_crud.get_child_data(player.id, "seat", True))
-                player.num_games_won = len(player.games_won)
+                player.num_games_won = len(game_crud.specific("winning_player_id", player.id, True))
 
             # if they've played no games we need to set the win rate manually to avoid divide by zero errors
             if player.games_played == 0:

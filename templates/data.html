@@ -293,13 +293,16 @@
   <!-- toggle columns on/off-->
   <div class="toggle" id="player_toggle">
     <label>
-      <input type="checkbox" id="player_name" checked onclick="toggleColumn('player_name')">Player Name
+      <input type="checkbox" id="player_names" checked onclick="toggleColumn('player_names')">Player Name
     </label>
     <label>
-      <input type="checkbox" id="player_decks" checked onclick="toggleColumn('player_decks')">Number of Decks
+      <input type="checkbox" id="player_decks" checked onclick="toggleColumn('player_decks')"># Decks
     </label>
     <label>
       <input type="checkbox" id="player_games_played" checked onclick="toggleColumn('player_games_played')">Games Played
+    </label>
+    <label>
+      <input type="checkbox" id="player_wins" checked onclick="toggleColumn('player_wins')">Games Won
     </label>
     <label>
       <input type="checkbox" id="player_win_rate" checked onclick="toggleColumn('player_win_rate')">Win Rate
@@ -312,17 +315,19 @@
   <div id="data_tables">
     <table class="data_table" id="player_table">
       <tr>
-        <th onclick="sortTable(0)" class="player_name">Player Name</th>
-        <th onclick="sortTable(1)" class="player_decks">Number of Decks</th>
+        <th onclick="sortTable(0)" class="player_names">Player Name</th>
+        <th onclick="sortTable(1)" class="player_decks"># Decks</th>
         <th onclick="sortTable(2)" class="player_games_played">Games Played</th>
-        <th onclick="sortTable(3)" class="player_win_rate">Win Rate</th>
-        <th onclick="sortTable(4)" class="player_ave_game_time">Ave Game Time</th>
+        <th onclick="sortTable(3)" class="player_wins">Games Won</th>
+        <th onclick="sortTable(4)" class="player_win_rate">Win Rate</th>
+        <th onclick="sortTable(5)" class="player_ave_game_time">Ave Game Time</th>
       </tr>
       {% for player in data["players"] %}
       <tr>
-        <td class="player_name">{{ player.player_name }}</td>
+        <td class="player_names">{{ player.player_name }}</td>
         <td class="player_decks">{{ player.num_decks }}</td>
         <td class="player_games_played">{{ player.games_played }}</td>
+        <td class="player_wins">{{ player.num_games_won }}</td>
         <td class="player_win_rate">{{ '%0.2f'|format(player.win_rate) }}%</td>
         <td class="player_ave_game_time">{{ player.ave_game_time }}</td>
       </tr>
