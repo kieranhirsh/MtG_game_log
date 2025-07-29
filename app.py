@@ -575,10 +575,6 @@ def data_post():
         return render_template('data.html', data_type="colour_identity", data=html_data)
     elif request.form["type"] == "deck":
         restrictions = []
-        if "edhrec_data" in request.form:
-            edhrec_data = request.form["edhrec_data"]
-        else:
-            edhrec_data = False
 
         for form_item in request.form:
             if form_item != "type" and form_item != "edhrec_data" and request.form[form_item]:
@@ -608,6 +604,18 @@ def data_post():
                     "key": restriction_key,
                     "value": restriction_value
                 })
+
+        if "edhrec_data" in request.form:
+            if not restrictions:
+                return render_template('error.html',
+                                       page="data.html",
+                                       error_messages=["edhrec data cannot be displayed for all decks at once"],
+                                       data={"colour_identities": colour_identities,
+                                             "decks": decks,
+                                             "players": players}), 400
+            edhrec_data = request.form["edhrec_data"]
+        else:
+            edhrec_data = False
 
         if restrictions:
             deck_data = decks
