@@ -57,8 +57,6 @@
           {% include "ci_dropdown.html" %}
           </div>
         </div>
-        <input type="checkbox" id="edhrec_data" name="edhrec_data" value="True">
-        <label for="edhrec_data"> Show edhrec data</label>
         <br><input type="submit" value="Submit">
       </form>
     </div>
@@ -192,14 +190,12 @@
     <label>
       <input type="checkbox" id="deck_ave_game_time" checked onclick="toggleColumn('deck_ave_game_time')">Ave Game Time
     </label>
-    {% if edhrec_data %}
     <label>
       <input type="checkbox" id="deck_edhrec_decks" checked onclick="toggleColumn('deck_edhrec_decks')"># EDHrec Decks
     </label>
     <label>
       <input type="checkbox" id="deck_popularity" checked onclick="toggleColumn('deck_popularity')">Popularity
     </label>
-    {% endif %}
   </div>
   <!-- data table-->
   <div id="data_tables">
@@ -215,10 +211,8 @@
         <th onclick="sortTable(7)" class="deck_wins">Games Won</th>
         <th onclick="sortTable(8)" class="deck_win_rate">Win Rate</th>
         <th onclick="sortTable(9)" class="deck_ave_game_time">Ave Game Time</th>
-        {% if edhrec_data %}
         <th onclick="sortTable(10)" class="deck_edhrec_decks"># EDHrec Decks</th>
         <th onclick="sortTable(11)" class="deck_popularity">Popularity</th>
-        {% endif %}
       </tr>
       {% for deck in data["decks"] %}
       <tr>
@@ -237,10 +231,8 @@
         <td class="deck_wins">{{ deck.num_games_won }}</td>
         <td class="deck_win_rate">{{ '%0.2f'|format(deck.win_rate) }}%</td>
         <td class="deck_ave_game_time">{{ deck.ave_game_time }}</td>
-        {% if edhrec_data %}
         <td class="deck_edhrec_decks">{{ deck.edhrec_decks }}</td>
         <td class="deck_popularity">{{ deck.popularity }}</td>
-        {% endif %}
       </tr>
       {% endfor %}
     </table>

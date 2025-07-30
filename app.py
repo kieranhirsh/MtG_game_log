@@ -71,6 +71,10 @@ def input():
             else:
                 partner_id = ""
 
+            # get edhrec data
+            edhrec_uri = curl_utils.get_edhrec_uri_from_commander_names([commander_name, partner_name])
+            edhrec_num_decks, edhrec_popularity = curl_utils.get_popularity_from_edhrec_uri(edhrec_uri)
+
             # get companion id
             if request.form["deck_companion"]:
                 companion_name = request.form["deck_companion"]
@@ -107,6 +111,9 @@ def input():
                 "partner_id": partner_id,
                 "companion_id": companion_id,
                 "player_id": owner_data[0].id,
+                "edhrec_num_decks": edhrec_num_decks,
+                "edhrec_popularity": edhrec_popularity[1:],
+                "last_accessed": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 "colour_identity_id": colour_identity_data[0].id
                 }
 
@@ -578,7 +585,7 @@ def data_post():
         restrictions = []
 
         for form_item in request.form:
-            if form_item != "type" and form_item != "edhrec_data" and request.form[form_item]:
+            if form_item != "type" and request.form[form_item]:
                 restriction_key = form_item
                 restriction_value = request.form[form_item]
 
@@ -605,18 +612,6 @@ def data_post():
                     "key": restriction_key,
                     "value": restriction_value
                 })
-
-        if "edhrec_data" in request.form:
-            if not restrictions:
-                return render_template('error.html',
-                                       page="data.html",
-                                       error_messages=["edhrec data cannot be displayed for all decks at once"],
-                                       data={"colour_identities": colour_identities,
-                                             "decks": decks,
-                                             "players": players}), 400
-            edhrec_data = request.form["edhrec_data"]
-        else:
-            edhrec_data = False
 
         if restrictions:
             deck_data = decks
@@ -653,13 +648,19 @@ def data_post():
                         deck.partner_name = ""
                     edhrec_uri = curl_utils.get_edhrec_uri_from_commander_names([deck.commander_name, deck.partner_name])
 
-                if edhrec_data:
+                if not deck.last_accessed or ((datetime.now() - deck.last_accessed) > timedelta(weeks=1)):
                     try:
                         deck.edhrec_decks, deck.popularity = curl_utils.get_popularity_from_edhrec_uri(edhrec_uri)
+                        deck_crud.update(deck.id, jsonify({"edhrec_num_decks": deck.edhrec_decks,
+                                                           "edhrec_popularity": deck.popularity[1:],
+                                                           "last_accessed": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}))
                         time.sleep(0.01)
                     except:
                         deck.edhrec_decks = ""
                         deck.popularity = ""
+                else:
+                    deck.edhrec_decks = deck.edhrec_num_decks
+                    deck.popularity = deck.edhrec_popularity
 
             if deck.companion_id:
                 try:
@@ -692,7 +693,7 @@ def data_post():
                      "decks": deck_data,
                      "players": players}
 
-        return render_template('data.html', data_type="deck", data=html_data, edhrec_data=edhrec_data)
+        return render_template('data.html', data_type="deck", data=html_data)
     elif request.form["type"] == "game":
         # Load the data we need
         games = game_crud.all(True)

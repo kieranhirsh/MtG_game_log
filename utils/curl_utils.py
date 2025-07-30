@@ -4,14 +4,15 @@ import requests
 def get_edhrec_uri_from_commander_names(cmdr_names=[]):
     names = ""
     for cmdr_name in cmdr_names:
-        cmdr = cmdr_name.split('/')[0]
-        cmdr = cmdr.replace(',','')
-        cmdr = cmdr.replace("'",'')
-        cmdr = cmdr.replace(' ','-')
-        if cmdr[-1] == "-":
-            names += cmdr.lower()
-        else:
-            names += cmdr.lower() + "-"
+        if cmdr_name:
+            cmdr = cmdr_name.split('/')[0]
+            cmdr = cmdr.replace(',','')
+            cmdr = cmdr.replace("'",'')
+            cmdr = cmdr.replace(' ','-')
+            if cmdr[-1] == "-":
+                names += cmdr.lower()
+            else:
+                names += cmdr.lower() + "-"
 
     return f"/commanders/{names[:-1]}"
 
@@ -35,4 +36,7 @@ def get_popularity_from_edhrec_uri(edhrec_uri):
         except:
             raise ValueError("unable to get data from edhrec")
     label = edhrec_response["container"]["json_dict"]["card"]["label"].split()
-    return label[0], label[-1]
+    num_decks = label[0]
+    rank = label[-1]
+
+    return num_decks, rank

@@ -27,6 +27,9 @@ class deck_crud():
                 "commander_id": row.commander_id,
                 "partner_id": row.partner_id,
                 "companion_id": row.companion_id,
+                "edhrec_num_decks": row.edhrec_num_decks,
+                "edhrec_popularity": row.edhrec_popularity,
+                "last_accessed": row.last_accessed,
                 "player_id": row.player_id,
                 "colour_identity_id": row.colour_identity_id
             })
@@ -56,6 +59,9 @@ class deck_crud():
             "commander_id": result[0].commander_id,
             "partner_id": result[0].partner_id,
             "companion_id": result[0].companion_id,
+            "edhrec_num_decks": result[0].edhrec_num_decks,
+            "edhrec_popularity": result[0].edhrec_popularity,
+            "last_accessed": result[0].last_accessed,
             "player_id": result[0].player_id,
             "colour_identity_id": result[0].colour_identity_id
         }
@@ -89,6 +95,9 @@ class deck_crud():
             commander_id=data["commander_id"],
             partner_id=data["partner_id"],
             companion_id=data["companion_id"],
+            edhrec_num_decks=["edhrec_num_decks"],
+            edhrec_popularity=["edhrec_popularity"],
+            last_accessed=["last_accessed"],
             player_id=data["player_id"],
             colour_identity_id=data["colour_identity_id"]
         )
@@ -108,6 +117,9 @@ class deck_crud():
             "commander_id": new_deck.commander_id,
             "partner_id": new_deck.partner_id,
             "companion_id": new_deck.companion_id,
+            "edhrec_num_decks": new_deck.edhrec_num_decks,
+            "edhrec_popularity": new_deck.edhrec_popularity,
+            "last_accessed": new_deck.last_accessed,
             "player_id": new_deck.player_id,
             "colour_identity_id": new_deck.colour_identity_id
         }
@@ -143,6 +155,9 @@ class deck_crud():
             "commander_id": result.commander_id,
             "partner_id": result.partner_id,
             "companion_id": result.companion_id,
+            "edhrec_num_decks": result.edhrec_num_decks,
+            "edhrec_popularity": result.edhrec_popularity,
+            "last_accessed": result.last_accessed,
             "player_id": result.player_id,
             "colour_identity_id": result.colour_identity_id
         }
@@ -195,6 +210,9 @@ class deck_crud():
                 "commander_id": sibling.commander_id,
                 "partner_id": sibling.partner_id,
                 "companion_id": sibling.companion_id,
+                "edhrec_num_decks": sibling.edhrec_num_decks,
+                "edhrec_popularity": sibling.edhrec_popularity,
+                "last_accessed": sibling.last_accessed,
                 "player_id": sibling.player_id,
                 "colour_identity_id": sibling.colour_identity_id
             })
