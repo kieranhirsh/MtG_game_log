@@ -112,7 +112,7 @@ def input():
                 "companion_id": companion_id,
                 "player_id": owner_data[0].id,
                 "edhrec_num_decks": edhrec_num_decks,
-                "edhrec_popularity": edhrec_popularity[1:],
+                "edhrec_popularity": edhrec_popularity,
                 "last_accessed": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 "colour_identity_id": colour_identity_data[0].id
                 }
@@ -652,7 +652,7 @@ def data_post():
                     try:
                         deck.edhrec_decks, deck.popularity = curl_utils.get_popularity_from_edhrec_uri(edhrec_uri)
                         deck_crud.update(deck.id, jsonify({"edhrec_num_decks": deck.edhrec_decks,
-                                                           "edhrec_popularity": deck.popularity[1:],
+                                                           "edhrec_popularity": deck.popularity,
                                                            "last_accessed": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}))
                         time.sleep(0.01)
                     except:
