@@ -735,7 +735,7 @@ def data_post():
                 game.player[seat.seat_no - 1] = seat.player
                 game.deck[seat.seat_no - 1] = seat.deck
 
-            if len(seats) > num_seats:
+            if len(seats) > num_seats and game not in games_to_remove:
                 num_seats = len(seats)
 
         for game_to_remove in games_to_remove:
