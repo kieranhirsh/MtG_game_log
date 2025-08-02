@@ -70,6 +70,7 @@ def input():
                 partner_name = response["name"]
             else:
                 partner_id = ""
+                partner_name = ""
 
             # get edhrec data
             edhrec_uri = curl_utils.get_edhrec_uri_from_commander_names([commander_name, partner_name])
