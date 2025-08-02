@@ -95,9 +95,9 @@ class deck_crud():
             commander_id=data["commander_id"],
             partner_id=data["partner_id"],
             companion_id=data["companion_id"],
-            edhrec_num_decks=["edhrec_num_decks"],
-            edhrec_popularity=["edhrec_popularity"],
-            last_accessed=["last_accessed"],
+            edhrec_num_decks=data["edhrec_num_decks"],
+            edhrec_popularity=data["edhrec_popularity"],
+            last_accessed=data["last_accessed"],
             player_id=data["player_id"],
             colour_identity_id=data["colour_identity_id"]
         )
