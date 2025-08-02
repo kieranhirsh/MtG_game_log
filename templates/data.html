@@ -281,8 +281,8 @@
         <td class="game_time">{{ game.game_time[:-3] }}</td>
         <td class="game_turns">{{ game.game_turns }}</td>
         <td class="game_winner">{{ game.winner }}</td>
-        {% for j in range(game.player|length) %}
-        <td class="game_players">{{ game.player[j].player_name }} - {{ game.deck[j].deck_name }}{% if game.player[j].player_name != game.deck[j].player.player_name  %} ({{ game.deck[j].player.player_name }}'s deck){% endif %}</td>
+        {% for j in range(data["num_seats"]) %}
+        <td class="game_players">{% if game.player[j] %}{{ game.player[j].player_name }} - {{ game.deck[j].deck_name }}{% if game.player[j].player_name != game.deck[j].player.player_name  %} ({{ game.deck[j].player.player_name }}'s deck){% endif %}{% endif %}</td>
         {% endfor %}
       </tr>
       {% endfor %}
