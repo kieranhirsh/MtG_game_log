@@ -1102,7 +1102,6 @@ def graphs():
                 else:
                     call_error = True
                     missing_entries.append([request.form["line_y"], 'Y Axis'])
-
             else:
                 call_error = True
                 missing_entries.append([request.form["line_x"], 'X Axis'])

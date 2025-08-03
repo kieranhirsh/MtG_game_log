@@ -1,5 +1,6 @@
 ''' utils that involve curl commands '''
 import requests
+import unicodedata
 
 def get_edhrec_uri_from_commander_names(cmdr_names=None):
     names = ""
@@ -10,9 +11,9 @@ def get_edhrec_uri_from_commander_names(cmdr_names=None):
             cmdr = cmdr.replace("'",'')
             cmdr = cmdr.replace(' ','-')
             if cmdr[-1] == "-":
-                names += cmdr.lower()
+                names += unicodedata.normalize('NFKD', cmdr.lower()).encode('ascii', 'ignore').decode("utf-8")
             else:
-                names += cmdr.lower() + "-"
+                names += unicodedata.normalize('NFKD', cmdr.lower()).encode('ascii', 'ignore').decode("utf-8") + "-"
 
     return f"/commanders/{names[:-1]}"
 
