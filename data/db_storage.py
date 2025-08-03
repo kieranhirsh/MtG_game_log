@@ -14,16 +14,17 @@ def build_query(node, classes):
         if op == "==":
             class_ = classes[model]
             return getattr(class_, key) == value
-        else:
-            raise ValueError("Invalid operation: %s" % op)
-    elif "clauses" in node and "op" in node:
+
+        raise ValueError(f"Invalid operation: {op}")
+
+    if "clauses" in node and "op" in node:
         sub_clauses = [build_query(clause, classes) for clause in node["clauses"]]
         if node["op"] == "and":
-            return(and_(*sub_clauses))
-        elif node["op"] == "or":
-            return(or_(*sub_clauses))
-        else:
-            raise ValueError("Invalid logical operation: %s" % op)
+            return and_(*sub_clauses)
+        if node["op"] == "or":
+            return or_(*sub_clauses)
+
+        raise ValueError(f"Invalid operation: {op}")
     else:
         raise ValueError("This node is lacking")
 
@@ -51,7 +52,7 @@ class DBStorage():
         if db is None:
             raise TypeError("environment variable MtG_log_MYSQL_DB not set")
 
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(user, pwd, host, db), pool_pre_ping=True)
+        self.__engine = create_engine(f"mysql+mysqldb://{user}:{pwd}@{host}/{db}", pool_pre_ping=True)
 
         Base.metadata.create_all(self.__engine)
 
@@ -60,7 +61,7 @@ class DBStorage():
         Session = scoped_session(session_factory)
         self.__session = Session()
 
-    def get(self, class_name, join_classes=[], query_tree = {}, key = "", value = ""):
+    def get(self, class_name, join_classes=None, query_tree=None, key="", value=""):
         """ Returns data for specified class name with or without record id"""
         if class_name.strip() == "":
             raise IndexError("Unable to load Model data. No class name specified")
@@ -134,9 +135,9 @@ class DBStorage():
                     if k in allowed:
                         setattr(record, k, v)
                     else:
-                        print("Warning: %s property in %s class cannot be updated" % (k, class_name))
+                        print(f"Warning: {k} property in {class_name} class cannot be updated")
                 else:
-                    raise ValueError("No properties of the %s class can be updated" % (class_name))
+                    raise ValueError(f"No properties of the {class_name} class can be updated")
 
             self.__session.commit()
         except:

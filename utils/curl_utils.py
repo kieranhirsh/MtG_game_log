@@ -1,7 +1,7 @@
 ''' utils that involve curl commands '''
 import requests
 
-def get_edhrec_uri_from_commander_names(cmdr_names=[]):
+def get_edhrec_uri_from_commander_names(cmdr_names=None):
     names = ""
     for cmdr_name in cmdr_names:
         if cmdr_name:

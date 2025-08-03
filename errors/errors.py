@@ -12,7 +12,7 @@ def entry_not_found(page, missing_entries, method=""):
     all_db_data = utils.load_all_db_data()
 
     for entry in missing_entries:
-        error_messages.append("Error: Unable to find %s with %s = %s" % (entry[0], entry[1], entry[2]))
+        error_messages.append(f"Error: Unable to find {entry[0]} with {entry[1]} = {entry[2]}")
 
     # Return the page
     return render_template('error.html',
@@ -32,7 +32,7 @@ def option_not_available(page, missing_entries, method=""):
     all_db_data = utils.load_all_db_data()
 
     for entry in missing_entries:
-        error_messages.append("Error: %s is not a valid %s" % (entry[0], entry[1]))
+        error_messages.append(f"Error: {entry[0]} is not a valid {entry[1]}")
 
     # Return the page
     return render_template('error.html',

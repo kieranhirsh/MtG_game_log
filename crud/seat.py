@@ -177,9 +177,9 @@ class seat_crud():
             print("Error: ", exc)
             return "Unable to find specific decseatk\n"
 
-        parent_id = getattr(seat_data[0], "%s_id" % (parent_type))
+        parent_id = getattr(seat_data[0], f"{parent_type}_id")
         try:
-            sibling_data = storage.get(class_name="seat", key="%s_id" % (parent_type), value=parent_id)
+            sibling_data = storage.get(class_name="seat", key=f"{parent_type}_id", value=parent_id)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to find sibling seats\n"

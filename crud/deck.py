@@ -193,9 +193,9 @@ class deck_crud():
             print("Error: ", exc)
             return "Unable to find specific deck\n"
 
-        parent_id = getattr(deck_data[0], "%s_id" % (parent_type))
+        parent_id = getattr(deck_data[0], f"{parent_type}_id")
         try:
-            sibling_data = storage.get(class_name="deck", key="%s_id" % (parent_type), value=parent_id)
+            sibling_data = storage.get(class_name="deck", key=f"{parent_type}_id", value=parent_id)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to find sibling decks\n"

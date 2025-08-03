@@ -1,8 +1,8 @@
+from io import BytesIO
+import re
 import base64
 import copy
 import matplotlib.pyplot as plt
-import re
-from io import BytesIO
 
 def make_pie_chart(labels, values, title=""):
     fig, ax = plt.subplots()

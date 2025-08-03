@@ -1,9 +1,9 @@
+from io import BytesIO
 import base64
 import matplotlib.pyplot as plt
 import numpy as np
-from io import BytesIO
 
-def make_line_graph(x_values, y_values, x_label="", y_label="", title="", legend=[]):
+def make_line_graph(x_values, y_values, x_label="", y_label="", title="", legend=None):
     fig, ax = plt.subplots()
     plt.setp(ax.get_xticklabels(), rotation=45, horizontalalignment='right')
 

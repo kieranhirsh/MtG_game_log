@@ -13,12 +13,12 @@ class Base_crud():
             print("Error: ", exc)
             return "Unable to find specific colour identity\n"
 
-        parent_id = getattr(object_data[0], "%s_id" % (parent_type.lower()))
+        parent_id = getattr(object_data[0], f"{parent_type.lower()}_id")
         try:
             parent_data = storage.get(class_name=parent_type, key="id", value=parent_id)
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to find specific %s\n" % (parent_type)
+            return f"Unable to find specific {parent_type}\n"
 
         if return_model_object:
             return parent_data
@@ -36,10 +36,10 @@ class Base_crud():
         output = []
 
         try:
-            child_data = storage.get(class_name=child_type, key="%s_id" % object_type, value=object_id)
+            child_data = storage.get(class_name=child_type, key=f"{object_type}_id", value=object_id)
         except IndexError as exc:
             print("Error: ", exc)
-            return "Unable to find specific %s\n" % (child_type)
+            return f"Unable to find specific {child_type}\n"
 
         if return_model_object:
             return child_data

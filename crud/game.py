@@ -143,7 +143,7 @@ class game_crud():
         game_to_update = game_crud.specific("id", game_id)
         for key in data:
             game_to_update[key] = data[key]
-            if key == "start_time" or key == "end_time":
+            if key in ("start_time", "end_time"):
                 call_validator = True
 
         if "start_time" in data:
@@ -269,9 +269,9 @@ class game_crud():
             print("Error: ", exc)
             return "Unable to find specific game\n"
 
-        parent_id = getattr(game_data[0], "%s_id" % (parent_type))
+        parent_id = getattr(game_data[0], f"{parent_type}_id")
         try:
-            sibling_data = storage.get(class_name="game", key="%s_id" % (parent_type), value=parent_id)
+            sibling_data = storage.get(class_name="game", key=f"{parent_type}_id", value=parent_id)
         except IndexError as exc:
             print("Error: ", exc)
             return "Unable to find sibling games\n"

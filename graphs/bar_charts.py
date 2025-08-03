@@ -1,9 +1,8 @@
+from io import BytesIO
 import base64
 import copy
 import matplotlib.pyplot as plt
-import numpy as np
 import graphs.utils
-from io import BytesIO
 
 def make_bar_chart(x_values, y_values, x_label="", y_label="", title="", no_zeroes=False):
     if no_zeroes:
