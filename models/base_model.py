@@ -1,7 +1,7 @@
 """ model layer """
 import uuid
 
-def constructor(self, *_, **kwargs):
+def constructor(self, *args, **kwargs):
     """ constructor for all models """
     # Set object instance defaults
     self.id = str(uuid.uuid4())
