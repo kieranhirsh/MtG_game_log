@@ -1,15 +1,17 @@
 """ game model """
-import uuid
 from sqlalchemy import Column, String, Integer, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from data import Base
+from models.base_model import constructor
 
 class game(Base):
     """ Representation of game """
-
-    all_attribs = ["id", "game_name", "month", "year", "start_time", "end_time", "game_turns", "winning_deck_id", "winning_player_id"]
-    can_init    = ["game_name", "month", "year", "start_time", "end_time", "game_turns", "winning_deck_id", "winning_player_id"]
-    can_update  = ["game_name", "month", "year", "start_time", "end_time", "game_turns", "winning_deck_id", "winning_player_id"]
+    all_attribs = ["id", "game_name", "month", "year", "start_time",
+                   "end_time", "game_turns", "winning_deck_id","winning_player_id"]
+    can_init    = ["game_name", "month", "year", "start_time", "end_time",
+                   "game_turns", "winning_deck_id", "winning_player_id"]
+    can_update  = ["game_name", "month", "year", "start_time", "end_time",
+                   "game_turns", "winning_deck_id", "winning_player_id"]
 
     # Class attributes defaults
     __tablename__     = 'games'
@@ -28,12 +30,4 @@ class game(Base):
 
     # constructor
     def __init__(self, *args, **kwargs):
-        """ constructor """
-        # Set object instance defaults
-        self.id = str(uuid.uuid4())
-
-        # Note that setattr will call the setters for attribs in the list
-        if kwargs:
-            for key, value in kwargs.items():
-                if key in self.can_init:
-                    setattr(self, key, value)
+        constructor(self, *args, **kwargs)

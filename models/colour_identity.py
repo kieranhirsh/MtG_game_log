@@ -1,12 +1,11 @@
 """ Colour Identity model """
-import uuid
 from sqlalchemy import Column, String, Integer
 from sqlalchemy.orm import relationship
 from data import Base
+from models.base_model import constructor
 
 class colour_identity(Base):
     """ Representation of colour identity """
-
     all_attribs = ["id", "ci_name", "colours"]
     can_init    = []
     can_update  = []
@@ -21,12 +20,4 @@ class colour_identity(Base):
 
     # constructor
     def __init__(self, *args, **kwargs):
-        """ constructor """
-        # Set object instance defaults
-        self.id = str(uuid.uuid4())
-
-        # Note that setattr will call the setters for attribs in the list
-        if kwargs:
-            for key, value in kwargs.items():
-                if key in self.can_init:
-                    setattr(self, key, value)
+        constructor(self, *args, **kwargs)

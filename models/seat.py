@@ -1,12 +1,11 @@
 """ seat model """
-import uuid
 from sqlalchemy import Column, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 from data import Base
+from models.base_model import constructor
 
 class seat(Base):
     """ Representation of seat """
-
     all_attribs = ["id", "seat_no", "ko_turn", "deck_id", "game_id", "player_id"]
     can_init    = ["seat_no", "ko_turn", "deck_id", "game_id", "player_id"]
     can_update  = ["seat_no", "ko_turn", "deck_id", "game_id", "player_id"]
@@ -25,12 +24,4 @@ class seat(Base):
 
     # constructor
     def __init__(self, *args, **kwargs):
-        """ constructor """
-        # Set object instance defaults
-        self.id = str(uuid.uuid4())
-
-        # Note that setattr will call the setters for attribs in the list
-        if kwargs:
-            for key, value in kwargs.items():
-                if key in self.can_init:
-                    setattr(self, key, value)
+        constructor(self, *args, **kwargs)

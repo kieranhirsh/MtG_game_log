@@ -1,12 +1,11 @@
 """ deck model """
-import uuid
 from sqlalchemy import Column, DateTime, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from data import Base
+from models.base_model import constructor
 
 class deck(Base):
     """ Representation of deck """
-
     all_attribs = ["id", "deck_name", "commander_id", "partner_id", "companion_id", "edhrec_num_decks",
                    "edhrec_popularity", "last_accessed", "player_id","colour_identity_id"]
     can_init    = ["deck_name", "commander_id", "partner_id", "companion_id", "edhrec_num_decks", "edhrec_popularity",
@@ -33,12 +32,4 @@ class deck(Base):
 
     # constructor
     def __init__(self, *args, **kwargs):
-        """ constructor """
-        # Set object instance defaults
-        self.id = str(uuid.uuid4())
-
-        # Note that setattr will call the setters for attribs in the list
-        if kwargs:
-            for key, value in kwargs.items():
-                if key in self.can_init:
-                    setattr(self, key, value)
+        constructor(self, *args, **kwargs)
