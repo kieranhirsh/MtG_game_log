@@ -57,7 +57,6 @@ def input():
             response = requests.get(f"https://api.scryfall.com/cards/named?fuzzy={commander_name}").json()
             if "status" in response:
                 return errors.card_not_found('input.html', [response["details"]], 'create')
-            commander_id = response["id"]
             commander_name = response["name"]
 
             # get partner/background id
@@ -66,10 +65,8 @@ def input():
                 response = requests.get(f"https://api.scryfall.com/cards/named?fuzzy={partner_name}").json()
                 if "status" in response:
                     return errors.card_not_found('input.html', [response["details"]], 'create')
-                partner_id = response["id"]
                 partner_name = response["name"]
             else:
-                partner_id = ""
                 partner_name = ""
 
             # get edhrec data
@@ -82,10 +79,9 @@ def input():
                 response = requests.get(f"https://api.scryfall.com/cards/named?fuzzy={companion_name}").json()
                 if "status" in response:
                     return errors.card_not_found('input.html', [response["details"]], 'create')
-                companion_id = response["id"]
                 companion_name = response["name"]
             else:
-                companion_id = ""
+                companion_name = ""
 
             # get the deck name
             if request.form["deck_name"]:
@@ -108,9 +104,9 @@ def input():
 
             new_deck = {
                 "deck_name": deck_name,
-                "commander_id": commander_id,
-                "partner_id": partner_id,
-                "companion_id": companion_id,
+                "commander_name": commander_name,
+                "partner_name": partner_name,
+                "companion_name": companion_name,
                 "player_id": owner_data[0].id,
                 "edhrec_num_decks": edhrec_num_decks,
                 "edhrec_popularity": edhrec_popularity,
@@ -220,9 +216,9 @@ def input_edit():
                 response = requests.get(f"https://api.scryfall.com/cards/named?fuzzy={commander_name}").json()
                 if "status" in response:
                     return errors.card_not_found('input.html', [response["details"]], 'create')
-                commander_id = response["id"]
+                commander_name = response["name"]
                 new_deck_data.update({
-                    "commander_id": commander_id
+                    "commander_name": commander_name
                 })
 
             # get partner/background id
@@ -231,9 +227,9 @@ def input_edit():
                 response = requests.get(f"https://api.scryfall.com/cards/named?fuzzy={partner_name}").json()
                 if "status" in response:
                     return errors.card_not_found('input.html', [response["details"]], 'create')
-                partner_id = response["id"]
+                partner_name = response["name"]
                 new_deck_data.update({
-                    "partner_id": partner_id
+                    "partner_name": partner_name
                 })
 
             # get companion id
@@ -242,9 +238,9 @@ def input_edit():
                 response = requests.get(f"https://api.scryfall.com/cards/named?fuzzy={companion_name}").json()
                 if "status" in response:
                     return errors.card_not_found('input.html', [response["details"]], 'create')
-                companion_id = response["id"]
+                companion_name = response["name"]
                 new_deck_data.update({
-                    "companion_id": companion_id
+                    "companion_name": companion_name
                 })
 
             # get owner id
@@ -634,41 +630,40 @@ def data_post():
             deck.games_played = len(deck_crud.get_child_data(deck.id, "seat", True))
             game_times = []
 
-            if deck.commander_id:
-                try:
-                    deck.commander_name, edhrec_uri = curl_utils.get_commander_name_from_commander_id(deck.commander_id)
-                    time.sleep(0.01)
-                except:
-                    deck.commander_name = ""
+            try:
+                name, uri = curl_utils.get_commander_name_from_commander_id(deck.commander_name)
+                deck_crud.update(deck.id, jsonify({"commander_name": name}))
+            except:
+                pass
 
-                if deck.partner_id:
-                    try:
-                        deck.partner_name = curl_utils.get_commander_name_from_commander_id(deck.partner_id)[0]
-                        time.sleep(0.01)
-                    except:
-                        deck.partner_name = ""
+            if deck.companion_name:
+                try:
+                    name, uri = curl_utils.get_commander_name_from_commander_id(deck.companion_name)
+                    deck_crud.update(deck.id, jsonify({"companion_name": name}))
+                except:
+                    pass
+
+            if deck.partner_name:
+                try:
+                    name, uri = curl_utils.get_commander_name_from_commander_id(deck.partner_name)
+                    deck_crud.update(deck.id, jsonify({"partner_name": name}))
+                except:
+                    pass
+
+            if not deck.last_accessed or ((datetime.now() - deck.last_accessed) > timedelta(weeks=1)):
+                try:
                     edhrec_uri = curl_utils.get_edhrec_uri_from_commander_names([deck.commander_name, deck.partner_name])
-
-                if not deck.last_accessed or ((datetime.now() - deck.last_accessed) > timedelta(weeks=1)):
-                    try:
-                        deck.edhrec_decks, deck.popularity = curl_utils.get_popularity_from_edhrec_uri(edhrec_uri)
-                        deck_crud.update(deck.id, jsonify({"edhrec_num_decks": deck.edhrec_decks,
-                                                           "edhrec_popularity": deck.popularity,
-                                                           "last_accessed": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}))
-                        time.sleep(0.01)
-                    except:
-                        deck.edhrec_decks = ""
-                        deck.popularity = ""
-                else:
-                    deck.edhrec_decks = deck.edhrec_num_decks
-                    deck.popularity = deck.edhrec_popularity
-
-            if deck.companion_id:
-                try:
-                    deck.companion_name = curl_utils.get_commander_name_from_commander_id(deck.companion_id)[0]
+                    deck.edhrec_decks, deck.popularity = curl_utils.get_popularity_from_edhrec_uri(edhrec_uri)
+                    deck_crud.update(deck.id, jsonify({"edhrec_num_decks": deck.edhrec_decks,
+                                                        "edhrec_popularity": deck.popularity,
+                                                        "last_accessed": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}))
                     time.sleep(0.01)
                 except:
-                    deck.companion_name = ""
+                    deck.edhrec_decks = ""
+                    deck.popularity = ""
+            else:
+                deck.edhrec_decks = deck.edhrec_num_decks
+                deck.popularity = deck.edhrec_popularity
 
             if deck.games_played == 0:
                 deck.win_rate = 0
