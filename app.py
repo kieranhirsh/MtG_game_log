@@ -630,25 +630,11 @@ def data_post():
             deck.games_played = len(deck_crud.get_child_data(deck.id, "seat", True))
             game_times = []
 
-            try:
-                name, uri = curl_utils.get_commander_name_from_commander_id(deck.commander_name)
-                deck_crud.update(deck.id, jsonify({"commander_name": name}))
-            except:
-                pass
+            if not deck.partner_name:
+                deck.partner_name = ""
 
-            if deck.companion_name:
-                try:
-                    name, uri = curl_utils.get_commander_name_from_commander_id(deck.companion_name)
-                    deck_crud.update(deck.id, jsonify({"companion_name": name}))
-                except:
-                    pass
-
-            if deck.partner_name:
-                try:
-                    name, uri = curl_utils.get_commander_name_from_commander_id(deck.partner_name)
-                    deck_crud.update(deck.id, jsonify({"partner_name": name}))
-                except:
-                    pass
+            if not deck.companion_name:
+                deck.companion_name = ""
 
             if not deck.last_accessed or ((datetime.now() - deck.last_accessed) > timedelta(weeks=1)):
                 try:

@@ -17,9 +17,9 @@ class deck(Base):
     __tablename__      = 'decks'
     id                 = Column(String(64), nullable=False, primary_key=True)
     deck_name          = Column("deck_name", String(128), nullable=False)
-    commander_name       = Column("commander_id", String(64), nullable=True)
-    partner_name         = Column("partner_id", String(64), nullable=True)
-    companion_name       = Column("companion_id", String(64), nullable=True)
+    commander_name     = Column("commander_name", String(64), nullable=True)
+    partner_name       = Column("partner_name", String(64), nullable=True)
+    companion_name     = Column("companion_name", String(64), nullable=True)
     edhrec_num_decks   = Column("edhrec_num_decks", Integer, nullable=True)
     edhrec_popularity  = Column("edhrec_popularity", Integer, nullable=True)
     last_accessed      = Column("last_accessed", DateTime, nullable=True)
