@@ -53,9 +53,9 @@ CREATE TABLE `decks` (
   `deck_name` varchar(128) NOT NULL,
   `player_id` varchar(64) NOT NULL,
   `colour_identity_id` varchar(64) NOT NULL,
-  `commander_id` varchar(64) DEFAULT NULL,
-  `partner_id` varchar(64) DEFAULT NULL,
-  `companion_id` varchar(64) DEFAULT NULL,
+  `commander_name` varchar(64) DEFAULT NULL,
+  `partner_name` varchar(64) DEFAULT NULL,
+  `companion_name` varchar(64) DEFAULT NULL,
   `edhrec_num_decks` int DEFAULT NULL,
   `edhrec_popularity` int DEFAULT NULL,
   `last_accessed` datetime DEFAULT NULL,
@@ -179,4 +179,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-08-05 14:20:58
+-- Dump completed on 2025-08-05 14:31:22
