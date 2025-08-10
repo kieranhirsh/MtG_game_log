@@ -65,6 +65,7 @@ function sortTable(n) {
     header === "Start Time" ||
     header === "Game Length (Time)" ||
     header === "Game Length (Turns)" ||
+    header === "Ave Game Length" ||
     header === "Ave Game Time" ||
     header === "# EDHrec Decks"
   ) {
@@ -106,6 +107,7 @@ function sortTable(n) {
           header === "Games Played" ||
           header === "Games Won" ||
           header === "Win Rate" ||
+          header === "Ave Game Length" ||
           header === "Game Length (Turns)" ||
           header === "# EDHrec Decks" ||
           header === "Popularity"
@@ -130,6 +132,7 @@ function sortTable(n) {
           header === "Games Won" ||
           header === "Win Rate" ||
           header === "Game Length (Turns)" ||
+          header === "Ave Game Length" ||
           header === "# EDHrec Decks" ||
           header === "Popularity"
         ) {
@@ -212,6 +215,7 @@ function sortColourTables(col) {
       header === "Games Played" ||
       header === "Games Won" ||
       header === "Win Rate" ||
+      header === "Ave Game Length" ||
       header === "Ave Game Time"
     ) {
       dir = "desc";
@@ -252,7 +256,8 @@ function sortColourTables(col) {
             header === "# Decks" ||
             header === "Games Played" ||
             header === "Games Won" ||
-            header === "Win Rate"
+            header === "Win Rate" ||
+            header === "Ave Game Length"
           ) {
             if (parseInt(x.innerHTML) > parseInt(y.innerHTML) || parseInt(x.innerHTML) == 0) {
               // If we want to switch, mark as a switch and break the loop:
@@ -272,7 +277,8 @@ function sortColourTables(col) {
             header === "# Decks" ||
             header === "Games Played" ||
             header === "Games Won" ||
-            header === "Win Rate"
+            header === "Win Rate" ||
+            header === "Ave Game Length"
           ) {
             if (parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
               // If so, mark as a switch and break the loop:

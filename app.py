@@ -517,7 +517,7 @@ def data_post():
                 # find all games played by the deck
                 for seat in deck_crud.get_child_data(deck.id, "seat", True):
                     # get the time taken for each of those games
-                    game_length, game_seconds = derived_quantities.game_length_in_time(seat.game)
+                    _, game_seconds = derived_quantities.game_length_in_time(seat.game)
                     game_times.append(game_seconds)
 
                 # add the total time and number of timed games to the running tally
@@ -629,6 +629,7 @@ def data_post():
         for deck in deck_data:
             deck.games_played = len(deck_crud.get_child_data(deck.id, "seat", True))
             game_times = []
+            game_turns = []
 
             if not deck.partner_name:
                 deck.partner_name = ""
@@ -655,20 +656,29 @@ def data_post():
                 deck.win_rate = 0
                 deck.num_games_won = 0
                 deck.ave_game_time = ""
+                deck.ave_game_turns = ""
             else:
                 deck.num_games_won = len(game_crud.specific("winning_deck_id", deck.id, True))
                 deck.win_rate = deck.num_games_won / deck.games_played * 100
 
                 for seat in deck_crud.get_child_data(deck.id, "seat", True):
-                    game_length, game_seconds = derived_quantities.game_length_in_time(seat.game)
+                    _, game_seconds = derived_quantities.game_length_in_time(seat.game)
                     if game_seconds:
                         game_times.append(game_seconds)
+                    game_length = derived_quantities.game_length_in_turns(seat.game)
+                    if game_length:
+                        game_turns.append(game_length)
 
                 if len(game_times) > 0:
                     ave_time = sum(game_times) / len(game_times)
                     deck.ave_game_time = str(timedelta(seconds=(ave_time - (ave_time % 60))))[0:-3]
                 else:
                     deck.ave_game_time = ""
+
+                if len(game_turns) > 0:
+                    deck.ave_game_turns = sum(game_turns) / len(game_turns)
+                else:
+                    deck.ave_game_turns = ""
 
         # Prepare data to pass to the template
         html_data = {"colour_identities": colour_identities,
@@ -743,7 +753,7 @@ def data_post():
             # find all games played by the player
             for seat in player_crud.get_child_data(player.id, "seat", True):
                 # get the time taken for each of those games
-                game_length, game_seconds = derived_quantities.game_length_in_time(seat.game)
+                _, game_seconds = derived_quantities.game_length_in_time(seat.game)
                 if game_seconds:
                     game_times.append(game_seconds)
 
