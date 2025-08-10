@@ -210,7 +210,7 @@ def input_edit():
                     "deck_name": request.form["new_deck_name"]
                 })
 
-            # get commander id
+            # get commander name
             if request.form["new_deck_commander_1"]:
                 commander_name = request.form["new_deck_commander_1"]
                 response = requests.get(f"https://api.scryfall.com/cards/named?fuzzy={commander_name}").json()
@@ -221,7 +221,7 @@ def input_edit():
                     "commander_name": commander_name
                 })
 
-            # get partner/background id
+            # get partner/background name
             if request.form["new_deck_commander_2"]:
                 partner_name = request.form["new_deck_commander_2"]
                 response = requests.get(f"https://api.scryfall.com/cards/named?fuzzy={partner_name}").json()
@@ -232,7 +232,7 @@ def input_edit():
                     "partner_name": partner_name
                 })
 
-            # get companion id
+            # get companion name
             if request.form["new_deck_companion"]:
                 companion_name = request.form["new_deck_companion"]
                 response = requests.get(f"https://api.scryfall.com/cards/named?fuzzy={companion_name}").json()
