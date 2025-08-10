@@ -112,7 +112,7 @@ function sortTable(n) {
           header === "# EDHrec Decks" ||
           header === "Popularity"
         ) {
-          if (parseInt(x.innerHTML) > parseInt(y.innerHTML) || parseInt(x.innerHTML) == 0 || isNaN(parseInt(x.innerHTML))) {
+          if (parseFloat(x.innerHTML) > parseFloat(y.innerHTML) || parseFloat(x.innerHTML) == 0 || isNaN(parseFloat(x.innerHTML))) {
             // If we want to switch, mark as a switch and break the loop:
             shouldSwitch = true;
             break;
@@ -136,11 +136,11 @@ function sortTable(n) {
           header === "# EDHrec Decks" ||
           header === "Popularity"
         ) {
-          if (isNaN(parseInt(y.innerHTML))) {
+          if (isNaN(parseFloat(y.innerHTML))) {
             // skip this case
             continue;
           }
-          if (parseInt(x.innerHTML) < parseInt(y.innerHTML) || isNaN(parseInt(x.innerHTML))) {
+          if (parseFloat(x.innerHTML) < parseFloat(y.innerHTML) || isNaN(parseFloat(x.innerHTML))) {
             // If so, mark as a switch and break the loop:
             shouldSwitch = true;
             break;
@@ -259,7 +259,7 @@ function sortColourTables(col) {
             header === "Win Rate" ||
             header === "Ave Game Length"
           ) {
-            if (parseInt(x.innerHTML) > parseInt(y.innerHTML) || parseInt(x.innerHTML) == 0) {
+            if (parseFloat(x.innerHTML) > parseFloat(y.innerHTML) || parseFloat(x.innerHTML) == 0) {
               // If we want to switch, mark as a switch and break the loop:
               shouldSwitch = true;
               break;
@@ -280,7 +280,7 @@ function sortColourTables(col) {
             header === "Win Rate" ||
             header === "Ave Game Length"
           ) {
-            if (parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
+            if (parseFloat(x.innerHTML) < parseFloat(y.innerHTML)) {
               // If so, mark as a switch and break the loop:
               shouldSwitch = true;
               break;
