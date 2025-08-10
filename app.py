@@ -676,7 +676,7 @@ def data_post():
                     deck.ave_game_time = ""
 
                 if len(game_turns) > 0:
-                    deck.ave_game_turns = sum(game_turns) / len(game_turns)
+                    deck.ave_game_turns = "%.1f" % (sum(game_turns) / len(game_turns))
                 else:
                     deck.ave_game_turns = ""
 
