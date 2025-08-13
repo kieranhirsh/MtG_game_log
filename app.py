@@ -749,9 +749,12 @@ def data_post():
             player_decks = player_crud.get_child_data(player.id, "deck", True)
             decks_to_remove = []
             game_times = []
+            game_turns = []
 
             # find all games played by the player
             for seat in player_crud.get_child_data(player.id, "seat", True):
+                # get the length of the game
+                game_turns.append(derived_quantities.game_length_in_turns(seat.game))
                 # get the time taken for each of those games
                 _, game_seconds = derived_quantities.game_length_in_time(seat.game)
                 if game_seconds:
@@ -761,8 +764,10 @@ def data_post():
             if len(game_times) > 0:
                 ave_time = sum(game_times) / len(game_times)
                 player.ave_game_time = str(timedelta(seconds=(ave_time - (ave_time % 60))))[0:-3]
+                player.ave_game_turns = f"{(sum(game_turns) / len(game_turns)):.1f}"
             else:
                 player.ave_game_time = ""
+                player.ave_game_turns = ""
 
             # if we have a restriction on the colour identity name
             if request.form.getlist("ci_abbr"):
