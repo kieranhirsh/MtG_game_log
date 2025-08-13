@@ -5,12 +5,11 @@ from crud.player import player_crud
 from crud.seat import seat_crud
 from data import storage
 
-def get_ci_data_from_dropdown_inputs(request_form):
+def get_ci_data_from_list_of_colours(ci_raw_list):
     # initialise varaiables
     ci_abbr_string = ""
 
     # get the list of inputs and all colour identity data
-    ci_raw_list = request_form.getlist("ci_abbr")
     all_ci = storage.get(class_name="colour_identity")
 
     # loop over the raw list of inputs and add its character to a string
@@ -24,7 +23,7 @@ def get_ci_data_from_dropdown_inputs(request_form):
         # loop over all the colour identities and compare each string of colours to the input string
         for ci in all_ci:
             # the strings are sorted so that anagrams match
-            if sorted(ci.colours) == sorted(ci_abbr_string):
+            if sorted(set(ci.colours)) == sorted(set(ci_abbr_string)):
                 desired_ci = ci.colours
                 break
 

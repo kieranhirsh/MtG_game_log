@@ -94,7 +94,7 @@ def input():
                     deck_name += f" + {companion_name}"
 
             # get the colour identity id
-            colour_identity_data, desired_ci = utils.get_ci_data_from_dropdown_inputs(request.form)
+            colour_identity_data, desired_ci = utils.get_ci_data_from_list_of_colours(request.form.getlist("ci_abbr"))
             if not colour_identity_data:
                 call_error = True
                 missing_entries.append(["colour_identity", "colours", desired_ci])
@@ -258,7 +258,7 @@ def input_edit():
 
             # get colour identity id
             if request.form.getlist("ci_abbr"):
-                colour_identity_data, desired_ci = utils.get_ci_data_from_dropdown_inputs(request.form)
+                colour_identity_data, desired_ci = utils.get_ci_data_from_list_of_colours(request.form.getlist("ci_abbr"))
                 if colour_identity_data:
                     new_deck_data.update({
                         "colour_identity_id": colour_identity_data[0].id
@@ -635,7 +635,7 @@ def data_post():
                     class_type = "player"
 
                 elif form_item == "ci_abbr":
-                    colour_identity_data, desired_ci = utils.get_ci_data_from_dropdown_inputs(request.form)
+                    colour_identity_data, desired_ci = utils.get_ci_data_from_list_of_colours(request.form.getlist("ci_abbr"))
                     if not colour_identity_data:
                         return errors.entry_not_found(["colour_identity", "colours", desired_ci])
                     restriction_key = "ci_name"
@@ -810,7 +810,7 @@ def data_post():
 
             # if we have a restriction on the colour identity name
             if request.form.getlist("ci_abbr"):
-                colour_identity_data, desired_ci = utils.get_ci_data_from_dropdown_inputs(request.form)
+                colour_identity_data, desired_ci = utils.get_ci_data_from_list_of_colours(request.form.getlist("ci_abbr"))
                 ci_name = colour_identity_data[0].ci_name
 
                 # loop over those decks
