@@ -280,7 +280,11 @@ function sortColourTables(col) {
             header === "Win Rate" ||
             header === "Ave Game Length"
           ) {
-            if (parseFloat(x.innerHTML) < parseFloat(y.innerHTML)) {
+            if (isNaN(parseFloat(y.innerHTML))) {
+              // skip this case
+              continue;
+            }
+            if (parseFloat(x.innerHTML) < parseFloat(y.innerHTML) || isNaN(parseFloat(x.innerHTML))) {
               // If so, mark as a switch and break the loop:
               shouldSwitch = true;
               break;
