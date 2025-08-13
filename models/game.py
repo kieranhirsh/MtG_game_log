@@ -7,11 +7,11 @@ from models.base_model import constructor
 class game(Base):
     """ Representation of game """
     all_attribs = ["id", "game_name", "month", "year", "start_time",
-                   "end_time", "game_turns", "winning_deck_id","winning_player_id"]
+                   "end_time", "winning_deck_id","winning_player_id"]
     can_init    = ["game_name", "month", "year", "start_time", "end_time",
-                   "game_turns", "winning_deck_id", "winning_player_id"]
+                   "winning_deck_id", "winning_player_id"]
     can_update  = ["game_name", "month", "year", "start_time", "end_time",
-                   "game_turns", "winning_deck_id", "winning_player_id"]
+                   "winning_deck_id", "winning_player_id"]
 
     # Class attributes defaults
     __tablename__     = 'games'
@@ -21,7 +21,6 @@ class game(Base):
     game_name         = Column("game_name", String(1024))
     start_time        = Column("start_time", DateTime)
     end_time          = Column("end_time", DateTime)
-    game_turns        = Column("game_turns", Integer)
     winning_deck_id   = Column("winning_deck_id", String(128), ForeignKey('decks.id'), nullable=True)
     winning_player_id = Column("winning_player_id", String(128), ForeignKey('players.id'), nullable=True)
     winning_deck      = relationship("deck", back_populates="games_won")

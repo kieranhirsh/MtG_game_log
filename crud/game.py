@@ -43,7 +43,6 @@ class game_crud():
                 "year": row.year,
                 "start_time": row.start_time,
                 "end_time": row.end_time,
-                "game_turns": row.game_turns,
                 "winning_deck_id": row.winning_deck_id,
                 "winning_player_id": row.winning_player_id
             })
@@ -70,7 +69,6 @@ class game_crud():
             "year": result[0].year,
             "start_time": result[0].start_time,
             "end_time": result[0].end_time,
-            "game_turns": result[0].game_turns,
             "winning_deck_id": result[0].winning_deck_id,
             "winning_player_id": result[0].winning_player_id
         }
@@ -103,7 +101,6 @@ class game_crud():
             year=year,
             start_time=test_game["start_time"],
             end_time=test_game["end_time"],
-            game_turns=None,
             winning_deck_id=None,
             winning_player_id=None
         )
@@ -124,7 +121,6 @@ class game_crud():
             "year": new_game.year,
             "start_time": new_game.start_time,
             "end_time": new_game.end_time,
-            "game_turns": new_game.game_turns,
             "winning_deck_id": new_game.winning_deck_id,
             "winning_player_id": new_game.winning_player_id
         }
@@ -173,7 +169,6 @@ class game_crud():
             "year": result.year,
             "start_time": result.start_time,
             "end_time": result.end_time,
-            "game_turns": result.game_turns,
             "winning_deck_id": result.winning_deck_id,
             "winning_player_id": result.winning_player_id
         }
@@ -195,28 +190,6 @@ class game_crud():
         # create an updated game dict
         updated_game = {
             "game_name": game_name
-        }
-
-        # update the game entry
-        return game_crud.update(game_id=game_id, data=jsonify(updated_game), return_model_object=return_model_object)
-
-    @staticmethod
-    def update_game_turns(game_id, return_model_object = False):
-        # find the game entry to be updated
-        game_object = game_crud.specific("id", game_id, True)
-
-        # get the data we need to generate the name
-        seats = game_crud.get_child_data(game_object[0].id, "seat", True)
-
-        # calculate the game length in turns
-        game_turns = 0
-        for seat in seats:
-            if seat.ko_turn and seat.ko_turn > game_turns:
-                game_turns = seat.ko_turn
-
-        # create an updated game dict
-        updated_game = {
-            "game_turns": game_turns
         }
 
         # update the game entry
