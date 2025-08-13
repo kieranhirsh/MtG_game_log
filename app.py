@@ -330,7 +330,9 @@ def input_edit():
             try:
                 player_to_edit = player_crud.specific('player_name', request.form['player_name'])
             except:
-                return errors.entry_not_found('input.html', [['player', 'player_name', request.form['player_name']]], 'edit')
+                return errors.entry_not_found('input.html',
+                                              [['player', 'player_name', request.form['player_name']]],
+                                              'edit')
 
             new_player_data = {}
             if request.form["new_player_name"]:
@@ -594,16 +596,20 @@ def data_post():
             if colour_identity_data[num_colours][0]["games_played"] == 0:
                 colour_identity_data[num_colours][0]["win_rate"] = 0
             else:
-                colour_identity_data[num_colours][0]["win_rate"] = colour_identity_data[num_colours][0]["games_won"] / colour_identity_data[num_colours][0]["games_played"] * 100
+                colour_identity_data[num_colours][0]["win_rate"] = (colour_identity_data[num_colours][0]["games_won"]
+                                                                    / colour_identity_data[num_colours][0]["games_played"]
+                                                                    * 100)
             if colour_identity_data[num_colours][0]["timed_games"] == 0:
                 colour_identity_data[num_colours][0]["ave_game_time"] = ""
             else:
-                running_ave_game_time = colour_identity_data[num_colours][0]["time_played"] / colour_identity_data[num_colours][0]["timed_games"]
+                running_ave_game_time = (colour_identity_data[num_colours][0]["time_played"]
+                                         / colour_identity_data[num_colours][0]["timed_games"])
                 colour_identity_data[num_colours][0]["ave_game_time"] = str(timedelta(seconds=(running_ave_game_time - (running_ave_game_time % 60))))[:-3]
             if colour_identity_data[num_colours][0]["turned_games"] == 0:
                 colour_identity_data[num_colours][0]["ave_game_turns"] = ""
             else:
-                running_ave_game_turns = colour_identity_data[num_colours][0]["turns_played"] / colour_identity_data[num_colours][0]["turned_games"]
+                running_ave_game_turns = (colour_identity_data[num_colours][0]["turns_played"]
+                                          / colour_identity_data[num_colours][0]["turned_games"])
                 colour_identity_data[num_colours][0]["ave_game_turns"] = f"{running_ave_game_turns:.1f}"
 
             colour_identity_data[num_colours].append({
@@ -685,7 +691,8 @@ def data_post():
 
             if not deck.last_accessed or ((datetime.now() - deck.last_accessed) > timedelta(weeks=1)):
                 try:
-                    edhrec_uri = curl_utils.get_edhrec_uri_from_commander_names([deck.commander_name, deck.partner_name])
+                    edhrec_uri = curl_utils.get_edhrec_uri_from_commander_names([deck.commander_name,
+                                                                                 deck.partner_name])
                     deck.edhrec_decks, deck.popularity = curl_utils.get_popularity_from_edhrec_uri(edhrec_uri)
                     deck_crud.update(deck.id, jsonify({"edhrec_num_decks": deck.edhrec_decks,
                                                         "edhrec_popularity": deck.popularity,
@@ -752,7 +759,9 @@ def data_post():
                 if request.form["requested_deck"]:
                     deck_name, deck_owner_name, query_tree = utils.get_deck_data_from_form_inputs(request.form['requested_deck'])
                     try:
-                        requested_deck = deck_crud.specific(query_tree=query_tree, join_classes=["player"], return_model_object=True)[0]
+                        requested_deck = deck_crud.specific(query_tree=query_tree,
+                                                            join_classes=["player"],
+                                                            return_model_object=True)[0]
                     except:
                         return errors.entry_not_found('data.html', [['deck', 'deck_name', deck_name]])
 
@@ -894,8 +903,14 @@ def graphs():
         number_of_colours = list(plt_data.keys())
         number_of_decks = list(plt_data.values())
 
-        example_bar_chart = bar_charts.make_bar_chart(number_of_colours, number_of_decks, "Number of Colours", "Number of Decks", "Number of Decks per Number of Colours")
-        example_pie_chart = pie_charts.make_pie_chart(number_of_colours, number_of_decks, "Number of Decks per Number of Colours")
+        example_bar_chart = bar_charts.make_bar_chart(number_of_colours,
+                                                      number_of_decks,
+                                                      "Number of Colours",
+                                                      "Number of Decks",
+                                                      "Number of Decks per Number of Colours")
+        example_pie_chart = pie_charts.make_pie_chart(number_of_colours,
+                                                      number_of_decks,
+                                                      "Number of Decks per Number of Colours")
 
         return render_template(
             'graphs.html',
@@ -1026,7 +1041,9 @@ def graphs():
                         if games_played == 0:
                             xy_data[datum_owner] = 0
                         else:
-                            games_won = len(game_crud.specific("winning_player_id", getattr(datum_player_model, "id"), True))
+                            games_won = len(game_crud.specific("winning_player_id",
+                                                               getattr(datum_player_model, "id"),
+                                                               True))
                             xy_data[datum_owner] = games_won/games_played * 100
                 else:
                     call_error = True
