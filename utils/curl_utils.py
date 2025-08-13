@@ -36,8 +36,12 @@ def get_popularity_from_edhrec_uri(edhrec_uri):
             edhrec_response = requests.get(uri).json()
         except:
             raise ValueError("unable to get data from edhrec")
-    label = edhrec_response["container"]["json_dict"]["card"]["label"].split()
-    num_decks = label[0]
-    rank = label[-1][1:]
+    if "container" in edhrec_response:
+        label = edhrec_response["container"]["json_dict"]["card"]["label"].split()
+        num_decks = label[0]
+        rank = label[-1][1:]
+    else:
+        num_decks = None
+        rank = None
 
     return num_decks, rank

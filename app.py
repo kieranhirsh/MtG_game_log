@@ -58,6 +58,7 @@ def input():
             if "status" in response:
                 return errors.card_not_found('input.html', [response["details"]], 'create')
             commander_name = response["name"]
+            commander_colours = response["color_identity"]
 
             # get partner/background id
             if request.form["deck_commander_2"]:
@@ -66,8 +67,10 @@ def input():
                 if "status" in response:
                     return errors.card_not_found('input.html', [response["details"]], 'create')
                 partner_name = response["name"]
+                partner_colours = response["color_identity"]
             else:
                 partner_name = ""
+                partner_colours = []
 
             # get edhrec data
             edhrec_uri = curl_utils.get_edhrec_uri_from_commander_names([commander_name, partner_name])
@@ -94,10 +97,14 @@ def input():
                     deck_name += f" + {companion_name}"
 
             # get the colour identity id
-            colour_identity_data, desired_ci = utils.get_ci_data_from_list_of_colours(request.form.getlist("ci_abbr"))
+            colour_identity_data, _ = utils.get_ci_data_from_list_of_colours(request.form.getlist("ci_abbr"))
             if not colour_identity_data:
-                call_error = True
-                missing_entries.append(["colour_identity", "colours", desired_ci])
+                deck_colours = commander_colours + partner_colours
+                deck_colours = [colour.lower() for colour in deck_colours]
+                colour_identity_data, desired_ci = utils.get_ci_data_from_list_of_colours(deck_colours)
+                if not colour_identity_data:
+                    call_error = True
+                    missing_entries.append(["colour_identity", "colours", desired_ci])
 
             if call_error:
                 return errors.entry_not_found('input.html', missing_entries, 'create')
