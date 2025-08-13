@@ -1248,7 +1248,9 @@ def graphs():
             labels = list(pie_data.keys())
             values = list(pie_data.values())
 
-            plt_graph = pie_charts.make_pie_chart(labels, values, titles[request.form["pie_data"]] + " per " + titles[request.form["pie_divisions"]])
+            plt_graph = pie_charts.make_pie_chart(labels,
+                                                  values,
+                                                  titles[request.form["pie_data"]] + " per " + titles[request.form["pie_divisions"]])
 
         return render_template(
             'graphs.html',
