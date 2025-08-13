@@ -104,6 +104,9 @@
       <input type="checkbox" id="ci_win_rate" checked onclick="toggleColumn('ci_win_rate')">Win Rate
     </label>
     <label>
+      <input type="checkbox" id="ci_ave_game_turns" checked onclick="toggleColumn('ci_ave_game_turns')">Ave Game Length
+    </label>
+    <label>
       <input type="checkbox" id="ci_ave_game_time" checked onclick="toggleColumn('ci_ave_game_time')">Ave Game Time
     </label>
   </div>
@@ -117,7 +120,8 @@
         <th onclick="sortColourTables(2)" class="ci_games_played">Games Played</th>
         <th onclick="sortColourTables(3)" class="ci_wins">Games Won</th>
         <th onclick="sortColourTables(4)" class="ci_win_rate">Win Rate</th>
-        <th onclick="sortColourTables(5)" class="ci_ave_game_time">Ave Game Time</th>
+        <th onclick="sortColourTables(5)" class="ci_ave_game_turns">Ave Game Length</th>
+        <th onclick="sortColourTables(6)" class="ci_ave_game_time">Ave Game Time</th>
       </tr>
       {% for colour_identity in colour_identity_group_by_num_colours %}
       <tr>
@@ -145,6 +149,11 @@
           {% if colour_identity.colours == "skip" %}</b>{% endif %}
         </td>
         <td class="ci_win_rate">{% if colour_identity.colours == "skip" %}<b>{% endif %}{{ '%0.2f'|format(colour_identity.win_rate) }}%{% if colour_identity.colours == "skip" %}</b>{% endif %}</td>
+        <td class="ci_ave_game_turns">
+          {% if colour_identity.colours == "skip" %}<b>{% endif %}
+          {{ colour_identity.ave_game_turns }}
+          {% if colour_identity.colours == "skip" %}</b>{% endif %}
+        </td>
         <td class="ci_ave_game_time">
           {% if colour_identity.colours == "skip" %}<b>{% endif %}
           {{ colour_identity.ave_game_time }}

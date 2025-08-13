@@ -418,7 +418,10 @@ def data_post():
                 "win_rate": 0,
                 "time_played": 0,
                 "timed_games": 0,
-                "ave_game_time": 0
+                "turns_played": 0,
+                "turned_games": 0,
+                "ave_game_time": 0,
+                "ave_game_turns": 0
             }],
             [{
                 "ci_name": "1 colour",
@@ -429,7 +432,10 @@ def data_post():
                 "win_rate": 0,
                 "time_played": 0,
                 "timed_games": 0,
-                "ave_game_time": 0
+                "turns_played": 0,
+                "turned_games": 0,
+                "ave_game_time": 0,
+                "ave_game_turns": 0
             }],
             [{
                 "ci_name": "2 colours",
@@ -440,7 +446,10 @@ def data_post():
                 "win_rate": 0,
                 "time_played": 0,
                 "timed_games": 0,
-                "ave_game_time": 0
+                "turns_played": 0,
+                "turned_games": 0,
+                "ave_game_time": 0,
+                "ave_game_turns": 0
             }],
             [{
                 "ci_name": "3 colours",
@@ -451,7 +460,10 @@ def data_post():
                 "win_rate": 0,
                 "time_played": 0,
                 "timed_games": 0,
-                "ave_game_time": 0
+                "turns_played": 0,
+                "turned_games": 0,
+                "ave_game_time": 0,
+                "ave_game_turns": 0
             }],
             [{
                 "ci_name": "4 colours",
@@ -462,7 +474,10 @@ def data_post():
                 "win_rate": 0,
                 "time_played": 0,
                 "timed_games": 0,
-                "ave_game_time": 0
+                "turns_played": 0,
+                "turned_games": 0,
+                "ave_game_time": 0,
+                "ave_game_turns": 0
             }],
             [{
                 "ci_name": "5 colours",
@@ -473,7 +488,10 @@ def data_post():
                 "win_rate": 0,
                 "time_played": 0,
                 "timed_games": 0,
-                "ave_game_time": 0
+                "turns_played": 0,
+                "turned_games": 0,
+                "ave_game_time": 0,
+                "ave_game_turns": 0
             }]
         ]
 
@@ -509,20 +527,26 @@ def data_post():
             games_won = 0
             time_played = 0
             timed_games = 0
+            turns_played = 0
+            turned_games = 0
             # find the number of games played and win rate
             for deck in colour_identity_decks:
                 # initialise some values
                 game_times = []
+                game_turns = []
 
                 # find all games played by the deck
                 for seat in deck_crud.get_child_data(deck.id, "seat", True):
                     # get the time taken for each of those games
                     _, game_seconds = derived_quantities.game_length_in_time(seat.game)
                     game_times.append(game_seconds)
+                    game_turns.append(derived_quantities.game_length_in_turns(seat.game))
 
                 # add the total time and number of timed games to the running tally
                 time_played += sum(game_times)
                 timed_games += len(game_times)
+                turns_played += sum(game_turns)
+                turned_games += len(game_turns)
 
                 # number of games played is the number of child seats
                 games_played += len(deck_crud.get_child_data(deck.id, "seat", True))
@@ -535,12 +559,19 @@ def data_post():
             else:
                 win_rate = games_won / games_played * 100
 
-            # same goes for timed games and average game length
+            # same goes for timed games
             if timed_games == 0:
                 ave_game_time = ""
             else:
                 ave_time = time_played / timed_games
                 ave_game_time = str(timedelta(seconds=(ave_time - (ave_time % 60))))[:-3]
+
+            # and average game length
+            if turned_games == 0:
+                ave_game_turns = ""
+            else:
+                ave_game_turns = turns_played / turned_games
+                ave_game_turns = f"{ave_game_turns:.1f}"
 
             # find the number of colours of the given colour identity
             num_colours = colour_identity.num_colours
@@ -550,7 +581,9 @@ def data_post():
             colour_identity_data[num_colours][0]["games_played"] += games_played
             colour_identity_data[num_colours][0]["games_won"] += games_won
             colour_identity_data[num_colours][0]["time_played"] += time_played
+            colour_identity_data[num_colours][0]["turns_played"] += turns_played
             colour_identity_data[num_colours][0]["timed_games"] += timed_games
+            colour_identity_data[num_colours][0]["turned_games"] += turned_games
             if colour_identity_data[num_colours][0]["games_played"] == 0:
                 colour_identity_data[num_colours][0]["win_rate"] = 0
             else:
@@ -560,6 +593,11 @@ def data_post():
             else:
                 running_ave_game_time = colour_identity_data[num_colours][0]["time_played"] / colour_identity_data[num_colours][0]["timed_games"]
                 colour_identity_data[num_colours][0]["ave_game_time"] = str(timedelta(seconds=(running_ave_game_time - (running_ave_game_time % 60))))[:-3]
+            if colour_identity_data[num_colours][0]["turned_games"] == 0:
+                colour_identity_data[num_colours][0]["ave_game_turns"] = ""
+            else:
+                running_ave_game_turns = colour_identity_data[num_colours][0]["turns_played"] / colour_identity_data[num_colours][0]["turned_games"]
+                colour_identity_data[num_colours][0]["ave_game_turns"] = f"{running_ave_game_turns:.1f}"
 
             colour_identity_data[num_colours].append({
                 "ci_name": colour_identity.ci_name,
@@ -569,7 +607,8 @@ def data_post():
                 "games_played": games_played,
                 "games_won": games_won,
                 "win_rate": win_rate,
-                "ave_game_time": ave_game_time
+                "ave_game_time": ave_game_time,
+                "ave_game_turns": ave_game_turns
             })
 
         # Prepare data to pass to the template
