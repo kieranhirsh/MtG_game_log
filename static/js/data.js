@@ -67,7 +67,8 @@ function sortTable(n) {
     header === "Game Length (Turns)" ||
     header === "Ave Game Length" ||
     header === "Ave Game Time" ||
-    header === "# EDHrec Decks"
+    header === "# EDHrec Decks" ||
+    header === "Ave # EDHrec Decks"
   ) {
     dir = "desc";
   } else {
@@ -110,7 +111,8 @@ function sortTable(n) {
           header === "Ave Game Length" ||
           header === "Game Length (Turns)" ||
           header === "# EDHrec Decks" ||
-          header === "Popularity"
+          header === "Popularity" ||
+          header === "Ave # EDHrec Decks"
         ) {
           if (parseFloat(x.innerHTML) > parseFloat(y.innerHTML) || parseFloat(x.innerHTML) == 0 || isNaN(parseFloat(x.innerHTML))) {
             // If we want to switch, mark as a switch and break the loop:
@@ -134,7 +136,8 @@ function sortTable(n) {
           header === "Game Length (Turns)" ||
           header === "Ave Game Length" ||
           header === "# EDHrec Decks" ||
-          header === "Popularity"
+          header === "Popularity" ||
+          header === "Ave # EDHrec Decks"
         ) {
           if (isNaN(parseFloat(y.innerHTML))) {
             // skip this case
@@ -216,7 +219,8 @@ function sortColourTables(col) {
       header === "Games Won" ||
       header === "Win Rate" ||
       header === "Ave Game Length" ||
-      header === "Ave Game Time"
+      header === "Ave Game Time" ||
+      header === "Ave # EDHrec Decks"
     ) {
       dir = "desc";
     } else {
@@ -257,7 +261,8 @@ function sortColourTables(col) {
             header === "Games Played" ||
             header === "Games Won" ||
             header === "Win Rate" ||
-            header === "Ave Game Length"
+            header === "Ave Game Length" ||
+            header === "Ave # EDHrec Decks"
           ) {
             if (parseFloat(x.innerHTML) > parseFloat(y.innerHTML) || parseFloat(x.innerHTML) == 0) {
               // If we want to switch, mark as a switch and break the loop:
@@ -278,7 +283,8 @@ function sortColourTables(col) {
             header === "Games Played" ||
             header === "Games Won" ||
             header === "Win Rate" ||
-            header === "Ave Game Length"
+            header === "Ave Game Length" ||
+            header === "Ave # EDHrec Decks"
           ) {
             if (isNaN(parseFloat(y.innerHTML))) {
               // skip this case

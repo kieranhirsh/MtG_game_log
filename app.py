@@ -804,6 +804,7 @@ def data_post():
             decks_to_remove = []
             game_times = []
             game_turns = []
+            num_edhrec_deck = []
 
             # if we have a restriction on the colour identity name
             if request.form.getlist("ci_abbr"):
@@ -871,7 +872,19 @@ def data_post():
             # find the number of decks the given player owns
             player.num_decks = len(player_decks)
 
-            # and finally, append all the relevant data that has been requested
+            # find the edhrec data for each relevant deck player owns
+            for player_deck in player_decks:
+                if player_deck.edhrec_num_decks:
+                    num_edhrec_deck.append(player_deck.edhrec_num_decks)
+
+            # if a deck has no edhrec data we need to set the average number of
+            # decks manually to avoid divide by zero errors
+            if len(num_edhrec_deck) == 0:
+                player.ave_edhrec_decks = 0
+            else:
+                player.ave_edhrec_decks = sum(num_edhrec_deck) / len(num_edhrec_deck)
+
+            # finally, append all the relevant data that has been requested
             if player.num_decks != 0:
                 player_data.append(player)
 
