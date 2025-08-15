@@ -57,4 +57,3 @@ class Base_crud():
                 i += 1
 
         return output
-

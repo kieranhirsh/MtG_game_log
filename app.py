@@ -1,7 +1,7 @@
 import importlib
 import time
-from flask import Flask, render_template, request, jsonify
 from datetime import datetime, timedelta
+from flask import Flask, render_template, request, jsonify
 import requests
 from api.v1 import api_routes
 from data import storage
@@ -33,7 +33,7 @@ def hack():
     return render_template('hack.html')
 
 @app.route('/input', methods=['GET', 'POST'])
-def input():
+def input_add():
     """ Data is inputted here """
     if request.method == 'POST':
         # First add the new item to the database
@@ -171,7 +171,6 @@ def input():
             # so it's easiet to wait until all inputs were added to the database
             # but really they want to be removed from the db completely
             game_crud.update_game_name(new_game_object["id"])
-            game_crud.update_game_turns(new_game_object["id"])
             game_crud.update_game_winner(new_game_object["id"])
         elif input_type == "player":
             new_player = {
@@ -324,7 +323,6 @@ def input_edit():
                     seat_crud.update(seat_to_edit["id"], jsonify(new_seat_data))
 
             game_crud.update_game_name(game_to_edit["id"])
-            game_crud.update_game_turns(game_to_edit["id"])
             game_crud.update_game_winner(game_to_edit["id"])
         elif input_type == "player":
             try:
@@ -650,7 +648,7 @@ def data_post():
                 elif form_item == "ci_abbr":
                     colour_identity_data, desired_ci = utils.get_ci_data_from_list_of_colours(request.form.getlist("ci_abbr"))
                     if not colour_identity_data:
-                        return errors.entry_not_found(["colour_identity", "colours", desired_ci])
+                        return errors.entry_not_found('data.html', [["colour_identity", "colours", desired_ci]])
                     restriction_key = "ci_name"
                     restriction_value = colour_identity_data[0].ci_name
 
@@ -1222,11 +1220,11 @@ def graphs():
                     pie_data[datum_ci_name] += 1
             elif request.form["pie_divisions"] == "number of colours":
                 for ii in list(range(0,6)):
-                    pie_data.update({"%s colours" % ii: 0})
+                    pie_data.update({f"{ii} colours": 0})
 
                 for datum in data:
                     datum_num_colours = datum.colour_identity.num_colours
-                    pie_data["%s colours" % datum_num_colours] += 1
+                    pie_data[f"{datum_num_colours} colours"] += 1
             elif request.form["pie_divisions"] == "owner":
                 players = player_crud.all(True)
 
