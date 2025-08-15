@@ -805,24 +805,6 @@ def data_post():
             game_times = []
             game_turns = []
 
-            # find all games played by the player
-            for seat in player_crud.get_child_data(player.id, "seat", True):
-                # get the length of the game
-                game_turns.append(derived_quantities.game_length_in_turns(seat.game))
-                # get the time taken for each of those games
-                _, game_seconds = derived_quantities.game_length_in_time(seat.game)
-                if game_seconds:
-                    game_times.append(game_seconds)
-
-            # and calculate the average time of all of those games
-            if len(game_times) > 0:
-                ave_time = sum(game_times) / len(game_times)
-                player.ave_game_time = str(timedelta(seconds=(ave_time - (ave_time % 60))))[0:-3]
-                player.ave_game_turns = f"{(sum(game_turns) / len(game_turns)):.1f}"
-            else:
-                player.ave_game_time = ""
-                player.ave_game_turns = ""
-
             # if we have a restriction on the colour identity name
             if request.form.getlist("ci_abbr"):
                 colour_identity_data, desired_ci = utils.get_ci_data_from_list_of_colours(request.form.getlist("ci_abbr"))
@@ -847,11 +829,38 @@ def data_post():
                 for player_deck in player_decks:
                     # find number of games played and number of games won
                     player.games_played += len(deck_crud.get_child_data(player_deck.id, "seat", True))
-                    player.num_games_won += len(game_crud.specific("winning_player_id", player_deck.id, True))
+                    player.num_games_won += len(game_crud.specific("winning_deck_id", player_deck.id, True))
+
+                    # find all games played by the deck
+                    for seat in deck_crud.get_child_data(player_deck.id, "seat", True):
+                        # get the length of the game
+                        game_turns.append(derived_quantities.game_length_in_turns(seat.game))
+                        # get the time taken for each of those games
+                        _, game_seconds = derived_quantities.game_length_in_time(seat.game)
+                        if game_seconds:
+                            game_times.append(game_seconds)
             else:
                 # find number of games played and number of games won
                 player.games_played = len(player_crud.get_child_data(player.id, "seat", True))
                 player.num_games_won = len(game_crud.specific("winning_player_id", player.id, True))
+
+                # find all games played by the player
+                for seat in player_crud.get_child_data(player.id, "seat", True):
+                    # get the length of the game
+                    game_turns.append(derived_quantities.game_length_in_turns(seat.game))
+                    # get the time taken for each of those games
+                    _, game_seconds = derived_quantities.game_length_in_time(seat.game)
+                    if game_seconds:
+                        game_times.append(game_seconds)
+
+            # and calculate the average time of all of those games
+            if len(game_times) > 0:
+                ave_time = sum(game_times) / len(game_times)
+                player.ave_game_time = str(timedelta(seconds=(ave_time - (ave_time % 60))))[0:-3]
+                player.ave_game_turns = f"{(sum(game_turns) / len(game_turns)):.1f}"
+            else:
+                player.ave_game_time = ""
+                player.ave_game_turns = ""
 
             # if they've played no games we need to set the win rate manually to avoid divide by zero errors
             if player.games_played == 0:
