@@ -5,11 +5,13 @@ import re
 class game_validator():
     def is_valid(new_game):
         # check all inputs are valid
-        game_validator.valid_time(new_game["start_time"])
-        game_validator.valid_time(new_game["end_time"])
+        if new_game["start_time"]:
+            game_validator.valid_time(new_game["start_time"])
+        if new_game["end_time"]:
+            game_validator.valid_time(new_game["end_time"])
 
         # ensure that end time is after start time
-        if str(new_game["start_time"]) > str(new_game["end_time"]):
+        if new_game["start_time"] and new_game["end_time"] and str(new_game["start_time"]) > str(new_game["end_time"]):
             raise ValueError("Invalid game start and end time specified (game must start before it ends): {} {}".format(new_game["start_time"], new_game["end_time"]))
 
         # if all checks are passed, we're good to go

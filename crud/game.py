@@ -95,6 +95,11 @@ class game_crud():
         test_game["year"] = year
         game_validator.is_valid(test_game)
 
+        if not test_game["start_time"]:
+            test_game["start_time"] = None
+        if not test_game["end_time"]:
+            test_game["end_time"] = None
+
         new_game = game(
             game_name=test_game["game_name"],
             month=month_dict[month_num],

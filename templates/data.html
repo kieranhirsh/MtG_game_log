@@ -292,7 +292,7 @@
       <tr>
         <td class="game_date">{{ (game.start_time|string)[0:10] }}</td>
         <td class="game_start">{{ (game.start_time|string)[11:16] }}</td>
-        <td class="game_time">{{ game.game_time[:-3] }}</td>
+        <td class="game_time">{% if game.game_time %}{{ game.game_time[:-3] }}{% endif %}</td>
         <td class="game_turns">{{ game.game_turns }}</td>
         <td class="game_winner">{{ game.winner }}</td>
         {% for j in range(data["num_seats"]) %}
