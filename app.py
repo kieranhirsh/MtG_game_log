@@ -415,92 +415,27 @@ def data_post():
 
     # this desperately wants to be a select case, but I'm using Python 3.8 :(
     if request.form["type"] == "colour_identity":
-        colour_identity_data = [
-            [{
-                "ci_name": "0 colours",
-                "colours": "skip",
-                "number_of_decks": 0,
-                "games_played": 0,
-                "games_won": 0,
-                "win_rate": 0,
-                "time_played": 0,
-                "timed_games": 0,
-                "turns_played": 0,
-                "turned_games": 0,
-                "ave_game_time": 0,
-                "ave_game_turns": 0
-            }],
-            [{
-                "ci_name": "1 colour",
-                "colours": "skip",
-                "number_of_decks": 0,
-                "games_played": 0,
-                "games_won": 0,
-                "win_rate": 0,
-                "time_played": 0,
-                "timed_games": 0,
-                "turns_played": 0,
-                "turned_games": 0,
-                "ave_game_time": 0,
-                "ave_game_turns": 0
-            }],
-            [{
-                "ci_name": "2 colours",
-                "colours": "skip",
-                "number_of_decks": 0,
-                "games_played": 0,
-                "games_won": 0,
-                "win_rate": 0,
-                "time_played": 0,
-                "timed_games": 0,
-                "turns_played": 0,
-                "turned_games": 0,
-                "ave_game_time": 0,
-                "ave_game_turns": 0
-            }],
-            [{
-                "ci_name": "3 colours",
-                "colours": "skip",
-                "number_of_decks": 0,
-                "games_played": 0,
-                "games_won": 0,
-                "win_rate": 0,
-                "time_played": 0,
-                "timed_games": 0,
-                "turns_played": 0,
-                "turned_games": 0,
-                "ave_game_time": 0,
-                "ave_game_turns": 0
-            }],
-            [{
-                "ci_name": "4 colours",
-                "colours": "skip",
-                "number_of_decks": 0,
-                "games_played": 0,
-                "games_won": 0,
-                "win_rate": 0,
-                "time_played": 0,
-                "timed_games": 0,
-                "turns_played": 0,
-                "turned_games": 0,
-                "ave_game_time": 0,
-                "ave_game_turns": 0
-            }],
-            [{
-                "ci_name": "5 colours",
-                "colours": "skip",
-                "number_of_decks": 0,
-                "games_played": 0,
-                "games_won": 0,
-                "win_rate": 0,
-                "time_played": 0,
-                "timed_games": 0,
-                "turns_played": 0,
-                "turned_games": 0,
-                "ave_game_time": 0,
-                "ave_game_turns": 0
-            }]
-        ]
+        colour_identity_data = []
+        for i in range(6):
+            if i == 1:
+                colours = "colour"
+            else:
+                colours = "colours"
+            colour_identity_data.append(
+                [{
+                    "ci_name": f"{i} {colours}",
+                    "colours": "skip",
+                    "number_of_decks": 0,
+                    "games_played": 0,
+                    "games_won": 0,
+                    "win_rate": 0,
+                    "time_played": 0,
+                    "timed_games": 0,
+                    "turns_played": 0,
+                    "turned_games": 0,
+                    "ave_game_time": 0,
+                    "ave_game_turns": 0
+                }])
 
         # loop over all colour identities
         for colour_identity in colour_identities:
@@ -546,7 +481,8 @@ def data_post():
                 for seat in deck_crud.get_child_data(deck.id, "seat", True):
                     # get the time taken for each of those games
                     _, game_seconds = derived_quantities.game_length_in_time(seat.game)
-                    game_times.append(game_seconds)
+                    if game_seconds:
+                        game_times.append(game_seconds)
                     game_turns.append(derived_quantities.game_length_in_turns(seat.game))
 
                 # add the total time and number of timed games to the running tally
