@@ -434,7 +434,10 @@ def data_post():
                     "turns_played": 0,
                     "turned_games": 0,
                     "ave_game_time": 0,
-                    "ave_game_turns": 0
+                    "ave_game_turns": 0,
+                    "ave_edhrec_decks": 0,
+                    "num_edhrec_data": 0,
+                    "total_edhrec_decks": 0
                 }])
 
         # loop over all colour identities
@@ -471,11 +474,16 @@ def data_post():
             timed_games = 0
             turns_played = 0
             turned_games = 0
+            num_edhrec_deck = []
             # find the number of games played and win rate
             for deck in colour_identity_decks:
                 # initialise some values
                 game_times = []
                 game_turns = []
+
+                # find the edhrec data for each relevant deck player owns
+                if deck.edhrec_num_decks:
+                    num_edhrec_deck.append(deck.edhrec_num_decks)
 
                 # find all games played by the deck
                 for seat in deck_crud.get_child_data(deck.id, "seat", True):
@@ -516,6 +524,13 @@ def data_post():
                 ave_game_turns = turns_played / turned_games
                 ave_game_turns = f"{ave_game_turns:.1f}"
 
+            # if there's no edhrec data we need to set the average number of
+            # decks manually to avoid divide by zero errors
+            if len(num_edhrec_deck) == 0:
+                ave_edhrec_decks = 0
+            else:
+                ave_edhrec_decks = sum(num_edhrec_deck) / len(num_edhrec_deck)
+
             # find the number of colours of the given colour identity
             num_colours = colour_identity.num_colours
 
@@ -523,28 +538,36 @@ def data_post():
             colour_identity_data[num_colours][0]["number_of_decks"] += num_decks
             colour_identity_data[num_colours][0]["games_played"] += games_played
             colour_identity_data[num_colours][0]["games_won"] += games_won
-            colour_identity_data[num_colours][0]["time_played"] += time_played
-            colour_identity_data[num_colours][0]["turns_played"] += turns_played
-            colour_identity_data[num_colours][0]["timed_games"] += timed_games
-            colour_identity_data[num_colours][0]["turned_games"] += turned_games
             if colour_identity_data[num_colours][0]["games_played"] == 0:
                 colour_identity_data[num_colours][0]["win_rate"] = 0
             else:
                 colour_identity_data[num_colours][0]["win_rate"] = (colour_identity_data[num_colours][0]["games_won"]
                                                                     / colour_identity_data[num_colours][0]["games_played"]
                                                                     * 100)
+            colour_identity_data[num_colours][0]["timed_games"] += timed_games
+            colour_identity_data[num_colours][0]["time_played"] += time_played
             if colour_identity_data[num_colours][0]["timed_games"] == 0:
                 colour_identity_data[num_colours][0]["ave_game_time"] = ""
             else:
                 running_ave_game_time = (colour_identity_data[num_colours][0]["time_played"]
                                          / colour_identity_data[num_colours][0]["timed_games"])
                 colour_identity_data[num_colours][0]["ave_game_time"] = str(timedelta(seconds=(running_ave_game_time - (running_ave_game_time % 60))))[:-3]
+            colour_identity_data[num_colours][0]["turns_played"] += turns_played
+            colour_identity_data[num_colours][0]["turned_games"] += turned_games
             if colour_identity_data[num_colours][0]["turned_games"] == 0:
                 colour_identity_data[num_colours][0]["ave_game_turns"] = ""
             else:
                 running_ave_game_turns = (colour_identity_data[num_colours][0]["turns_played"]
                                           / colour_identity_data[num_colours][0]["turned_games"])
                 colour_identity_data[num_colours][0]["ave_game_turns"] = f"{running_ave_game_turns:.1f}"
+            colour_identity_data[num_colours][0]["num_edhrec_data"] += len(num_edhrec_deck)
+            colour_identity_data[num_colours][0]["total_edhrec_decks"] += sum(num_edhrec_deck)
+            if colour_identity_data[num_colours][0]["num_edhrec_data"] == 0:
+                colour_identity_data[num_colours][0]["ave_edhrec_decks"] = ""
+            else:
+                running_ave_edhrec_decks = (colour_identity_data[num_colours][0]["total_edhrec_decks"]
+                                          / colour_identity_data[num_colours][0]["num_edhrec_data"])
+                colour_identity_data[num_colours][0]["ave_edhrec_decks"] = running_ave_edhrec_decks
 
             colour_identity_data[num_colours].append({
                 "ci_name": colour_identity.ci_name,
@@ -555,7 +578,8 @@ def data_post():
                 "games_won": games_won,
                 "win_rate": win_rate,
                 "ave_game_time": ave_game_time,
-                "ave_game_turns": ave_game_turns
+                "ave_game_turns": ave_game_turns,
+                "ave_edhrec_decks": ave_edhrec_decks
             })
 
         # Prepare data to pass to the template
