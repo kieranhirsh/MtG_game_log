@@ -1,23 +1,18 @@
 """ game model """
-from sqlalchemy import Column, String, Integer, DateTime, ForeignKey
+from sqlalchemy import Column, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from data import Base
 from models.base_model import constructor
 
 class game(Base):
     """ Representation of game """
-    all_attribs = ["id", "game_name", "month", "year", "start_time",
-                   "end_time", "winning_deck_id","winning_player_id"]
-    can_init    = ["game_name", "month", "year", "start_time", "end_time",
-                   "winning_deck_id", "winning_player_id"]
-    can_update  = ["game_name", "month", "year", "start_time", "end_time",
-                   "winning_deck_id", "winning_player_id"]
+    all_attribs = ["id", "game_name", "start_time", "end_time", "winning_deck_id", "winning_player_id"]
+    can_init    = ["game_name", "start_time", "end_time", "winning_deck_id", "winning_player_id"]
+    can_update  = ["game_name", "start_time", "end_time", "winning_deck_id", "winning_player_id"]
 
     # Class attributes defaults
     __tablename__     = 'games'
     id                = Column(String(64), nullable=False, primary_key=True)
-    month             = Column("month", String(16))
-    year              = Column("year", Integer)
     game_name         = Column("game_name", String(1024))
     start_time        = Column("start_time", DateTime, nullable=True)
     end_time          = Column("end_time", DateTime, nullable=True)

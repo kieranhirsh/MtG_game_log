@@ -15,3 +15,7 @@ def game_length_in_turns(game):
             turns = seat.ko_turn
 
     return turns
+
+# game.start_time.strftime('%A') <- gets the day of the week
+# game.start_time.strftime('%B') <- gets the month
+# game.start_time.strftime('%Y') <- gets the year
