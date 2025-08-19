@@ -436,9 +436,12 @@ def data_post():
                     "ave_game_time": 0,
                     "ave_game_turns": 0,
                     "ave_edhrec_decks": 0,
+                    "ave_edhrec_ranking": 0,
                     "num_edhrec_data": 0,
                     "total_edhrec_decks": 0
                 }])
+        edhrec_all_cmdrs_response = requests.get("https://json.edhrec.com/pages/commanders/year.json").json()
+        popularity_list = edhrec_all_cmdrs_response["container"]["json_dict"]["cardlists"][0]["cardviews"]
 
         # loop over all colour identities
         for colour_identity in colour_identities:
@@ -528,13 +531,22 @@ def data_post():
             # decks manually to avoid divide by zero errors
             if len(num_edhrec_deck) == 0:
                 ave_edhrec_decks = 0
+                ave_edhrec_ranking = ""
             else:
                 ave_edhrec_decks = sum(num_edhrec_deck) / len(num_edhrec_deck)
+                # find the ranking that the colour identity's average deck would have on EDHrec
+                for rank in range(len(popularity_list)):
+                    if ave_edhrec_decks > popularity_list[rank]["num_decks"]:
+                        ave_edhrec_ranking = f"#{rank + 1}"
+                        break
+                    if rank == len(popularity_list) - 1:
+                        ave_edhrec_ranking = "#100+"
 
             # find the number of colours of the given colour identity
             num_colours = colour_identity.num_colours
 
             # add all the relevant data that has been requested
+            # this handles the data binned by number of colours
             colour_identity_data[num_colours][0]["number_of_decks"] += num_decks
             colour_identity_data[num_colours][0]["games_played"] += games_played
             colour_identity_data[num_colours][0]["games_won"] += games_won
@@ -564,11 +576,19 @@ def data_post():
             colour_identity_data[num_colours][0]["total_edhrec_decks"] += sum(num_edhrec_deck)
             if colour_identity_data[num_colours][0]["num_edhrec_data"] == 0:
                 colour_identity_data[num_colours][0]["ave_edhrec_decks"] = ""
+                colour_identity_data[num_colours][0]["ave_edhrec_ranking"] = ""
             else:
                 running_ave_edhrec_decks = (colour_identity_data[num_colours][0]["total_edhrec_decks"]
                                           / colour_identity_data[num_colours][0]["num_edhrec_data"])
                 colour_identity_data[num_colours][0]["ave_edhrec_decks"] = running_ave_edhrec_decks
+                for rank in range(len(popularity_list)):
+                    if colour_identity_data[num_colours][0]["ave_edhrec_decks"] > popularity_list[rank]["num_decks"]:
+                        colour_identity_data[num_colours][0]["ave_edhrec_ranking"] = f"#{rank + 1}"
+                        break
+                    if rank == len(popularity_list) - 1:
+                        colour_identity_data[num_colours][0]["ave_edhrec_ranking"] = "#100+"
 
+            # this handles the data for the specific colour identity
             colour_identity_data[num_colours].append({
                 "ci_name": colour_identity.ci_name,
                 "colours": colour_identity.colours,
@@ -579,7 +599,8 @@ def data_post():
                 "win_rate": win_rate,
                 "ave_game_time": ave_game_time,
                 "ave_game_turns": ave_game_turns,
-                "ave_edhrec_decks": ave_edhrec_decks
+                "ave_edhrec_decks": ave_edhrec_decks,
+                "ave_edhrec_ranking": ave_edhrec_ranking
             })
 
         # Prepare data to pass to the template
@@ -756,7 +777,6 @@ def data_post():
         return render_template('data.html', data_type="game", data=html_data)
     elif request.form["type"] == "player":
         player_data = []
-
         edhrec_all_cmdrs_response = requests.get("https://json.edhrec.com/pages/commanders/year.json").json()
         popularity_list = edhrec_all_cmdrs_response["container"]["json_dict"]["cardlists"][0]["cardviews"]
 
