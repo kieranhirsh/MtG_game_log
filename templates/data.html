@@ -340,6 +340,9 @@
     <label>
       <input type="checkbox" id="player_ave_edhrec_decks" checked onclick="toggleColumn('player_ave_edhrec_decks')">Ave # EDHrec Decks
     </label>
+    <label>
+      <input type="checkbox" id="player_ave_edhrec_ranking" checked onclick="toggleColumn('player_ave_edhrec_ranking')">Ave EDHrec Popularity
+    </label>
   </div>
   <!-- data table-->
   <div id="data_tables">
@@ -353,6 +356,7 @@
         <th onclick="sortTable(5)" class="player_ave_game_turns">Ave Game Length</th>
         <th onclick="sortTable(6)" class="player_ave_game_time">Ave Game Time</th>
         <th onclick="sortTable(7)" class="player_ave_edhrec_decks">Ave # EDHrec Decks</th>
+        <th onclick="sortTable(7)" class="player_ave_edhrec_ranking">Ave EDHrec Popularity</th>
       </tr>
       {% for player in data["players"] %}
       <tr>
@@ -364,6 +368,7 @@
         <td class="player_ave_game_turns">{{ player.ave_game_turns }}</td>
         <td class="player_ave_game_time">{{ player.ave_game_time }}</td>
         <td class="player_ave_edhrec_decks">{{ '%0.1f'|format(player.ave_edhrec_decks) }}</td>
+        <td class="player_ave_edhrec_ranking">{{ player.ave_edhrec_ranking }}</td>
       </tr>
       {% endfor %}
     </table>

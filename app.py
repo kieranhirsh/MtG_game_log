@@ -757,6 +757,9 @@ def data_post():
     elif request.form["type"] == "player":
         player_data = []
 
+        edhrec_all_cmdrs_response = requests.get("https://json.edhrec.com/pages/commanders/year.json").json()
+        popularity_list = edhrec_all_cmdrs_response["container"]["json_dict"]["cardlists"][0]["cardviews"]
+
         # loop over all players
         for player in players:
             # find all decks owned by the player
@@ -843,6 +846,15 @@ def data_post():
                 player.ave_edhrec_decks = 0
             else:
                 player.ave_edhrec_decks = sum(num_edhrec_deck) / len(num_edhrec_deck)
+
+            # find the ranking that the player's average deck would have on EDHrec
+            for rank in range(len(popularity_list)):
+                if player.ave_edhrec_decks > popularity_list[rank]["num_decks"]:
+                    player.ave_edhrec_ranking = f"#{rank + 1}"
+                    break
+
+                if rank == len(popularity_list) - 1:
+                    player.ave_edhrec_ranking = "#100+"
 
             # finally, append all the relevant data that has been requested
             if player.num_decks != 0:
