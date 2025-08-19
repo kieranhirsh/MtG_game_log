@@ -537,7 +537,7 @@ def data_post():
                 # find the ranking that the colour identity's average deck would have on EDHrec
                 for rank in range(len(popularity_list)):
                     if ave_edhrec_decks > popularity_list[rank]["num_decks"]:
-                        ave_edhrec_ranking = f"#{rank + 1}"
+                        ave_edhrec_ranking = f"#{rank + 1} ({popularity_list[rank]['name']})"
                         break
                     if rank == len(popularity_list) - 1:
                         ave_edhrec_ranking = "#100+"
@@ -870,7 +870,7 @@ def data_post():
             # find the ranking that the player's average deck would have on EDHrec
             for rank in range(len(popularity_list)):
                 if player.ave_edhrec_decks > popularity_list[rank]["num_decks"]:
-                    player.ave_edhrec_ranking = f"#{rank + 1}"
+                    player.ave_edhrec_ranking = f"#{rank + 1} ({popularity_list[rank]['name']})"
                     break
 
                 if rank == len(popularity_list) - 1:
