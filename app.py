@@ -415,6 +415,7 @@ def data_post():
 
     # this desperately wants to be a select case, but I'm using Python 3.8 :(
     if request.form["type"] == "colour_identity":
+        # initialise values
         colour_identity_data = []
         for i in range(6):
             if i == 1:
@@ -440,8 +441,16 @@ def data_post():
                     "num_edhrec_data": 0,
                     "total_edhrec_decks": 0
                 }])
+
+        # generate the full list of edhrec deck data
+        min_edhrec_decks = min([deck.edhrec_num_decks for deck in decks if deck.edhrec_num_decks])
+        page = 1
         edhrec_all_cmdrs_response = requests.get("https://json.edhrec.com/pages/commanders/year.json").json()
         popularity_list = edhrec_all_cmdrs_response["container"]["json_dict"]["cardlists"][0]["cardviews"]
+        while popularity_list[-1]["num_decks"] > min_edhrec_decks:
+            edhrec_all_cmdrs_response = requests.get(f"https://json.edhrec.com/pages/commanders/year-past2years-{page}.json").json()
+            popularity_list += edhrec_all_cmdrs_response["cardviews"]
+            page += 1
 
         # loop over all colour identities
         for colour_identity in colour_identities:
@@ -534,13 +543,11 @@ def data_post():
                 ave_edhrec_ranking = ""
             else:
                 ave_edhrec_decks = sum(num_edhrec_deck) / len(num_edhrec_deck)
-                # find the ranking that the colour identity's average deck would have on EDHrec
-                for rank in range(len(popularity_list)):
-                    if ave_edhrec_decks > popularity_list[rank]["num_decks"]:
-                        ave_edhrec_ranking = f"#{rank + 1} ({popularity_list[rank]['name']})"
-                        break
-                    if rank == len(popularity_list) - 1:
-                        ave_edhrec_ranking = "#100+"
+                # find the ranking that the player's average deck would have on EDHrec
+                rank = 0
+                while ave_edhrec_decks < popularity_list[rank]["num_decks"]:
+                    rank += 1
+                ave_edhrec_ranking = f"#{rank + 1} ({popularity_list[rank]['name']})"
 
             # find the number of colours of the given colour identity
             num_colours = colour_identity.num_colours
@@ -581,12 +588,11 @@ def data_post():
                 running_ave_edhrec_decks = (colour_identity_data[num_colours][0]["total_edhrec_decks"]
                                           / colour_identity_data[num_colours][0]["num_edhrec_data"])
                 colour_identity_data[num_colours][0]["ave_edhrec_decks"] = running_ave_edhrec_decks
-                for rank in range(len(popularity_list)):
-                    if colour_identity_data[num_colours][0]["ave_edhrec_decks"] > popularity_list[rank]["num_decks"]:
-                        colour_identity_data[num_colours][0]["ave_edhrec_ranking"] = f"#{rank + 1}"
-                        break
-                    if rank == len(popularity_list) - 1:
-                        colour_identity_data[num_colours][0]["ave_edhrec_ranking"] = "#100+"
+                # find the ranking that the player's average deck would have on EDHrec
+                rank = 0
+                while colour_identity_data[num_colours][0]["ave_edhrec_decks"] < popularity_list[rank]["num_decks"]:
+                    rank += 1
+                colour_identity_data[num_colours][0]["ave_edhrec_ranking"] = f"#{rank + 1} ({popularity_list[rank]['name']})"
 
             # this handles the data for the specific colour identity
             colour_identity_data[num_colours].append({
@@ -776,10 +782,12 @@ def data_post():
 
         return render_template('data.html', data_type="game", data=html_data)
     elif request.form["type"] == "player":
+        # initialise values
         player_data = []
+
+        # generate the full list of edhrec deck data
         min_edhrec_decks = min([deck.edhrec_num_decks for deck in decks if deck.edhrec_num_decks])
         page = 1
-
         edhrec_all_cmdrs_response = requests.get("https://json.edhrec.com/pages/commanders/year.json").json()
         popularity_list = edhrec_all_cmdrs_response["container"]["json_dict"]["cardlists"][0]["cardviews"]
         while popularity_list[-1]["num_decks"] > min_edhrec_decks:
