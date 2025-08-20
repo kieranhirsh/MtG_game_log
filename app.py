@@ -777,8 +777,15 @@ def data_post():
         return render_template('data.html', data_type="game", data=html_data)
     elif request.form["type"] == "player":
         player_data = []
+        min_edhrec_decks = min([deck.edhrec_num_decks for deck in decks if deck.edhrec_num_decks])
+        page = 1
+
         edhrec_all_cmdrs_response = requests.get("https://json.edhrec.com/pages/commanders/year.json").json()
         popularity_list = edhrec_all_cmdrs_response["container"]["json_dict"]["cardlists"][0]["cardviews"]
+        while popularity_list[-1]["num_decks"] > min_edhrec_decks:
+            edhrec_all_cmdrs_response = requests.get(f"https://json.edhrec.com/pages/commanders/year-past2years-{page}.json").json()
+            popularity_list += edhrec_all_cmdrs_response["cardviews"]
+            page += 1
 
         # loop over all players
         for player in players:
@@ -868,13 +875,10 @@ def data_post():
                 player.ave_edhrec_decks = sum(num_edhrec_deck) / len(num_edhrec_deck)
 
             # find the ranking that the player's average deck would have on EDHrec
-            for rank in range(len(popularity_list)):
-                if player.ave_edhrec_decks > popularity_list[rank]["num_decks"]:
-                    player.ave_edhrec_ranking = f"#{rank + 1} ({popularity_list[rank]['name']})"
-                    break
-
-                if rank == len(popularity_list) - 1:
-                    player.ave_edhrec_ranking = "#100+"
+            rank = 0
+            while player.ave_edhrec_decks < popularity_list[rank]["num_decks"]:
+                rank += 1
+            player.ave_edhrec_ranking = f"#{rank + 1} ({popularity_list[rank]['name']})"
 
             # finally, append all the relevant data that has been requested
             if player.num_decks != 0:
