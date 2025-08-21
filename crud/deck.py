@@ -77,6 +77,7 @@ class deck_crud():
                 deck_crud.update(result[0].id, jsonify({"edhrec_num_decks": result[0].edhrec_num_decks,
                                                     "edhrec_popularity": result[0].edhrec_popularity,
                                                     "last_accessed": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}))
+                time.sleep(0.01)
             except:
                 result[0].edhrec_num_decks = ""
                 result[0].edhrec_popularity = ""
