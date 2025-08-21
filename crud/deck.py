@@ -69,19 +69,6 @@ class deck_crud():
         if return_model_object or not result:
             return result
 
-        if not result[0].last_accessed or ((datetime.now() - result[0].last_accessed) > timedelta(weeks=1)):
-            try:
-                edhrec_uri = curl_utils.get_edhrec_uri_from_commander_names([result[0].commander_name,
-                                                                             result[0].partner_name])
-                result[0].edhrec_decks, result[0].popularity = curl_utils.get_popularity_from_edhrec_uri(edhrec_uri)
-                deck_crud.update(result[0].id, jsonify({"edhrec_num_decks": result[0].edhrec_num_decks,
-                                                    "edhrec_popularity": result[0].edhrec_popularity,
-                                                    "last_accessed": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}))
-                time.sleep(0.01)
-            except:
-                result[0].edhrec_num_decks = ""
-                result[0].edhrec_popularity = ""
-
         output = {
             "id": result[0].id,
             "deck_name": result[0].deck_name,
