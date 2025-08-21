@@ -1,9 +1,12 @@
 """ CRUD layer """
-from flask import request, abort
+import time
+from datetime import datetime, timedelta
+from flask import request, abort, jsonify
 from crud.base_crud import Base_crud
 from data import storage
 from models.deck import deck
 from validation.deck import deck_validator
+from utils import curl_utils
 
 class deck_crud():
     @staticmethod
@@ -21,6 +24,19 @@ class deck_crud():
             return result
 
         for row in result:
+            if not row.last_accessed or ((datetime.now() - row.last_accessed) > timedelta(weeks=1)):
+                try:
+                    edhrec_uri = curl_utils.get_edhrec_uri_from_commander_names([row.commander_name,
+                                                                                 row.partner_name])
+                    row.edhrec_decks, row.popularity = curl_utils.get_popularity_from_edhrec_uri(edhrec_uri)
+                    deck_crud.update(row.id, jsonify({"edhrec_num_decks": row.edhrec_num_decks,
+                                                        "edhrec_popularity": row.edhrec_popularity,
+                                                        "last_accessed": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}))
+                    time.sleep(0.01)
+                except:
+                    row.edhrec_num_decks = ""
+                    row.edhrec_popularity = ""
+
             output.append({
                 "id": row.id,
                 "deck_name": row.deck_name,
