@@ -674,8 +674,21 @@ def data_post():
             if not deck.companion_name:
                 deck.companion_name = ""
 
-            deck.edhrec_decks = deck.edhrec_num_decks
-            deck.popularity = deck.edhrec_popularity
+            if not deck.last_accessed or ((datetime.now() - deck.last_accessed) > timedelta(weeks=1)):
+                try:
+                    edhrec_uri = curl_utils.get_edhrec_uri_from_commander_names([deck.commander_name,
+                                                                                 deck.partner_name])
+                    deck.edhrec_decks, deck.popularity = curl_utils.get_popularity_from_edhrec_uri(edhrec_uri)
+                    deck_crud.update(deck.id, jsonify({"edhrec_num_decks": deck.edhrec_decks,
+                                                        "edhrec_popularity": deck.popularity,
+                                                        "last_accessed": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}))
+                    time.sleep(0.01)
+                except:
+                    deck.edhrec_decks = ""
+                    deck.popularity = ""
+            else:
+                deck.edhrec_decks = deck.edhrec_num_decks
+                deck.popularity = deck.edhrec_popularity
 
             if deck.games_played == 0:
                 deck.win_rate = 0
