@@ -830,14 +830,18 @@ def data_post():
 
                 # find number of games played and win rate
                 # initialise values
-                player.games_played = 0
+                player.num_games_played = 0
                 player.num_games_won = 0
 
                 # loop over all of that player's decks
                 for player_deck in player_decks:
-                    # find number of games played and number of games won
-                    player.games_played += len(deck_crud.get_child_data(player_deck.id, "seat", True))
-                    player.num_games_won += len(game_crud.specific("winning_deck_id", player_deck.id, True))
+                    # find number of games this deck has played and number of games won
+                    player_deck_seats = deck_crud.get_child_data(player_deck.id, "seat", True)
+                    player.num_games_played += len(player_deck_seats)
+                    for seat in player_deck_seats:
+                        _, winning_deck = curl_utils.get_game_game_winner_from_game(seat.game)
+                        if winning_deck == player_deck.id:
+                            player.num_games_won += 1
 
                     # find all games played by the deck
                     for seat in deck_crud.get_child_data(player_deck.id, "seat", True):
@@ -848,9 +852,14 @@ def data_post():
                         if game_seconds:
                             game_times.append(game_seconds)
             else:
-                # find number of games played and number of games won
-                player.games_played = len(player_crud.get_child_data(player.id, "seat", True))
-                player.num_games_won = len(game_crud.specific("winning_player_id", player.id, True))
+                # find number of games this player has played and number of games won
+                player_seats = player_crud.get_child_data(player.id, "seat", True)
+                player.num_games_played = len(player_seats)
+                player.num_games_won = 0
+                for seat in player_seats:
+                    winning_player, _ = curl_utils.get_game_game_winner_from_game(seat.game)
+                    if winning_player == player.id:
+                        player.num_games_won += 1
 
                 # find all games played by the player
                 for seat in player_crud.get_child_data(player.id, "seat", True):
@@ -871,10 +880,10 @@ def data_post():
                 player.ave_game_turns = ""
 
             # if they've played no games we need to set the win rate manually to avoid divide by zero errors
-            if player.games_played == 0:
+            if player.num_games_played == 0:
                 player.win_rate = 0
             else:
-                player.win_rate = player.num_games_won / player.games_played * 100
+                player.win_rate = player.num_games_won / player.num_games_played * 100
 
             # find the number of decks the given player owns
             player.num_decks = len(player_decks)
