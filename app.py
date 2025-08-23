@@ -480,8 +480,8 @@ def data_post():
             num_decks = len(colour_identity_decks)
 
             # initialise some values
-            games_played = 0
-            games_won = 0
+            num_games_played = 0
+            num_games_won = 0
             time_played = 0
             timed_games = 0
             turns_played = 0
@@ -511,16 +511,20 @@ def data_post():
                 turns_played += sum(game_turns)
                 turned_games += len(game_turns)
 
-                # number of games played is the number of child seats
-                games_played += len(deck_crud.get_child_data(deck.id, "seat", True))
-                # number of games won is the number of games with winning_deck_id equal to the colour identity's id
-                games_won += len(game_crud.specific("winning_deck_id", deck.id, True))
+                # find all the games this deck has played
+                deck_seats = deck_crud.get_child_data(deck.id, "seat", True)
+                num_games_played += len(deck_seats)
+                # loop over the number of games played and count the number of games won
+                for seat in deck_seats:
+                    _, winning_deck = curl_utils.get_game_game_winner_from_game(seat.game)
+                    if winning_deck == deck.id:
+                        num_games_won += 1
 
             # if they've played no games we need to set the win rate manually to avoid divide by zero errors
-            if games_played == 0:
+            if num_games_played == 0:
                 win_rate = 0
             else:
-                win_rate = games_won / games_played * 100
+                win_rate = num_games_won / num_games_played * 100
 
             # same goes for timed games
             if timed_games == 0:
@@ -555,8 +559,8 @@ def data_post():
             # add all the relevant data that has been requested
             # this handles the data binned by number of colours
             colour_identity_data[num_colours][0]["number_of_decks"] += num_decks
-            colour_identity_data[num_colours][0]["games_played"] += games_played
-            colour_identity_data[num_colours][0]["games_won"] += games_won
+            colour_identity_data[num_colours][0]["games_played"] += num_games_played
+            colour_identity_data[num_colours][0]["games_won"] += num_games_won
             if colour_identity_data[num_colours][0]["games_played"] == 0:
                 colour_identity_data[num_colours][0]["win_rate"] = 0
             else:
@@ -600,8 +604,8 @@ def data_post():
                 "colours": colour_identity.colours,
                 "number_of_decks": num_decks,
                 "num_colours": num_colours,
-                "games_played": games_played,
-                "games_won": games_won,
+                "games_played": num_games_played,
+                "games_won": num_games_won,
                 "win_rate": win_rate,
                 "ave_game_time": ave_game_time,
                 "ave_game_turns": ave_game_turns,
