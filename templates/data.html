@@ -263,7 +263,7 @@
             {% endfor %})
         </td>
         <td class="deck_last_played">{{ deck.last_played }}</td>
-        <td class="deck_games_played">{{ deck.games_played }}</td>
+        <td class="deck_games_played">{{ deck.num_games_played }}</td>
         <td class="deck_wins">{{ deck.num_games_won }}</td>
         <td class="deck_win_rate">{{ '%0.2f'|format(deck.win_rate) }}%</td>
         <td class="deck_ave_game_turns">{{ deck.ave_game_turns }}</td>

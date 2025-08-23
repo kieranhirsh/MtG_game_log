@@ -668,7 +668,9 @@ def data_post():
             deck_data = decks
 
         for deck in deck_data:
-            deck.games_played = len(deck_crud.get_child_data(deck.id, "seat", True))
+            # find all the games this deck has played
+            deck_seats = deck_crud.get_child_data(deck.id, "seat", True)
+            deck.num_games_played = len(deck_seats)
             game_times = []
             game_turns = []
 
@@ -688,18 +690,21 @@ def data_post():
                 deck.edhrec_decks = deck.edhrec_num_decks
                 deck.popularity = deck.edhrec_popularity
 
-            if deck.games_played == 0:
+            if deck.num_games_played == 0:
                 deck.win_rate = 0
                 deck.num_games_won = 0
                 deck.ave_game_time = ""
                 deck.ave_game_turns = ""
                 deck.last_played = "never"
             else:
-                deck.num_games_won = len(game_crud.specific("winning_deck_id", deck.id, True))
-                deck.win_rate = deck.num_games_won / deck.games_played * 100
+                deck.num_games_won = 0
+                for seat in deck_seats:
+                    _, winning_deck = curl_utils.get_game_game_winner_from_game(seat.game)
+                    if winning_deck == deck.id:
+                        deck.num_games_won += 1
+                deck.win_rate = deck.num_games_won / deck.num_games_played * 100
 
                 most_recent_game = datetime.min
-
                 for seat in deck_crud.get_child_data(deck.id, "seat", True):
                     _, game_seconds = derived_quantities.game_length_in_time(seat.game)
                     if game_seconds:
@@ -709,7 +714,6 @@ def data_post():
                         game_turns.append(game_length)
                     if seat.game.start_time > most_recent_game:
                         most_recent_game = seat.game.start_time
-
                 deck.last_played = f"{(datetime.now() - most_recent_game).days} days ago"
 
                 if len(game_times) > 0:
