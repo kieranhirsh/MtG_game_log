@@ -48,7 +48,7 @@ function sortTable(n) {
       x.innerHTML = x.innerHTML.slice(0, -1);
     }
   }
-  // If the row is "Popularity", we need to remove the trailing % to be able to convert to a int
+  // If the row is "Popularity", we need to remove the leading # to be able to convert to a int
   if (header === "Popularity") {
     for (i = 1; i < (table[0].rows.length); i++) {
       x = table[0].rows[i].getElementsByTagName("td")[n];
@@ -58,6 +58,7 @@ function sortTable(n) {
   // Set the sorting direction:
   if (
     header === "# Decks" ||
+    header === "Last Played" ||
     header === "Games Played" ||
     header === "Games Won" ||
     header === "Win Rate" ||
@@ -105,6 +106,7 @@ function sortTable(n) {
         // Check whether the data is a number or a string
         if (
           header === "# Decks" ||
+          header === "Last Played" ||
           header === "Games Played" ||
           header === "Games Won" ||
           header === "Win Rate" ||
@@ -130,6 +132,7 @@ function sortTable(n) {
         // Check whether the data is a number or a string
         if (
           header === "# Decks" ||
+          header === "Last Played" ||
           header === "Games Played" ||
           header === "Games Won" ||
           header === "Win Rate" ||

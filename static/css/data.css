@@ -36,6 +36,9 @@ body #data_tables .data_table .deck_partner, body #data_tables .colour_data_tabl
 body #data_tables .data_table .deck_companion, body #data_tables .colour_data_table .deck_companion {
   display: none;
 }
+body #data_tables .data_table .deck_last_played, body #data_tables .colour_data_table .deck_last_played {
+  display: none;
+}
 body .mana_symbol {
   height: 14px;
   width: 14px;

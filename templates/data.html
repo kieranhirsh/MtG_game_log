@@ -206,6 +206,9 @@
       <input type="checkbox" id="deck_ci" checked onclick="toggleColumn('deck_ci')">Colour Identity
     </label>
     <label>
+      <input type="checkbox" id="deck_last_played" onclick="toggleColumn('deck_last_played')">Last Played
+    </label>
+    <label>
       <input type="checkbox" id="deck_games_played" checked onclick="toggleColumn('deck_games_played')">Games Played
     </label>
     <label>
@@ -237,13 +240,14 @@
         <th onclick="sortTable(3)" class="deck_partner">Partner/Background</th>
         <th onclick="sortTable(4)" class="deck_companion">Companion</th>
         <th onclick="sortTable(5)" class="deck_ci">Colour Identity</th>
-        <th onclick="sortTable(6)" class="deck_games_played">Games Played</th>
-        <th onclick="sortTable(7)" class="deck_wins">Games Won</th>
-        <th onclick="sortTable(8)" class="deck_win_rate">Win Rate</th>
-        <th onclick="sortTable(9)" class="deck_ave_game_turns">Ave Game Length</th>
-        <th onclick="sortTable(10)" class="deck_ave_game_time">Ave Game Time</th>
-        <th onclick="sortTable(11)" class="deck_edhrec_decks"># EDHrec Decks</th>
-        <th onclick="sortTable(12)" class="deck_popularity">Popularity</th>
+        <th onclick="sortTable(6)" class="deck_last_played">Last Played</th>
+        <th onclick="sortTable(7)" class="deck_games_played">Games Played</th>
+        <th onclick="sortTable(8)" class="deck_wins">Games Won</th>
+        <th onclick="sortTable(9)" class="deck_win_rate">Win Rate</th>
+        <th onclick="sortTable(10)" class="deck_ave_game_turns">Ave Game Length</th>
+        <th onclick="sortTable(11)" class="deck_ave_game_time">Ave Game Time</th>
+        <th onclick="sortTable(12)" class="deck_edhrec_decks"># EDHrec Decks</th>
+        <th onclick="sortTable(13)" class="deck_popularity">Popularity</th>
       </tr>
       {% for deck in data["decks"] %}
       <tr>
@@ -258,6 +262,7 @@
             <img class="mana_symbol" src="../static/img/mana_{{ colour }}.svg">
             {% endfor %})
         </td>
+        <td class="deck_last_played">{{ deck.last_played }}</td>
         <td class="deck_games_played">{{ deck.games_played }}</td>
         <td class="deck_wins">{{ deck.num_games_won }}</td>
         <td class="deck_win_rate">{{ '%0.2f'|format(deck.win_rate) }}%</td>
