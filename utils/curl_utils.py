@@ -45,3 +45,14 @@ def get_popularity_from_edhrec_uri(edhrec_uri):
         rank = None
 
     return num_decks, rank
+
+def get_game_game_winner_from_game(game):
+    winner = []
+    for seat in game.seats:
+        if not seat.ko_turn:
+            winner.append([seat.player_id, seat.deck_id])
+
+    if len(winner) != 1:
+        return "draw", "draw"
+
+    return winner[0][0], winner[0][1]
