@@ -116,6 +116,16 @@ function sortTable(n) {
           header === "Popularity" ||
           header === "Ave # EDHrec Decks"
         ) {
+          if (header === "Last Played") {
+            if (y.innerHTML == "never") {
+              continue
+            }
+            if (x.innerHTML == "never") {
+              // If we want to switch, mark as a switch and break the loop:
+              shouldSwitch = true;
+              break;
+            }
+          }
           if (parseFloat(x.innerHTML) > parseFloat(y.innerHTML) || parseFloat(x.innerHTML) == 0 || isNaN(parseFloat(x.innerHTML))) {
             // If we want to switch, mark as a switch and break the loop:
             shouldSwitch = true;
