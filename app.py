@@ -171,7 +171,6 @@ def input_add():
             # so it's easiet to wait until all inputs were added to the database
             # but really they want to be removed from the db completely
             game_crud.update_game_name(new_game_object["id"])
-            game_crud.update_game_winner(new_game_object["id"])
         elif input_type == "player":
             new_player = {
                 "player_name": request.form["player_name"]
@@ -323,7 +322,6 @@ def input_edit():
                     seat_crud.update(seat_to_edit["id"], jsonify(new_seat_data))
 
             game_crud.update_game_name(game_to_edit["id"])
-            game_crud.update_game_winner(game_to_edit["id"])
         elif input_type == "player":
             try:
                 player_to_edit = player_crud.specific('player_name', request.form['player_name'])
@@ -480,8 +478,8 @@ def data_post():
             num_decks = len(colour_identity_decks)
 
             # initialise some values
-            games_played = 0
-            games_won = 0
+            num_games_played = 0
+            num_games_won = 0
             time_played = 0
             timed_games = 0
             turns_played = 0
@@ -511,16 +509,20 @@ def data_post():
                 turns_played += sum(game_turns)
                 turned_games += len(game_turns)
 
-                # number of games played is the number of child seats
-                games_played += len(deck_crud.get_child_data(deck.id, "seat", True))
-                # number of games won is the number of games with winning_deck_id equal to the colour identity's id
-                games_won += len(game_crud.specific("winning_deck_id", deck.id, True))
+                # find all the games this deck has played
+                deck_seats = deck_crud.get_child_data(deck.id, "seat", True)
+                num_games_played += len(deck_seats)
+                # loop over the number of games played and count the number of games won
+                for seat in deck_seats:
+                    _, winning_deck = curl_utils.get_game_game_winner_from_game(seat.game)
+                    if winning_deck == deck.id:
+                        num_games_won += 1
 
             # if they've played no games we need to set the win rate manually to avoid divide by zero errors
-            if games_played == 0:
+            if num_games_played == 0:
                 win_rate = 0
             else:
-                win_rate = games_won / games_played * 100
+                win_rate = num_games_won / num_games_played * 100
 
             # same goes for timed games
             if timed_games == 0:
@@ -555,8 +557,8 @@ def data_post():
             # add all the relevant data that has been requested
             # this handles the data binned by number of colours
             colour_identity_data[num_colours][0]["number_of_decks"] += num_decks
-            colour_identity_data[num_colours][0]["games_played"] += games_played
-            colour_identity_data[num_colours][0]["games_won"] += games_won
+            colour_identity_data[num_colours][0]["games_played"] += num_games_played
+            colour_identity_data[num_colours][0]["games_won"] += num_games_won
             if colour_identity_data[num_colours][0]["games_played"] == 0:
                 colour_identity_data[num_colours][0]["win_rate"] = 0
             else:
@@ -600,8 +602,8 @@ def data_post():
                 "colours": colour_identity.colours,
                 "number_of_decks": num_decks,
                 "num_colours": num_colours,
-                "games_played": games_played,
-                "games_won": games_won,
+                "games_played": num_games_played,
+                "games_won": num_games_won,
                 "win_rate": win_rate,
                 "ave_game_time": ave_game_time,
                 "ave_game_turns": ave_game_turns,
@@ -664,7 +666,9 @@ def data_post():
             deck_data = decks
 
         for deck in deck_data:
-            deck.games_played = len(deck_crud.get_child_data(deck.id, "seat", True))
+            # find all the games this deck has played
+            deck_seats = deck_crud.get_child_data(deck.id, "seat", True)
+            deck.num_games_played = len(deck_seats)
             game_times = []
             game_turns = []
 
@@ -684,18 +688,21 @@ def data_post():
                 deck.edhrec_decks = deck.edhrec_num_decks
                 deck.popularity = deck.edhrec_popularity
 
-            if deck.games_played == 0:
+            if deck.num_games_played == 0:
                 deck.win_rate = 0
                 deck.num_games_won = 0
                 deck.ave_game_time = ""
                 deck.ave_game_turns = ""
                 deck.last_played = "never"
             else:
-                deck.num_games_won = len(game_crud.specific("winning_deck_id", deck.id, True))
-                deck.win_rate = deck.num_games_won / deck.games_played * 100
+                deck.num_games_won = 0
+                for seat in deck_seats:
+                    _, winning_deck = curl_utils.get_game_game_winner_from_game(seat.game)
+                    if winning_deck == deck.id:
+                        deck.num_games_won += 1
+                deck.win_rate = deck.num_games_won / deck.num_games_played * 100
 
                 most_recent_game = datetime.min
-
                 for seat in deck_crud.get_child_data(deck.id, "seat", True):
                     _, game_seconds = derived_quantities.game_length_in_time(seat.game)
                     if game_seconds:
@@ -705,7 +712,6 @@ def data_post():
                         game_turns.append(game_length)
                     if seat.game.start_time > most_recent_game:
                         most_recent_game = seat.game.start_time
-
                 deck.last_played = f"{(datetime.now() - most_recent_game).days} days ago"
 
                 if len(game_times) > 0:
@@ -743,7 +749,7 @@ def data_post():
                 player_found = False
 
                 if request.form["requested_deck"]:
-                    deck_name, deck_owner_name, query_tree = utils.get_deck_data_from_form_inputs(request.form['requested_deck'])
+                    deck_name, _, query_tree = utils.get_deck_data_from_form_inputs(request.form['requested_deck'])
                     try:
                         requested_deck = deck_crud.specific(query_tree=query_tree,
                                                             join_classes=["player"],
@@ -760,9 +766,13 @@ def data_post():
                 if not deck_found or not player_found:
                     games_to_remove.append(game)
 
-            game.winner = game.winning_player.player_name + " - " + game.winning_deck.deck_name
-            if game.winning_player.player_name != game.winning_deck.player.player_name:
-                game.winner += " (%s's deck)" % game.winning_deck.player.player_name
+            winning_player_id, winning_deck_id = curl_utils.get_game_game_winner_from_game(game)
+            winning_player = player_crud.specific(key="id", value=winning_player_id, return_model_object=True)[0]
+            winning_deck = deck_crud.specific(key="id", value=winning_deck_id, return_model_object=True)[0]
+
+            game.winner = winning_player.player_name + " - " + winning_deck.deck_name
+            if winning_player.player_name != winning_deck.player.player_name:
+                game.winner += " (%s's deck)" % winning_deck.player.player_name
 
             for seat in seats:
                 game.player[seat.seat_no - 1] = seat.player
@@ -822,14 +832,18 @@ def data_post():
 
                 # find number of games played and win rate
                 # initialise values
-                player.games_played = 0
+                player.num_games_played = 0
                 player.num_games_won = 0
 
                 # loop over all of that player's decks
                 for player_deck in player_decks:
-                    # find number of games played and number of games won
-                    player.games_played += len(deck_crud.get_child_data(player_deck.id, "seat", True))
-                    player.num_games_won += len(game_crud.specific("winning_deck_id", player_deck.id, True))
+                    # find number of games this deck has played and number of games won
+                    player_deck_seats = deck_crud.get_child_data(player_deck.id, "seat", True)
+                    player.num_games_played += len(player_deck_seats)
+                    for seat in player_deck_seats:
+                        _, winning_deck = curl_utils.get_game_game_winner_from_game(seat.game)
+                        if winning_deck == player_deck.id:
+                            player.num_games_won += 1
 
                     # find all games played by the deck
                     for seat in deck_crud.get_child_data(player_deck.id, "seat", True):
@@ -840,9 +854,14 @@ def data_post():
                         if game_seconds:
                             game_times.append(game_seconds)
             else:
-                # find number of games played and number of games won
-                player.games_played = len(player_crud.get_child_data(player.id, "seat", True))
-                player.num_games_won = len(game_crud.specific("winning_player_id", player.id, True))
+                # find number of games this player has played and number of games won
+                player_seats = player_crud.get_child_data(player.id, "seat", True)
+                player.num_games_played = len(player_seats)
+                player.num_games_won = 0
+                for seat in player_seats:
+                    winning_player, _ = curl_utils.get_game_game_winner_from_game(seat.game)
+                    if winning_player == player.id:
+                        player.num_games_won += 1
 
                 # find all games played by the player
                 for seat in player_crud.get_child_data(player.id, "seat", True):
@@ -863,10 +882,10 @@ def data_post():
                 player.ave_game_turns = ""
 
             # if they've played no games we need to set the win rate manually to avoid divide by zero errors
-            if player.games_played == 0:
+            if player.num_games_played == 0:
                 player.win_rate = 0
             else:
-                player.win_rate = player.num_games_won / player.games_played * 100
+                player.win_rate = player.num_games_won / player.num_games_played * 100
 
             # find the number of decks the given player owns
             player.num_decks = len(player_decks)
@@ -1061,15 +1080,18 @@ def graphs():
                     for datum in data:
                         datum_player_model = getattr(datum, "player")
                         datum_owner = getattr(datum_player_model, "player_name")
-                        games_played = len(player_crud.get_child_data(getattr(datum_player_model, "id"), "seat", True))
+                        games_played = deck_crud.get_child_data(getattr(datum, "id"), "seat", True)
+                        num_games_played = len(games_played)
 
-                        if games_played == 0:
+                        if num_games_played == 0:
                             xy_data[datum_owner] = 0
                         else:
-                            games_won = len(game_crud.specific("winning_player_id",
-                                                               getattr(datum_player_model, "id"),
-                                                               True))
-                            xy_data[datum_owner] = games_won/games_played * 100
+                            num_games_won = 0
+                            for seat in games_played:
+                                _, winning_deck = curl_utils.get_game_game_winner_from_game(seat.game)
+                                if winning_deck == deck.id:
+                                    num_games_won += 1
+                            xy_data[datum_owner] = num_games_won / num_games_played * 100
                 else:
                     call_error = True
                     missing_entries.append([request.form["bar_y"], 'Y axis'])
@@ -1083,13 +1105,18 @@ def graphs():
                 if request.form["bar_y"] == "win rate":
                     for datum in data:
                         datum_name = getattr(datum, "deck_name")
-                        games_played = len(deck_crud.get_child_data(getattr(datum, "id"), "seat", True))
+                        games_played = deck_crud.get_child_data(getattr(datum, "id"), "seat", True)
+                        num_games_played = len(games_played)
 
-                        if games_played == 0:
+                        if num_games_played == 0:
                             xy_data[datum_name] = 0
                         else:
-                            games_won = len(game_crud.specific("winning_deck_id", getattr(datum, "id"), True))
-                            xy_data[datum_name] = games_won/games_played * 100
+                            num_games_won = 0
+                            for seat in games_played:
+                                _, winning_deck = curl_utils.get_game_game_winner_from_game(seat.game)
+                                if winning_deck == deck.id:
+                                    num_games_won += 1
+                            xy_data[datum_name] = num_games_won / num_games_played * 100
             else:
                 call_error = True
                 missing_entries.append([request.form["bar_x"], 'X axis'])
@@ -1167,9 +1194,9 @@ def graphs():
                                 for game in games:
                                     if game.start_time < time_data[i]:
                                         games_played_over_time[i] += 1
-                                        if getattr(game, "winning_%s_id" % request.form['line_data']) == datum.id:
+                                        winning_player, winning_deck = curl_utils.get_game_game_winner_from_game(game)
+                                        if winning_player == datum.id or winning_deck == datum.id:
                                             games_won_over_time[i] += 1
-
                                 if games_played_over_time[i] == 0:
                                     win_rate_over_time[i] = 0
                                 else:
