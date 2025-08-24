@@ -171,7 +171,6 @@ def input_add():
             # so it's easiet to wait until all inputs were added to the database
             # but really they want to be removed from the db completely
             game_crud.update_game_name(new_game_object["id"])
-            game_crud.update_game_winner(new_game_object["id"])
         elif input_type == "player":
             new_player = {
                 "player_name": request.form["player_name"]
@@ -323,7 +322,6 @@ def input_edit():
                     seat_crud.update(seat_to_edit["id"], jsonify(new_seat_data))
 
             game_crud.update_game_name(game_to_edit["id"])
-            game_crud.update_game_winner(game_to_edit["id"])
         elif input_type == "player":
             try:
                 player_to_edit = player_crud.specific('player_name', request.form['player_name'])
