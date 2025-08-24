@@ -1194,9 +1194,9 @@ def graphs():
                                 for game in games:
                                     if game.start_time < time_data[i]:
                                         games_played_over_time[i] += 1
-                                        if getattr(game, "winning_%s_id" % request.form['line_data']) == datum.id:
+                                        winning_player, winning_deck = curl_utils.get_game_game_winner_from_game(game)
+                                        if winning_player == datum.id or winning_deck == datum.id:
                                             games_won_over_time[i] += 1
-
                                 if games_played_over_time[i] == 0:
                                     win_rate_over_time[i] = 0
                                 else:
