@@ -749,7 +749,7 @@ def data_post():
                 player_found = False
 
                 if request.form["requested_deck"]:
-                    deck_name, deck_owner_name, query_tree = utils.get_deck_data_from_form_inputs(request.form['requested_deck'])
+                    deck_name, _, query_tree = utils.get_deck_data_from_form_inputs(request.form['requested_deck'])
                     try:
                         requested_deck = deck_crud.specific(query_tree=query_tree,
                                                             join_classes=["player"],
@@ -766,9 +766,13 @@ def data_post():
                 if not deck_found or not player_found:
                     games_to_remove.append(game)
 
-            game.winner = game.winning_player.player_name + " - " + game.winning_deck.deck_name
-            if game.winning_player.player_name != game.winning_deck.player.player_name:
-                game.winner += " (%s's deck)" % game.winning_deck.player.player_name
+            winning_player_id, winning_deck_id = curl_utils.get_game_game_winner_from_game(game)
+            winning_player = player_crud.specific(key="id", value=winning_player_id, return_model_object=True)[0]
+            winning_deck = deck_crud.specific(key="id", value=winning_deck_id, return_model_object=True)[0]
+
+            game.winner = winning_player.player_name + " - " + winning_deck.deck_name
+            if winning_player.player_name != winning_deck.player.player_name:
+                game.winner += " (%s's deck)" % winning_deck.player.player_name
 
             for seat in seats:
                 game.player[seat.seat_no - 1] = seat.player
