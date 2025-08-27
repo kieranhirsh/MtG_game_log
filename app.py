@@ -673,7 +673,6 @@ def data_post():
             game_turns = []
 
             if (not deck.last_accessed
-                or type(deck.last_accessed) != datetime
                 or ((datetime.now() - deck.last_accessed) > timedelta(hours=5, minutes=59, seconds=59))):
                 try:
                     edhrec_uri = curl_utils.get_edhrec_uri_from_commander_names([deck.commander_name,
