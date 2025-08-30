@@ -674,7 +674,7 @@ def data_post():
 
             if (not deck.last_accessed
                 or ((datetime.now() - datetime.strptime(str(deck.last_accessed), "%Y-%m-%d %H:%M:%S"))
-                    > timedelta(hours=5, minutes=59, seconds=59))
+                    > timedelta(hours=5, minutes=59))
                ):
                 try:
                     edhrec_uri = curl_utils.get_edhrec_uri_from_commander_names([deck.commander_name,
