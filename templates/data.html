@@ -292,6 +292,9 @@
       <input type="checkbox" id="game_turns" checked onclick="toggleColumn('game_turns')">Game Length (Turns)
     </label>
     <label>
+      <input type="checkbox" id="game_first_ko" checked onclick="toggleColumn('game_first_ko')">First KO
+    </label>
+    <label>
       <input type="checkbox" id="game_winner" checked onclick="toggleColumn('game_winner')">Winner
     </label>
     <label>
@@ -306,9 +309,10 @@
         <th onclick="sortTable(1)" class="game_start">Start Time</th>
         <th onclick="sortTable(2)" class="game_time">Game Length (Time)</th>
         <th onclick="sortTable(3)" class="game_turns">Game Length (Turns)</th>
-        <th onclick="sortTable(4)" class="game_winner">Winner</th>
+        <th onclick="sortTable(4)" class="game_first_ko">First KO</th>
+        <th onclick="sortTable(5)" class="game_winner">Winner</th>
         {% for i in range(data["num_seats"]) %}
-        <th onclick="sortTable({{ i + 5 }})" class="game_players">Player {{ i + 1 }}</th>
+        <th onclick="sortTable({{ i + 6 }})" class="game_players">Player {{ i + 1 }}</th>
         {% endfor %}
       </tr>
       {% for game in data["games"] %}
@@ -317,6 +321,7 @@
         <td class="game_start">{{ (game.start_time|string)[11:16] }}</td>
         <td class="game_time">{% if game.game_time %}{{ game.game_time[:-3] }}{% endif %}</td>
         <td class="game_turns">{{ game.game_turns }}</td>
+        <td class="game_first_ko">{{ game.first_ko }}</td>
         <td class="game_winner">{{ game.winner }}</td>
         {% for j in range(data["num_seats"]) %}
         <td class="game_players">{% if game.player[j] %}{{ game.player[j].player_name }} - {{ game.deck[j].deck_name }}{% if game.player[j].player_name != game.deck[j].player.player_name  %} ({{ game.deck[j].player.player_name }}'s deck){% endif %}{% endif %}</td>

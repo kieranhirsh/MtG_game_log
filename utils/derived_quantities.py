@@ -1,5 +1,13 @@
 ''' utils that derive quantities from db data '''
 
+def game_first_ko(game):
+    first_ko_turn = 0
+    for seat in game.seats:
+        if seat.ko_turn and (not first_ko_turn or seat.ko_turn < first_ko_turn):
+            first_ko_turn = seat.ko_turn
+
+    return first_ko_turn
+
 def game_length_in_time(game):
     if game.start_time and game.end_time:
         length_in_time = game.end_time - game.start_time

@@ -743,6 +743,7 @@ def data_post():
         for game in games:
             game.game_time, game.seconds = derived_quantities.game_length_in_time(game)
             game.game_turns = derived_quantities.game_length_in_turns(game)
+            game.first_ko = derived_quantities.game_first_ko(game)
             seats = game_crud.get_child_data(game.id, "seat", True)
             game.player = [None] * len(seats)
             game.deck = [None] * len(seats)
