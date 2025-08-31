@@ -16,6 +16,18 @@ def game_length_in_turns(game):
 
     return turns
 
-# game.start_time.strftime('%A') <- gets the day of the week
-# game.start_time.strftime('%B') <- gets the month
-# game.start_time.strftime('%Y') <- gets the year
+def game_winning_player_and_deck(game):
+    '''
+        This function takes a game object as an input, finds the winning seat,
+        and outputs that seat's associated player object and game object.
+        If the game didn't have exactly 1 winning seat it instead outputs "draw"
+    '''
+    winner = []
+    for seat in game.seats:
+        if not seat.ko_turn:
+            winner.append([seat.player, seat.deck])
+
+    if len(winner) != 1:
+        return "draw", "draw"
+
+    return winner[0][0], winner[0][1]

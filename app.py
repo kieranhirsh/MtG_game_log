@@ -514,7 +514,7 @@ def data_post():
                 num_games_played += len(deck_seats)
                 # loop over the number of games played and count the number of games won
                 for seat in deck_seats:
-                    _, winning_deck = curl_utils.get_game_game_winner_from_game(seat.game)
+                    _, winning_deck = derived_quantities.game_winning_player_and_deck(seat.game)
                     if winning_deck.id == deck.id:
                         num_games_won += 1
 
@@ -700,7 +700,7 @@ def data_post():
             else:
                 deck.num_games_won = 0
                 for seat in deck_seats:
-                    _, winning_deck = curl_utils.get_game_game_winner_from_game(seat.game)
+                    _, winning_deck = derived_quantities.game_winning_player_and_deck(seat.game)
                     if winning_deck.id == deck.id:
                         deck.num_games_won += 1
                 deck.win_rate = deck.num_games_won / deck.num_games_played * 100
@@ -769,7 +769,7 @@ def data_post():
                 if not deck_found or not player_found:
                     games_to_remove.append(game)
 
-            winning_player, winning_deck = curl_utils.get_game_game_winner_from_game(game)
+            winning_player, winning_deck = derived_quantities.game_winning_player_and_deck(game)
             winning_player = player_crud.specific(key="id", value=winning_player.id, return_model_object=True)[0]
             winning_deck = deck_crud.specific(key="id", value=winning_deck.id, return_model_object=True)[0]
 
@@ -844,7 +844,7 @@ def data_post():
                     player_deck_seats = deck_crud.get_child_data(player_deck.id, "seat", True)
                     player.num_games_played += len(player_deck_seats)
                     for seat in player_deck_seats:
-                        _, winning_deck = curl_utils.get_game_game_winner_from_game(seat.game)
+                        _, winning_deck = derived_quantities.game_winning_player_and_deck(seat.game)
                         if winning_deck.id == player_deck.id:
                             player.num_games_won += 1
 
@@ -862,7 +862,7 @@ def data_post():
                 player.num_games_played = len(player_seats)
                 player.num_games_won = 0
                 for seat in player_seats:
-                    winning_player, _ = curl_utils.get_game_game_winner_from_game(seat.game)
+                    winning_player, _ = derived_quantities.game_winning_player_and_deck(seat.game)
                     if winning_player.id == player.id:
                         player.num_games_won += 1
 
@@ -1091,7 +1091,7 @@ def graphs():
                         else:
                             num_games_won = 0
                             for seat in games_played:
-                                _, winning_deck = curl_utils.get_game_game_winner_from_game(seat.game)
+                                _, winning_deck = derived_quantities.game_winning_player_and_deck(seat.game)
                                 if winning_deck.id == deck.id:
                                     num_games_won += 1
                             xy_data[datum_owner] = num_games_won / num_games_played * 100
@@ -1116,7 +1116,7 @@ def graphs():
                         else:
                             num_games_won = 0
                             for seat in games_played:
-                                _, winning_deck = curl_utils.get_game_game_winner_from_game(seat.game)
+                                _, winning_deck = derived_quantities.game_winning_player_and_deck(seat.game)
                                 if winning_deck.id == deck.id:
                                     num_games_won += 1
                             xy_data[datum_name] = num_games_won / num_games_played * 100
@@ -1197,7 +1197,7 @@ def graphs():
                                 for game in games:
                                     if game.start_time < time_data[i]:
                                         games_played_over_time[i] += 1
-                                        winning_player, winning_deck = curl_utils.get_game_game_winner_from_game(game)
+                                        winning_player, winning_deck = derived_quantities.game_winning_player_and_deck(game)
                                         if winning_player.id == datum.id or winning_deck.id == datum.id:
                                             games_won_over_time[i] += 1
                                 if games_played_over_time[i] == 0:

@@ -45,19 +45,3 @@ def get_popularity_from_edhrec_uri(edhrec_uri):
         rank = None
 
     return num_decks, rank
-
-def get_game_game_winner_from_game(game):
-    '''
-        This function takes a game object as an input, finds the winning seat,
-        and outputs that seat's associated player object and game object.
-        If the game didn't have exactly 1 winning seat it instead outputs "draw"
-    '''
-    winner = []
-    for seat in game.seats:
-        if not seat.ko_turn:
-            winner.append([seat.player, seat.deck])
-
-    if len(winner) != 1:
-        return "draw", "draw"
-
-    return winner[0][0], winner[0][1]
