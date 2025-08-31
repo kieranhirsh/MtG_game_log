@@ -671,6 +671,7 @@ def data_post():
             deck.num_games_played = len(deck_seats)
             game_times = []
             game_turns = []
+            first_kos = []
 
             if (not deck.last_accessed
                 or ((datetime.now() - datetime.strptime(str(deck.last_accessed), "%Y-%m-%d %H:%M:%S"))
@@ -696,6 +697,7 @@ def data_post():
                 deck.num_games_won = 0
                 deck.ave_game_time = ""
                 deck.ave_game_turns = ""
+                deck.ave_first_ko = ""
                 deck.last_played = "never"
             else:
                 deck.num_games_won = 0
@@ -713,6 +715,9 @@ def data_post():
                     game_length = derived_quantities.game_length_in_turns(seat.game)
                     if game_length:
                         game_turns.append(game_length)
+                    first_ko = derived_quantities.game_first_ko(seat.game)
+                    if first_ko:
+                        first_kos.append(first_ko)
                     if seat.game.start_time > most_recent_game:
                         most_recent_game = seat.game.start_time
                 deck.last_played = f"{(datetime.now() - most_recent_game).days} days ago"
@@ -727,6 +732,11 @@ def data_post():
                     deck.ave_game_turns = f"{(sum(game_turns) / len(game_turns)):.1f}"
                 else:
                     deck.ave_game_turns = ""
+
+                if len(first_kos) > 0:
+                    deck.ave_first_ko = f"{(sum(first_kos) / len(first_kos)):.1f}"
+                else:
+                    deck.ave_first_ko = ""
 
         # Prepare data to pass to the template
         html_data = {"colour_identities": colour_identities,
