@@ -432,8 +432,11 @@ def data_post():
                     "timed_games": 0,
                     "turns_played": 0,
                     "turned_games": 0,
+                    "total_ko_turns": 0,
+                    "num_ko_games": 0,
                     "ave_game_time": 0,
                     "ave_game_turns": 0,
+                    "ave_first_ko": 0,
                     "ave_edhrec_decks": 0,
                     "ave_edhrec_ranking": 0,
                     "num_edhrec_data": 0,
@@ -484,12 +487,15 @@ def data_post():
             timed_games = 0
             turns_played = 0
             turned_games = 0
+            sum_first_kos = 0
+            len_first_kos = 0
             num_edhrec_deck = []
             # find the number of games played and win rate
             for deck in colour_identity_decks:
                 # initialise some values
                 game_times = []
                 game_turns = []
+                first_kos = []
 
                 # find the edhrec data for each relevant deck player owns
                 if deck.edhrec_num_decks:
@@ -501,13 +507,22 @@ def data_post():
                     _, game_seconds = derived_quantities.game_length_in_time(seat.game)
                     if game_seconds:
                         game_times.append(game_seconds)
-                    game_turns.append(derived_quantities.game_length_in_turns(seat.game))
+                    # get the length in turns for each of those games
+                    game_length = derived_quantities.game_length_in_turns(seat.game)
+                    if game_length:
+                        game_turns.append(game_length)
+                    # get the first turn a player was KO'd for each of those games
+                    first_ko = derived_quantities.game_first_ko(seat.game)
+                    if first_ko:
+                        first_kos.append(first_ko)
 
                 # add the total time and number of timed games to the running tally
                 time_played += sum(game_times)
                 timed_games += len(game_times)
                 turns_played += sum(game_turns)
                 turned_games += len(game_turns)
+                sum_first_kos += sum(first_kos)
+                len_first_kos += len(first_kos)
 
                 # find all the games this deck has played
                 deck_seats = deck_crud.get_child_data(deck.id, "seat", True)
@@ -537,6 +552,13 @@ def data_post():
             else:
                 ave_game_turns = turns_played / turned_games
                 ave_game_turns = f"{ave_game_turns:.1f}"
+
+            # and average first_ko
+            if len_first_kos == 0:
+                ave_first_ko = ""
+            else:
+                ave_first_ko = sum_first_kos / len_first_kos
+                ave_first_ko = f"{ave_first_ko:.1f}"
 
             # if there's no edhrec data we need to set the average number of
             # decks manually to avoid divide by zero errors
@@ -581,6 +603,14 @@ def data_post():
                 running_ave_game_turns = (colour_identity_data[num_colours][0]["turns_played"]
                                           / colour_identity_data[num_colours][0]["turned_games"])
                 colour_identity_data[num_colours][0]["ave_game_turns"] = f"{running_ave_game_turns:.1f}"
+            colour_identity_data[num_colours][0]["total_ko_turns"] += sum_first_kos
+            colour_identity_data[num_colours][0]["num_ko_games"] += len_first_kos
+            if colour_identity_data[num_colours][0]["num_ko_games"] == 0:
+                colour_identity_data[num_colours][0]["ave_first_ko"] = ""
+            else:
+                running_first_ko = (colour_identity_data[num_colours][0]["total_ko_turns"]
+                                          / colour_identity_data[num_colours][0]["num_ko_games"])
+                colour_identity_data[num_colours][0]["ave_first_ko"] = f"{running_first_ko:.1f}"
             colour_identity_data[num_colours][0]["num_edhrec_data"] += len(num_edhrec_deck)
             colour_identity_data[num_colours][0]["total_edhrec_decks"] += sum(num_edhrec_deck)
             if colour_identity_data[num_colours][0]["num_edhrec_data"] == 0:
@@ -607,6 +637,7 @@ def data_post():
                 "win_rate": win_rate,
                 "ave_game_time": ave_game_time,
                 "ave_game_turns": ave_game_turns,
+                "ave_first_ko": ave_first_ko,
                 "ave_edhrec_decks": ave_edhrec_decks,
                 "ave_edhrec_ranking": ave_edhrec_ranking
             })
@@ -671,6 +702,7 @@ def data_post():
             deck.num_games_played = len(deck_seats)
             game_times = []
             game_turns = []
+            first_kos = []
 
             if (not deck.last_accessed
                 or ((datetime.now() - datetime.strptime(str(deck.last_accessed), "%Y-%m-%d %H:%M:%S"))
@@ -696,6 +728,7 @@ def data_post():
                 deck.num_games_won = 0
                 deck.ave_game_time = ""
                 deck.ave_game_turns = ""
+                deck.ave_first_ko = ""
                 deck.last_played = "never"
             else:
                 deck.num_games_won = 0
@@ -713,6 +746,9 @@ def data_post():
                     game_length = derived_quantities.game_length_in_turns(seat.game)
                     if game_length:
                         game_turns.append(game_length)
+                    first_ko = derived_quantities.game_first_ko(seat.game)
+                    if first_ko:
+                        first_kos.append(first_ko)
                     if seat.game.start_time > most_recent_game:
                         most_recent_game = seat.game.start_time
                 deck.last_played = f"{(datetime.now() - most_recent_game).days} days ago"
@@ -727,6 +763,11 @@ def data_post():
                     deck.ave_game_turns = f"{(sum(game_turns) / len(game_turns)):.1f}"
                 else:
                     deck.ave_game_turns = ""
+
+                if len(first_kos) > 0:
+                    deck.ave_first_ko = f"{(sum(first_kos) / len(first_kos)):.1f}"
+                else:
+                    deck.ave_first_ko = ""
 
         # Prepare data to pass to the template
         html_data = {"colour_identities": colour_identities,
@@ -743,6 +784,7 @@ def data_post():
         for game in games:
             game.game_time, game.seconds = derived_quantities.game_length_in_time(game)
             game.game_turns = derived_quantities.game_length_in_turns(game)
+            game.first_ko = derived_quantities.game_first_ko(game)
             seats = game_crud.get_child_data(game.id, "seat", True)
             game.player = [None] * len(seats)
             game.deck = [None] * len(seats)
@@ -816,6 +858,7 @@ def data_post():
             decks_to_remove = []
             game_times = []
             game_turns = []
+            first_kos = []
             num_edhrec_deck = []
 
             # if we have a restriction on the colour identity name
@@ -850,12 +893,18 @@ def data_post():
 
                     # find all games played by the deck
                     for seat in deck_crud.get_child_data(player_deck.id, "seat", True):
-                        # get the length of the game
-                        game_turns.append(derived_quantities.game_length_in_turns(seat.game))
+                        # get the length of those games
+                        game_length = derived_quantities.game_length_in_turns(seat.game)
+                        if game_length:
+                            game_turns.append(game_length)
                         # get the time taken for each of those games
                         _, game_seconds = derived_quantities.game_length_in_time(seat.game)
                         if game_seconds:
                             game_times.append(game_seconds)
+                        # get the first turn a player was KOd in each of those games
+                        first_ko_turn = derived_quantities.game_first_ko(seat.game)
+                        if first_ko_turn:
+                            first_kos.append(first_ko_turn)
             else:
                 # find number of games this player has played and number of games won
                 player_seats = player_crud.get_child_data(player.id, "seat", True)
@@ -868,21 +917,37 @@ def data_post():
 
                 # find all games played by the player
                 for seat in player_crud.get_child_data(player.id, "seat", True):
-                    # get the length of the game
-                    game_turns.append(derived_quantities.game_length_in_turns(seat.game))
+                    # get the length of those games
+                    game_length = derived_quantities.game_length_in_turns(seat.game)
+                    if game_length:
+                        game_turns.append(game_length)
                     # get the time taken for each of those games
                     _, game_seconds = derived_quantities.game_length_in_time(seat.game)
                     if game_seconds:
                         game_times.append(game_seconds)
+                    # get the first turn a player was KOd in each of those games
+                    first_ko_turn = derived_quantities.game_first_ko(seat.game)
+                    if first_ko_turn:
+                        first_kos.append(first_ko_turn)
 
-            # and calculate the average time of all of those games
+            # calculate the average time of all the games a player has played
             if len(game_times) > 0:
                 ave_time = sum(game_times) / len(game_times)
                 player.ave_game_time = str(timedelta(seconds=(ave_time - (ave_time % 60))))[0:-3]
-                player.ave_game_turns = f"{(sum(game_turns) / len(game_turns)):.1f}"
             else:
                 player.ave_game_time = ""
+
+            # calculate the average turn length of all the games a player has played
+            if len(game_turns) > 0:
+                player.ave_game_turns = f"{(sum(game_turns) / len(game_turns)):.1f}"
+            else:
                 player.ave_game_turns = ""
+
+            # calculate the average first KO turn for all the games a player has played
+            if len(first_kos) > 0:
+                player.ave_first_ko = f"{(sum(first_kos) / len(first_kos)):.1f}"
+            else:
+                player.ave_first_ko = ""
 
             # if they've played no games we need to set the win rate manually to avoid divide by zero errors
             if player.num_games_played == 0:
@@ -896,20 +961,21 @@ def data_post():
             # find the edhrec data for each relevant deck player owns
             for player_deck in player_decks:
                 if player_deck.edhrec_num_decks:
-                    num_edhrec_deck.append(player_deck.edhrec_num_decks)
+                    num_edhrec_deck.append(int(player_deck.edhrec_num_decks))
 
             # if a deck has no edhrec data we need to set the average number of
             # decks manually to avoid divide by zero errors
             if len(num_edhrec_deck) == 0:
                 player.ave_edhrec_decks = 0
+                player.ave_edhrec_ranking = ""
             else:
                 player.ave_edhrec_decks = sum(num_edhrec_deck) / len(num_edhrec_deck)
 
-            # find the ranking that the player's average deck would have on EDHrec
-            rank = 0
-            while player.ave_edhrec_decks < popularity_list[rank]["num_decks"]:
-                rank += 1
-            player.ave_edhrec_ranking = f"#{rank + 1} ({popularity_list[rank]['name']})"
+                # find the ranking that the player's average deck would have on EDHrec
+                rank = 0
+                while player.ave_edhrec_decks < popularity_list[rank]["num_decks"]:
+                    rank += 1
+                player.ave_edhrec_ranking = f"#{rank + 1} ({popularity_list[rank]['name']})"
 
             # finally, append all the relevant data that has been requested
             if player.num_decks != 0:

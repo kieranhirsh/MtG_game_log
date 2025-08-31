@@ -66,8 +66,10 @@ function sortTable(n) {
     header === "Start Time" ||
     header === "Game Length (Time)" ||
     header === "Game Length (Turns)" ||
-    header === "Ave Game Length" ||
+    header === "First KO" ||
     header === "Ave Game Time" ||
+    header === "Ave Game Length" ||
+    header === "Ave First KO" ||
     header === "# EDHrec Decks" ||
     header === "Ave # EDHrec Decks"
   ) {
@@ -111,7 +113,9 @@ function sortTable(n) {
           header === "Games Won" ||
           header === "Win Rate" ||
           header === "Ave Game Length" ||
+          header === "First KO" ||
           header === "Game Length (Turns)" ||
+          header === "Ave First KO" ||
           header === "# EDHrec Decks" ||
           header === "Popularity" ||
           header === "Ave # EDHrec Decks"
@@ -147,7 +151,9 @@ function sortTable(n) {
           header === "Games Won" ||
           header === "Win Rate" ||
           header === "Game Length (Turns)" ||
+          header === "First KO" ||
           header === "Ave Game Length" ||
+          header === "Ave First KO" ||
           header === "# EDHrec Decks" ||
           header === "Popularity" ||
           header === "Ave # EDHrec Decks"
@@ -231,8 +237,9 @@ function sortColourTables(col) {
       header === "Games Played" ||
       header === "Games Won" ||
       header === "Win Rate" ||
-      header === "Ave Game Length" ||
       header === "Ave Game Time" ||
+      header === "Ave Game Length" ||
+      header === "Ave First KO" ||
       header === "Ave # EDHrec Decks"
     ) {
       dir = "desc";
@@ -275,6 +282,7 @@ function sortColourTables(col) {
             header === "Games Won" ||
             header === "Win Rate" ||
             header === "Ave Game Length" ||
+            header === "Ave First KO" ||
             header === "Ave # EDHrec Decks"
           ) {
             if (parseFloat(x.innerHTML) > parseFloat(y.innerHTML) || parseFloat(x.innerHTML) == 0) {
@@ -297,6 +305,7 @@ function sortColourTables(col) {
             header === "Games Won" ||
             header === "Win Rate" ||
             header === "Ave Game Length" ||
+            header === "Ave First KO" ||
             header === "Ave # EDHrec Decks"
           ) {
             if (isNaN(parseFloat(y.innerHTML))) {
