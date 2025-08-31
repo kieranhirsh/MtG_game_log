@@ -930,20 +930,21 @@ def data_post():
             # find the edhrec data for each relevant deck player owns
             for player_deck in player_decks:
                 if player_deck.edhrec_num_decks:
-                    num_edhrec_deck.append(player_deck.edhrec_num_decks)
+                    num_edhrec_deck.append(int(player_deck.edhrec_num_decks))
 
             # if a deck has no edhrec data we need to set the average number of
             # decks manually to avoid divide by zero errors
             if len(num_edhrec_deck) == 0:
                 player.ave_edhrec_decks = 0
+                player.ave_edhrec_ranking = ""
             else:
                 player.ave_edhrec_decks = sum(num_edhrec_deck) / len(num_edhrec_deck)
 
-            # find the ranking that the player's average deck would have on EDHrec
-            rank = 0
-            while player.ave_edhrec_decks < popularity_list[rank]["num_decks"]:
-                rank += 1
-            player.ave_edhrec_ranking = f"#{rank + 1} ({popularity_list[rank]['name']})"
+                # find the ranking that the player's average deck would have on EDHrec
+                rank = 0
+                while player.ave_edhrec_decks < popularity_list[rank]["num_decks"]:
+                    rank += 1
+                player.ave_edhrec_ranking = f"#{rank + 1} ({popularity_list[rank]['name']})"
 
             # finally, append all the relevant data that has been requested
             if player.num_decks != 0:
