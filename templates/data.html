@@ -356,10 +356,13 @@
       <input type="checkbox" id="player_win_rate" checked onclick="toggleColumn('player_win_rate')">Win Rate
     </label>
     <label>
+      <input type="checkbox" id="player_ave_game_time" checked onclick="toggleColumn('player_ave_game_time')">Ave Game Time
+    </label>
+    <label>
       <input type="checkbox" id="player_ave_game_turns" checked onclick="toggleColumn('player_ave_game_turns')">Ave Game Length
     </label>
     <label>
-      <input type="checkbox" id="player_ave_game_time" checked onclick="toggleColumn('player_ave_game_time')">Ave Game Time
+      <input type="checkbox" id="player_ave_first_ko" checked onclick="toggleColumn('player_ave_first_ko')">Ave First KO
     </label>
     <label>
       <input type="checkbox" id="player_ave_edhrec_decks" checked onclick="toggleColumn('player_ave_edhrec_decks')">Ave # EDHrec Decks
@@ -377,10 +380,11 @@
         <th onclick="sortTable(2)" class="player_games_played">Games Played</th>
         <th onclick="sortTable(3)" class="player_wins">Games Won</th>
         <th onclick="sortTable(4)" class="player_win_rate">Win Rate</th>
-        <th onclick="sortTable(5)" class="player_ave_game_turns">Ave Game Length</th>
-        <th onclick="sortTable(6)" class="player_ave_game_time">Ave Game Time</th>
-        <th onclick="sortTable(7)" class="player_ave_edhrec_decks">Ave # EDHrec Decks</th>
-        <th onclick="sortTable(7)" class="player_ave_edhrec_ranking">Ave EDHrec Popularity</th>
+        <th onclick="sortTable(5)" class="player_ave_game_time">Ave Game Time</th>
+        <th onclick="sortTable(6)" class="player_ave_game_turns">Ave Game Length</th>
+        <th onclick="sortTable(7)" class="player_ave_first_ko">Ave First KO</th>
+        <th onclick="sortTable(8)" class="player_ave_edhrec_decks">Ave # EDHrec Decks</th>
+        <th onclick="sortTable(8)" class="player_ave_edhrec_ranking">Ave EDHrec Popularity</th>
       </tr>
       {% for player in data["players"] %}
       <tr>
@@ -389,8 +393,9 @@
         <td class="player_games_played">{{ player.num_games_played }}</td>
         <td class="player_wins">{{ player.num_games_won }}</td>
         <td class="player_win_rate">{{ '%0.2f'|format(player.win_rate) }}%</td>
-        <td class="player_ave_game_turns">{{ player.ave_game_turns }}</td>
         <td class="player_ave_game_time">{{ player.ave_game_time }}</td>
+        <td class="player_ave_game_turns">{{ player.ave_game_turns }}</td>
+        <td class="player_ave_first_ko">{{ player.ave_first_ko }}</td>
         <td class="player_ave_edhrec_decks">{{ '%0.1f'|format(player.ave_edhrec_decks) }}</td>
         <td class="player_ave_edhrec_ranking">{{ player.ave_edhrec_ranking }}</td>
       </tr>

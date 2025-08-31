@@ -827,6 +827,7 @@ def data_post():
             decks_to_remove = []
             game_times = []
             game_turns = []
+            first_kos = []
             num_edhrec_deck = []
 
             # if we have a restriction on the colour identity name
@@ -861,12 +862,18 @@ def data_post():
 
                     # find all games played by the deck
                     for seat in deck_crud.get_child_data(player_deck.id, "seat", True):
-                        # get the length of the game
-                        game_turns.append(derived_quantities.game_length_in_turns(seat.game))
+                        # get the length of those games
+                        game_length = derived_quantities.game_length_in_turns(seat.game)
+                        if game_length:
+                            game_turns.append(game_length)
                         # get the time taken for each of those games
                         _, game_seconds = derived_quantities.game_length_in_time(seat.game)
                         if game_seconds:
                             game_times.append(game_seconds)
+                        # get the first turn a player was KOd in each of those games
+                        first_ko_turn = derived_quantities.game_first_ko(seat.game)
+                        if first_ko_turn:
+                            first_kos.append(first_ko_turn)
             else:
                 # find number of games this player has played and number of games won
                 player_seats = player_crud.get_child_data(player.id, "seat", True)
@@ -879,21 +886,37 @@ def data_post():
 
                 # find all games played by the player
                 for seat in player_crud.get_child_data(player.id, "seat", True):
-                    # get the length of the game
-                    game_turns.append(derived_quantities.game_length_in_turns(seat.game))
+                    # get the length of those games
+                    game_length = derived_quantities.game_length_in_turns(seat.game)
+                    if game_length:
+                        game_turns.append(game_length)
                     # get the time taken for each of those games
                     _, game_seconds = derived_quantities.game_length_in_time(seat.game)
                     if game_seconds:
                         game_times.append(game_seconds)
+                    # get the first turn a player was KOd in each of those games
+                    first_ko_turn = derived_quantities.game_first_ko(seat.game)
+                    if first_ko_turn:
+                        first_kos.append(first_ko_turn)
 
-            # and calculate the average time of all of those games
+            # calculate the average time of all the games a player has played
             if len(game_times) > 0:
                 ave_time = sum(game_times) / len(game_times)
                 player.ave_game_time = str(timedelta(seconds=(ave_time - (ave_time % 60))))[0:-3]
-                player.ave_game_turns = f"{(sum(game_turns) / len(game_turns)):.1f}"
             else:
                 player.ave_game_time = ""
+
+            # calculate the average turn length of all the games a player has played
+            if len(game_turns) > 0:
+                player.ave_game_turns = f"{(sum(game_turns) / len(game_turns)):.1f}"
+            else:
                 player.ave_game_turns = ""
+
+            # calculate the average first KO turn for all the games a player has played
+            if len(first_kos) > 0:
+                player.ave_first_ko = f"{(sum(first_kos) / len(first_kos)):.1f}"
+            else:
+                player.ave_first_ko = ""
 
             # if they've played no games we need to set the win rate manually to avoid divide by zero errors
             if player.num_games_played == 0:
