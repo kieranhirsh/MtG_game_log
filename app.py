@@ -806,6 +806,8 @@ def data_post():
                                                             return_model_object=True)[0]
                     except:
                         return errors.entry_not_found('data.html', [['deck', 'deck_name', deck_name]])
+                else:
+                    return errors.missing_form_item('data.html')
 
                 for seat in seats:
                     if not request.form["requested_deck"] or seat.deck == requested_deck:
@@ -1176,21 +1178,21 @@ def graphs():
                     deck_name = getattr(deck, "deck_name")
                     xy_data.update({deck_name: 0})
 
-                if request.form["bar_y"] == "win rate":
-                    for datum in data:
-                        datum_name = getattr(datum, "deck_name")
-                        games_played = deck_crud.get_child_data(getattr(datum, "id"), "seat", True)
-                        num_games_played = len(games_played)
+                    if request.form["bar_y"] == "win rate":
+                        for datum in data:
+                            datum_name = getattr(datum, "deck_name")
+                            games_played = deck_crud.get_child_data(getattr(datum, "id"), "seat", True)
+                            num_games_played = len(games_played)
 
-                        if num_games_played == 0:
-                            xy_data[datum_name] = 0
-                        else:
-                            num_games_won = 0
-                            for seat in games_played:
-                                _, winning_deck = derived_quantities.game_winning_player_and_deck(seat.game)
-                                if winning_deck.id == deck.id:
-                                    num_games_won += 1
-                            xy_data[datum_name] = num_games_won / num_games_played * 100
+                            if num_games_played == 0:
+                                xy_data[datum_name] = 0
+                            else:
+                                num_games_won = 0
+                                for seat in games_played:
+                                    _, winning_deck = derived_quantities.game_winning_player_and_deck(seat.game)
+                                    if winning_deck.id == deck.id:
+                                        num_games_won += 1
+                                xy_data[datum_name] = num_games_won / num_games_played * 100
             else:
                 call_error = True
                 missing_entries.append([request.form["bar_x"], 'X axis'])
@@ -1377,6 +1379,8 @@ def graphs():
             plt_graph = pie_charts.make_pie_chart(labels,
                                                   values,
                                                   titles[request.form["pie_data"]] + " per " + titles[request.form["pie_divisions"]])
+        else:
+            return errors.missing_form_item('graphs.html')
 
         return render_template(
             'graphs.html',
