@@ -144,7 +144,7 @@ def input_add():
             # loop over number of seats
             for i in range(len(game_decks)):
                 # find the deck and player id, and ko_turn, for each seat
-                deck_name, deck_owner_name, query_tree = utils.get_deck_data_from_form_inputs(game_decks[i])
+                deck_name, _, query_tree = utils.get_deck_data_from_form_inputs(game_decks[i])
                 try:
                     desired_deck = deck_crud.specific(query_tree=query_tree, join_classes=["player"])
                 except:
@@ -199,7 +199,7 @@ def input_edit():
 
         # this desperately wants to be a select case, but I'm using Python 3.8 :(
         if input_type == "deck":
-            deck_name, deck_owner_name, query_tree = utils.get_deck_data_from_form_inputs(request.form['requested_deck'])
+            deck_name, _, query_tree = utils.get_deck_data_from_form_inputs(request.form['requested_deck'])
             try:
                 deck_to_edit = deck_crud.specific(query_tree=query_tree, join_classes=["player"])
             except:
@@ -303,7 +303,7 @@ def input_edit():
                 seat_no = seat_to_edit["seat_no"] - 1
 
                 if game_decks[seat_no] or game_players[seat_no] or game_ko_turns[seat_no]:
-                    deck_name, deck_owner_name, query_tree = utils.get_deck_data_from_form_inputs(game_decks[seat_no])
+                    deck_name, _, query_tree = utils.get_deck_data_from_form_inputs(game_decks[seat_no])
                     deck_id = deck_crud.specific(query_tree=query_tree, join_classes=['player'])['id']
 
                     player_id = player_crud.specific(key='player_name', value=game_players[seat_no])['id']
@@ -358,7 +358,7 @@ def input_delete():
         input_type = request.form["type"]
 
         if input_type == "deck":
-            deck_name, deck_owner_name, query_tree = utils.get_deck_data_from_form_inputs(request.form['requested_deck'])
+            deck_name, _, query_tree = utils.get_deck_data_from_form_inputs(request.form['requested_deck'])
             try:
                 deck_to_delete = deck_crud.specific(query_tree=query_tree, join_classes=["player"])
             except:
@@ -1216,7 +1216,7 @@ def graphs():
                 data_names = request.form.getlist("line_" + request.form['line_data'])
                 for deck_input in data_names:
                     if deck_input:
-                        deck_name, deck_owner_name, query_tree = utils.get_deck_data_from_form_inputs(deck_input)
+                        deck_name, _, query_tree = utils.get_deck_data_from_form_inputs(deck_input)
                         try:
                             data.append(crud_class.specific(query_tree=query_tree,
                                                             join_classes=["player"],
