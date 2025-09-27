@@ -667,6 +667,7 @@ def data_post():
                     class_type = "player"
 
                 elif form_item == "ci_abbr":
+                    # check that colour identity exists in database, return an error if it doesn't
                     colour_identity_data, desired_ci = utils.get_ci_data_from_list_of_colours(request.form.getlist("ci_abbr"))
                     if not colour_identity_data:
                         return errors.entry_not_found('data.html', [["colour_identity", "colours", desired_ci]])
@@ -674,6 +675,9 @@ def data_post():
                     restriction_value = colour_identity_data[0].ci_name
 
                     class_type = "colour_identity"
+
+                else:
+                    return errors.missing_form_item('data.html')
 
                 restrictions.append({
                     "class_type": class_type,

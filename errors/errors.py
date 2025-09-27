@@ -60,3 +60,20 @@ def card_not_found(page, details, method=""):
                            method=method,
                            error_messages=error_messages,
                            data=all_db_data), 400
+
+def missing_form_item(page, method=""):
+    '''
+        This function is for when the expected form items are not found
+    '''
+    # Initialise variables
+    error_messages = ["The expected form items were not found"]
+
+    # Load all the data, because we don't know what we will need
+    all_db_data = utils.load_all_db_data()
+
+    # Return the page
+    return render_template('error.html',
+                           page=page,
+                           method=method,
+                           error_messages=error_messages,
+                           data=all_db_data), 400
