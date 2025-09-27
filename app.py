@@ -372,7 +372,8 @@ def input_delete():
                                                                     request.form["%s_name" % input_type])
             except:
                 return errors.entry_not_found('input.html',
-                                              [[input_type, "%s_name" % input_type, request.form["%s_name" % input_type]]],
+                                              [[input_type, "%s_name" % input_type,
+                                                request.form["%s_name" % input_type]]],
                                               'delete')
             module_names[input_type].delete(entry_to_delete['id'])
 
