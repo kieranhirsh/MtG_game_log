@@ -27,12 +27,12 @@
   <div id="menu">
     Under the following conditions (leave a condition blank for no restriction):<br>
     <datalist id="players">
-      {% for player in data["players"] %}
+      {% for player in menu_data["players"] %}
       <option value="{{ player.player_name }}">
         {% endfor %}
     </datalist>
     <datalist id="decks">
-      {% for deck in data["decks"] %}
+      {% for deck in menu_data["decks"] %}
       <option value="{{ deck.deck_name }} ({{ deck.player.player_name }})">
         {% endfor %}
     </datalist>
@@ -121,7 +121,7 @@
   </div>
   <!-- data table-->
   <div id="data_tables">
-    {% for colour_identity_group_by_num_colours in data["colour_identities"] %}
+    {% for colour_identity_group_by_num_colours in menu_data["colour_identities"] %}
     <table class="colour_data_table" id="{{ colour_identity_group_by_num_colours[1].num_colours }}_colours_table">
       <tr>
         <th onclick="sortColourTables(0)" class="ci_name">Colour Identity</th>
@@ -262,7 +262,7 @@
         <th onclick="sortTable(13)" class="deck_edhrec_decks"># EDHrec Decks</th>
         <th onclick="sortTable(14)" class="deck_popularity">Popularity</th>
       </tr>
-      {% for deck in data["decks"] %}
+      {% for deck in menu_data["decks"] %}
       <tr>
         <td class="deck_name">{{ deck.deck_name }}</td>
         <td class="deck_owner">{{ deck.player.player_name }}</td>
@@ -325,11 +325,11 @@
         <th onclick="sortTable(3)" class="game_turns">Game Length (Turns)</th>
         <th onclick="sortTable(4)" class="game_first_ko">First KO</th>
         <th onclick="sortTable(5)" class="game_winner">Winner</th>
-        {% for i in range(data["num_seats"]) %}
+        {% for i in range(menu_data["num_seats"]) %}
         <th onclick="sortTable({{ i + 6 }})" class="game_players">Player {{ i + 1 }}</th>
         {% endfor %}
       </tr>
-      {% for game in data["games"] %}
+      {% for game in menu_data["games"] %}
       <tr>
         <td class="game_date">{{ (game.start_time|string)[0:10] }}</td>
         <td class="game_start">{{ (game.start_time|string)[11:16] }}</td>
@@ -337,7 +337,7 @@
         <td class="game_turns">{{ game.game_turns }}</td>
         <td class="game_first_ko">{{ game.first_ko }}</td>
         <td class="game_winner">{{ game.winner }}</td>
-        {% for j in range(data["num_seats"]) %}
+        {% for j in range(menu_data["num_seats"]) %}
         <td class="game_players">{% if game.player[j] %}{{ game.player[j].player_name }} - {{ game.deck[j].deck_name }}{% if game.player[j].player_name != game.deck[j].player.player_name  %} ({{ game.deck[j].player.player_name }}'s deck){% endif %}{% endif %}</td>
         {% endfor %}
       </tr>
@@ -395,7 +395,7 @@
         <th onclick="sortTable(8)" class="player_ave_edhrec_decks">Ave # EDHrec Decks</th>
         <th onclick="sortTable(8)" class="player_ave_edhrec_ranking">Ave EDHrec Popularity</th>
       </tr>
-      {% for player in data["players"] %}
+      {% for player in menu_data["players"] %}
       <tr>
         <td class="player_names">{{ player.player_name }}</td>
         <td class="player_decks">{{ player.num_decks }}</td>

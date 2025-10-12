@@ -402,7 +402,7 @@ def data_get():
                  "decks": decks,
                  "players": players}
 
-    return render_template('data.html', data=html_data)
+    return render_template('data.html', menu_data=html_data)
 
 @app.route('/data', methods=['POST'])
 def data_post():
@@ -648,7 +648,7 @@ def data_post():
                      "decks": decks,
                      "players": players}
 
-        return render_template('data.html', data_type="colour_identity", data=html_data)
+        return render_template('data.html', data_type="colour_identity", menu_data=html_data)
     elif request.form["type"] == "deck":
         restrictions = []
 
@@ -778,7 +778,7 @@ def data_post():
                      "decks": deck_data,
                      "players": players}
 
-        return render_template('data.html', data_type="deck", data=html_data)
+        return render_template('data.html', data_type="deck", menu_data=html_data)
     elif request.form["type"] == "game":
         # Load the data we need
         games = game_crud.all(True)
@@ -842,7 +842,7 @@ def data_post():
                      "players": players,
                      "num_seats": num_seats}
 
-        return render_template('data.html', data_type="game", data=html_data)
+        return render_template('data.html', data_type="game", menu_data=html_data)
     elif request.form["type"] == "player":
         # initialise values
         player_data = []
@@ -992,14 +992,14 @@ def data_post():
                      "decks": decks,
                      "players": player_data}
 
-        return render_template('data.html', data_type="player", data=html_data)
+        return render_template('data.html', data_type="player", menu_data=html_data)
 
     # Prepare data to pass to the template
     html_data = {"colour_identities": colour_identities,
                  "decks": decks,
                  "players": players}
 
-    return render_template('data.html', data=html_data)
+    return render_template('data.html', menu_data=html_data)
 
 @app.route('/graphs', methods=['GET', 'POST'])
 def graphs():
