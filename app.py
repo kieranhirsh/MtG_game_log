@@ -754,8 +754,7 @@ def data_post():
                     first_ko = derived_quantities.game_first_ko(seat.game)
                     if first_ko:
                         first_kos.append(first_ko)
-                    if seat.game.start_time > most_recent_game:
-                        most_recent_game = seat.game.start_time
+                    most_recent_game = max(most_recent_game, seat.game.start_time)
                 deck.last_played = f"{(datetime.now() - most_recent_game).days} days ago"
 
                 if len(game_times) > 0:
@@ -824,7 +823,7 @@ def data_post():
 
             game.winner = winning_player.player_name + " - " + winning_deck.deck_name
             if winning_player.player_name != winning_deck.player.player_name:
-                game.winner += " (%s's deck)" % winning_deck.player.player_name
+                game.winner += f" ({winning_deck.player.player_name}'s deck)"
 
             for seat in seats:
                 game.player[seat.seat_no - 1] = seat.player
@@ -1014,11 +1013,11 @@ def graphs():
         plt_data = {}
 
         for ii in list(range(0,6)):
-            plt_data.update({"%s colours" % ii: 0})
+            plt_data.update({f"{ii} colours": 0})
 
         for deck in deck_data:
             deck_num_colours = deck.colour_identity.num_colours
-            plt_data["%s colours" % deck_num_colours] += 1
+            plt_data[f"{deck_num_colours} colours"] += 1
 
         number_of_colours = list(plt_data.keys())
         number_of_decks = list(plt_data.values())
@@ -1071,10 +1070,7 @@ def graphs():
                 missing_entries.append([request.form["bar_data"], 'Data Type'])
                 return errors.option_not_available('graphs.html', missing_entries)
 
-            if "no_zeroes" in request.form:
-                no_zeroes = True
-            else:
-                no_zeroes = False
+            no_zeroes = bool("no_zeroes" in request.form)
 
             crud_file = importlib.import_module("crud." + model_names[request.form["bar_data"]]["file"])
             crud_class = getattr(crud_file, model_names[request.form["bar_data"]]["class"])
@@ -1131,12 +1127,12 @@ def graphs():
                     missing_entries.append([request.form["bar_y"], 'Y axis'])
             elif request.form["bar_x"] == "number of colours":
                 for ii in list(range(0,6)):
-                    xy_data.update({"%s colours" % ii: 0})
+                    xy_data.update({f"{ii} colours": 0})
 
                 if request.form["bar_y"] == "number of decks":
                     for datum in data:
                         datum_num_colours = datum.colour_identity.num_colours
-                        xy_data["%s colours" % datum_num_colours] += 1
+                        xy_data[f"{datum_num_colours} colours"] += 1
                 else:
                     call_error = True
                     missing_entries.append([request.form["bar_y"], 'Y axis'])
@@ -1400,7 +1396,7 @@ def graphs_advanced():
 # Error pages #
 ###############
 @app.errorhandler(404)
-def error_404(e):
+def error_404(_):
     return render_template('404.html')
 
 # Set debug=True for the server to auto-reload when there are changes
