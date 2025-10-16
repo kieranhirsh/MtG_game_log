@@ -445,7 +445,7 @@ def data_post():
                 }])
 
         # generate the full list of edhrec deck data
-        min_edhrec_decks = min((deck.edhrec_num_decks for deck in decks if deck.edhrec_num_decks))
+        min_edhrec_decks = min([deck.edhrec_num_decks for deck in decks if isinstance(deck.edhrec_num_decks, int)])
         page = 1
         edhrec_all_cmdrs_response = requests.get("https://json.edhrec.com/pages/commanders/year.json").json()
         popularity_list = edhrec_all_cmdrs_response["container"]["json_dict"]["cardlists"][0]["cardviews"]
@@ -848,7 +848,7 @@ def data_post():
         player_data = []
 
         # generate the full list of edhrec deck data
-        min_edhrec_decks = min([int(deck.edhrec_num_decks) for deck in decks if deck.edhrec_num_decks])
+        min_edhrec_decks = min([deck.edhrec_num_decks for deck in decks if isinstance(deck.edhrec_num_decks, int)])
         page = 1
         edhrec_all_cmdrs_response = requests.get("https://json.edhrec.com/pages/commanders/year.json").json()
         popularity_list = edhrec_all_cmdrs_response["container"]["json_dict"]["cardlists"][0]["cardviews"]
