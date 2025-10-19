@@ -690,6 +690,7 @@ def data_post():
                 })
 
         # set up our initial bins
+        bin_type = ""
         columns = {
             "deck_name": "",
             "owner_name": "",
@@ -712,10 +713,10 @@ def data_post():
             "popularity": ""
         }
         if "bins" in request.form.keys():
-            form_value = request.form["bins"]
+            bin_type = request.form["bins"]
             # find how we're supposed to bin the data
             # this wants to be a select case, but I'm using Python 3.8 :(
-            if form_value == "result":
+            if bin_type == "result":
                 # in this case we have 2 options, win or lose
                 bins = {
                     "total": deepcopy(columns),
@@ -799,25 +800,44 @@ def data_post():
             else:
                 most_recent_game = datetime.min
                 for seat in deck_seats:
+                    # this wants to be a select case, but I'm using Python 3.8 :(
+                    game_bin = ""
+                    if bin_type == "result":
+                        if winning_deck.id == deck.id:
+                            game_bin = "win"
+                        else:
+                            game_bin = "loss"
+                    if game_bin:
+                        table_data[deck.id][game_bin]["num_games_played"] += 1
+
                     _, winning_deck = derived_quantities.game_winning_player_and_deck(seat.game)
                     if winning_deck.id == deck.id:
                         table_data[deck.id]["total"]["num_games_won"] += 1
+                        if game_bin:
+                            table_data[deck.id][game_bin]["num_games_won"] += 1
 
                     _, game_seconds = derived_quantities.game_length_in_time(seat.game)
                     if game_seconds:
                         table_data[deck.id]["total"]["total_game_time"] += game_seconds
+                        if game_bin:
+                            table_data[deck.id][game_bin]["total_game_time"] += game_seconds
                     game_length = derived_quantities.game_length_in_turns(seat.game)
                     if game_length:
                         table_data[deck.id]["total"]["total_game_turns"] += game_length
+                        if game_bin:
+                            table_data[deck.id][game_bin]["total_game_turns"] += game_length
                     first_ko = derived_quantities.game_first_ko(seat.game)
                     if first_ko:
                         table_data[deck.id]["total"]["total_first_ko"] += first_ko
+                        if game_bin:
+                            table_data[deck.id][game_bin]["total_first_ko"] += first_ko
                     most_recent_game = max(most_recent_game, seat.game.start_time)
 
                 table_data[deck.id]["total"]["win_rate"] = table_data[deck.id]["total"]["num_games_won"] / table_data[deck.id]["total"]["num_games_played"] * 100
                 table_data[deck.id]["total"]["last_played"] = f"{(datetime.now() - most_recent_game).days} days ago"
                 try:
-                    table_data[deck.id]["total"]["ave_game_time"] = table_data[deck.id]["total"]["total_game_time"] / table_data[deck.id]["total"]["num_games_played"]
+                    ave_time = table_data[deck.id]["total"]["total_game_time"] / table_data[deck.id]["total"]["num_games_played"]
+                    table_data[deck.id]["total"]["ave_game_time"] = str(timedelta(seconds=(ave_time - (ave_time % 60))))[0:-3]
                 except ZeroDivisionError:
                     table_data[deck.id]["total"]["ave_game_time"] = ""
                 try:
@@ -828,6 +848,23 @@ def data_post():
                     table_data[deck.id]["total"]["ave_first_ko"] = table_data[deck.id]["total"]["total_first_ko"] / table_data[deck.id]["total"]["num_games_played"]
                 except ZeroDivisionError:
                     table_data[deck.id]["total"]["ave_first_ko"] = ""
+
+                if game_bin:
+                    table_data[deck.id][game_bin]["win_rate"] = table_data[deck.id][game_bin]["num_games_won"] / table_data[deck.id][game_bin]["num_games_played"] * 100
+                    table_data[deck.id][game_bin]["last_played"] = f"{(datetime.now() - most_recent_game).days} days ago"
+                    try:
+                        ave_time = table_data[deck.id][game_bin]["total_game_time"] / table_data[deck.id][game_bin]["num_games_played"]
+                        table_data[deck.id][game_bin]["ave_game_time"] = str(timedelta(seconds=(ave_time - (ave_time % 60))))[0:-3]
+                    except ZeroDivisionError:
+                        table_data[deck.id][game_bin]["ave_game_time"] = ""
+                    try:
+                        table_data[deck.id][game_bin]["ave_game_turns"] = table_data[deck.id][game_bin]["total_game_turns"] / table_data[deck.id][game_bin]["num_games_played"]
+                    except ZeroDivisionError:
+                        table_data[deck.id][game_bin]["ave_game_turns"] = ""
+                    try:
+                        table_data[deck.id][game_bin]["ave_first_ko"] = table_data[deck.id][game_bin]["total_first_ko"] / table_data[deck.id][game_bin]["num_games_played"]
+                    except ZeroDivisionError:
+                        table_data[deck.id][game_bin]["ave_first_ko"] = ""
 
         return render_template('data.html', data_type="deck", menu_data=html_data, table_data=table_data)
     elif request.form["type"] == "game":
