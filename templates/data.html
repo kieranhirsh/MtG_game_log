@@ -52,11 +52,22 @@
         <label for="player_name">&emsp;Owner Name = </label>
         <input type="text" id="player_name" name="player_name" list="players" autocomplete="off">
         <div>
-          Colour Identity:
+          &emsp;Colour Identity:
           <div>
           {% include "ci_dropdown.html" %}
           </div>
         </div>
+        Binned by:
+        <select name="bins" id="bins">
+          <option value="" selected disabled hidden>Choose bin (optional)</option>
+          <option value="opp_player">Opponent (player)</option>
+          <option value="opp_deck">Opponent (deck)</option>
+          <option value="seat">Position in Turn Order</option>
+          <option value="result">Result</option>
+          <option value="game_time">Game Length (time)</option>
+          <option value="game_turns">Game Length (turns)</option>
+          <option value="first_KO">First KO turn</option>
+        </select>
         <br><input type="submit" value="Submit">
       </form>
     </div>
@@ -262,28 +273,28 @@
         <th onclick="sortTable(13)" class="deck_edhrec_decks"># EDHrec Decks</th>
         <th onclick="sortTable(14)" class="deck_popularity">Popularity</th>
       </tr>
-      {% for deck in menu_data["decks"] %}
+      {% for deck in table_data %}
       <tr>
-        <td class="deck_name">{{ deck.deck_name }}</td>
-        <td class="deck_owner">{{ deck.player.player_name }}</td>
-        <td class="deck_commander">{{ deck.commander_name }}</td>
-        <td class="deck_partner">{{ deck.partner_name }}</td>
-        <td class="deck_companion">{{ deck.companion_name }}</td>
+        <td class="deck_name">{{ table_data[deck]["total"]["deck_name"] }}</td>
+        <td class="deck_owner">{{ table_data[deck]["total"]["owner_name"] }}</td>
+        <td class="deck_commander">{{ table_data[deck]["total"]["commander_name"] }}</td>
+        <td class="deck_partner">{{ table_data[deck]["total"]["partner_name"] }}</td>
+        <td class="deck_companion">{{ table_data[deck]["total"]["companion_name"] }}</td>
         <td class="deck_ci">
-          {{ deck.colour_identity.ci_name }} (
-            {% for colour in deck.colour_identity.colours %}
+          {{ table_data[deck]["total"]["colour_identity"] }} (
+            {% for colour in table_data[deck]["total"]["colours"] %}
             <img class="mana_symbol" src="../static/img/mana_{{ colour }}.svg">
             {% endfor %})
         </td>
-        <td class="deck_last_played">{{ deck.last_played }}</td>
-        <td class="deck_games_played">{{ deck.num_games_played }}</td>
-        <td class="deck_wins">{{ deck.num_games_won }}</td>
-        <td class="deck_win_rate">{{ '%0.2f'|format(deck.win_rate) }}%</td>
-        <td class="deck_ave_game_time">{{ deck.ave_game_time }}</td>
-        <td class="deck_ave_game_turns">{{ deck.ave_game_turns }}</td>
-        <td class="deck_ave_first_ko">{{ deck.ave_first_ko }}</td>
-        <td class="deck_edhrec_decks">{% if deck.edhrec_decks %}{{ deck.edhrec_decks }}{% endif %}</td>
-        <td class="deck_popularity">{% if deck.popularity %}#{{ deck.popularity }}{% endif %}</td>
+        <td class="deck_last_played">{{ table_data[deck]["total"]["last_played"] }}</td>
+        <td class="deck_games_played">{{ table_data[deck]["total"]["num_games_played"] }}</td>
+        <td class="deck_wins">{{ table_data[deck]["total"]["num_games_won"] }}</td>
+        <td class="deck_win_rate">{{ '%0.2f'|format(table_data[deck]["total"]["win_rate"]) }}%</td>
+        <td class="deck_ave_game_time">{{ table_data[deck]["total"]["ave_game_time"] }}</td>
+        <td class="deck_ave_game_turns">{{ table_data[deck]["total"]["ave_game_turns"] }}</td>
+        <td class="deck_ave_first_ko">{{ table_data[deck]["total"]["ave_first_ko"] }}</td>
+        <td class="deck_edhrec_decks">{% if table_data[deck]["total"]["edhrec_decks"] %}{{ table_data[deck]["total"]["edhrec_decks"] }}{% endif %}</td>
+        <td class="deck_popularity">{% if table_data[deck]["total"]["popularity"] %}#{{ table_data[deck]["total"]["popularity"] }}{% endif %}</td>
       </tr>
       {% endfor %}
     </table>

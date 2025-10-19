@@ -1,5 +1,6 @@
 import importlib
 import time
+from copy import deepcopy
 from datetime import datetime, timedelta
 from flask import Flask, render_template, request, jsonify
 import requests
@@ -411,6 +412,9 @@ def data_post():
     colour_identities = colour_identity_crud.all(True)
     decks = deck_crud.all(True)
     players = player_crud.all(True)
+    html_data = {"colour_identities": colour_identities,
+                 "decks": decks,
+                 "players": players}
 
     # this desperately wants to be a select case, but I'm using Python 3.8 :(
     if request.form["type"] == "colour_identity":
@@ -653,7 +657,7 @@ def data_post():
         restrictions = []
 
         for form_item in request.form:
-            if form_item != "type" and request.form[form_item]:
+            if form_item != "type" and form_item != "bins" and request.form[form_item]:
                 restriction_key = form_item
                 restriction_value = request.form[form_item]
 
@@ -685,6 +689,46 @@ def data_post():
                     "value": restriction_value
                 })
 
+        # set up our initial bins
+        columns = {
+            "deck_name": "",
+            "owner_name": "",
+            "commander_name": "",
+            "partner_name": "",
+            "companion_name": "",
+            "colour_identity": "",
+            "colours": [],
+            "last_played": "",
+            "num_games_played": 0,
+            "num_games_won": 0,
+            "win_rate": "",
+            "total_game_time": 0,
+            "ave_game_time": "",
+            "total_game_turns": 0,
+            "ave_game_turns": "",
+            "total_first_ko": 0,
+            "ave_first_ko": "",
+            "edhrec_decks": "",
+            "popularity": ""
+        }
+        if "bins" in request.form.keys():
+            form_value = request.form["bins"]
+            # find how we're supposed to bin the data
+            # this wants to be a select case, but I'm using Python 3.8 :(
+            if form_value == "result":
+                # in this case we have 2 options, win or lose
+                bins = {
+                    "total": deepcopy(columns),
+                    "win": deepcopy(columns),
+                    "loss": deepcopy(columns)
+                }
+                bins["win"]["deck_name"] = "games won"
+                bins["loss"]["deck_name"] = "games lost"
+        else:
+            bins = {
+                "total": columns
+            }
+
         if restrictions:
             deck_data = decks
             decks_to_remove = []
@@ -701,13 +745,26 @@ def data_post():
         else:
             deck_data = decks
 
+        table_data = {}
+
         for deck in deck_data:
+            print("deck_id = ", deck.id)
+            print("deck_name = ", deck.deck_name)
+            # initialise data
+            table_data[deck.id] = deepcopy(bins)
+            table_data[deck.id]["total"]["deck_name"] = deck.deck_name
+            table_data[deck.id]["total"]["owner_name"] = deck.player.player_name
+            table_data[deck.id]["total"]["commander_name"] = deck.commander_name
+            table_data[deck.id]["total"]["partner_name"] = deck.partner_name
+            table_data[deck.id]["total"]["companion_name"] = deck.companion_name
+            table_data[deck.id]["total"]["colour_identity"] = deck.colour_identity.ci_name
+            table_data[deck.id]["total"]["colours"] = deck.colour_identity.colours
+            print("table_data = ", table_data)
+
             # find all the games this deck has played
             deck_seats = deck_crud.get_child_data(deck.id, "seat", True)
-            deck.num_games_played = len(deck_seats)
-            game_times = []
-            game_turns = []
-            first_kos = []
+            num_games_played = len(deck_seats)
+            table_data[deck.id]["total"]["num_games_played"] = num_games_played
 
             if (not deck.last_accessed
                 or ((datetime.now() - datetime.strptime(str(deck.last_accessed), "%Y-%m-%d %H:%M:%S"))
@@ -716,69 +773,63 @@ def data_post():
                 try:
                     edhrec_uri = curl_utils.get_edhrec_uri_from_commander_names([deck.commander_name,
                                                                                  deck.partner_name])
-                    deck.edhrec_decks, deck.popularity = curl_utils.get_popularity_from_edhrec_uri(edhrec_uri)
-                    deck_crud.update(deck.id, jsonify({"edhrec_num_decks": deck.edhrec_decks,
-                                                        "edhrec_popularity": deck.popularity,
+                    edhrec_decks, popularity = curl_utils.get_popularity_from_edhrec_uri(edhrec_uri)
+                    table_data[deck.id]["total"]["edhrec_decks"] = edhrec_decks
+                    table_data[deck.id]["total"]["popularity"] = popularity
+                    deck_crud.update(deck.id, jsonify({"edhrec_num_decks": edhrec_decks,
+                                                        "edhrec_popularity": popularity,
                                                         "last_accessed": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}))
                     time.sleep(0.01)
                 except:
-                    deck.edhrec_decks = ""
-                    deck.popularity = ""
+                    pass
             else:
-                deck.edhrec_decks = deck.edhrec_num_decks
-                deck.popularity = deck.edhrec_popularity
+                table_data[deck.id]["total"]["edhrec_decks"] = deck.edhrec_num_decks
+                table_data[deck.id]["total"]["popularity"] = deck.edhrec_popularity
 
-            if deck.num_games_played == 0:
-                deck.win_rate = 0
-                deck.num_games_won = 0
-                deck.ave_game_time = ""
-                deck.ave_game_turns = ""
-                deck.ave_first_ko = ""
-                deck.last_played = "never"
+            if num_games_played == 0:
+                table_data[deck.id]["total"]["num_games_won"] = 0
+                table_data[deck.id]["total"]["win_rate"] = 0
+                table_data[deck.id]["total"]["ave_game_time"] = ""
+                table_data[deck.id]["total"]["ave_game_turns"] = ""
+                table_data[deck.id]["total"]["ave_first_ko"] = ""
+                table_data[deck.id]["total"]["last_played"] = "never"
+                table_data[deck.id] = {
+                    "total": table_data[deck.id]["total"]
+                }
             else:
-                deck.num_games_won = 0
+                most_recent_game = datetime.min
                 for seat in deck_seats:
                     _, winning_deck = derived_quantities.game_winning_player_and_deck(seat.game)
                     if winning_deck.id == deck.id:
-                        deck.num_games_won += 1
-                deck.win_rate = deck.num_games_won / deck.num_games_played * 100
+                        table_data[deck.id]["total"]["num_games_won"] += 1
 
-                most_recent_game = datetime.min
-                for seat in deck_crud.get_child_data(deck.id, "seat", True):
                     _, game_seconds = derived_quantities.game_length_in_time(seat.game)
                     if game_seconds:
-                        game_times.append(game_seconds)
+                        table_data[deck.id]["total"]["total_game_time"] += game_seconds
                     game_length = derived_quantities.game_length_in_turns(seat.game)
                     if game_length:
-                        game_turns.append(game_length)
+                        table_data[deck.id]["total"]["total_game_turns"] += game_length
                     first_ko = derived_quantities.game_first_ko(seat.game)
                     if first_ko:
-                        first_kos.append(first_ko)
+                        table_data[deck.id]["total"]["total_first_ko"] += first_ko
                     most_recent_game = max(most_recent_game, seat.game.start_time)
-                deck.last_played = f"{(datetime.now() - most_recent_game).days} days ago"
 
-                if len(game_times) > 0:
-                    ave_time = sum(game_times) / len(game_times)
-                    deck.ave_game_time = str(timedelta(seconds=(ave_time - (ave_time % 60))))[0:-3]
-                else:
-                    deck.ave_game_time = ""
+                table_data[deck.id]["total"]["win_rate"] = table_data[deck.id]["total"]["num_games_won"] / table_data[deck.id]["total"]["num_games_played"] * 100
+                table_data[deck.id]["total"]["last_played"] = f"{(datetime.now() - most_recent_game).days} days ago"
+                try:
+                    table_data[deck.id]["total"]["ave_game_time"] = table_data[deck.id]["total"]["total_game_time"] / table_data[deck.id]["total"]["num_games_played"]
+                except ZeroDivisionError:
+                    table_data[deck.id]["total"]["ave_game_time"] = ""
+                try:
+                    table_data[deck.id]["total"]["ave_game_turns"] = table_data[deck.id]["total"]["total_game_turns"] / table_data[deck.id]["total"]["num_games_played"]
+                except ZeroDivisionError:
+                    table_data[deck.id]["total"]["ave_game_turns"] = ""
+                try:
+                    table_data[deck.id]["total"]["ave_first_ko"] = table_data[deck.id]["total"]["total_first_ko"] / table_data[deck.id]["total"]["num_games_played"]
+                except ZeroDivisionError:
+                    table_data[deck.id]["total"]["ave_first_ko"] = ""
 
-                if len(game_turns) > 0:
-                    deck.ave_game_turns = f"{(sum(game_turns) / len(game_turns)):.1f}"
-                else:
-                    deck.ave_game_turns = ""
-
-                if len(first_kos) > 0:
-                    deck.ave_first_ko = f"{(sum(first_kos) / len(first_kos)):.1f}"
-                else:
-                    deck.ave_first_ko = ""
-
-        # Prepare data to pass to the template
-        html_data = {"colour_identities": colour_identities,
-                     "decks": deck_data,
-                     "players": players}
-
-        return render_template('data.html', data_type="deck", menu_data=html_data)
+        return render_template('data.html', data_type="deck", menu_data=html_data, table_data=table_data)
     elif request.form["type"] == "game":
         # Load the data we need
         games = game_crud.all(True)
