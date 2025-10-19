@@ -692,25 +692,11 @@ def data_post():
         # set up our initial bins
         bin_type = ""
         columns = {
-            "deck_name": "",
-            "owner_name": "",
-            "commander_name": "",
-            "partner_name": "",
-            "companion_name": "",
-            "colour_identity": "",
-            "colours": [],
-            "last_played": "",
             "num_games_played": 0,
             "num_games_won": 0,
-            "win_rate": 0,
             "total_game_time": 0,
-            "ave_game_time": "",
             "total_game_turns": 0,
-            "ave_game_turns": "",
             "total_first_ko": 0,
-            "ave_first_ko": "",
-            "edhrec_decks": "",
-            "popularity": ""
         }
         if "bins" in request.form.keys():
             bin_type = request.form["bins"]
