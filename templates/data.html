@@ -134,7 +134,7 @@
   <div id="data_tables">
     {% for colour_identity_group_by_num_colours in menu_data["colour_identities"] %}
     <table class="colour_data_table" id="{{ colour_identity_group_by_num_colours[1].num_colours }}_colours_table">
-      <tr>
+      <tr id="header">
         <th onclick="sortColourTables(0)" class="ci_name">Colour Identity</th>
         <th onclick="sortColourTables(1)" class="ci_num_decks"># Decks</th>
         <th onclick="sortColourTables(2)" class="ci_games_played">Games Played</th>
@@ -256,7 +256,7 @@
   <!-- data table-->
   <div id="data_tables">
     <table class="data_table" id="deck_table">
-      <tr>
+      <tr id="header">
         <th onclick="sortTable(0)" class="deck_name">Deck Name</th>
         <th onclick="sortTable(1)" class="deck_owner">Owner Name</th>
         <th onclick="sortTable(2)" class="deck_commander">Commander</th>
@@ -274,7 +274,7 @@
         <th onclick="sortTable(14)" class="deck_popularity">Popularity</th>
       </tr>
       {% for deck in table_data %}
-      <tr>
+      <tr id="total">
         <td class="deck_name">{{ table_data[deck]["total"]["deck_name"] }}</td>
         <td class="deck_owner">{{ table_data[deck]["total"]["owner_name"] }}</td>
         <td class="deck_commander">{{ table_data[deck]["total"]["commander_name"] }}</td>
@@ -298,7 +298,7 @@
       </tr>
         {% for bin in table_data[deck] %}
           {% if bin != "total" %}
-          <tr>
+          <tr id="bins">
             <td class="deck_name">{{ table_data[deck][bin]["deck_name"] }}</td>
             <td class="deck_owner">{{ table_data[deck][bin]["owner_name"] }}</td>
             <td class="deck_commander">{{ table_data[deck][bin]["commander_name"] }}</td>
@@ -357,7 +357,7 @@
   <!-- data table-->
   <div id="data_tables">
     <table class="data_table" id="game_table">
-      <tr>
+      <tr id="header">
         <th onclick="sortTable(0)" class="game_date">Date</th>
         <th onclick="sortTable(1)" class="game_start">Start Time</th>
         <th onclick="sortTable(2)" class="game_time">Game Length (Time)</th>
@@ -422,7 +422,7 @@
   <!-- data table-->
   <div id="data_tables">
     <table class="data_table" id="player_table">
-      <tr>
+      <tr id="header">
         <th onclick="sortTable(0)" class="player_names">Player Name</th>
         <th onclick="sortTable(1)" class="player_decks"># Decks</th>
         <th onclick="sortTable(2)" class="player_games_played">Games Played</th>

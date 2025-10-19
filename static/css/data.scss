@@ -29,11 +29,32 @@ body {
         padding: 4px 8px;
       }
 
+      tr#header {
+        background-color: #3b3c3d;
+        color: white;
+      }
+
       tr:nth-child(even) {
-        background-color: white;
+        background-color: #e0e9f0;
       }
 
       tr:nth-child(odd) {
+        background-color: #ffffe9;
+      }
+
+      tr#total:nth-child(even) {
+        background-color: #e0e9f0;
+      }
+
+      tr#total:nth-child(odd) {
+        background-color: #ffffe9;
+      }
+
+      tr#bins:nth-child(even) {
+        background-color: white;
+      }
+
+      tr#bins:nth-child(odd) {
         background-color: #E7E9EB;
       }
 
