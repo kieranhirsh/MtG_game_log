@@ -296,6 +296,34 @@
         <td class="deck_edhrec_decks">{% if table_data[deck]["total"]["edhrec_decks"] %}{{ table_data[deck]["total"]["edhrec_decks"] }}{% endif %}</td>
         <td class="deck_popularity">{% if table_data[deck]["total"]["popularity"] %}#{{ table_data[deck]["total"]["popularity"] }}{% endif %}</td>
       </tr>
+        {% for bin in table_data[deck] %}
+          {% if bin != "total" %}
+          <tr>
+            <td class="deck_name">{{ table_data[deck][bin]["deck_name"] }}</td>
+            <td class="deck_owner">{{ table_data[deck][bin]["owner_name"] }}</td>
+            <td class="deck_commander">{{ table_data[deck][bin]["commander_name"] }}</td>
+            <td class="deck_partner">{{ table_data[deck][bin]["partner_name"] }}</td>
+            <td class="deck_companion">{{ table_data[deck][bin]["companion_name"] }}</td>
+            <td class="deck_ci">
+              {% if table_data[deck][bin]["colour_identity"] %}
+              {{ table_data[deck][bin]["colour_identity"] }} (
+                {% for colour in table_data[deck][bin]["colours"] %}
+                <img class="mana_symbol" src="../static/img/mana_{{ colour }}.svg">
+                {% endfor %})
+              {% endif %}
+            </td>
+            <td class="deck_last_played">{{ table_data[deck][bin]["last_played"] }}</td>
+            <td class="deck_games_played">{{ table_data[deck][bin]["num_games_played"] }}</td>
+            <td class="deck_wins">{{ table_data[deck][bin]["num_games_won"] }}</td>
+            <td class="deck_win_rate">{{ '%0.2f'|format(table_data[deck][bin]["win_rate"]) }}%</td>
+            <td class="deck_ave_game_time">{{ table_data[deck][bin]["ave_game_time"] }}</td>
+            <td class="deck_ave_game_turns">{{ table_data[deck][bin]["ave_game_turns"] }}</td>
+            <td class="deck_ave_first_ko">{{ table_data[deck][bin]["ave_first_ko"] }}</td>
+            <td class="deck_edhrec_decks">{% if table_data[deck][bin]["edhrec_decks"] %}{{ table_data[deck][bin]["edhrec_decks"] }}{% endif %}</td>
+            <td class="deck_popularity">{% if table_data[deck][bin]["popularity"] %}#{{ table_data[deck][bin]["popularity"] }}{% endif %}</td>
+          </tr>
+          {% endif %}
+        {% endfor %}
       {% endfor %}
     </table>
   </div>
