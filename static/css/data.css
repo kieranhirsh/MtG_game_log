@@ -38,10 +38,10 @@ body #data_tables .data_table tr#total:nth-child(odd), body #data_tables .colour
   background-color: #ffffe9;
 }
 body #data_tables .data_table tr#bins:nth-child(even), body #data_tables .colour_data_table tr#bins:nth-child(even) {
-  background-color: white;
+  background-color: #E7E9EB;
 }
 body #data_tables .data_table tr#bins:nth-child(odd), body #data_tables .colour_data_table tr#bins:nth-child(odd) {
-  background-color: #E7E9EB;
+  background-color: white;
 }
 body #data_tables .data_table .deck_commander, body #data_tables .colour_data_table .deck_commander {
   display: none;
