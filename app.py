@@ -764,29 +764,30 @@ def data_post():
                     "total": datetime.min
                 }
                 for seat in deck_seats:
-                    game_bins = ""
+                    game_bins = []
                     # find the type of bins we want, if any
                     # this wants to be a select case, but I'm using Python 3.8 :(
                     if bin_type == "result":
                         _, winning_deck = derived_quantities.game_winning_player_and_deck(seat.game)
                         # find the specific bin we want and set some values for initialisation
                         if winning_deck.id == deck.id:
-                            game_bins = "win"
+                            game_bins = ["win"]
                             game_key = "deck_name"
                             game_value = "Games Won"
                         else:
-                            game_bins = "loss"
+                            game_bins = ["loss"]
                             game_key = "deck_name"
                             game_value = "Games Lost"
                     if game_bins:
-                        # create bin if it doesn't exist yet
-                        if game_bins not in table_data[deck.id]:
-                            table_data[deck.id][game_bins] = {game_key: game_value}
-                        # start populating the bins, initialising values when the key doesn't exist yet
-                        try:
-                            table_data[deck.id][game_bins]["num_games_played"] += 1
-                        except KeyError:
-                            table_data[deck.id][game_bins]["num_games_played"] = 1
+                        for game_bin in game_bins:
+                            # create bin if it doesn't exist yet
+                            if game_bin not in table_data[deck.id]:
+                                table_data[deck.id][game_bin] = {game_key: game_value}
+                            # start populating the bins, initialising values when the key doesn't exist yet
+                            try:
+                                table_data[deck.id][game_bin]["num_games_played"] += 1
+                            except KeyError:
+                                table_data[deck.id][game_bin]["num_games_played"] = 1
 
                     _, winning_deck = derived_quantities.game_winning_player_and_deck(seat.game)
                     if winning_deck.id == deck.id:
@@ -795,10 +796,11 @@ def data_post():
                         except KeyError:
                             table_data[deck.id]["total"]["num_games_won"] = 1
                         if game_bins:
-                            try:
-                                table_data[deck.id][game_bins]["num_games_won"] += 1
-                            except KeyError:
-                                table_data[deck.id][game_bins]["num_games_won"] = 1
+                            for game_bin in game_bins:
+                                try:
+                                    table_data[deck.id][game_bin]["num_games_won"] += 1
+                                except KeyError:
+                                    table_data[deck.id][game_bin]["num_games_won"] = 1
 
                     _, game_seconds = derived_quantities.game_length_in_time(seat.game)
                     if game_seconds:
@@ -807,10 +809,11 @@ def data_post():
                         except KeyError:
                             table_data[deck.id]["total"]["total_game_time"] = game_seconds
                         if game_bins:
-                            try:
-                                table_data[deck.id][game_bins]["total_game_time"] += game_seconds
-                            except KeyError:
-                                table_data[deck.id][game_bins]["total_game_time"] = game_seconds
+                            for game_bin in game_bins:
+                                try:
+                                    table_data[deck.id][game_bin]["total_game_time"] += game_seconds
+                                except KeyError:
+                                    table_data[deck.id][game_bin]["total_game_time"] = game_seconds
                     game_length = derived_quantities.game_length_in_turns(seat.game)
                     if game_length:
                         try:
@@ -818,10 +821,11 @@ def data_post():
                         except KeyError:
                             table_data[deck.id]["total"]["total_game_turns"] = game_length
                         if game_bins:
-                            try:
-                                table_data[deck.id][game_bins]["total_game_turns"] += game_length
-                            except KeyError:
-                                table_data[deck.id][game_bins]["total_game_turns"] = game_length
+                            for game_bin in game_bins:
+                                try:
+                                    table_data[deck.id][game_bin]["total_game_turns"] += game_length
+                                except KeyError:
+                                    table_data[deck.id][game_bin]["total_game_turns"] = game_length
                     first_ko = derived_quantities.game_first_ko(seat.game)
                     if first_ko:
                         try:
@@ -829,16 +833,18 @@ def data_post():
                         except KeyError:
                             table_data[deck.id]["total"]["total_first_ko"] = first_ko
                         if game_bins:
-                            try:
-                                table_data[deck.id][game_bins]["total_first_ko"] += first_ko
-                            except KeyError:
-                                table_data[deck.id][game_bins]["total_first_ko"] = first_ko
+                            for game_bin in game_bins:
+                                try:
+                                    table_data[deck.id][game_bin]["total_first_ko"] += first_ko
+                                except KeyError:
+                                    table_data[deck.id][game_bin]["total_first_ko"] = first_ko
                     most_recent_game["total"] = max(most_recent_game["total"], seat.game.start_time)
                     if game_bins:
-                        if game_bins in most_recent_game.keys():
-                            most_recent_game[game_bins] = max(most_recent_game[game_bins], seat.game.start_time)
-                        else:
-                            most_recent_game[game_bins] = seat.game.start_time
+                        for game_bin in game_bins:
+                            if game_bin in most_recent_game.keys():
+                                most_recent_game[game_bin] = max(most_recent_game[game_bin], seat.game.start_time)
+                            else:
+                                most_recent_game[game_bin] = seat.game.start_time
 
                 for deck_bin in table_data[deck.id]:
                     # inititalise some values
