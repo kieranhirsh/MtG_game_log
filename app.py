@@ -765,11 +765,21 @@ def data_post():
                     "total": datetime.min
                 }
                 for seat in deck_seats:
-                    # find the type of bins we want, if any
+                    # find the type of bins we want, if any, and set the specific bins we want for this game
                     # this wants to be a select case, but I'm using Python 3.8 :(
-                    if bin_type == "result":
+                    if bin_type == "opp_player":
+                        game_bins = []
+                        opponents = seat.game.seats
+                        for opponent in opponents:
+                            if opponent.id != seat.id:
+                                game_bins.append({
+                                    "bin_name": opponent.player_id,
+                                    "name_key": "owner_name",
+                                    "name_value": f"vs {opponent.player.player_name}"
+                                })
+                                pass
+                    elif bin_type == "result":
                         _, winning_deck = derived_quantities.game_winning_player_and_deck(seat.game)
-                        # find the specific bin we want and set some values for initialisation
                         if winning_deck.id == deck.id:
                             game_bins = [{
                                 "bin_name": "win",
@@ -796,8 +806,8 @@ def data_post():
                             # create bin if it doesn't exist yet
                             if game_bin["bin_name"] not in table_data[deck.id]:
                                 table_data[deck.id][game_bin["bin_name"]] = {
-                                        game_bin["name_key"]: game_bin["name_value"]
-                                    }
+                                    game_bin["name_key"]: game_bin["name_value"]
+                                }
                             # start populating the bins, initialising values when the key doesn't exist yet
                             try:
                                 table_data[deck.id][game_bin["bin_name"]]["num_games_played"] += 1
@@ -856,7 +866,7 @@ def data_post():
                     most_recent_game["total"] = max(most_recent_game["total"], seat.game.start_time)
                     if game_bins:
                         for game_bin in game_bins:
-                            if game_bin in most_recent_game.keys():
+                            if game_bin["bin_name"] in most_recent_game.keys():
                                 most_recent_game[game_bin["bin_name"]] = max(most_recent_game[game_bin["bin_name"]], seat.game.start_time)
                             else:
                                 most_recent_game[game_bin["bin_name"]] = seat.game.start_time
@@ -877,15 +887,15 @@ def data_post():
                     try:
                         ave_time = table_data[deck.id][deck_bin]["total_game_time"] / table_data[deck.id][deck_bin]["num_games_played"]
                         table_data[deck.id][deck_bin]["ave_game_time"] = str(timedelta(seconds=(ave_time - (ave_time % 60))))[0:-3]
-                    except ZeroDivisionError:
+                    except (ZeroDivisionError, KeyError):
                         table_data[deck.id][deck_bin]["ave_game_time"] = ""
                     try:
                         table_data[deck.id][deck_bin]["ave_game_turns"] = f"{(table_data[deck.id][deck_bin]['total_game_turns'] / table_data[deck.id][deck_bin]['num_games_played']):.1f}"
-                    except ZeroDivisionError:
+                    except (ZeroDivisionError, KeyError):
                         table_data[deck.id][deck_bin]["ave_game_turns"] = ""
                     try:
                         table_data[deck.id][deck_bin]["ave_first_ko"] = f"{(table_data[deck.id][deck_bin]['total_first_ko'] / table_data[deck.id][deck_bin]['num_games_played']):.1f}"
-                    except ZeroDivisionError:
+                    except (ZeroDivisionError, KeyError):
                         table_data[deck.id][deck_bin]["ave_first_ko"] = ""
 
         return render_template('data.html', data_type="deck", menu_data=html_data, table_data=table_data)
