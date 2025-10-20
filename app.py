@@ -690,9 +690,10 @@ def data_post():
                 })
 
         # set up our initial bins
-        bin_type = ""
         if "bins" in request.form.keys():
             bin_type = request.form["bins"]
+        else:
+            bin_type = ""
 
         if restrictions:
             deck_data = decks
@@ -764,7 +765,6 @@ def data_post():
                     "total": datetime.min
                 }
                 for seat in deck_seats:
-                    game_bins = []
                     # find the type of bins we want, if any
                     # this wants to be a select case, but I'm using Python 3.8 :(
                     if bin_type == "result":
@@ -778,6 +778,13 @@ def data_post():
                             game_bins = ["loss"]
                             game_key = "deck_name"
                             game_value = "Games Lost"
+                    elif bin_type == "seat":
+                        game_bins = [seat.seat_no]
+                        game_key = "deck_name"
+                        game_value = f"seat number {seat.seat_no}"
+                    else:
+                        game_bins = []
+
                     if game_bins:
                         for game_bin in game_bins:
                             # create bin if it doesn't exist yet
@@ -872,11 +879,6 @@ def data_post():
                         table_data[deck.id][deck_bin]["ave_first_ko"] = f"{(table_data[deck.id][deck_bin]['total_first_ko'] / table_data[deck.id][deck_bin]['num_games_played']):.1f}"
                     except ZeroDivisionError:
                         table_data[deck.id][deck_bin]["ave_first_ko"] = ""
-
-        for deck in table_data:
-            print("deck = ", deck)
-            for bin in table_data[deck]:
-                print("bin = ", bin)
 
         return render_template('data.html', data_type="deck", menu_data=html_data, table_data=table_data)
     elif request.form["type"] == "game":
