@@ -774,8 +774,10 @@ def data_post():
                             if opponent.id != seat.id:
                                 game_bins.append({
                                     "bin_name": opponent.player_id,
-                                    "name_key": "owner_name",
-                                    "name_value": f"vs {opponent.player.player_name}"
+                                    "default_data": [{
+                                        "key": "owner_name",
+                                        "value": f"vs {opponent.player.player_name}"
+                                    }]
                                 })
                                 pass
                     elif bin_type == "result":
@@ -783,20 +785,26 @@ def data_post():
                         if winning_deck.id == deck.id:
                             game_bins = [{
                                 "bin_name": "win",
-                                "name_key": "deck_name",
-                                "name_value": "Games Won"
+                                "default_data": [{
+                                    "key": "deck_name",
+                                    "value": "Games Won"
+                                }]
                             }]
                         else:
                             game_bins = [{
                                 "bin_name": "loss",
-                                "name_key": "deck_name",
-                                "name_value": "Games Lost"
+                                "default_data": [{
+                                    "key": "deck_name",
+                                    "value": "Games Lost"
+                                }]
                             }]
                     elif bin_type == "seat":
                         game_bins = [{
                             "bin_name": seat.seat_no,
-                            "name_key": "deck_name",
-                            "name_value": f"seat number {seat.seat_no}"
+                            "default_data": [{
+                                "key": "deck_name",
+                                "value": f"seat number {seat.seat_no}"
+                            }]
                         }]
                     else:
                         game_bins = []
@@ -806,7 +814,8 @@ def data_post():
                             # create bin if it doesn't exist yet
                             if game_bin["bin_name"] not in table_data[deck.id]:
                                 table_data[deck.id][game_bin["bin_name"]] = defaultdict(int)
-                                table_data[deck.id][game_bin["bin_name"]][game_bin["name_key"]] = game_bin["name_value"]
+                                for default_datum in game_bin["default_data"]:
+                                    table_data[deck.id][game_bin["bin_name"]][default_datum["key"]] = default_datum["value"]
                             # start populating the bins
                             table_data[deck.id][game_bin["bin_name"]]["num_games_played"] += 1
 
