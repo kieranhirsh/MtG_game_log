@@ -805,31 +805,81 @@ def data_post():
                                         }
                                     ]
                                 })
+                    elif bin_type == "seat":
+                        game_bins = [{
+                            "bin_name": seat.seat_no,
+                            "default_data": [
+                                {
+                                    "key": "deck_name",
+                                    "value": f"seat number {seat.seat_no}"
+                                },
+                                {
+                                    "key": "owner_name",
+                                    "value": ""
+                                }
+                            ]
+                        }]
                     elif bin_type == "result":
                         _, winning_deck = derived_quantities.game_winning_player_and_deck(seat.game)
                         if winning_deck.id == deck.id:
                             game_bins = [{
                                 "bin_name": "win",
-                                "default_data": [{
-                                    "key": "deck_name",
-                                    "value": "Games Won"
-                                }]
+                                "default_data": [
+                                    {
+                                        "key": "deck_name",
+                                        "value": "Games Won"
+                                    },
+                                    {
+                                        "key": "owner_name",
+                                        "value": ""
+                                    }
+                                ]
                             }]
                         else:
                             game_bins = [{
                                 "bin_name": "loss",
-                                "default_data": [{
-                                    "key": "deck_name",
-                                    "value": "Games Lost"
-                                }]
+                                "default_data": [
+                                    {
+                                        "key": "deck_name",
+                                        "value": "Games Lost"
+                                    },
+                                    {
+                                        "key": "owner_name",
+                                        "value": ""
+                                    }
+                                ]
                             }]
-                    elif bin_type == "seat":
+                    elif bin_type == "game_time":
+                        pass
+                    elif bin_type == "game_turns":
+                        game_length = derived_quantities.game_length_in_turns(seat.game)
                         game_bins = [{
-                            "bin_name": seat.seat_no,
-                            "default_data": [{
-                                "key": "deck_name",
-                                "value": f"seat number {seat.seat_no}"
-                            }]
+                            "bin_name": game_length,
+                            "default_data": [
+                                {
+                                    "key": "deck_name",
+                                    "value": f"{game_length} turn games"
+                                },
+                                {
+                                    "key": "owner_name",
+                                    "value": ""
+                                }
+                            ]
+                        }]
+                    elif bin_type == "first_KO":
+                        game_length = derived_quantities.game_first_ko(seat.game)
+                        game_bins = [{
+                            "bin_name": game_length,
+                            "default_data": [
+                                {
+                                    "key": "deck_name",
+                                    "value": f"turn {game_length} KO"
+                                },
+                                {
+                                    "key": "owner_name",
+                                    "value": ""
+                                }
+                            ]
                         }]
                     else:
                         game_bins = []
