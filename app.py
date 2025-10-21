@@ -850,7 +850,27 @@ def data_post():
                                 ]
                             }]
                     elif bin_type == "game_time":
-                        pass
+                        _, game_time = derived_quantities.game_length_in_time(seat.game)
+                        if game_time:
+                            game_minutes = game_time / 60
+                            minutes_bin = int(game_minutes - (game_minutes % 10))
+                            default_value = f"{minutes_bin} - {minutes_bin + 10} minute games"
+                        else:
+                            minutes_bin = "untimed"
+                            default_value = "untimed games"
+                        game_bins = [{
+                            "bin_name": minutes_bin,
+                            "default_data": [
+                                {
+                                    "key": "deck_name",
+                                    "value": default_value
+                                },
+                                {
+                                    "key": "owner_name",
+                                    "value": ""
+                                }
+                            ]
+                        }]
                     elif bin_type == "game_turns":
                         game_length = derived_quantities.game_length_in_turns(seat.game)
                         game_bins = [{
@@ -867,13 +887,13 @@ def data_post():
                             ]
                         }]
                     elif bin_type == "first_KO":
-                        game_length = derived_quantities.game_first_ko(seat.game)
+                        KO_turn = derived_quantities.game_first_ko(seat.game)
                         game_bins = [{
-                            "bin_name": game_length,
+                            "bin_name": KO_turn,
                             "default_data": [
                                 {
                                     "key": "deck_name",
-                                    "value": f"turn {game_length} KO"
+                                    "value": f"turn {KO_turn} KO"
                                 },
                                 {
                                     "key": "owner_name",
