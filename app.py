@@ -1,6 +1,6 @@
 import importlib
 import time
-from copy import deepcopy
+from collections import defaultdict
 from datetime import datetime, timedelta
 from flask import Flask, render_template, request, jsonify
 import requests
@@ -715,7 +715,7 @@ def data_post():
 
         for deck in deck_data:
             # initialise data
-            table_data[deck.id] = {"total": {}}
+            table_data[deck.id] = {"total": defaultdict(int)}
             table_data[deck.id]["total"]["deck_name"] = deck.deck_name
             table_data[deck.id]["total"]["owner_name"] = deck.player.player_name
             table_data[deck.id]["total"]["commander_name"] = deck.commander_name
@@ -805,64 +805,36 @@ def data_post():
                         for game_bin in game_bins:
                             # create bin if it doesn't exist yet
                             if game_bin["bin_name"] not in table_data[deck.id]:
-                                table_data[deck.id][game_bin["bin_name"]] = {
-                                    game_bin["name_key"]: game_bin["name_value"]
-                                }
-                            # start populating the bins, initialising values when the key doesn't exist yet
-                            try:
-                                table_data[deck.id][game_bin["bin_name"]]["num_games_played"] += 1
-                            except KeyError:
-                                table_data[deck.id][game_bin["bin_name"]]["num_games_played"] = 1
+                                table_data[deck.id][game_bin["bin_name"]] = defaultdict(int)
+                                table_data[deck.id][game_bin["bin_name"]][game_bin["name_key"]] = game_bin["name_value"]
+                            # start populating the bins
+                            table_data[deck.id][game_bin["bin_name"]]["num_games_played"] += 1
 
                     _, winning_deck = derived_quantities.game_winning_player_and_deck(seat.game)
                     if winning_deck.id == deck.id:
-                        try:
-                            table_data[deck.id]["total"]["num_games_won"] += 1
-                        except KeyError:
-                            table_data[deck.id]["total"]["num_games_won"] = 1
+                        table_data[deck.id]["total"]["num_games_won"] += 1
                         if game_bins:
                             for game_bin in game_bins:
-                                try:
-                                    table_data[deck.id][game_bin["bin_name"]]["num_games_won"] += 1
-                                except KeyError:
-                                    table_data[deck.id][game_bin["bin_name"]]["num_games_won"] = 1
+                                table_data[deck.id][game_bin["bin_name"]]["num_games_won"] += 1
 
                     _, game_seconds = derived_quantities.game_length_in_time(seat.game)
                     if game_seconds:
-                        try:
-                            table_data[deck.id]["total"]["total_game_time"] += game_seconds
-                        except KeyError:
-                            table_data[deck.id]["total"]["total_game_time"] = game_seconds
+                        table_data[deck.id]["total"]["total_game_time"] += game_seconds
                         if game_bins:
                             for game_bin in game_bins:
-                                try:
-                                    table_data[deck.id][game_bin["bin_name"]]["total_game_time"] += game_seconds
-                                except KeyError:
-                                    table_data[deck.id][game_bin["bin_name"]]["total_game_time"] = game_seconds
+                                table_data[deck.id][game_bin["bin_name"]]["total_game_time"] += game_seconds
                     game_length = derived_quantities.game_length_in_turns(seat.game)
                     if game_length:
-                        try:
-                            table_data[deck.id]["total"]["total_game_turns"] += game_length
-                        except KeyError:
-                            table_data[deck.id]["total"]["total_game_turns"] = game_length
+                        table_data[deck.id]["total"]["total_game_turns"] += game_length
                         if game_bins:
                             for game_bin in game_bins:
-                                try:
-                                    table_data[deck.id][game_bin["bin_name"]]["total_game_turns"] += game_length
-                                except KeyError:
-                                    table_data[deck.id][game_bin["bin_name"]]["total_game_turns"] = game_length
+                                table_data[deck.id][game_bin["bin_name"]]["total_game_turns"] += game_length
                     first_ko = derived_quantities.game_first_ko(seat.game)
                     if first_ko:
-                        try:
-                            table_data[deck.id]["total"]["total_first_ko"] += first_ko
-                        except KeyError:
-                            table_data[deck.id]["total"]["total_first_ko"] = first_ko
+                        table_data[deck.id]["total"]["total_first_ko"] += first_ko
                         if game_bins:
                             for game_bin in game_bins:
-                                try:
-                                    table_data[deck.id][game_bin["bin_name"]]["total_first_ko"] += first_ko
-                                except KeyError:
-                                    table_data[deck.id][game_bin["bin_name"]]["total_first_ko"] = first_ko
+                                table_data[deck.id][game_bin["bin_name"]]["total_first_ko"] += first_ko
                     most_recent_game["total"] = max(most_recent_game["total"], seat.game.start_time)
                     if game_bins:
                         for game_bin in game_bins:
@@ -884,18 +856,27 @@ def data_post():
                         table_data[deck.id][deck_bin]["last_played"] = f"{(datetime.now() - most_recent_game[deck_bin]).days} days ago"
                     except KeyError:
                         table_data[deck.id][deck_bin]["last_played"] = "never"
-                    try:
-                        ave_time = table_data[deck.id][deck_bin]["total_game_time"] / table_data[deck.id][deck_bin]["num_games_played"]
-                        table_data[deck.id][deck_bin]["ave_game_time"] = str(timedelta(seconds=(ave_time - (ave_time % 60))))[0:-3]
-                    except (ZeroDivisionError, KeyError):
+                    if table_data[deck.id][deck_bin]["total_game_time"]:
+                        try:
+                            ave_time = table_data[deck.id][deck_bin]["total_game_time"] / table_data[deck.id][deck_bin]["num_games_played"]
+                            table_data[deck.id][deck_bin]["ave_game_time"] = str(timedelta(seconds=(ave_time - (ave_time % 60))))[0:-3]
+                        except ZeroDivisionError:
+                            table_data[deck.id][deck_bin]["ave_game_time"] = ""
+                    else:
                         table_data[deck.id][deck_bin]["ave_game_time"] = ""
-                    try:
-                        table_data[deck.id][deck_bin]["ave_game_turns"] = f"{(table_data[deck.id][deck_bin]['total_game_turns'] / table_data[deck.id][deck_bin]['num_games_played']):.1f}"
-                    except (ZeroDivisionError, KeyError):
+                    if table_data[deck.id][deck_bin]['total_game_turns']:
+                        try:
+                            table_data[deck.id][deck_bin]["ave_game_turns"] = f"{(table_data[deck.id][deck_bin]['total_game_turns'] / table_data[deck.id][deck_bin]['num_games_played']):.1f}"
+                        except ZeroDivisionError:
+                            table_data[deck.id][deck_bin]["ave_game_turns"] = ""
+                    else:
                         table_data[deck.id][deck_bin]["ave_game_turns"] = ""
-                    try:
-                        table_data[deck.id][deck_bin]["ave_first_ko"] = f"{(table_data[deck.id][deck_bin]['total_first_ko'] / table_data[deck.id][deck_bin]['num_games_played']):.1f}"
-                    except (ZeroDivisionError, KeyError):
+                    if table_data[deck.id][deck_bin]['total_first_ko']:
+                        try:
+                            table_data[deck.id][deck_bin]["ave_first_ko"] = f"{(table_data[deck.id][deck_bin]['total_first_ko'] / table_data[deck.id][deck_bin]['num_games_played']):.1f}"
+                        except ZeroDivisionError:
+                            table_data[deck.id][deck_bin]["ave_first_ko"] = ""
+                    else:
                         table_data[deck.id][deck_bin]["ave_first_ko"] = ""
 
         return render_template('data.html', data_type="deck", menu_data=html_data, table_data=table_data)
