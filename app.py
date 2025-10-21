@@ -779,7 +779,32 @@ def data_post():
                                         "value": f"vs {opponent.player.player_name}"
                                     }]
                                 })
-                                pass
+                    elif bin_type == "opp_deck":
+                        game_bins = []
+                        opponents = seat.game.seats
+                        for opponent in opponents:
+                            if opponent.id != seat.id:
+                                game_bins.append({
+                                    "bin_name": opponent.deck_id,
+                                    "default_data": [
+                                        {
+                                            "key": "deck_name",
+                                            "value": f"vs {opponent.deck.deck_name}"
+                                        },
+                                        {
+                                            "key": "owner_name",
+                                            "value": f"{opponent.deck.player.player_name}"
+                                        },
+                                        {
+                                            "key": "colour_identity",
+                                            "value": f"{opponent.deck.colour_identity.ci_name}"
+                                        },
+                                        {
+                                            "key": "colours",
+                                            "value": f"{opponent.deck.colour_identity.colours}"
+                                        }
+                                    ]
+                                })
                     elif bin_type == "result":
                         _, winning_deck = derived_quantities.game_winning_player_and_deck(seat.game)
                         if winning_deck.id == deck.id:
