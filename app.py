@@ -901,6 +901,26 @@ def data_post():
                                 }
                             ]
                         }]
+                    elif bin_type == "self_KO":
+                        KO_turn = seat.ko_turn
+                        if KO_turn:
+                            default_value = f"KO'd on turn {KO_turn}"
+                        else:
+                            KO_turn = "win"
+                            default_value = "Won the game"
+                        game_bins = [{
+                            "bin_name": KO_turn,
+                            "default_data": [
+                                {
+                                    "key": "deck_name",
+                                    "value": default_value
+                                },
+                                {
+                                    "key": "owner_name",
+                                    "value": ""
+                                }
+                            ]
+                        }]
                     else:
                         game_bins = []
 
