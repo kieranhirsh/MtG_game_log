@@ -28,8 +28,8 @@ body #data_tables .colour_data_table tr#header {
   background-color: #3b3c3d;
   color: white;
 }
-body #data_tables .data_table tr.total_row,
-body #data_tables .colour_data_table tr.total_row {
+body #data_tables .data_table tr.total_row:has(+ .bins_row),
+body #data_tables .colour_data_table tr.total_row:has(+ .bins_row) {
   cursor: pointer;
 }
 body #data_tables .data_table tbody:nth-child(even) tr.total_row,

@@ -35,7 +35,7 @@ body {
         color: white;
       }
 
-      tr.total_row {
+      tr.total_row:has(+ .bins_row) {
         cursor: pointer;
       }
 
