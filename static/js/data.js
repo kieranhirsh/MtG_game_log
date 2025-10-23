@@ -35,8 +35,8 @@ function toggleDataType() {
   }
 }
 
-function sortTable(n) {
-  var table, rows, switching, noswitch, i, x, y, header, shouldSwitch, dir, switchcount = 0;
+function sortTableBins(n) {
+  var table, bodies, switching, noswitch, i, x, y, header, shouldSwitch, dir, switchcount = 0;
   table = document.getElementsByClassName("data_table");
   switching = true;
   noswitch = true;
@@ -91,13 +91,13 @@ function sortTable(n) {
       /* Get the two elements you want to compare,
       one from current row and one from the next: */
       x = bodies[i].rows[0].getElementsByTagName("td")[n];
-      y = bodies[i+1].rows[0].getElementsByTagName("td")[n];
+      y = bodies[i + 1].rows[0].getElementsByTagName("td")[n];
       /* Check if the two rows should switch place,
       based on the direction, asc or desc: */
       if (dir == "asc") {
         if (y.innerHTML.toLowerCase() == 0) {
           // If the second element is zero, we don't want to switch, but we also want to keep the loop going:
-          if (i == (rows.length - 2)) {
+          if (i == (bodies.length - 2)) {
             // If we've reached the end of the list, however, we do want to break the loop:
             switching = false;
             break;
@@ -197,6 +197,197 @@ function sortTable(n) {
           noswitch = false;
         }
       }
+    }
+  }
+  // If the row is "Win Rate", we need to add the trailing % back
+  if (header === "Win Rate") {
+    for (i = 1; i < (table[0].rows.length); i++) {
+      x = table[0].rows[i].getElementsByTagName("td")[n];
+      x.innerHTML = x.innerHTML + "%";
+    }
+  }
+  // If the row is "Popularity", we need to add the leading # back
+  if (header === "Popularity") {
+    for (i = 1; i < (table[0].rows.length); i++) {
+      x = table[0].rows[i].getElementsByTagName("td")[n];
+      if (x.innerHTML) {
+        x.innerHTML = "#" + x.innerHTML;
+      }
+    }
+  }
+}
+
+function sortTableRows(n) {
+  var table, bodies, rows, switching, noswitch, i, x, y, header, shouldSwitch, globalDir, dir, switchcount = 0;
+  table = document.getElementsByClassName("data_table");
+  header = table[0].rows[0].getElementsByTagName("th")[n].innerHTML;
+  // If the row is "Win Rate", we need to remove the trailing % to be able to convert to a int
+  if (header === "Win Rate") {
+    for (i = 1; i < (table[0].rows.length); i++) {
+      x = table[0].rows[i].getElementsByTagName("td")[n];
+      x.innerHTML = x.innerHTML.slice(0, -1);
+    }
+  }
+  // If the row is "Popularity", we need to remove the leading # to be able to convert to a int
+  if (header === "Popularity") {
+    for (i = 1; i < (table[0].rows.length); i++) {
+      x = table[0].rows[i].getElementsByTagName("td")[n];
+      x.innerHTML = x.innerHTML.slice(1);
+    }
+  }
+  // Set the global sorting direction:
+  if (
+    header === "# Decks" ||
+    header === "Last Played" ||
+    header === "Games Played" ||
+    header === "Games Won" ||
+    header === "Win Rate" ||
+    header === "Date" ||
+    header === "Start Time" ||
+    header === "Game Length (Time)" ||
+    header === "Game Length (Turns)" ||
+    header === "First KO" ||
+    header === "Ave Game Time" ||
+    header === "Ave Game Length" ||
+    header === "Ave First KO" ||
+    header === "# EDHrec Decks" ||
+    header === "Ave # EDHrec Decks"
+  ) {
+    globalDir = "desc";
+  } else {
+    globalDir = "asc";
+  }
+  bodies = table[0].tBodies;
+  for (i = 1; i < bodies.length; i++) {
+    /* Make a loop that will continue until
+    no switching has been done: */
+    rows = bodies[i].rows;
+    // Set the global sorting direction:
+    dir = globalDir;
+    // initialise some loop variables
+    switching = true;
+    noswitch = true;
+    while (switching) {
+      // Start by saying: no switching is done:
+      switching = false;
+      /* Loop through all table rows (except the
+      first, which contains table headers): */
+      for (j = 1; j < (rows.length - 1); j++) {
+        // Start by saying there should be no switching:
+        shouldSwitch = false;
+        /* Get the two elements you want to compare,
+        one from current row and one from the next: */
+        x = rows[j].getElementsByTagName("td")[n];
+        y = rows[j + 1].getElementsByTagName("td")[n];
+        /* Check if the two rows should switch place,
+        based on the direction, asc or desc: */
+        if (dir == "asc") {
+          if (y.innerHTML.toLowerCase() == 0) {
+            // If the second element is zero, we don't want to switch, but we also want to keep the loop going:
+            if (j == (rows.length - 2)) {
+              // If we've reached the end of the list, however, we do want to break the loop:
+              switching = false;
+              break;
+            }
+            switching = true;
+            continue;
+          }
+          // Check whether the data is a number or a string
+          if (
+            header === "# Decks" ||
+            header === "Last Played" ||
+            header === "Games Played" ||
+            header === "Games Won" ||
+            header === "Win Rate" ||
+            header === "Ave Game Length" ||
+            header === "First KO" ||
+            header === "Game Length (Turns)" ||
+            header === "Ave First KO" ||
+            header === "# EDHrec Decks" ||
+            header === "Popularity" ||
+            header === "Ave # EDHrec Decks"
+          ) {
+            if (header === "Last Played") {
+              if (y.innerHTML == "never") {
+                continue
+              }
+              if (x.innerHTML == "never") {
+                // If we want to switch, mark as a switch and break the loop:
+                shouldSwitch = true;
+                break;
+              }
+            }
+            if (parseFloat(x.innerHTML) > parseFloat(y.innerHTML) || parseFloat(x.innerHTML) == 0 || isNaN(parseFloat(x.innerHTML))) {
+              // If we want to switch, mark as a switch and break the loop:
+              shouldSwitch = true;
+              break;
+            }
+          } else {
+            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase() || x.innerHTML.toLowerCase() == 0) {
+              // If we want to switch, mark as a switch and break the loop:
+              shouldSwitch = true;
+              break;
+            }
+          }
+        } else if (dir == "desc") {
+          // Check whether the data is a number or a string
+          if (
+            header === "# Decks" ||
+            header === "Last Played" ||
+            header === "Games Played" ||
+            header === "Games Won" ||
+            header === "Win Rate" ||
+            header === "Game Length (Turns)" ||
+            header === "First KO" ||
+            header === "Ave Game Length" ||
+            header === "Ave First KO" ||
+            header === "# EDHrec Decks" ||
+            header === "Popularity" ||
+            header === "Ave # EDHrec Decks"
+          ) {
+            if (isNaN(parseFloat(y.innerHTML))) {
+              // skip this case
+              continue;
+            }
+            if (parseFloat(x.innerHTML) < parseFloat(y.innerHTML) || isNaN(parseFloat(x.innerHTML))) {
+              // If so, mark as a switch and break the loop:
+              shouldSwitch = true;
+              break;
+            }
+          } else {
+            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+              // If so, mark as a switch and break the loop:
+              shouldSwitch = true;
+              break;
+            }
+          }
+        }
+      }
+      if (shouldSwitch) {
+        /* If a switch has been marked, make the switch
+        and mark that a switch has been done: */
+        rows[j].parentNode.insertBefore(rows[j + 1], rows[j]);
+        switching = true;
+        // Each time a switch is done, increase this count by 1:
+        switchcount++;
+      } else {
+        /* If no switching has been done, swap the direction and run the while loop again.
+           noswitch is here to ensure we don't have an infinite loop. */
+        if (switchcount == 0 && noswitch) {
+          if (dir == "asc") {
+            dir = "desc";
+            switching = true;
+            noswitch = false;
+          } else if (dir == "desc") {
+            dir = "asc";
+            switching = true;
+            noswitch = false;
+          }
+        }
+      }
+    }
+    if (i == 1) {
+      globalDir = dir;
     }
   }
   // If the row is "Win Rate", we need to add the trailing % back

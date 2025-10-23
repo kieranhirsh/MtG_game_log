@@ -17,7 +17,8 @@ body {
     flex-wrap: wrap;
     align-items: flex-start;
 
-    .data_table, .colour_data_table {
+    .data_table,
+    .colour_data_table {
       &:not(#ci_table_0):not(#ci_table_1):not(#ci_table_2):not(#ci_table_3):not(#ci_table_4):not(#ci_table_5) {
         th {
           cursor: pointer;
@@ -34,31 +35,35 @@ body {
         color: white;
       }
 
-      tbody:nth-child(even){
-        tr.total_row{
+      tr.total_row {
+        cursor: pointer;
+      }
+
+      tbody:nth-child(even) {
+        tr.total_row {
           background-color: #ffffe9;
         }
 
-        tr.bins_row:nth-child(even){
-        background-color: #E7E9EB;
+        tr.bins_row:nth-child(even) {
+          background-color: #E7E9EB;
         }
 
-        tr.bins_row:nth-child(odd){
-        background-color: white;
+        tr.bins_row:nth-child(odd) {
+          background-color: white;
         }
       }
 
-      tbody:nth-child(odd){
-        tr.total_row{
+      tbody:nth-child(odd) {
+        tr.total_row {
           background-color: #e0e9f0;
         }
 
-        tr.bins_row:nth-child(even){
-        background-color: white;
+        tr.bins_row:nth-child(even) {
+          background-color: white;
         }
 
-        tr.bins_row:nth-child(odd){
-        background-color: #E7E9EB;
+        tr.bins_row:nth-child(odd) {
+          background-color: #E7E9EB;
         }
       }
 
