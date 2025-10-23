@@ -82,16 +82,16 @@ function sortTable(n) {
   while (switching) {
     // Start by saying: no switching is done:
     switching = false;
-    rows = table[0].rows;
+    bodies = table[0].tBodies;
     /* Loop through all table rows (except the
     first, which contains table headers): */
-    for (i = 1; i < (rows.length - 1); i++) {
+    for (i = 1; i < (bodies.length - 1); i++) {
       // Start by saying there should be no switching:
       shouldSwitch = false;
       /* Get the two elements you want to compare,
       one from current row and one from the next: */
-      x = rows[i].getElementsByTagName("td")[n];
-      y = rows[i + 1].getElementsByTagName("td")[n];
+      x = bodies[i].rows[0].getElementsByTagName("td")[n];
+      y = bodies[i+1].rows[0].getElementsByTagName("td")[n];
       /* Check if the two rows should switch place,
       based on the direction, asc or desc: */
       if (dir == "asc") {
@@ -179,7 +179,7 @@ function sortTable(n) {
     if (shouldSwitch) {
       /* If a switch has been marked, make the switch
       and mark that a switch has been done: */
-      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      bodies[i].parentNode.insertBefore(bodies[i + 1], bodies[i]);
       switching = true;
       // Each time a switch is done, increase this count by 1:
       switchcount++;

@@ -1,15 +1,16 @@
 {% extends "main.html" %}
 
-  {% block head %}
-  <link rel="stylesheet" type="text/css" href="../static/css/data.css">
-  <link rel="stylesheet" type="text/css" href="../static/css/error.css">
-  <link rel="stylesheet" type="text/css" href="../static/css/ci_dropdown.css">
-  <script type="text/javascript" src="../static/js/data.js"></script>
-  <script type="text/javascript" src="../static/js/ci_dropdown.js"></script>
-  <title>M:tG Game Logger</title>
-  {% endblock head %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="../static/css/data.css">
+<link rel="stylesheet" type="text/css" href="../static/css/error.css">
+<link rel="stylesheet" type="text/css" href="../static/css/ci_dropdown.css">
+<script type="text/javascript" src="../static/js/data.js"></script>
+<script type="text/javascript" src="../static/js/ci_dropdown.js"></script>
+<title>M:tG Game Logger</title>
+{% endblock head %}
 
 {% block body %}
+
 <body pg-name="data" js="off">
   {% block error %}
   {% endblock error %}
@@ -54,7 +55,7 @@
         <div>
           &emsp;Colour Identity:
           <div>
-          {% include "ci_dropdown.html" %}
+            {% include "ci_dropdown.html" %}
           </div>
         </div>
         Binned by:
@@ -90,7 +91,7 @@
         <div>
           Colour Identity:
           <div>
-          {% include "ci_dropdown.html" %}
+            {% include "ci_dropdown.html" %}
           </div>
         </div>
         <br><input type="submit" value="Submit">
@@ -125,10 +126,12 @@
       <input type="checkbox" id="ci_ave_first_ko" checked onclick="toggleColumn('ci_ave_first_ko')">Ave First KO
     </label>
     <label>
-      <input type="checkbox" id="ci_ave_edhrec_decks" checked onclick="toggleColumn('ci_ave_edhrec_decks')">Ave # EDHrec Decks
+      <input type="checkbox" id="ci_ave_edhrec_decks" checked onclick="toggleColumn('ci_ave_edhrec_decks')">Ave # EDHrec
+      Decks
     </label>
     <label>
-      <input type="checkbox" id="ci_ave_edhrec_ranking" checked onclick="toggleColumn('ci_ave_edhrec_ranking')">Ave EDHrec Popularity
+      <input type="checkbox" id="ci_ave_edhrec_ranking" checked onclick="toggleColumn('ci_ave_edhrec_ranking')">Ave
+      EDHrec Popularity
     </label>
   </div>
   <!-- data table-->
@@ -151,52 +154,53 @@
       <tr>
         <td class="ci_name">
           {% if colour_identity.colours == "skip" %}<b>{% endif %}
-          {{ colour_identity.ci_name }}{% if colour_identity.colours != "skip" %} (
+            {{ colour_identity.ci_name }}{% if colour_identity.colours != "skip" %} (
             {% for colour in colour_identity.colours %}
             <img class="mana_symbol" src="../static/img/mana_{{ colour }}.svg">
             {% endfor %}){% endif %}
-          {% if colour_identity.colours == "skip" %}</b>{% endif %}
+            {% if colour_identity.colours == "skip" %}</b>{% endif %}
         </td>
         <td class="ci_num_decks">
           {% if colour_identity.colours == "skip" %}<b>{% endif %}
-          {{ colour_identity.number_of_decks }}
-          {% if colour_identity.colours == "skip" %}</b>{% endif %}
+            {{ colour_identity.number_of_decks }}
+            {% if colour_identity.colours == "skip" %}</b>{% endif %}
         </td>
         <td class="ci_games_played">
           {% if colour_identity.colours == "skip" %}<b>{% endif %}
-          {{ colour_identity.games_played }}
-          {% if colour_identity.colours == "skip" %}</b>{% endif %}
+            {{ colour_identity.games_played }}
+            {% if colour_identity.colours == "skip" %}</b>{% endif %}
         </td>
         <td class="ci_wins">
           {% if colour_identity.colours == "skip" %}<b>{% endif %}
-          {{ colour_identity.games_won }}
-          {% if colour_identity.colours == "skip" %}</b>{% endif %}
+            {{ colour_identity.games_won }}
+            {% if colour_identity.colours == "skip" %}</b>{% endif %}
         </td>
-        <td class="ci_win_rate">{% if colour_identity.colours == "skip" %}<b>{% endif %}{{ '%0.2f'|format(colour_identity.win_rate) }}%{% if colour_identity.colours == "skip" %}</b>{% endif %}</td>
+        <td class="ci_win_rate">{% if colour_identity.colours == "skip" %}<b>{% endif %}{{
+            '%0.2f'|format(colour_identity.win_rate) }}%{% if colour_identity.colours == "skip" %}</b>{% endif %}</td>
         <td class="ci_ave_game_time">
           {% if colour_identity.colours == "skip" %}<b>{% endif %}
-          {{ colour_identity.ave_game_time }}
-          {% if colour_identity.colours == "skip" %}</b>{% endif %}
+            {{ colour_identity.ave_game_time }}
+            {% if colour_identity.colours == "skip" %}</b>{% endif %}
         </td>
         <td class="ci_ave_game_turns">
           {% if colour_identity.colours == "skip" %}<b>{% endif %}
-          {{ colour_identity.ave_game_turns }}
-          {% if colour_identity.colours == "skip" %}</b>{% endif %}
+            {{ colour_identity.ave_game_turns }}
+            {% if colour_identity.colours == "skip" %}</b>{% endif %}
         </td>
         <td class="ci_ave_first_ko">
           {% if colour_identity.colours == "skip" %}<b>{% endif %}
-          {{ colour_identity.ave_first_ko }}
-          {% if colour_identity.colours == "skip" %}</b>{% endif %}
+            {{ colour_identity.ave_first_ko }}
+            {% if colour_identity.colours == "skip" %}</b>{% endif %}
         </td>
         <td class="ci_ave_edhrec_decks">
           {% if colour_identity.colours == "skip" %}<b>{% endif %}
-          {% if colour_identity.ave_edhrec_decks %}{{ '%0.1f'|format(colour_identity.ave_edhrec_decks) }}{% endif %}
-          {% if colour_identity.colours == "skip" %}</b>{% endif %}
+            {% if colour_identity.ave_edhrec_decks %}{{ '%0.1f'|format(colour_identity.ave_edhrec_decks) }}{% endif %}
+            {% if colour_identity.colours == "skip" %}</b>{% endif %}
         </td>
         <td class="ci_ave_edhrec_ranking">
           {% if colour_identity.colours == "skip" %}<b>{% endif %}
-          {% if colour_identity.ave_edhrec_ranking %}{{ colour_identity.ave_edhrec_ranking }}{% endif %}
-          {% if colour_identity.colours == "skip" %}</b>{% endif %}
+            {% if colour_identity.ave_edhrec_ranking %}{{ colour_identity.ave_edhrec_ranking }}{% endif %}
+            {% if colour_identity.colours == "skip" %}</b>{% endif %}
         </td>
       </tr>
       {% endfor %}
@@ -242,7 +246,8 @@
       <input type="checkbox" id="deck_ave_game_time" checked onclick="toggleColumn('deck_ave_game_time')">Ave Game Time
     </label>
     <label>
-      <input type="checkbox" id="deck_ave_game_turns" checked onclick="toggleColumn('deck_ave_game_turns')">Ave Game Length
+      <input type="checkbox" id="deck_ave_game_turns" checked onclick="toggleColumn('deck_ave_game_turns')">Ave Game
+      Length
     </label>
     <label>
       <input type="checkbox" id="ave_first_ko" checked onclick="toggleColumn('ave_first_ko')">Ave First KO
@@ -275,31 +280,34 @@
         <th onclick="sortTable(14)" class="deck_popularity">Popularity</th>
       </tr>
       {% for deck in table_data %}
-      <tr id="total">
-        <td class="deck_name">{{ table_data[deck]["total"]["deck_name"] }}</td>
-        <td class="deck_owner">{{ table_data[deck]["total"]["owner_name"] }}</td>
-        <td class="deck_commander">{{ table_data[deck]["total"]["commander_name"] }}</td>
-        <td class="deck_partner">{{ table_data[deck]["total"]["partner_name"] }}</td>
-        <td class="deck_companion">{{ table_data[deck]["total"]["companion_name"] }}</td>
-        <td class="deck_ci">
-          {{ table_data[deck]["total"]["colour_identity"] }} (
+      <tbody class="total_body">
+        <tr class="total_row">
+          <td class="deck_name">{{ table_data[deck]["total"]["deck_name"] }}</td>
+          <td class="deck_owner">{{ table_data[deck]["total"]["owner_name"] }}</td>
+          <td class="deck_commander">{{ table_data[deck]["total"]["commander_name"] }}</td>
+          <td class="deck_partner">{{ table_data[deck]["total"]["partner_name"] }}</td>
+          <td class="deck_companion">{{ table_data[deck]["total"]["companion_name"] }}</td>
+          <td class="deck_ci">
+            {{ table_data[deck]["total"]["colour_identity"] }} (
             {% for colour in table_data[deck]["total"]["colours"] %}
             <img class="mana_symbol" src="../static/img/mana_{{ colour }}.svg">
             {% endfor %})
-        </td>
-        <td class="deck_last_played">{{ table_data[deck]["total"]["last_played"] }}</td>
-        <td class="deck_games_played">{{ table_data[deck]["total"]["num_games_played"] }}</td>
-        <td class="deck_wins">{{ table_data[deck]["total"]["num_games_won"] }}</td>
-        <td class="deck_win_rate">{{ '%0.2f'|format(table_data[deck]["total"]["win_rate"]) }}%</td>
-        <td class="deck_ave_game_time">{{ table_data[deck]["total"]["ave_game_time"] }}</td>
-        <td class="deck_ave_game_turns">{{ table_data[deck]["total"]["ave_game_turns"] }}</td>
-        <td class="deck_ave_first_ko">{{ table_data[deck]["total"]["ave_first_ko"] }}</td>
-        <td class="deck_edhrec_decks">{% if table_data[deck]["total"]["edhrec_decks"] %}{{ table_data[deck]["total"]["edhrec_decks"] }}{% endif %}</td>
-        <td class="deck_popularity">{% if table_data[deck]["total"]["popularity"] %}#{{ table_data[deck]["total"]["popularity"] }}{% endif %}</td>
-      </tr>
-        {% for bin in table_data[deck] %}
+          </td>
+          <td class="deck_last_played">{{ table_data[deck]["total"]["last_played"] }}</td>
+          <td class="deck_games_played">{{ table_data[deck]["total"]["num_games_played"] }}</td>
+          <td class="deck_wins">{{ table_data[deck]["total"]["num_games_won"] }}</td>
+          <td class="deck_win_rate">{{ '%0.2f'|format(table_data[deck]["total"]["win_rate"]) }}%</td>
+          <td class="deck_ave_game_time">{{ table_data[deck]["total"]["ave_game_time"] }}</td>
+          <td class="deck_ave_game_turns">{{ table_data[deck]["total"]["ave_game_turns"] }}</td>
+          <td class="deck_ave_first_ko">{{ table_data[deck]["total"]["ave_first_ko"] }}</td>
+          <td class="deck_edhrec_decks">{% if table_data[deck]["total"]["edhrec_decks"] %}{{
+            table_data[deck]["total"]["edhrec_decks"] }}{% endif %}</td>
+          <td class="deck_popularity">{% if table_data[deck]["total"]["popularity"] %}#{{
+            table_data[deck]["total"]["popularity"] }}{% endif %}</td>
+        </tr>
+          {% for bin in table_data[deck] %}
           {% if bin != "total" %}
-          <tr id="bins">
+          <tr class="bins_row">
             <td class="deck_name">{{ table_data[deck][bin]["deck_name"] }}</td>
             <td class="deck_owner">{{ table_data[deck][bin]["owner_name"] }}</td>
             <td class="deck_commander">{{ table_data[deck][bin]["commander_name"] }}</td>
@@ -308,9 +316,9 @@
             <td class="deck_ci">
               {% if table_data[deck][bin]["colour_identity"] %}
               {{ table_data[deck][bin]["colour_identity"] }} (
-                {% for colour in table_data[deck][bin]["colours"] %}
-                <img class="mana_symbol" src="../static/img/mana_{{ colour }}.svg">
-                {% endfor %})
+              {% for colour in table_data[deck][bin]["colours"] %}
+              <img class="mana_symbol" src="../static/img/mana_{{ colour }}.svg">
+              {% endfor %})
               {% endif %}
             </td>
             <td class="deck_last_played">{{ table_data[deck][bin]["last_played"] }}</td>
@@ -320,11 +328,14 @@
             <td class="deck_ave_game_time">{{ table_data[deck][bin]["ave_game_time"] }}</td>
             <td class="deck_ave_game_turns">{{ table_data[deck][bin]["ave_game_turns"] }}</td>
             <td class="deck_ave_first_ko">{{ table_data[deck][bin]["ave_first_ko"] }}</td>
-            <td class="deck_edhrec_decks">{% if table_data[deck][bin]["edhrec_decks"] %}{{ table_data[deck][bin]["edhrec_decks"] }}{% endif %}</td>
-            <td class="deck_popularity">{% if table_data[deck][bin]["popularity"] %}#{{ table_data[deck][bin]["popularity"] }}{% endif %}</td>
+            <td class="deck_edhrec_decks">{% if table_data[deck][bin]["edhrec_decks"] %}{{
+              table_data[deck][bin]["edhrec_decks"] }}{% endif %}</td>
+            <td class="deck_popularity">{% if table_data[deck][bin]["popularity"] %}#{{
+              table_data[deck][bin]["popularity"] }}{% endif %}</td>
           </tr>
           {% endif %}
-        {% endfor %}
+          {% endfor %}
+      </tbody>
       {% endfor %}
     </table>
   </div>
@@ -378,7 +389,9 @@
         <td class="game_first_ko">{{ game.first_ko }}</td>
         <td class="game_winner">{{ game.winner }}</td>
         {% for j in range(menu_data["num_seats"]) %}
-        <td class="game_players">{% if game.player[j] %}{{ game.player[j].player_name }} - {{ game.deck[j].deck_name }}{% if game.player[j].player_name != game.deck[j].player.player_name  %} ({{ game.deck[j].player.player_name }}'s deck){% endif %}{% endif %}</td>
+        <td class="game_players">{% if game.player[j] %}{{ game.player[j].player_name }} - {{ game.deck[j].deck_name
+          }}{% if game.player[j].player_name != game.deck[j].player.player_name %} ({{ game.deck[j].player.player_name
+          }}'s deck){% endif %}{% endif %}</td>
         {% endfor %}
       </tr>
       {% endfor %}
@@ -405,19 +418,23 @@
       <input type="checkbox" id="player_win_rate" checked onclick="toggleColumn('player_win_rate')">Win Rate
     </label>
     <label>
-      <input type="checkbox" id="player_ave_game_time" checked onclick="toggleColumn('player_ave_game_time')">Ave Game Time
+      <input type="checkbox" id="player_ave_game_time" checked onclick="toggleColumn('player_ave_game_time')">Ave Game
+      Time
     </label>
     <label>
-      <input type="checkbox" id="player_ave_game_turns" checked onclick="toggleColumn('player_ave_game_turns')">Ave Game Length
+      <input type="checkbox" id="player_ave_game_turns" checked onclick="toggleColumn('player_ave_game_turns')">Ave Game
+      Length
     </label>
     <label>
       <input type="checkbox" id="player_ave_first_ko" checked onclick="toggleColumn('player_ave_first_ko')">Ave First KO
     </label>
     <label>
-      <input type="checkbox" id="player_ave_edhrec_decks" checked onclick="toggleColumn('player_ave_edhrec_decks')">Ave # EDHrec Decks
+      <input type="checkbox" id="player_ave_edhrec_decks" checked onclick="toggleColumn('player_ave_edhrec_decks')">Ave
+      # EDHrec Decks
     </label>
     <label>
-      <input type="checkbox" id="player_ave_edhrec_ranking" checked onclick="toggleColumn('player_ave_edhrec_ranking')">Ave EDHrec Popularity
+      <input type="checkbox" id="player_ave_edhrec_ranking" checked
+        onclick="toggleColumn('player_ave_edhrec_ranking')">Ave EDHrec Popularity
     </label>
   </div>
   <!-- data table-->
