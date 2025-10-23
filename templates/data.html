@@ -151,58 +151,60 @@
         <th onclick="sortColourTables(8)" class="ci_ave_edhrec_ranking">Ave EDHrec Popularity</th>
       </tr>
       {% for colour_identity in colour_identity_group_by_num_colours %}
-      <tr>
-        <td class="ci_name">
-          {% if colour_identity.colours == "skip" %}<b>{% endif %}
-            {{ colour_identity.ci_name }}{% if colour_identity.colours != "skip" %} (
-            {% for colour in colour_identity.colours %}
-            <img class="mana_symbol" src="../static/img/mana_{{ colour }}.svg">
-            {% endfor %}){% endif %}
-            {% if colour_identity.colours == "skip" %}</b>{% endif %}
-        </td>
-        <td class="ci_num_decks">
-          {% if colour_identity.colours == "skip" %}<b>{% endif %}
-            {{ colour_identity.number_of_decks }}
-            {% if colour_identity.colours == "skip" %}</b>{% endif %}
-        </td>
-        <td class="ci_games_played">
-          {% if colour_identity.colours == "skip" %}<b>{% endif %}
-            {{ colour_identity.games_played }}
-            {% if colour_identity.colours == "skip" %}</b>{% endif %}
-        </td>
-        <td class="ci_wins">
-          {% if colour_identity.colours == "skip" %}<b>{% endif %}
-            {{ colour_identity.games_won }}
-            {% if colour_identity.colours == "skip" %}</b>{% endif %}
-        </td>
-        <td class="ci_win_rate">{% if colour_identity.colours == "skip" %}<b>{% endif %}{{
-            '%0.2f'|format(colour_identity.win_rate) }}%{% if colour_identity.colours == "skip" %}</b>{% endif %}</td>
-        <td class="ci_ave_game_time">
-          {% if colour_identity.colours == "skip" %}<b>{% endif %}
-            {{ colour_identity.ave_game_time }}
-            {% if colour_identity.colours == "skip" %}</b>{% endif %}
-        </td>
-        <td class="ci_ave_game_turns">
-          {% if colour_identity.colours == "skip" %}<b>{% endif %}
-            {{ colour_identity.ave_game_turns }}
-            {% if colour_identity.colours == "skip" %}</b>{% endif %}
-        </td>
-        <td class="ci_ave_first_ko">
-          {% if colour_identity.colours == "skip" %}<b>{% endif %}
-            {{ colour_identity.ave_first_ko }}
-            {% if colour_identity.colours == "skip" %}</b>{% endif %}
-        </td>
-        <td class="ci_ave_edhrec_decks">
-          {% if colour_identity.colours == "skip" %}<b>{% endif %}
-            {% if colour_identity.ave_edhrec_decks %}{{ '%0.1f'|format(colour_identity.ave_edhrec_decks) }}{% endif %}
-            {% if colour_identity.colours == "skip" %}</b>{% endif %}
-        </td>
-        <td class="ci_ave_edhrec_ranking">
-          {% if colour_identity.colours == "skip" %}<b>{% endif %}
-            {% if colour_identity.ave_edhrec_ranking %}{{ colour_identity.ave_edhrec_ranking }}{% endif %}
-            {% if colour_identity.colours == "skip" %}</b>{% endif %}
-        </td>
-      </tr>
+      <tbody class="total_body">
+        <tr class="total_row">
+          <td class="ci_name">
+            {% if colour_identity.colours == "skip" %}<b>{% endif %}
+              {{ colour_identity.ci_name }}{% if colour_identity.colours != "skip" %} (
+              {% for colour in colour_identity.colours %}
+              <img class="mana_symbol" src="../static/img/mana_{{ colour }}.svg">
+              {% endfor %}){% endif %}
+              {% if colour_identity.colours == "skip" %}</b>{% endif %}
+          </td>
+          <td class="ci_num_decks">
+            {% if colour_identity.colours == "skip" %}<b>{% endif %}
+              {{ colour_identity.number_of_decks }}
+              {% if colour_identity.colours == "skip" %}</b>{% endif %}
+          </td>
+          <td class="ci_games_played">
+            {% if colour_identity.colours == "skip" %}<b>{% endif %}
+              {{ colour_identity.games_played }}
+              {% if colour_identity.colours == "skip" %}</b>{% endif %}
+          </td>
+          <td class="ci_wins">
+            {% if colour_identity.colours == "skip" %}<b>{% endif %}
+              {{ colour_identity.games_won }}
+              {% if colour_identity.colours == "skip" %}</b>{% endif %}
+          </td>
+          <td class="ci_win_rate">{% if colour_identity.colours == "skip" %}<b>{% endif %}{{
+              '%0.2f'|format(colour_identity.win_rate) }}%{% if colour_identity.colours == "skip" %}</b>{% endif %}</td>
+          <td class="ci_ave_game_time">
+            {% if colour_identity.colours == "skip" %}<b>{% endif %}
+              {{ colour_identity.ave_game_time }}
+              {% if colour_identity.colours == "skip" %}</b>{% endif %}
+          </td>
+          <td class="ci_ave_game_turns">
+            {% if colour_identity.colours == "skip" %}<b>{% endif %}
+              {{ colour_identity.ave_game_turns }}
+              {% if colour_identity.colours == "skip" %}</b>{% endif %}
+          </td>
+          <td class="ci_ave_first_ko">
+            {% if colour_identity.colours == "skip" %}<b>{% endif %}
+              {{ colour_identity.ave_first_ko }}
+              {% if colour_identity.colours == "skip" %}</b>{% endif %}
+          </td>
+          <td class="ci_ave_edhrec_decks">
+            {% if colour_identity.colours == "skip" %}<b>{% endif %}
+              {% if colour_identity.ave_edhrec_decks %}{{ '%0.1f'|format(colour_identity.ave_edhrec_decks) }}{% endif %}
+              {% if colour_identity.colours == "skip" %}</b>{% endif %}
+          </td>
+          <td class="ci_ave_edhrec_ranking">
+            {% if colour_identity.colours == "skip" %}<b>{% endif %}
+              {% if colour_identity.ave_edhrec_ranking %}{{ colour_identity.ave_edhrec_ranking }}{% endif %}
+              {% if colour_identity.colours == "skip" %}</b>{% endif %}
+          </td>
+        </tr>
+      </tbody>
       {% endfor %}
     </table>
     {% endfor %}
@@ -294,47 +296,51 @@
             {% endfor %})
           </td>
           <td onclick="sortTableRows(6)" class="deck_last_played">{{ table_data[deck]["total"]["last_played"] }}</td>
-          <td onclick="sortTableRows(7)" class="deck_games_played">{{ table_data[deck]["total"]["num_games_played"] }}</td>
+          <td onclick="sortTableRows(7)" class="deck_games_played">{{ table_data[deck]["total"]["num_games_played"] }}
+          </td>
           <td onclick="sortTableRows(8)" class="deck_wins">{{ table_data[deck]["total"]["num_games_won"] }}</td>
-          <td onclick="sortTableRows(9)" class="deck_win_rate">{{ '%0.2f'|format(table_data[deck]["total"]["win_rate"]) }}%</td>
-          <td onclick="sortTableRows(10)" class="deck_ave_game_time">{{ table_data[deck]["total"]["ave_game_time"] }}</td>
-          <td onclick="sortTableRows(11)" class="deck_ave_game_turns">{{ table_data[deck]["total"]["ave_game_turns"] }}</td>
+          <td onclick="sortTableRows(9)" class="deck_win_rate">{{ '%0.2f'|format(table_data[deck]["total"]["win_rate"])
+            }}%</td>
+          <td onclick="sortTableRows(10)" class="deck_ave_game_time">{{ table_data[deck]["total"]["ave_game_time"] }}
+          </td>
+          <td onclick="sortTableRows(11)" class="deck_ave_game_turns">{{ table_data[deck]["total"]["ave_game_turns"] }}
+          </td>
           <td onclick="sortTableRows(12)" class="deck_ave_first_ko">{{ table_data[deck]["total"]["ave_first_ko"] }}</td>
           <td onclick="sortTableRows(13)" class="deck_edhrec_decks">{% if table_data[deck]["total"]["edhrec_decks"] %}{{
             table_data[deck]["total"]["edhrec_decks"] }}{% endif %}</td>
           <td onclick="sortTableRows(14)" class="deck_popularity">{% if table_data[deck]["total"]["popularity"] %}#{{
             table_data[deck]["total"]["popularity"] }}{% endif %}</td>
         </tr>
-          {% for bin in table_data[deck] %}
-          {% if bin != "total" %}
-          <tr class="bins_row">
-            <td class="deck_name">{{ table_data[deck][bin]["deck_name"] }}</td>
-            <td class="deck_owner">{{ table_data[deck][bin]["owner_name"] }}</td>
-            <td class="deck_commander">{{ table_data[deck][bin]["commander_name"] }}</td>
-            <td class="deck_partner">{{ table_data[deck][bin]["partner_name"] }}</td>
-            <td class="deck_companion">{{ table_data[deck][bin]["companion_name"] }}</td>
-            <td class="deck_ci">
-              {% if table_data[deck][bin]["colour_identity"] %}
-              {{ table_data[deck][bin]["colour_identity"] }} (
-              {% for colour in table_data[deck][bin]["colours"] %}
-              <img class="mana_symbol" src="../static/img/mana_{{ colour }}.svg">
-              {% endfor %})
-              {% endif %}
-            </td>
-            <td class="deck_last_played">{{ table_data[deck][bin]["last_played"] }}</td>
-            <td class="deck_games_played">{{ table_data[deck][bin]["num_games_played"] }}</td>
-            <td class="deck_wins">{{ table_data[deck][bin]["num_games_won"] }}</td>
-            <td class="deck_win_rate">{{ '%0.2f'|format(table_data[deck][bin]["win_rate"]) }}%</td>
-            <td class="deck_ave_game_time">{{ table_data[deck][bin]["ave_game_time"] }}</td>
-            <td class="deck_ave_game_turns">{{ table_data[deck][bin]["ave_game_turns"] }}</td>
-            <td class="deck_ave_first_ko">{{ table_data[deck][bin]["ave_first_ko"] }}</td>
-            <td class="deck_edhrec_decks">{% if table_data[deck][bin]["edhrec_decks"] %}{{
-              table_data[deck][bin]["edhrec_decks"] }}{% endif %}</td>
-            <td class="deck_popularity">{% if table_data[deck][bin]["popularity"] %}#{{
-              table_data[deck][bin]["popularity"] }}{% endif %}</td>
-          </tr>
-          {% endif %}
-          {% endfor %}
+        {% for bin in table_data[deck] %}
+        {% if bin != "total" %}
+        <tr class="bins_row">
+          <td class="deck_name">{{ table_data[deck][bin]["deck_name"] }}</td>
+          <td class="deck_owner">{{ table_data[deck][bin]["owner_name"] }}</td>
+          <td class="deck_commander">{{ table_data[deck][bin]["commander_name"] }}</td>
+          <td class="deck_partner">{{ table_data[deck][bin]["partner_name"] }}</td>
+          <td class="deck_companion">{{ table_data[deck][bin]["companion_name"] }}</td>
+          <td class="deck_ci">
+            {% if table_data[deck][bin]["colour_identity"] %}
+            {{ table_data[deck][bin]["colour_identity"] }} (
+            {% for colour in table_data[deck][bin]["colours"] %}
+            <img class="mana_symbol" src="../static/img/mana_{{ colour }}.svg">
+            {% endfor %})
+            {% endif %}
+          </td>
+          <td class="deck_last_played">{{ table_data[deck][bin]["last_played"] }}</td>
+          <td class="deck_games_played">{{ table_data[deck][bin]["num_games_played"] }}</td>
+          <td class="deck_wins">{{ table_data[deck][bin]["num_games_won"] }}</td>
+          <td class="deck_win_rate">{{ '%0.2f'|format(table_data[deck][bin]["win_rate"]) }}%</td>
+          <td class="deck_ave_game_time">{{ table_data[deck][bin]["ave_game_time"] }}</td>
+          <td class="deck_ave_game_turns">{{ table_data[deck][bin]["ave_game_turns"] }}</td>
+          <td class="deck_ave_first_ko">{{ table_data[deck][bin]["ave_first_ko"] }}</td>
+          <td class="deck_edhrec_decks">{% if table_data[deck][bin]["edhrec_decks"] %}{{
+            table_data[deck][bin]["edhrec_decks"] }}{% endif %}</td>
+          <td class="deck_popularity">{% if table_data[deck][bin]["popularity"] %}#{{
+            table_data[deck][bin]["popularity"] }}{% endif %}</td>
+        </tr>
+        {% endif %}
+        {% endfor %}
       </tbody>
       {% endfor %}
     </table>
@@ -370,30 +376,32 @@
   <div id="data_tables">
     <table class="data_table" id="game_table">
       <tr id="header">
-        <th onclick="sortTable(0)" class="game_date">Date</th>
-        <th onclick="sortTable(1)" class="game_start">Start Time</th>
-        <th onclick="sortTable(2)" class="game_time">Game Length (Time)</th>
-        <th onclick="sortTable(3)" class="game_turns">Game Length (Turns)</th>
-        <th onclick="sortTable(4)" class="game_first_ko">First KO</th>
-        <th onclick="sortTable(5)" class="game_winner">Winner</th>
+        <th onclick="sortTableBins(0)" class="game_date">Date</th>
+        <th onclick="sortTableBins(1)" class="game_start">Start Time</th>
+        <th onclick="sortTableBins(2)" class="game_time">Game Length (Time)</th>
+        <th onclick="sortTableBins(3)" class="game_turns">Game Length (Turns)</th>
+        <th onclick="sortTableBins(4)" class="game_first_ko">First KO</th>
+        <th onclick="sortTableBins(5)" class="game_winner">Winner</th>
         {% for i in range(menu_data["num_seats"]) %}
-        <th onclick="sortTable({{ i + 6 }})" class="game_players">Player {{ i + 1 }}</th>
+        <th onclick="sortTableBins({{ i + 6 }})" class="game_players">Player {{ i + 1 }}</th>
         {% endfor %}
       </tr>
       {% for game in menu_data["games"] %}
-      <tr>
-        <td class="game_date">{{ (game.start_time|string)[0:10] }}</td>
-        <td class="game_start">{{ (game.start_time|string)[11:16] }}</td>
-        <td class="game_time">{% if game.game_time %}{{ game.game_time[:-3] }}{% endif %}</td>
-        <td class="game_turns">{{ game.game_turns }}</td>
-        <td class="game_first_ko">{{ game.first_ko }}</td>
-        <td class="game_winner">{{ game.winner }}</td>
-        {% for j in range(menu_data["num_seats"]) %}
-        <td class="game_players">{% if game.player[j] %}{{ game.player[j].player_name }} - {{ game.deck[j].deck_name
-          }}{% if game.player[j].player_name != game.deck[j].player.player_name %} ({{ game.deck[j].player.player_name
-          }}'s deck){% endif %}{% endif %}</td>
-        {% endfor %}
-      </tr>
+      <tbody class="total_body">
+        <tr class="total_row">
+          <td class="game_date">{{ (game.start_time|string)[0:10] }}</td>
+          <td class="game_start">{{ (game.start_time|string)[11:16] }}</td>
+          <td class="game_time">{% if game.game_time %}{{ game.game_time[:-3] }}{% endif %}</td>
+          <td class="game_turns">{{ game.game_turns }}</td>
+          <td class="game_first_ko">{{ game.first_ko }}</td>
+          <td class="game_winner">{{ game.winner }}</td>
+          {% for j in range(menu_data["num_seats"]) %}
+          <td class="game_players">{% if game.player[j] %}{{ game.player[j].player_name }} - {{ game.deck[j].deck_name
+            }}{% if game.player[j].player_name != game.deck[j].player.player_name %} ({{ game.deck[j].player.player_name
+            }}'s deck){% endif %}{% endif %}</td>
+          {% endfor %}
+        </tr>
+      </tbody>
       {% endfor %}
     </table>
   </div>
@@ -441,30 +449,32 @@
   <div id="data_tables">
     <table class="data_table" id="player_table">
       <tr id="header">
-        <th onclick="sortTable(0)" class="player_names">Player Name</th>
-        <th onclick="sortTable(1)" class="player_decks"># Decks</th>
-        <th onclick="sortTable(2)" class="player_games_played">Games Played</th>
-        <th onclick="sortTable(3)" class="player_wins">Games Won</th>
-        <th onclick="sortTable(4)" class="player_win_rate">Win Rate</th>
-        <th onclick="sortTable(5)" class="player_ave_game_time">Ave Game Time</th>
-        <th onclick="sortTable(6)" class="player_ave_game_turns">Ave Game Length</th>
-        <th onclick="sortTable(7)" class="player_ave_first_ko">Ave First KO</th>
-        <th onclick="sortTable(8)" class="player_ave_edhrec_decks">Ave # EDHrec Decks</th>
-        <th onclick="sortTable(8)" class="player_ave_edhrec_ranking">Ave EDHrec Popularity</th>
+        <th onclick="sortTableBins(0)" class="player_names">Player Name</th>
+        <th onclick="sortTableBins(1)" class="player_decks"># Decks</th>
+        <th onclick="sortTableBins(2)" class="player_games_played">Games Played</th>
+        <th onclick="sortTableBins(3)" class="player_wins">Games Won</th>
+        <th onclick="sortTableBins(4)" class="player_win_rate">Win Rate</th>
+        <th onclick="sortTableBins(5)" class="player_ave_game_time">Ave Game Time</th>
+        <th onclick="sortTableBins(6)" class="player_ave_game_turns">Ave Game Length</th>
+        <th onclick="sortTableBins(7)" class="player_ave_first_ko">Ave First KO</th>
+        <th onclick="sortTableBins(8)" class="player_ave_edhrec_decks">Ave # EDHrec Decks</th>
+        <th onclick="sortTableBins(8)" class="player_ave_edhrec_ranking">Ave EDHrec Popularity</th>
       </tr>
       {% for player in menu_data["players"] %}
-      <tr>
-        <td class="player_names">{{ player.player_name }}</td>
-        <td class="player_decks">{{ player.num_decks }}</td>
-        <td class="player_games_played">{{ player.num_games_played }}</td>
-        <td class="player_wins">{{ player.num_games_won }}</td>
-        <td class="player_win_rate">{{ '%0.2f'|format(player.win_rate) }}%</td>
-        <td class="player_ave_game_time">{{ player.ave_game_time }}</td>
-        <td class="player_ave_game_turns">{{ player.ave_game_turns }}</td>
-        <td class="player_ave_first_ko">{{ player.ave_first_ko }}</td>
-        <td class="player_ave_edhrec_decks">{{ '%0.1f'|format(player.ave_edhrec_decks) }}</td>
-        <td class="player_ave_edhrec_ranking">{{ player.ave_edhrec_ranking }}</td>
-      </tr>
+      <tbody class="total_body">
+        <tr class="total_row">
+          <td class="player_names">{{ player.player_name }}</td>
+          <td class="player_decks">{{ player.num_decks }}</td>
+          <td class="player_games_played">{{ player.num_games_played }}</td>
+          <td class="player_wins">{{ player.num_games_won }}</td>
+          <td class="player_win_rate">{{ '%0.2f'|format(player.win_rate) }}%</td>
+          <td class="player_ave_game_time">{{ player.ave_game_time }}</td>
+          <td class="player_ave_game_turns">{{ player.ave_game_turns }}</td>
+          <td class="player_ave_first_ko">{{ player.ave_first_ko }}</td>
+          <td class="player_ave_edhrec_decks">{{ '%0.1f'|format(player.ave_edhrec_decks) }}</td>
+          <td class="player_ave_edhrec_ranking">{{ player.ave_edhrec_ranking }}</td>
+        </tr>
+      </tbody>
       {% endfor %}
     </table>
   </div>
