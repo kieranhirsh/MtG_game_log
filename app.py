@@ -774,10 +774,28 @@ def data_post():
                             if opponent.id != seat.id:
                                 game_bins.append({
                                     "bin_name": opponent.player_id,
-                                    "default_data": [{
-                                        "key": "owner_name",
-                                        "value": f"vs {opponent.player.player_name}"
-                                    }]
+                                    "default_data": [
+                                        {
+                                            "key": "owner_name",
+                                            "value": f"vs {opponent.player.player_name}"
+                                        },
+                                        {
+                                            "key": "deck_name",
+                                            "value": ""
+                                        },
+                                        {
+                                            "key": "commander_name",
+                                            "value": ""
+                                        },
+                                        {
+                                            "key": "partner_name",
+                                            "value": ""
+                                        },
+                                        {
+                                            "key": "companion_name",
+                                            "value": ""
+                                        }
+                                    ]
                                 })
                     elif bin_type == "opp_deck":
                         game_bins = []
@@ -802,6 +820,26 @@ def data_post():
                                         {
                                             "key": "colours",
                                             "value": f"{opponent.deck.colour_identity.colours}"
+                                        },
+                                        {
+                                            "key": "commander_name",
+                                            "value": f"{opponent.deck.commander_name}"
+                                        },
+                                        {
+                                            "key": "partner_name",
+                                            "value": f"{opponent.deck.partner_name}"
+                                        },
+                                        {
+                                            "key": "companion_name",
+                                            "value": f"{opponent.deck.companion_name}"
+                                        },
+                                        {
+                                            "key": "edhrec_decks",
+                                            "value": f"{opponent.deck.edhrec_num_decks}"
+                                        },
+                                        {
+                                            "key": "popularity",
+                                            "value": f"{opponent.deck.edhrec_popularity}"
                                         }
                                     ]
                                 })
@@ -815,6 +853,18 @@ def data_post():
                                 },
                                 {
                                     "key": "owner_name",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "commander_name",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "partner_name",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "companion_name",
                                     "value": ""
                                 }
                             ]
@@ -832,6 +882,18 @@ def data_post():
                                     {
                                         "key": "owner_name",
                                         "value": ""
+                                    },
+                                    {
+                                        "key": "commander_name",
+                                        "value": ""
+                                    },
+                                    {
+                                        "key": "partner_name",
+                                        "value": ""
+                                    },
+                                    {
+                                        "key": "companion_name",
+                                        "value": ""
                                     }
                                 ]
                             }]
@@ -845,6 +907,18 @@ def data_post():
                                     },
                                     {
                                         "key": "owner_name",
+                                        "value": ""
+                                    },
+                                    {
+                                        "key": "commander_name",
+                                        "value": ""
+                                    },
+                                    {
+                                        "key": "partner_name",
+                                        "value": ""
+                                    },
+                                    {
+                                        "key": "companion_name",
                                         "value": ""
                                     }
                                 ]
@@ -868,6 +942,18 @@ def data_post():
                                 {
                                     "key": "owner_name",
                                     "value": ""
+                                },
+                                {
+                                    "key": "commander_name",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "partner_name",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "companion_name",
+                                    "value": ""
                                 }
                             ]
                         }]
@@ -883,6 +969,18 @@ def data_post():
                                 {
                                     "key": "owner_name",
                                     "value": ""
+                                },
+                                {
+                                    "key": "commander_name",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "partner_name",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "companion_name",
+                                    "value": ""
                                 }
                             ]
                         }]
@@ -897,6 +995,18 @@ def data_post():
                                 },
                                 {
                                     "key": "owner_name",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "commander_name",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "partner_name",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "companion_name",
                                     "value": ""
                                 }
                             ]
@@ -917,6 +1027,18 @@ def data_post():
                                 },
                                 {
                                     "key": "owner_name",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "commander_name",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "partner_name",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "companion_name",
                                     "value": ""
                                 }
                             ]
