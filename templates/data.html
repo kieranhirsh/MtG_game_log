@@ -306,19 +306,45 @@
           <td onclick="sortTableRows(11)" class="deck_ave_game_turns">{{ table_data[deck]["total"]["ave_game_turns"] }}
           </td>
           <td onclick="sortTableRows(12)" class="deck_ave_first_ko">{{ table_data[deck]["total"]["ave_first_ko"] }}</td>
-          <td onclick="sortTableRows(13)" class="deck_edhrec_decks">{% if table_data[deck]["total"]["edhrec_decks"] %}{{
-            table_data[deck]["total"]["edhrec_decks"] }}{% endif %}</td>
-          <td onclick="sortTableRows(14)" class="deck_popularity">{% if table_data[deck]["total"]["popularity"] %}#{{
-            table_data[deck]["total"]["popularity"] }}{% endif %}</td>
+          <td onclick="sortTableRows(13)" class="deck_edhrec_decks">
+            {% if table_data[deck]["total"]["edhrec_decks"] %}
+            {{table_data[deck]["total"]["edhrec_decks"] }}
+            {% endif %}
+          </td>
+          <td onclick="sortTableRows(14)" class="deck_popularity">
+            {% if table_data[deck]["total"]["popularity"] %}
+            #{{table_data[deck]["total"]["popularity"] }}
+            {% endif %}
+          </td>
         </tr>
         {% for bin in table_data[deck] %}
         {% if bin != "total" %}
         <tr class="bins_row">
-          <td class="deck_name">{{ table_data[deck][bin]["deck_name"] }}</td>
-          <td class="deck_owner">{{ table_data[deck][bin]["owner_name"] }}</td>
-          <td class="deck_commander">{{ table_data[deck][bin]["commander_name"] }}</td>
-          <td class="deck_partner">{{ table_data[deck][bin]["partner_name"] }}</td>
-          <td class="deck_companion">{{ table_data[deck][bin]["companion_name"] }}</td>
+          <td class="deck_name">
+            {% if table_data[deck][bin]["deck_name"] %}
+            {{ table_data[deck][bin]["deck_name"] }}
+            {% endif %}
+          </td>
+          <td class="deck_owner">
+            {% if table_data[deck][bin]["owner_name"] %}
+            {{ table_data[deck][bin]["owner_name"] }}
+            {% endif %}
+          </td>
+          <td class="deck_commander">
+            {% if table_data[deck][bin]["commander_name"] %}
+            {{ table_data[deck][bin]["commander_name"] }}
+            {% endif %}
+          </td>
+          <td class="deck_partner">
+            {% if table_data[deck][bin]["partner_name"] %}
+            {{ table_data[deck][bin]["partner_name"] }}
+            {% endif %}
+          </td>
+          <td class="deck_companion">
+            {% if table_data[deck][bin]["companion_name"] %}
+            {{ table_data[deck][bin]["companion_name"] }}
+            {% endif %}
+          </td>
           <td class="deck_ci">
             {% if table_data[deck][bin]["colour_identity"] %}
             {{ table_data[deck][bin]["colour_identity"] }} (

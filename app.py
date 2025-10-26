@@ -778,22 +778,6 @@ def data_post():
                                         {
                                             "key": "owner_name",
                                             "value": f"vs {opponent.player.player_name}"
-                                        },
-                                        {
-                                            "key": "deck_name",
-                                            "value": ""
-                                        },
-                                        {
-                                            "key": "commander_name",
-                                            "value": ""
-                                        },
-                                        {
-                                            "key": "partner_name",
-                                            "value": ""
-                                        },
-                                        {
-                                            "key": "companion_name",
-                                            "value": ""
                                         }
                                     ]
                                 })
@@ -850,22 +834,6 @@ def data_post():
                                 {
                                     "key": "deck_name",
                                     "value": f"seat number {seat.seat_no}"
-                                },
-                                {
-                                    "key": "owner_name",
-                                    "value": ""
-                                },
-                                {
-                                    "key": "commander_name",
-                                    "value": ""
-                                },
-                                {
-                                    "key": "partner_name",
-                                    "value": ""
-                                },
-                                {
-                                    "key": "companion_name",
-                                    "value": ""
                                 }
                             ]
                         }]
@@ -878,22 +846,6 @@ def data_post():
                                     {
                                         "key": "deck_name",
                                         "value": "Games Won"
-                                    },
-                                    {
-                                        "key": "owner_name",
-                                        "value": ""
-                                    },
-                                    {
-                                        "key": "commander_name",
-                                        "value": ""
-                                    },
-                                    {
-                                        "key": "partner_name",
-                                        "value": ""
-                                    },
-                                    {
-                                        "key": "companion_name",
-                                        "value": ""
                                     }
                                 ]
                             }]
@@ -904,22 +856,6 @@ def data_post():
                                     {
                                         "key": "deck_name",
                                         "value": "Games Lost"
-                                    },
-                                    {
-                                        "key": "owner_name",
-                                        "value": ""
-                                    },
-                                    {
-                                        "key": "commander_name",
-                                        "value": ""
-                                    },
-                                    {
-                                        "key": "partner_name",
-                                        "value": ""
-                                    },
-                                    {
-                                        "key": "companion_name",
-                                        "value": ""
                                     }
                                 ]
                             }]
@@ -938,22 +874,6 @@ def data_post():
                                 {
                                     "key": "deck_name",
                                     "value": default_value
-                                },
-                                {
-                                    "key": "owner_name",
-                                    "value": ""
-                                },
-                                {
-                                    "key": "commander_name",
-                                    "value": ""
-                                },
-                                {
-                                    "key": "partner_name",
-                                    "value": ""
-                                },
-                                {
-                                    "key": "companion_name",
-                                    "value": ""
                                 }
                             ]
                         }]
@@ -965,22 +885,6 @@ def data_post():
                                 {
                                     "key": "deck_name",
                                     "value": f"{game_length} turn games"
-                                },
-                                {
-                                    "key": "owner_name",
-                                    "value": ""
-                                },
-                                {
-                                    "key": "commander_name",
-                                    "value": ""
-                                },
-                                {
-                                    "key": "partner_name",
-                                    "value": ""
-                                },
-                                {
-                                    "key": "companion_name",
-                                    "value": ""
                                 }
                             ]
                         }]
@@ -992,22 +896,6 @@ def data_post():
                                 {
                                     "key": "deck_name",
                                     "value": f"turn {KO_turn} KO"
-                                },
-                                {
-                                    "key": "owner_name",
-                                    "value": ""
-                                },
-                                {
-                                    "key": "commander_name",
-                                    "value": ""
-                                },
-                                {
-                                    "key": "partner_name",
-                                    "value": ""
-                                },
-                                {
-                                    "key": "companion_name",
-                                    "value": ""
                                 }
                             ]
                         }]
@@ -1024,22 +912,6 @@ def data_post():
                                 {
                                     "key": "deck_name",
                                     "value": default_value
-                                },
-                                {
-                                    "key": "owner_name",
-                                    "value": ""
-                                },
-                                {
-                                    "key": "commander_name",
-                                    "value": ""
-                                },
-                                {
-                                    "key": "partner_name",
-                                    "value": ""
-                                },
-                                {
-                                    "key": "companion_name",
-                                    "value": ""
                                 }
                             ]
                         }]
@@ -1124,6 +996,10 @@ def data_post():
                             table_data[deck.id][deck_bin]["ave_first_ko"] = ""
                     else:
                         table_data[deck.id][deck_bin]["ave_first_ko"] = ""
+
+        print("***************************************************************")
+        print(table_data)
+        print("***************************************************************")
 
         return render_template('data.html', data_type="deck", menu_data=html_data, table_data=table_data)
     elif request.form["type"] == "game":
