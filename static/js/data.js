@@ -289,6 +289,44 @@ function sortTableRows(n) {
           innerX = parseInt(innerX.trim().split(" ")[3]);
         } else if (innerX.includes("Won the game")) {
           innerX = Number.MIN_SAFE_INTEGER;
+        } else if (innerX.includes("Sunday")) {
+          innerX = 1;
+        } else if (innerX.includes("Monday")) {
+          innerX = 2;
+        } else if (innerX.includes("Tuesday")) {
+          innerX = 3;
+        } else if (innerX.includes("Wednesday")) {
+          innerX = 4;
+        } else if (innerX.includes("Thursday")) {
+          innerX = 5;
+        } else if (innerX.includes("Friday")) {
+          innerX = 6;
+        } else if (innerX.includes("Saturday")) {
+          innerX = 7;
+        } else if (innerX.includes("January")) {
+          innerX = 1;
+        } else if (innerX.includes("February")) {
+          innerX = 2;
+        } else if (innerX.includes("March")) {
+          innerX = 3;
+        } else if (innerX.includes("April")) {
+          innerX = 4;
+        } else if (innerX.includes("May")) {
+          innerX = 5;
+        } else if (innerX.includes("June")) {
+          innerX = 6;
+        } else if (innerX.includes("July")) {
+          innerX = 7;
+        } else if (innerX.includes("August")) {
+          innerX = 8;
+        } else if (innerX.includes("September")) {
+          innerX = 9;
+        } else if (innerX.includes("October")) {
+          innerX = 10;
+        } else if (innerX.includes("November")) {
+          innerX = 11;
+        } else if (innerX.includes("December")) {
+          innerX = 12;
         }
         y = rows[j + 1].getElementsByTagName("td")[n];
         innerY = y.innerHTML;
@@ -302,6 +340,44 @@ function sortTableRows(n) {
           innerY = parseInt(innerY.trim().split(" ")[3]);
         } else if (innerY.includes("Won the game")) {
           innerY = Number.MIN_SAFE_INTEGER;
+        } else if (innerY.includes("Sunday")) {
+          innerY = 1;
+        } else if (innerY.includes("Monday")) {
+          innerY = 2;
+        } else if (innerY.includes("Tuesday")) {
+          innerY = 3;
+        } else if (innerY.includes("Wednesday")) {
+          innerY = 4;
+        } else if (innerY.includes("Thursday")) {
+          innerY = 5;
+        } else if (innerY.includes("Friday")) {
+          innerY = 6;
+        } else if (innerY.includes("Saturday")) {
+          innerY = 7;
+        } else if (innerY.includes("January")) {
+          innerY = 1;
+        } else if (innerY.includes("February")) {
+          innerY = 2;
+        } else if (innerY.includes("March")) {
+          innerY = 3;
+        } else if (innerY.includes("April")) {
+          innerY = 4;
+        } else if (innerY.includes("May")) {
+          innerY = 5;
+        } else if (innerY.includes("June")) {
+          innerY = 6;
+        } else if (innerY.includes("July")) {
+          innerY = 7;
+        } else if (innerY.includes("August")) {
+          innerY = 8;
+        } else if (innerY.includes("September")) {
+          innerY = 9;
+        } else if (innerY.includes("October")) {
+          innerY = 10;
+        } else if (innerY.includes("November")) {
+          innerY = 11;
+        } else if (innerY.includes("December")) {
+          innerY = 12;
         }
         /* Check if the two rows should switch place,
         based on the direction, asc or desc: */

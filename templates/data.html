@@ -63,12 +63,19 @@
           <option value="" selected disabled hidden>Choose bin (optional)</option>
           <option value="opp_player">Opponent (player)</option>
           <option value="opp_deck">Opponent (deck)</option>
+          <option value="opp_ci">Opponent (colour identity)</option>
+          <option value="opp_num_colours">Opponent (number of colours)</option>
           <option value="seat">Position in Turn Order</option>
           <option value="result">Result</option>
           <option value="game_time">Game Length (time)</option>
           <option value="game_turns">Game Length (turns)</option>
           <option value="first_KO">First KO turn</option>
           <option value="self_KO">Self KO turn</option>
+          <option value="start_time">Start Time</option>
+          <option value="end_time">End Time</option>
+          <option value="dow">Day of Week</option>
+          <option value="month">Month</option>
+          <option value="year">Year</option>
         </select>
         <br><input type="submit" value="Submit">
       </form>
@@ -347,10 +354,12 @@
           </td>
           <td class="deck_ci">
             {% if table_data[deck][bin]["colour_identity"] %}
-            {{ table_data[deck][bin]["colour_identity"] }} (
-            {% for colour in table_data[deck][bin]["colours"] %}
-            <img class="mana_symbol" src="../static/img/mana_{{ colour }}.svg">
-            {% endfor %})
+            {{ table_data[deck][bin]["colour_identity"] }}
+              {% if table_data[deck][bin]["colours"] %}
+                ({% for colour in table_data[deck][bin]["colours"] %}
+                <img class="mana_symbol" src="../static/img/mana_{{ colour }}.svg">
+                {% endfor %})
+              {% endif %}
             {% endif %}
           </td>
           <td class="deck_last_played">{{ table_data[deck][bin]["last_played"] }}</td>

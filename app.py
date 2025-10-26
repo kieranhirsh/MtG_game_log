@@ -827,6 +827,38 @@ def data_post():
                                         }
                                     ]
                                 })
+                    elif bin_type == "opp_ci":
+                        game_bins = []
+                        opponents = seat.game.seats
+                        for opponent in opponents:
+                            if opponent.id != seat.id:
+                                game_bins.append({
+                                    "bin_name": opponent.deck.colour_identity.ci_name,
+                                    "default_data": [
+                                        {
+                                            "key": "colour_identity",
+                                            "value": f"vs {opponent.deck.colour_identity.ci_name}"
+                                        },
+                                        {
+                                            "key": "colours",
+                                            "value": f"{opponent.deck.colour_identity.colours}"
+                                        }
+                                    ]
+                                })
+                    elif bin_type == "opp_num_colours":
+                        game_bins = []
+                        opponents = seat.game.seats
+                        for opponent in opponents:
+                            if opponent.id != seat.id:
+                                game_bins.append({
+                                    "bin_name": len(opponent.deck.colour_identity.colours),
+                                    "default_data": [
+                                        {
+                                            "key": "colour_identity",
+                                            "value": f"vs {len(opponent.deck.colour_identity.colours)} colour decks"
+                                        }
+                                    ]
+                                })
                     elif bin_type == "seat":
                         game_bins = [{
                             "bin_name": seat.seat_no,
@@ -912,6 +944,71 @@ def data_post():
                                 {
                                     "key": "deck_name",
                                     "value": default_value
+                                }
+                            ]
+                        }]
+                    elif bin_type == "start_time":
+                        if seat.game.start_time:
+                            start_time = seat.game.start_time.strftime('%H')
+                            default_value = f"{start_time}:00"
+                        else:
+                            start_time = "none"
+                            default_value = "start time not recorded"
+                        game_bins = [{
+                            "bin_name": start_time,
+                            "default_data": [
+                                {
+                                    "key": "deck_name",
+                                    "value": default_value
+                                }
+                            ]
+                        }]
+                    elif bin_type == "end_time":
+                        if seat.game.end_time:
+                            end_time = seat.game.end_time.strftime('%H')
+                            default_value = f"{end_time}:00"
+                        else:
+                            end_time = "none"
+                            default_value = "end time not recorded"
+                        game_bins = [{
+                            "bin_name": end_time,
+                            "default_data": [
+                                {
+                                    "key": "deck_name",
+                                    "value": default_value
+                                }
+                            ]
+                        }]
+                    elif bin_type == "dow":
+                        dow = seat.game.start_time.strftime('%A')
+                        game_bins = [{
+                            "bin_name": dow,
+                            "default_data": [
+                                {
+                                    "key": "deck_name",
+                                    "value": dow
+                                }
+                            ]
+                        }]
+                    elif bin_type == "month":
+                        month = seat.game.start_time.strftime('%B')
+                        game_bins = [{
+                            "bin_name": month,
+                            "default_data": [
+                                {
+                                    "key": "deck_name",
+                                    "value": month
+                                }
+                            ]
+                        }]
+                    elif bin_type == "year":
+                        year = seat.game.start_time.strftime('%Y')
+                        game_bins = [{
+                            "bin_name": year,
+                            "default_data": [
+                                {
+                                    "key": "deck_name",
+                                    "value": year
                                 }
                             ]
                         }]
