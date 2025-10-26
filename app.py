@@ -997,10 +997,6 @@ def data_post():
                     else:
                         table_data[deck.id][deck_bin]["ave_first_ko"] = ""
 
-        print("***************************************************************")
-        print(table_data)
-        print("***************************************************************")
-
         return render_template('data.html', data_type="deck", menu_data=html_data, table_data=table_data)
     elif request.form["type"] == "game":
         # Load the data we need
