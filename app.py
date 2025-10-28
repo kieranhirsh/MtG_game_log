@@ -1012,6 +1012,30 @@ def data_post():
                                 }
                             ]
                         }]
+                    elif bin_type == "borrowed":
+                        pilot = seat.player.player_name
+                        if pilot == deck.player.player_name:
+                            game_bins = [{
+                                "bin_name": "owner",
+                                "default_data": [
+                                    {
+                                        "key": "deck_name",
+                                        "value": f"{pilot} (owner)"
+                                    }
+                                ]
+                            }]
+                        elif pilot != deck.player.player_name:
+                            game_bins = [{
+                                "bin_name": pilot,
+                                "default_data": [
+                                    {
+                                        "key": "deck_name",
+                                        "value": pilot
+                                    }
+                                ]
+                            }]
+                        else:
+                            raise ValueError("somehow the pilot is neither the deck owner nor not the deck owner")
                     else:
                         game_bins = []
 
