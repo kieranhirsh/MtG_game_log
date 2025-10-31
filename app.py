@@ -1145,8 +1145,6 @@ def data_post():
                                                             return_model_object=True)[0]
                     except:
                         return errors.entry_not_found('data.html', [['deck', 'deck_name', deck_name]])
-                else:
-                    return errors.missing_form_item('data.html')
 
                 for seat in seats:
                     if not request.form["requested_deck"] or seat.deck == requested_deck:
