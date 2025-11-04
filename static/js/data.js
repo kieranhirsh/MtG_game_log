@@ -270,19 +270,19 @@ function sortTableRows(n) {
         x = rows[j].getElementsByTagName("td")[n];
         innerX = x.innerHTML;
         if (innerX.includes("minute games") || innerX.includes("turn games") || innerX.includes("player games")) {
-          innerX = parseInt(innerX.trim().split(" ")[0]);
+          innerX = innerX.trim().split(" ")[0];
         } else if (innerX.includes("%")) {
-          innerX = parseFloat(innerX.slice(0, -1));
+          innerX = innerX.slice(0, -1);
         } else if (innerX.includes("#")) {
           innerX = innerX.slice(1);
         } else if (innerX.includes("untimed games")) {
-          innerX = Number.MAX_SAFE_INTEGER;
-        } else if (innerX.includes("turn ") && innerX.includes(" KO")) {
-          innerX = parseInt(innerX.trim().split(" ")[1]);
+          innerX = String(Number.MAX_SAFE_INTEGER);
         } else if (innerX.includes("KO'd on turn")) {
-          innerX = parseInt(innerX.trim().split(" ")[3]);
+          innerX = innerX.trim().split(" ")[3];
+        } else if (innerX.includes("turn ") && innerX.includes(" KO")) {
+          innerX = innerX.trim().split(" ")[1];
         } else if (innerX.includes("Won the game")) {
-          innerX = Number.MIN_SAFE_INTEGER;
+          innerX = String(Number.MIN_SAFE_INTEGER);
         } else if (innerX.includes("Sunday")) {
           innerX = 1;
         } else if (innerX.includes("Monday")) {
@@ -325,19 +325,19 @@ function sortTableRows(n) {
         y = rows[j + 1].getElementsByTagName("td")[n];
         innerY = y.innerHTML;
         if (innerY.includes("minute games") || innerY.includes("turn games") || innerY.includes("player games")) {
-          innerY = parseInt(innerY.trim().split(" ")[0]);
+          innerY = innerY.trim().split(" ")[0];
         } else if (innerY.includes("%")) {
-          innerY = parseFloat(innerY.slice(0, -1));
+          innerY = innerY.slice(0, -1);
         } else if (innerY.includes("#")) {
           innerY = innerY.slice(1);
         } else if (innerY.includes("untimed games")) {
-          innerY = Number.MAX_SAFE_INTEGER;
-        } else if (innerY.includes("turn ") && innerY.includes(" KO")) {
-          innerY = parseInt(innerY.trim().split(" ")[1]);
+          innerY = String(Number.MAX_SAFE_INTEGER);
         } else if (innerY.includes("KO'd on turn")) {
-          innerY = parseInt(innerY.trim().split(" ")[3]);
+          innerY = innerY.trim().split(" ")[3];
+        } else if (innerY.includes("turn ") && innerY.includes(" KO")) {
+          innerY = innerY.trim().split(" ")[1];
         } else if (innerY.includes("Won the game")) {
-          innerY = Number.MIN_SAFE_INTEGER;
+          innerY = String(Number.MIN_SAFE_INTEGER);
         } else if (innerY.includes("Sunday")) {
           innerY = 1;
         } else if (innerY.includes("Monday")) {
@@ -377,89 +377,40 @@ function sortTableRows(n) {
         } else if (innerY.includes("December")) {
           innerY = 12;
         }
+        // Make sure the values are of the correct type
+        if (!isNaN(parseFloat(innerX)) && !innerX.includes(":")) {
+          innerX = parseFloat(innerX);
+        } else {
+          innerX = innerX.toLowerCase();
+        }
+        if (!isNaN(parseFloat(innerY)) && !innerY.includes(":")) {
+          innerY = parseFloat(innerY);
+        } else {
+          innerY = innerY.toLowerCase();
+        }
         /* Check if the two rows should switch place,
         based on the direction, asc or desc: */
         if (dir == "asc") {
-          if (innerY == 0) {
-            // If the second element is zero, we don't want to switch, but we also want to keep the loop going:
-            if (j == (rows.length - 2)) {
-              // If we've reached the end of the list, however, we do want to break the loop:
-              switching = false;
+          if (header === "Last Played") {
+            if (y.innerHTML == "never") {
+              continue
+            }
+            if (x.innerHTML == "never") {
+              // If we want to switch, mark as a switch and break the loop:
+              shouldSwitch = true;
               break;
             }
-            switching = true;
-            continue;
           }
-          // Check whether the data is a number or a string
-          if (
-            header === "# Decks" ||
-            header === "Last Played" ||
-            header === "Games Played" ||
-            header === "Games Won" ||
-            header === "Win Rate" ||
-            header === "Ave Game Length" ||
-            header === "First KO" ||
-            header === "Game Length (Turns)" ||
-            header === "Ave First KO" ||
-            header === "# EDHrec Decks" ||
-            header === "Popularity" ||
-            header === "Ave # EDHrec Decks" ||
-            typeof(innerX) === "number"
-          ) {
-            if (header === "Last Played") {
-              if (y.innerHTML == "never") {
-                continue
-              }
-              if (x.innerHTML == "never") {
-                // If we want to switch, mark as a switch and break the loop:
-                shouldSwitch = true;
-                break;
-              }
-            }
-            if (parseFloat(innerX) > parseFloat(innerY) || parseFloat(innerX) == 0 || isNaN(parseFloat(innerX))) {
-              // If we want to switch, mark as a switch and break the loop:
-              shouldSwitch = true;
-              break;
-            }
-          } else {
-            if (innerX.toLowerCase() > innerY.toLowerCase() || innerX.toLowerCase() == 0) {
-              // If we want to switch, mark as a switch and break the loop:
-              shouldSwitch = true;
-              break;
-            }
+          if (innerX > innerY) {
+            // If we want to switch, mark as a switch and break the loop:
+            shouldSwitch = true;
+            break;
           }
         } else if (dir == "desc") {
-          // Check whether the data is a number or a string
-          if (
-            header === "# Decks" ||
-            header === "Last Played" ||
-            header === "Games Played" ||
-            header === "Games Won" ||
-            header === "Win Rate" ||
-            header === "Game Length (Turns)" ||
-            header === "First KO" ||
-            header === "Ave Game Length" ||
-            header === "Ave First KO" ||
-            header === "# EDHrec Decks" ||
-            header === "Popularity" ||
-            header === "Ave # EDHrec Decks" ||
-            typeof(innerX) === "number"
-          ) {
-            if (isNaN(parseFloat(innerY))) {
-              // skip this case
-              continue;
-            }
-            if (parseFloat(innerX) < parseFloat(innerY) || isNaN(parseFloat(innerX))) {
-              // If so, mark as a switch and break the loop:
-              shouldSwitch = true;
-              break;
-            }
-          } else {
-            if (innerX.toLowerCase() < innerY.toLowerCase()) {
-              // If so, mark as a switch and break the loop:
-              shouldSwitch = true;
-              break;
-            }
+          if (innerX < innerY) {
+            // If so, mark as a switch and break the loop:
+            shouldSwitch = true;
+            break;
           }
         }
       }
