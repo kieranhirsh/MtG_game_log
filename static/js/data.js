@@ -218,23 +218,10 @@ function sortTableBins(n) {
 }
 
 function sortTableRows(n) {
-  var table, bodies, rows, switching, noswitch, i, x, y, header, shouldSwitch, globalDir, dir, switchcount = 0;
+  var table, bodies, rows, switching, noswitch, i, x, y, header, shouldSwitch, globalDir, dirSet, dir, switchcount = 0;
   table = document.getElementsByClassName("data_table");
   header = table[0].rows[0].getElementsByTagName("th")[n].innerHTML;
-  // If the row is "Win Rate", we need to remove the trailing % to be able to convert to a int
-  if (header === "Win Rate") {
-    for (i = 1; i < (table[0].rows.length); i++) {
-      x = table[0].rows[i].getElementsByTagName("td")[n];
-      x.innerHTML = x.innerHTML.slice(0, -1);
-    }
-  }
-  // If the row is "Popularity", we need to remove the leading # to be able to convert to a int
-  if (header === "Popularity") {
-    for (i = 1; i < (table[0].rows.length); i++) {
-      x = table[0].rows[i].getElementsByTagName("td")[n];
-      x.innerHTML = x.innerHTML.slice(1);
-    }
-  }
+  dirSet = false;
   // Set the global sorting direction:
   if (
     header === "# Decks" ||
@@ -262,6 +249,9 @@ function sortTableRows(n) {
     /* Make a loop that will continue until
     no switching has been done: */
     rows = bodies[i].rows;
+    if (rows.length === 2) {
+      continue;
+    }
     // Set the global sorting direction:
     dir = globalDir;
     // initialise some loop variables
@@ -279,8 +269,12 @@ function sortTableRows(n) {
         one from current row and one from the next: */
         x = rows[j].getElementsByTagName("td")[n];
         innerX = x.innerHTML;
-        if (innerX.includes("minute games") || innerX.includes("turn games")) {
+        if (innerX.includes("minute games") || innerX.includes("turn games") || innerX.includes("player games")) {
           innerX = parseInt(innerX.trim().split(" ")[0]);
+        } else if (innerX.includes("%")) {
+          innerX = parseFloat(innerX.slice(0, -1));
+        } else if (innerX.includes("#")) {
+          innerX = innerX.slice(1);
         } else if (innerX.includes("untimed games")) {
           innerX = Number.MAX_SAFE_INTEGER;
         } else if (innerX.includes("turn ") && innerX.includes(" KO")) {
@@ -330,8 +324,12 @@ function sortTableRows(n) {
         }
         y = rows[j + 1].getElementsByTagName("td")[n];
         innerY = y.innerHTML;
-        if (innerY.includes("minute games" || innerY.includes("turn games"))) {
+        if (innerY.includes("minute games") || innerY.includes("turn games") || innerY.includes("player games")) {
           innerY = parseInt(innerY.trim().split(" ")[0]);
+        } else if (innerY.includes("%")) {
+          innerY = parseFloat(innerY.slice(0, -1));
+        } else if (innerY.includes("#")) {
+          innerY = innerY.slice(1);
         } else if (innerY.includes("untimed games")) {
           innerY = Number.MAX_SAFE_INTEGER;
         } else if (innerY.includes("turn ") && innerY.includes(" KO")) {
@@ -488,24 +486,9 @@ function sortTableRows(n) {
         }
       }
     }
-    if (i == 1) {
+    if (dirSet === false) {
+      dirSet = true;
       globalDir = dir;
-    }
-  }
-  // If the row is "Win Rate", we need to add the trailing % back
-  if (header === "Win Rate") {
-    for (i = 1; i < (table[0].rows.length); i++) {
-      x = table[0].rows[i].getElementsByTagName("td")[n];
-      x.innerHTML = x.innerHTML + "%";
-    }
-  }
-  // If the row is "Popularity", we need to add the leading # back
-  if (header === "Popularity") {
-    for (i = 1; i < (table[0].rows.length); i++) {
-      x = table[0].rows[i].getElementsByTagName("td")[n];
-      if (x.innerHTML) {
-        x.innerHTML = "#" + x.innerHTML;
-      }
     }
   }
 }
