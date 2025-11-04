@@ -859,6 +859,17 @@ def data_post():
                                         }
                                     ]
                                 })
+                    elif bin_type == "num_players":
+                        num_players = len(seat.game.seats)
+                        game_bins = [{
+                            "bin_name": num_players,
+                            "default_data": [
+                                {
+                                    "key": "deck_name",
+                                    "value": f"{num_players} player games"
+                                }
+                            ]
+                        }]
                     elif bin_type == "seat":
                         game_bins = [{
                             "bin_name": seat.seat_no,
