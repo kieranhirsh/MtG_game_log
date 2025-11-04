@@ -571,6 +571,10 @@ def data_post():
                 ave_edhrec_decks = 0
                 ave_edhrec_ranking = ""
             else:
+                # these lines are here because of a really annoying bug to track where sometimes
+                # the line that calculates ave_edhrec_decks fails due to unsopported comparison types
+                print(colour_identity.ci_name)
+                print(num_edhrec_deck)
                 ave_edhrec_decks = sum(num_edhrec_deck) / len(num_edhrec_deck)
                 # find the ranking that the player's average deck would have on EDHrec
                 rank = 0
