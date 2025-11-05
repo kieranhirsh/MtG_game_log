@@ -378,15 +378,19 @@ function sortTableRows(n) {
           innerY = 12;
         }
         // Make sure the values are of the correct type
-        if (!isNaN(parseFloat(innerX)) && !innerX.includes(":")) {
-          innerX = parseFloat(innerX);
-        } else {
-          innerX = innerX.toLowerCase();
+        if (typeof (innerX) === "string") {
+          if (!isNaN(parseFloat(innerX)) && !innerX.includes(":")) {
+            innerX = parseFloat(innerX);
+          } else {
+            innerX = innerX.toLowerCase();
+          }
         }
-        if (!isNaN(parseFloat(innerY)) && !innerY.includes(":")) {
-          innerY = parseFloat(innerY);
-        } else {
-          innerY = innerY.toLowerCase();
+        if (typeof (innerY) === "string") {
+          if (!isNaN(parseFloat(innerY)) && !innerY.includes(":")) {
+            innerY = parseFloat(innerY);
+          } else {
+            innerY = innerY.toLowerCase();
+          }
         }
         /* Check if the two rows should switch place,
         based on the direction, asc or desc: */
