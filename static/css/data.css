@@ -27,6 +27,9 @@ body #data_tables .data_table tr#header,
 body #data_tables .colour_data_table tr#header {
   background-color: #3b3c3d;
   color: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 body #data_tables .data_table tr.total_row:has(+ .bins_row),
 body #data_tables .colour_data_table tr.total_row:has(+ .bins_row) {

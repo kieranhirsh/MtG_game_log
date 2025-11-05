@@ -33,6 +33,9 @@ body {
       tr#header {
         background-color: #3b3c3d;
         color: white;
+        position: sticky;
+        top: 0;
+        z-index: 10;
       }
 
       tr.total_row:has(+ .bins_row) {
