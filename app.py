@@ -1197,9 +1197,6 @@ def data_post():
 
         return render_template('data.html', data_type="game", menu_data=html_data)
     elif request.form["type"] == "player":
-        # initialise values
-        player_data = []
-
         # generate the full list of edhrec deck data
         min_edhrec_decks = min([deck.edhrec_num_decks for deck in decks if isinstance(deck.edhrec_num_decks, int)])
         page = 1
@@ -1210,142 +1207,430 @@ def data_post():
             popularity_list += edhrec_all_cmdrs_response["cardviews"]
             page += 1
 
-        # loop over all players
+        # find restrictions
+        restrictions = []
+        for form_item in request.form:
+            if form_item != "type" and form_item != "bins" and request.form[form_item]:
+                restriction_key = form_item
+                restriction_value = request.form[form_item]
+
+                # this wants to be a select case, but I'm using Python 3.8 :(
+                if form_item == "ci_abbr":
+                    # check that colour identity exists in database, return an error if it doesn't
+                    colour_identity_data, desired_ci = utils.get_ci_data_from_list_of_colours(request.form.getlist("ci_abbr"))
+                    if not colour_identity_data:
+                        return errors.entry_not_found('data.html', [["colour_identity", "colours", desired_ci]])
+                    restriction_key = "ci_name"
+                    restriction_value = colour_identity_data[0].ci_name
+
+                    class_type = "colour_identity"
+
+                else:
+                    return errors.missing_form_item('data.html')
+
+                restrictions.append({
+                    "class_type": class_type,
+                    "key": restriction_key,
+                    "value": restriction_value
+                })
+
+        # set up our initial bins
+        if "bins" in request.form.keys():
+            bin_type = request.form["bins"]
+        else:
+            bin_type = ""
+
+        table_data = {}
+
         for player in players:
-            # find all decks owned by the player
-            player_decks = player_crud.get_child_data(player.id, "deck", True)
-            decks_to_remove = []
-            game_times = []
-            game_turns = []
-            first_kos = []
-            num_edhrec_deck = []
+            # initialise data
+            table_data[player.id] = {"total": defaultdict(int)}
+            table_data[player.id]["total"]["player_name"] = player.player_name
 
-            # if we have a restriction on the colour identity name
-            if request.form.getlist("ci_abbr"):
-                colour_identity_data, desired_ci = utils.get_ci_data_from_list_of_colours(request.form.getlist("ci_abbr"))
-                ci_name = colour_identity_data[0].ci_name
+            for deck in player.decks:
+                # skip this deck if it doesn't meet the restrictions
+                if restrictions:
+                    skip = False
+                    for restriction in restrictions:
+                        parent_data = deck_crud.get_parent_data(deck.id, restriction["class_type"], True)
+                        if getattr(parent_data[0], restriction["key"]) != restriction["value"]:
+                            skip = True
 
-                # loop over those decks
-                for deck in player_decks:
-                    # if they have the wrong colour identity, add them of the list of decks to remove
-                    if deck.colour_identity.ci_name != ci_name:
-                        decks_to_remove.append(deck)
+                    if skip:
+                        continue
 
-                # loop over our list of decks to remove and remove them from our list of all decks
-                for deck_to_remove in decks_to_remove:
-                    player_decks.remove(deck_to_remove)
+                # increment the number of decks counter
+                table_data[player.id]["total"]["num_decks"] += 1
 
-                # find number of games played and win rate
-                # initialise values
-                player.num_games_played = 0
-                player.num_games_won = 0
+                # find the EDHrec data for this deck
+                if (not deck.last_accessed
+                    or ((datetime.now() - datetime.strptime(str(deck.last_accessed), "%Y-%m-%d %H:%M:%S"))
+                        > timedelta(hours=5, minutes=59))
+                ):
+                    try:
+                        edhrec_uri = curl_utils.get_edhrec_uri_from_commander_names([deck.commander_name,
+                                                                                     deck.partner_name])
+                        edhrec_decks, popularity = curl_utils.get_popularity_from_edhrec_uri(edhrec_uri)
+                        table_data[player.id]["total"]["edhrec_decks"] += edhrec_decks
+                        deck_crud.update(deck.id, jsonify({"edhrec_num_decks": edhrec_decks,
+                                                            "edhrec_popularity": popularity,
+                                                            "last_accessed": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}))
+                        time.sleep(0.01)
+                    except:
+                        pass
+                else:
+                    table_data[player.id]["total"]["edhrec_decks"] += deck.edhrec_num_decks
 
-                # loop over all of that player's decks
-                for player_deck in player_decks:
-                    # find number of games this deck has played and number of games won
-                    player_deck_seats = deck_crud.get_child_data(player_deck.id, "seat", True)
-                    player.num_games_played += len(player_deck_seats)
-                    for seat in player_deck_seats:
-                        _, winning_deck = derived_quantities.game_winning_player_and_deck(seat.game)
-                        if winning_deck.id == player_deck.id:
-                            player.num_games_won += 1
+            table_data[player.id]["total"]["ave_edhrec_decks"] = table_data[player.id]["total"]["edhrec_decks"] / table_data[player.id]["total"]["num_decks"]
 
-                    # find all games played by the deck
-                    for seat in deck_crud.get_child_data(player_deck.id, "seat", True):
-                        # get the length of those games
-                        game_length = derived_quantities.game_length_in_turns(seat.game)
-                        if game_length:
-                            game_turns.append(game_length)
-                        # get the time taken for each of those games
-                        _, game_seconds = derived_quantities.game_length_in_time(seat.game)
-                        if game_seconds:
-                            game_times.append(game_seconds)
-                        # get the first turn a player was KOd in each of those games
-                        first_ko_turn = derived_quantities.game_first_ko(seat.game)
-                        if first_ko_turn:
-                            first_kos.append(first_ko_turn)
-            else:
-                # find number of games this player has played and number of games won
-                player_seats = player_crud.get_child_data(player.id, "seat", True)
-                player.num_games_played = len(player_seats)
-                player.num_games_won = 0
-                for seat in player_seats:
+            # find the ranking that the player's average deck would have on EDHrec
+            rank = 0
+            while table_data[player.id]["total"]["ave_edhrec_decks"] < popularity_list[rank]["num_decks"]:
+                rank += 1
+            table_data[player.id]["total"]["ave_edhrec_ranking"] = f"#{rank + 1} ({popularity_list[rank]['name']})"
+
+            # find all the games this player has played
+            player_seats = player_crud.get_child_data(player.id, "seat", True)
+
+            for seat in player_seats:
+                # skip this game if the played deck doesn't meet the restrictions
+                if restrictions:
+                    skip = False
+                    for restriction in restrictions:
+                        parent_data = deck_crud.get_parent_data(seat.deck.id, restriction["class_type"], True)
+                        if getattr(parent_data[0], restriction["key"]) != restriction["value"]:
+                            skip = True
+
+                    if skip:
+                        continue
+
+                table_data[player.id]["total"]["num_games_played"] += 1
+
+                # find the type of bins we want, if any, and set the specific bins we want for this game
+                # this wants to be a select case, but I'm using Python 3.8 :(
+                if bin_type == "opp_player":
+                    game_bins = []
+                    opponents = seat.game.seats
+                    for opponent in opponents:
+                        if opponent.id != seat.id:
+                            game_bins.append({
+                                "bin_name": opponent.player_id,
+                                "default_data": [
+                                    {
+                                        "key": "player_name",
+                                        "value": f"vs {opponent.player.player_name}"
+                                    }
+                                ]
+                            })
+                elif bin_type == "opp_deck":
+                    game_bins = []
+                    opponents = seat.game.seats
+                    for opponent in opponents:
+                        if opponent.id != seat.id:
+                            game_bins.append({
+                                "bin_name": opponent.deck_id,
+                                "default_data": [
+                                    {
+                                        "key": "player_name",
+                                        "value": f"vs {opponent.deck.player.player_name}"
+                                    },
+                                    {
+                                        "key": "num_decks",
+                                        "value": f"{opponent.deck.deck_name}"
+                                    }
+                                ]
+                            })
+                elif bin_type == "opp_ci":
+                    game_bins = []
+                    opponents = seat.game.seats
+                    for opponent in opponents:
+                        if opponent.id != seat.id:
+                            value_string = f"vs {opponent.deck.colour_identity.ci_name}"
+                            for colour in opponent.deck.colour_identity.colours:
+                                value_string += f"\n<img class=\"mana_symbol\" src=\"../static/img/mana_{colour}.svg\">"
+                            game_bins.append({
+                                "bin_name": opponent.deck.colour_identity.ci_name,
+                                "default_data": [
+                                    {
+                                        "key": "player_name",
+                                        "value": value_string
+                                    }
+                                ]
+                            })
+                elif bin_type == "opp_num_colours":
+                    game_bins = []
+                    opponents = seat.game.seats
+                    for opponent in opponents:
+                        if opponent.id != seat.id:
+                            game_bins.append({
+                                "bin_name": len(opponent.deck.colour_identity.colours),
+                                "default_data": [
+                                    {
+                                        "key": "player_name",
+                                        "value": f"vs {len(opponent.deck.colour_identity.colours)} colour decks"
+                                    }
+                                ]
+                            })
+                elif bin_type == "num_players":
+                    num_players = len(seat.game.seats)
+                    game_bins = [{
+                        "bin_name": num_players,
+                        "default_data": [
+                            {
+                                "key": "player_name",
+                                "value": f"{num_players} player games"
+                            }
+                        ]
+                    }]
+                elif bin_type == "seat":
+                    game_bins = [{
+                        "bin_name": seat.seat_no,
+                        "default_data": [
+                            {
+                                "key": "player_name",
+                                "value": f"seat number {seat.seat_no}"
+                            }
+                        ]
+                    }]
+                elif bin_type == "result":
                     winning_player, _ = derived_quantities.game_winning_player_and_deck(seat.game)
                     if winning_player.id == player.id:
-                        player.num_games_won += 1
-
-                # find all games played by the player
-                for seat in player_crud.get_child_data(player.id, "seat", True):
-                    # get the length of those games
+                        game_bins = [{
+                            "bin_name": "win",
+                            "default_data": [
+                                {
+                                    "key": "player_name",
+                                    "value": "Games Won"
+                                }
+                            ]
+                        }]
+                    else:
+                        game_bins = [{
+                            "bin_name": "loss",
+                            "default_data": [
+                                {
+                                    "key": "player_name",
+                                    "value": "Games Lost"
+                                }
+                            ]
+                        }]
+                elif bin_type == "game_time":
+                    _, game_time = derived_quantities.game_length_in_time(seat.game)
+                    if game_time:
+                        game_minutes = game_time / 60
+                        minutes_bin = int(game_minutes - (game_minutes % 10))
+                        default_value = f"{minutes_bin} - {minutes_bin + 10} minute games"
+                    else:
+                        minutes_bin = "untimed"
+                        default_value = "untimed games"
+                    game_bins = [{
+                        "bin_name": minutes_bin,
+                        "default_data": [
+                            {
+                                "key": "player_name",
+                                "value": default_value
+                            }
+                        ]
+                    }]
+                elif bin_type == "game_turns":
                     game_length = derived_quantities.game_length_in_turns(seat.game)
-                    if game_length:
-                        game_turns.append(game_length)
-                    # get the time taken for each of those games
-                    _, game_seconds = derived_quantities.game_length_in_time(seat.game)
-                    if game_seconds:
-                        game_times.append(game_seconds)
-                    # get the first turn a player was KOd in each of those games
-                    first_ko_turn = derived_quantities.game_first_ko(seat.game)
-                    if first_ko_turn:
-                        first_kos.append(first_ko_turn)
+                    game_bins = [{
+                        "bin_name": game_length,
+                        "default_data": [
+                            {
+                                "key": "player_name",
+                                "value": f"{game_length} turn games"
+                            }
+                        ]
+                    }]
+                elif bin_type == "first_KO":
+                    KO_turn = derived_quantities.game_first_ko(seat.game)
+                    game_bins = [{
+                        "bin_name": KO_turn,
+                        "default_data": [
+                            {
+                                "key": "player_name",
+                                "value": f"turn {KO_turn} KO"
+                            }
+                        ]
+                    }]
+                elif bin_type == "self_KO":
+                    KO_turn = seat.ko_turn
+                    if KO_turn:
+                        default_value = f"KO'd on turn {KO_turn}"
+                    else:
+                        KO_turn = "win"
+                        default_value = "Won the game"
+                    game_bins = [{
+                        "bin_name": KO_turn,
+                        "default_data": [
+                            {
+                                "key": "player_name",
+                                "value": default_value
+                            }
+                        ]
+                    }]
+                elif bin_type == "start_time":
+                    if seat.game.start_time:
+                        start_time = seat.game.start_time.strftime('%H')
+                        default_value = f"{start_time}:00"
+                    else:
+                        start_time = "none"
+                        default_value = "start time not recorded"
+                    game_bins = [{
+                        "bin_name": start_time,
+                        "default_data": [
+                            {
+                                "key": "player_name",
+                                "value": default_value
+                            }
+                        ]
+                    }]
+                elif bin_type == "end_time":
+                    if seat.game.end_time:
+                        end_time = seat.game.end_time.strftime('%H')
+                        default_value = f"{end_time}:00"
+                    else:
+                        end_time = "none"
+                        default_value = "end time not recorded"
+                    game_bins = [{
+                        "bin_name": end_time,
+                        "default_data": [
+                            {
+                                "key": "player_name",
+                                "value": default_value
+                            }
+                        ]
+                    }]
+                elif bin_type == "dow":
+                    dow = seat.game.start_time.strftime('%A')
+                    game_bins = [{
+                        "bin_name": dow,
+                        "default_data": [
+                            {
+                                "key": "player_name",
+                                "value": dow
+                            }
+                        ]
+                    }]
+                elif bin_type == "month":
+                    month = seat.game.start_time.strftime('%B')
+                    game_bins = [{
+                        "bin_name": month,
+                        "default_data": [
+                            {
+                                "key": "player_name",
+                                "value": month
+                            }
+                        ]
+                    }]
+                elif bin_type == "year":
+                    year = seat.game.start_time.strftime('%Y')
+                    game_bins = [{
+                        "bin_name": year,
+                        "default_data": [
+                            {
+                                "key": "player_name",
+                                "value": year
+                            }
+                        ]
+                    }]
+                elif bin_type == "borrowed":
+                    owner = seat.deck.player
+                    if owner.player_name == player.player_name:
+                        game_bins = [{
+                            "bin_name": "owner",
+                            "default_data": [
+                                {
+                                    "key": "player_name",
+                                    "value": f"{pilot} (owner)"
+                                }
+                            ]
+                        }]
+                    elif owner.player_name != player.player_name:
+                        game_bins = [{
+                            "bin_name": pilot,
+                            "default_data": [
+                                {
+                                    "key": "player_name",
+                                    "value": pilot
+                                }
+                            ]
+                        }]
+                    else:
+                        raise ValueError("somehow the pilot is neither the deck owner nor not the deck owner")
+                else:
+                    game_bins = []
 
-            # calculate the average time of all the games a player has played
-            if len(game_times) > 0:
-                ave_time = sum(game_times) / len(game_times)
-                player.ave_game_time = str(timedelta(seconds=(ave_time - (ave_time % 60))))[0:-3]
-            else:
-                player.ave_game_time = ""
+                if game_bins:
+                    for game_bin in game_bins:
+                        # create bin if it doesn't exist yet
+                        if game_bin["bin_name"] not in table_data[player.id]:
+                            table_data[player.id][game_bin["bin_name"]] = defaultdict(int)
+                            for default_datum in game_bin["default_data"]:
+                                table_data[player.id][game_bin["bin_name"]][default_datum["key"]] = default_datum["value"]
+                        # start populating the bins
+                        table_data[player.id][game_bin["bin_name"]]["num_games_played"] += 1
 
-            # calculate the average turn length of all the games a player has played
-            if len(game_turns) > 0:
-                player.ave_game_turns = f"{(sum(game_turns) / len(game_turns)):.1f}"
-            else:
-                player.ave_game_turns = ""
+                winning_player, _ = derived_quantities.game_winning_player_and_deck(seat.game)
+                if winning_player.id == player.id:
+                    table_data[player.id]["total"]["num_games_won"] += 1
+                    if game_bins:
+                        for game_bin in game_bins:
+                            table_data[player.id][game_bin["bin_name"]]["num_games_won"] += 1
 
-            # calculate the average first KO turn for all the games a player has played
-            if len(first_kos) > 0:
-                player.ave_first_ko = f"{(sum(first_kos) / len(first_kos)):.1f}"
-            else:
-                player.ave_first_ko = ""
+                _, game_seconds = derived_quantities.game_length_in_time(seat.game)
+                if game_seconds:
+                    table_data[player.id]["total"]["total_game_time"] += game_seconds
+                    if game_bins:
+                        for game_bin in game_bins:
+                            table_data[player.id][game_bin["bin_name"]]["total_game_time"] += game_seconds
+                game_length = derived_quantities.game_length_in_turns(seat.game)
+                if game_length:
+                    table_data[player.id]["total"]["total_game_turns"] += game_length
+                    if game_bins:
+                        for game_bin in game_bins:
+                            table_data[player.id][game_bin["bin_name"]]["total_game_turns"] += game_length
+                first_ko = derived_quantities.game_first_ko(seat.game)
+                if first_ko:
+                    table_data[player.id]["total"]["total_first_ko"] += first_ko
+                    if game_bins:
+                        for game_bin in game_bins:
+                            table_data[player.id][game_bin["bin_name"]]["total_first_ko"] += first_ko
 
-            # if they've played no games we need to set the win rate manually to avoid divide by zero errors
-            if player.num_games_played == 0:
-                player.win_rate = 0
-            else:
-                player.win_rate = player.num_games_won / player.num_games_played * 100
+            for player_bin in table_data[player.id]:
+                # inititalise some values
+                if "num_games_won" not in table_data[player.id][player_bin]:
+                    table_data[player.id][player_bin]["num_games_won"] = 0
+                # calculate some values
+                try:
+                    table_data[player.id][player_bin]["win_rate"] = table_data[player.id][player_bin]["num_games_won"] / table_data[player.id][player_bin]["num_games_played"] * 100
+                except ZeroDivisionError:
+                    table_data[player.id][player_bin]["win_rate"] = 0
+                if table_data[player.id][player_bin]["total_game_time"]:
+                    try:
+                        ave_time = table_data[player.id][player_bin]["total_game_time"] / table_data[player.id][player_bin]["num_games_played"]
+                        table_data[player.id][player_bin]["ave_game_time"] = str(timedelta(seconds=(ave_time - (ave_time % 60))))[0:-3]
+                    except ZeroDivisionError:
+                        table_data[player.id][player_bin]["ave_game_time"] = ""
+                else:
+                    table_data[player.id][player_bin]["ave_game_time"] = ""
+                if table_data[player.id][player_bin]['total_game_turns']:
+                    try:
+                        table_data[player.id][player_bin]["ave_game_turns"] = f"{(table_data[player.id][player_bin]['total_game_turns'] / table_data[player.id][player_bin]['num_games_played']):.1f}"
+                    except ZeroDivisionError:
+                        table_data[player.id][player_bin]["ave_game_turns"] = ""
+                else:
+                    table_data[player.id][player_bin]["ave_game_turns"] = ""
+                if table_data[player.id][player_bin]['total_first_ko']:
+                    try:
+                        table_data[player.id][player_bin]["ave_first_ko"] = f"{(table_data[player.id][player_bin]['total_first_ko'] / table_data[player.id][player_bin]['num_games_played']):.1f}"
+                    except ZeroDivisionError:
+                        table_data[player.id][player_bin]["ave_first_ko"] = ""
+                else:
+                    table_data[player.id][player_bin]["ave_first_ko"] = ""
 
-            # find the number of decks the given player owns
-            player.num_decks = len(player_decks)
-
-            # find the edhrec data for each relevant deck player owns
-            for player_deck in player_decks:
-                if player_deck.edhrec_num_decks:
-                    num_edhrec_deck.append(int(player_deck.edhrec_num_decks))
-
-            # if a deck has no edhrec data we need to set the average number of
-            # decks manually to avoid divide by zero errors
-            if len(num_edhrec_deck) == 0:
-                player.ave_edhrec_decks = 0
-                player.ave_edhrec_ranking = ""
-            else:
-                player.ave_edhrec_decks = sum(num_edhrec_deck) / len(num_edhrec_deck)
-
-                # find the ranking that the player's average deck would have on EDHrec
-                rank = 0
-                while player.ave_edhrec_decks < popularity_list[rank]["num_decks"]:
-                    rank += 1
-                player.ave_edhrec_ranking = f"#{rank + 1} ({popularity_list[rank]['name']})"
-
-            # finally, append all the relevant data that has been requested
-            if player.num_decks != 0:
-                player_data.append(player)
-
-        # Prepare data to pass to the template
-        html_data = {"colour_identities": colour_identities,
-                     "decks": decks,
-                     "players": player_data}
-
-        return render_template('data.html', data_type="player", menu_data=html_data)
+        return render_template('data.html', data_type="player", menu_data=html_data, table_data=table_data)
 
     # Prepare data to pass to the template
     html_data = {"colour_identities": colour_identities,
