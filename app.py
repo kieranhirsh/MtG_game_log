@@ -1332,11 +1332,11 @@ def data_post():
                                 "default_data": [
                                     {
                                         "key": "player_name",
-                                        "value": f"vs {opponent.deck.player.player_name}"
+                                        "value": f"vs {opponent.deck.deck_name}"
                                     },
                                     {
                                         "key": "num_decks",
-                                        "value": f"{opponent.deck.deck_name}"
+                                        "value": f"{opponent.deck.player.player_name}'s deck"
                                     }
                                 ]
                             })
@@ -1345,15 +1345,16 @@ def data_post():
                     opponents = seat.game.seats
                     for opponent in opponents:
                         if opponent.id != seat.id:
-                            value_string = f"vs {opponent.deck.colour_identity.ci_name}"
-                            for colour in opponent.deck.colour_identity.colours:
-                                value_string += f"\n<img class=\"mana_symbol\" src=\"../static/img/mana_{colour}.svg\">"
                             game_bins.append({
                                 "bin_name": opponent.deck.colour_identity.ci_name,
                                 "default_data": [
                                     {
                                         "key": "player_name",
-                                        "value": value_string
+                                        "value": f"vs {opponent.deck.colour_identity.ci_name}"
+                                    },
+                                    {
+                                        "key": "colours",
+                                        "value": f"{opponent.deck.colour_identity.colours}"
                                     }
                                 ]
                             })
@@ -1543,17 +1544,17 @@ def data_post():
                             "default_data": [
                                 {
                                     "key": "player_name",
-                                    "value": f"{pilot} (owner)"
+                                    "value": f"Playing {owner.player_name}'s deck"
                                 }
                             ]
                         }]
                     elif owner.player_name != player.player_name:
                         game_bins = [{
-                            "bin_name": pilot,
+                            "bin_name": owner.player_name,
                             "default_data": [
                                 {
                                     "key": "player_name",
-                                    "value": pilot
+                                    "value": f"Playing {owner.player_name}'s deck"
                                 }
                             ]
                         }]

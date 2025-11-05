@@ -515,6 +515,11 @@
           <td class="player_name">
             {% if table_data[player][bin]["player_name"] %}
             {{ table_data[player][bin]["player_name"] }}
+            {% if table_data[player][bin]["colours"] %}
+            ({% for colour in table_data[player][bin]["colours"] %}
+            <img class="mana_symbol" src="../static/img/mana_{{ colour }}.svg">
+            {% endfor %})
+            {% endif %}
             {% endif %}
           </td>
           <td class="player_decks">
