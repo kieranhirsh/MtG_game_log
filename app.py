@@ -1247,6 +1247,7 @@ def data_post():
             table_data[player.id] = {"total": defaultdict(int)}
             table_data[player.id]["total"]["player_name"] = player.player_name
 
+            # loop over all of that player's decks
             for deck in player.decks:
                 # skip this deck if it doesn't meet the restrictions
                 if restrictions:
@@ -1281,10 +1282,14 @@ def data_post():
                 else:
                     table_data[player.id]["total"]["edhrec_decks"] += deck.edhrec_num_decks
 
-            table_data[player.id]["total"]["ave_edhrec_decks"] = table_data[player.id]["total"]["edhrec_decks"] / table_data[player.id]["total"]["num_decks"]
+            # if we have no decks that match the restrictions, we can skip this player
+            if table_data[player.id]["total"]["num_decks"] == 0:
+                table_data.pop(player.id)
+                continue
 
             # find the ranking that the player's average deck would have on EDHrec
             rank = 0
+            table_data[player.id]["total"]["ave_edhrec_decks"] = table_data[player.id]["total"]["edhrec_decks"] / table_data[player.id]["total"]["num_decks"]
             while table_data[player.id]["total"]["ave_edhrec_decks"] < popularity_list[rank]["num_decks"]:
                 rank += 1
             table_data[player.id]["total"]["ave_edhrec_ranking"] = f"#{rank + 1} ({popularity_list[rank]['name']})"
