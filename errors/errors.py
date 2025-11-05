@@ -19,7 +19,8 @@ def entry_not_found(page, missing_entries, method=""):
                            page=page,
                            method=method,
                            error_messages=error_messages,
-                           data=all_db_data), 400
+                           data=all_db_data,
+                           menu_data=all_db_data), 400
 
 def option_not_available(page, missing_entries, method=""):
     '''
@@ -39,7 +40,8 @@ def option_not_available(page, missing_entries, method=""):
                            page=page,
                            method=method,
                            error_messages=error_messages,
-                           data=all_db_data), 400
+                           data=all_db_data,
+                           menu_data=all_db_data), 400
 
 def card_not_found(page, details, method=""):
     '''
@@ -59,7 +61,8 @@ def card_not_found(page, details, method=""):
                            page=page,
                            method=method,
                            error_messages=error_messages,
-                           data=all_db_data), 400
+                           data=all_db_data,
+                           menu_data=all_db_data), 400
 
 def missing_form_item(page, method=""):
     '''
@@ -76,4 +79,5 @@ def missing_form_item(page, method=""):
                            page=page,
                            method=method,
                            error_messages=error_messages,
-                           data=all_db_data), 400
+                           data=all_db_data,
+                           menu_data=all_db_data), 400

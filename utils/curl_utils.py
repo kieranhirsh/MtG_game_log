@@ -45,4 +45,4 @@ def get_popularity_from_edhrec_uri(edhrec_uri):
         num_decks = None
         rank = None
 
-    return num_decks, rank
+    return int(num_decks), int(rank)

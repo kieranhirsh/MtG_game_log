@@ -13,30 +13,63 @@ body #data_tables {
   flex-wrap: wrap;
   align-items: flex-start;
 }
-body #data_tables .data_table:not(#ci_table_0):not(#ci_table_1):not(#ci_table_2):not(#ci_table_3):not(#ci_table_4):not(#ci_table_5) th, body #data_tables .colour_data_table:not(#ci_table_0):not(#ci_table_1):not(#ci_table_2):not(#ci_table_3):not(#ci_table_4):not(#ci_table_5) th {
+body #data_tables .data_table:not(#ci_table_0):not(#ci_table_1):not(#ci_table_2):not(#ci_table_3):not(#ci_table_4):not(#ci_table_5) th,
+body #data_tables .colour_data_table:not(#ci_table_0):not(#ci_table_1):not(#ci_table_2):not(#ci_table_3):not(#ci_table_4):not(#ci_table_5) th {
   cursor: pointer;
 }
 body #data_tables .data_table td,
-body #data_tables .data_table th, body #data_tables .colour_data_table td,
+body #data_tables .data_table th,
+body #data_tables .colour_data_table td,
 body #data_tables .colour_data_table th {
   padding: 4px 8px;
 }
-body #data_tables .data_table tr:nth-child(even), body #data_tables .colour_data_table tr:nth-child(even) {
-  background-color: white;
+body #data_tables .data_table tr#header,
+body #data_tables .colour_data_table tr#header {
+  background-color: #3b3c3d;
+  color: white;
 }
-body #data_tables .data_table tr:nth-child(odd), body #data_tables .colour_data_table tr:nth-child(odd) {
+body #data_tables .data_table tr.total_row:has(+ .bins_row),
+body #data_tables .colour_data_table tr.total_row:has(+ .bins_row) {
+  cursor: pointer;
+}
+body #data_tables .data_table tbody:nth-child(even) tr.total_row,
+body #data_tables .colour_data_table tbody:nth-child(even) tr.total_row {
+  background-color: #ffffe9;
+}
+body #data_tables .data_table tbody:nth-child(even) tr.bins_row:nth-child(even),
+body #data_tables .colour_data_table tbody:nth-child(even) tr.bins_row:nth-child(even) {
   background-color: #E7E9EB;
 }
-body #data_tables .data_table .deck_commander, body #data_tables .colour_data_table .deck_commander {
+body #data_tables .data_table tbody:nth-child(even) tr.bins_row:nth-child(odd),
+body #data_tables .colour_data_table tbody:nth-child(even) tr.bins_row:nth-child(odd) {
+  background-color: white;
+}
+body #data_tables .data_table tbody:nth-child(odd) tr.total_row,
+body #data_tables .colour_data_table tbody:nth-child(odd) tr.total_row {
+  background-color: #e0e9f0;
+}
+body #data_tables .data_table tbody:nth-child(odd) tr.bins_row:nth-child(even),
+body #data_tables .colour_data_table tbody:nth-child(odd) tr.bins_row:nth-child(even) {
+  background-color: white;
+}
+body #data_tables .data_table tbody:nth-child(odd) tr.bins_row:nth-child(odd),
+body #data_tables .colour_data_table tbody:nth-child(odd) tr.bins_row:nth-child(odd) {
+  background-color: #E7E9EB;
+}
+body #data_tables .data_table .deck_commander,
+body #data_tables .colour_data_table .deck_commander {
   display: none;
 }
-body #data_tables .data_table .deck_partner, body #data_tables .colour_data_table .deck_partner {
+body #data_tables .data_table .deck_partner,
+body #data_tables .colour_data_table .deck_partner {
   display: none;
 }
-body #data_tables .data_table .deck_companion, body #data_tables .colour_data_table .deck_companion {
+body #data_tables .data_table .deck_companion,
+body #data_tables .colour_data_table .deck_companion {
   display: none;
 }
-body #data_tables .data_table .deck_last_played, body #data_tables .colour_data_table .deck_last_played {
+body #data_tables .data_table .deck_last_played,
+body #data_tables .colour_data_table .deck_last_played {
   display: none;
 }
 body .mana_symbol {
