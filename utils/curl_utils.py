@@ -9,6 +9,7 @@ def get_edhrec_uri_from_commander_names(cmdr_names=None):
             cmdr = cmdr_name.split('/')[0]
             cmdr = cmdr.replace(',','')
             cmdr = cmdr.replace("'",'')
+            cmdr = cmdr.replace('"','')
             cmdr = cmdr.replace(' ','-')
             if cmdr[-1] == "-":
                 names += unicodedata.normalize('NFKD', cmdr.lower()).encode('ascii', 'ignore').decode("utf-8")
