@@ -834,35 +834,41 @@ def data_post():
                     elif bin_type == "opp_ci":
                         game_bins = []
                         opponents = seat.game.seats
+                        opp_ci    = []
                         for opponent in opponents:
                             if opponent.id != seat.id:
-                                game_bins.append({
-                                    "bin_name": opponent.deck.colour_identity.ci_name,
-                                    "default_data": [
-                                        {
-                                            "key": "colour_identity",
-                                            "value": f"vs {opponent.deck.colour_identity.ci_name}"
-                                        },
-                                        {
-                                            "key": "colours",
-                                            "value": f"{opponent.deck.colour_identity.colours}"
-                                        }
-                                    ]
-                                })
+                                if opponent.deck.colour_identity.ci_name not in opp_ci:
+                                    game_bins.append({
+                                        "bin_name": opponent.deck.colour_identity.ci_name,
+                                        "default_data": [
+                                            {
+                                                "key": "colour_identity",
+                                                "value": f"vs {opponent.deck.colour_identity.ci_name}"
+                                            },
+                                            {
+                                                "key": "colours",
+                                                "value": f"{opponent.deck.colour_identity.colours}"
+                                            }
+                                        ]
+                                    })
+                                    opp_ci.append(opponent.deck.colour_identity.ci_name)
                     elif bin_type == "opp_num_colours":
-                        game_bins = []
-                        opponents = seat.game.seats
+                        game_bins       = []
+                        opponents       = seat.game.seats
+                        opp_num_colours = []
                         for opponent in opponents:
                             if opponent.id != seat.id:
-                                game_bins.append({
-                                    "bin_name": len(opponent.deck.colour_identity.colours),
-                                    "default_data": [
-                                        {
-                                            "key": "colour_identity",
-                                            "value": f"vs {len(opponent.deck.colour_identity.colours)} colour decks"
-                                        }
-                                    ]
-                                })
+                                if len(opponent.deck.colour_identity.colours) not in opp_num_colours:
+                                    game_bins.append({
+                                        "bin_name": len(opponent.deck.colour_identity.colours),
+                                        "default_data": [
+                                            {
+                                                "key": "colour_identity",
+                                                "value": f"vs {len(opponent.deck.colour_identity.colours)} colour decks"
+                                            }
+                                        ]
+                                    })
+                                    opp_num_colours.append(len(opponent.deck.colour_identity.colours))
                     elif bin_type == "num_players":
                         num_players = len(seat.game.seats)
                         game_bins = [{
@@ -1348,35 +1354,41 @@ def data_post():
                 elif bin_type == "opp_ci":
                     game_bins = []
                     opponents = seat.game.seats
+                    opp_ci    = []
                     for opponent in opponents:
                         if opponent.id != seat.id:
-                            game_bins.append({
-                                "bin_name": opponent.deck.colour_identity.ci_name,
-                                "default_data": [
-                                    {
-                                        "key": "player_name",
-                                        "value": f"vs {opponent.deck.colour_identity.ci_name}"
-                                    },
-                                    {
-                                        "key": "colours",
-                                        "value": f"{opponent.deck.colour_identity.colours}"
-                                    }
-                                ]
-                            })
+                            if opponent.deck.colour_identity.ci_name not in opp_ci:
+                                game_bins.append({
+                                    "bin_name": opponent.deck.colour_identity.ci_name,
+                                    "default_data": [
+                                        {
+                                            "key": "player_name",
+                                            "value": f"vs {opponent.deck.colour_identity.ci_name}"
+                                        },
+                                        {
+                                            "key": "colours",
+                                            "value": f"{opponent.deck.colour_identity.colours}"
+                                        }
+                                    ]
+                                })
+                                opp_ci.append(opponent.deck.colour_identity.ci_name)
                 elif bin_type == "opp_num_colours":
-                    game_bins = []
-                    opponents = seat.game.seats
+                    game_bins       = []
+                    opponents       = seat.game.seats
+                    opp_num_colours = []
                     for opponent in opponents:
                         if opponent.id != seat.id:
-                            game_bins.append({
-                                "bin_name": len(opponent.deck.colour_identity.colours),
-                                "default_data": [
-                                    {
-                                        "key": "player_name",
-                                        "value": f"vs {len(opponent.deck.colour_identity.colours)} colour decks"
-                                    }
-                                ]
-                            })
+                            if len(opponent.deck.colour_identity.colours) not in opp_num_colours:
+                                game_bins.append({
+                                    "bin_name": len(opponent.deck.colour_identity.colours),
+                                    "default_data": [
+                                        {
+                                            "key": "player_name",
+                                            "value": f"vs {len(opponent.deck.colour_identity.colours)} colour decks"
+                                        }
+                                    ]
+                                })
+                                opp_num_colours.append(len(opponent.deck.colour_identity.colours))
                 elif bin_type == "num_players":
                     num_players = len(seat.game.seats)
                     game_bins = [{
