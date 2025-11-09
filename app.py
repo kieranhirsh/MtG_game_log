@@ -412,9 +412,9 @@ def data_post():
     colour_identities = colour_identity_crud.all(True)
     decks = deck_crud.all(True)
     players = player_crud.all(True)
-    html_data = {"colour_identities": colour_identities,
-                 "decks": decks,
-                 "players": players}
+    html_data = {"colour_identities": colour_identities.copy(),
+                 "decks": decks.copy(),
+                 "players": players.copy()}
 
     # this desperately wants to be a select case, but I'm using Python 3.8 :(
     if request.form["type"] == "colour_identity":
