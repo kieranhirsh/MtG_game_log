@@ -30,7 +30,8 @@ def get_popularity_from_edhrec_uri(edhrec_uri):
     try:
         edhrec_response = requests.get(uri).json()
     except:
-        raise ValueError("unable to get data from edhrec")
+        return None, None
+
     if "redirect" in edhrec_response:
         uri = f"https://json.edhrec.com/pages{edhrec_response['redirect']}.json"
         try:
