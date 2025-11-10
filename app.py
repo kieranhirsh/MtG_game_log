@@ -1286,7 +1286,11 @@ def data_post():
                     except:
                         pass
                 else:
-                    table_data[player.id]["total"]["edhrec_decks"] += deck.edhrec_num_decks
+                    try:
+                        table_data[player.id]["total"]["edhrec_decks"] += deck.edhrec_num_decks
+                    except TypeError:
+                        if deck.edhrec_num_decks != None:
+                            raise TypeError(f"deck.edhrec_num_decks is of type {type(deck.edhrec_num_decks)}")
 
             # if we have no decks that match the restrictions, we can skip this player
             if table_data[player.id]["total"]["num_decks"] == 0:
