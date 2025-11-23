@@ -1299,9 +1299,10 @@ def data_post():
 
             # find the ranking that the player's average deck would have on EDHrec
             rank = 0
-            table_data[player.id]["total"]["ave_edhrec_decks"] = table_data[player.id]["total"]["edhrec_decks"] / table_data[player.id]["total"]["num_decks"]
+            table_data[player.id]["total"]["ave_edhrec_decks"] = table_data[player.id]['total']['edhrec_decks'] / table_data[player.id]['total']['num_decks']
             while table_data[player.id]["total"]["ave_edhrec_decks"] < popularity_list[rank]["num_decks"]:
                 rank += 1
+            table_data[player.id]["total"]["ave_edhrec_decks"] = f"{table_data[player.id]['total']['ave_edhrec_decks']:.1f}"
             table_data[player.id]["total"]["ave_edhrec_ranking"] = f"#{rank + 1} ({popularity_list[rank]['name']})"
 
             # find all the games this player has played

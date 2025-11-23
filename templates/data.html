@@ -501,8 +501,8 @@
           <td onclick="sortTableRows(7)" class="player_ave_first_ko">{{ table_data[player]["total"]["ave_first_ko"] }}
           </td>
           <td onclick="sortTableRows(8)" class="player_ave_edhrec_decks">
-            {% if table_data[player]["total"]["edhrec_decks"] %}
-            {{table_data[player]["total"]["edhrec_decks"] }}
+            {% if table_data[player]["total"]["ave_edhrec_decks"] %}
+            {{table_data[player]["total"]["ave_edhrec_decks"] }}
             {% endif %}</td>
           <td onclick="sortTableRows(9)" class="player_ave_edhrec_ranking">
             {% if table_data[player]["total"]["ave_edhrec_ranking"] %}
