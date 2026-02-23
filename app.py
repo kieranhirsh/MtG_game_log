@@ -418,6 +418,39 @@ def data_post():
 
     # this desperately wants to be a select case, but I'm using Python 3.8 :(
     if request.form["type"] == "colour_identity":
+        # generate the full list of edhrec deck data
+        min_edhrec_decks = min([deck.edhrec_num_decks for deck in decks if isinstance(deck.edhrec_num_decks, int)])
+        page = 1
+        edhrec_all_cmdrs_response = requests.get("https://json.edhrec.com/pages/commanders/year.json").json()
+        popularity_list = edhrec_all_cmdrs_response["container"]["json_dict"]["cardlists"][0]["cardviews"]
+        while popularity_list[-1]["num_decks"] > min_edhrec_decks:
+            edhrec_all_cmdrs_response = requests.get(f"https://json.edhrec.com/pages/commanders/year-past2years-{page}.json").json()
+            popularity_list += edhrec_all_cmdrs_response["cardviews"]
+            page += 1
+
+        for form_item in request.form:
+            if form_item != "type" and form_item != "bins" and request.form[form_item]:
+                restriction_key = form_item
+                restriction_value = request.form[form_item]
+
+                # this wants to be a select case, but I'm using Python 3.8 :(
+                if form_item == "player_name":
+                    # check that player exists in database, return an error if it doesn't
+                    player_data = storage.get(class_name="player", key="player_name", value=restriction_value)
+                    if not player_data:
+                        return errors.entry_not_found('data.html', [["player", "player_name", restriction_value]])
+
+                    class_type = "player"
+
+                else:
+                    return errors.missing_form_item('data.html')
+
+                restrictions.append({
+                    "class_type": class_type,
+                    "key": restriction_key,
+                    "value": restriction_value
+                })
+
         # initialise values
         colour_identity_data = []
         for i in range(6):
@@ -447,16 +480,6 @@ def data_post():
                     "num_edhrec_data": 0,
                     "total_edhrec_decks": 0
                 }])
-
-        # generate the full list of edhrec deck data
-        min_edhrec_decks = min([deck.edhrec_num_decks for deck in decks if isinstance(deck.edhrec_num_decks, int)])
-        page = 1
-        edhrec_all_cmdrs_response = requests.get("https://json.edhrec.com/pages/commanders/year.json").json()
-        popularity_list = edhrec_all_cmdrs_response["container"]["json_dict"]["cardlists"][0]["cardviews"]
-        while popularity_list[-1]["num_decks"] > min_edhrec_decks:
-            edhrec_all_cmdrs_response = requests.get(f"https://json.edhrec.com/pages/commanders/year-past2years-{page}.json").json()
-            popularity_list += edhrec_all_cmdrs_response["cardviews"]
-            page += 1
 
         # loop over all colour identities
         for colour_identity in colour_identities:
